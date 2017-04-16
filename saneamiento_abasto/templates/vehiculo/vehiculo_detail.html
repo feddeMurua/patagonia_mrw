@@ -17,7 +17,7 @@
             </tr>
             <tr>
                 <td>Domicilio del responsable:</td>
-                <td>B° {{ object.titular.domicilio.barrio }}, {{ object.titular.domicilio.calle }}, {{ object.titular.domicilio.nro }}</td>
+                <td>{% if object.titular.domicilio.barrio %} B° {{ object.titular.domicilio.barrio }}, {% else %} Calle: {% endif %} {{ object.titular.domicilio.calle }}, {{ object.titular.domicilio.nro }}</td>
             </tr>
             <tr>
                 <td>Telefono del responsable:</td>
