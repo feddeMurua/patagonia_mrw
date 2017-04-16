@@ -6,11 +6,6 @@
 
 {% block header-title %}Alta/Modificacion de Persona{% endblock %}
 
-{% if view.is_popup %}
-    {% block no-navbar %}{% endblock %}
-    {% block no-return %}{% endblock %}
-{% endif %}
-
 {% block url-volver %}{% url url_return %}{% endblock %}
 
 {% block form-right %}
