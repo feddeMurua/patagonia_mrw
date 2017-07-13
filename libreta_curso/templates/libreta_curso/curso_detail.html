@@ -1,0 +1,9 @@
+<h1>{{ curso.id }}</h1>
+<p>Fecha de inicio: <i>{{ curso.fecha_inicio }}</i></p>
+<p>Cupo: <i>{{ curso.cupo }}</i></p>
+<p>Lugar: <i>{{ curso.lugar }}</i></p>
+<p>Horario: <i>{{ curso.horario }}</i></p>
+<p>Precio: <i>{{ curso.precio }}</i></p>
+<p>
+    <a href="{% url "lista_cursos" %}">Regresar</a>
+</p>
