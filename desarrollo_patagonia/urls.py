@@ -17,12 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from libreta_curso import views as lc_views
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^cursos/', lc_views.ListaCurso.as_view(), name='lista_cursos'),
-    url(r'^(?P<pk>\d+)$', lc_views.DetalleCurso.as_view(), name='detalle_curso'),
-    url(r'^nuevo$',lc_views.AltaCurso.as_view(), name='nuevo_curso'),
-    url(r'^borrar/(?P<pk>\d+)$', lc_views.BajaCurso.as_view(), name='borrar_curso'),
-    url(r'^editar/(?P<pk>\d+)$', lc_views.ModificacionCurso.as_view(), name='modificar_curso'),
 
+urlpatterns = [
+ url(r'^cursos/', include('libreta_curso.urls', namespace='cursos')),
+ url(r'^admin/', admin.site.urls),
 ]

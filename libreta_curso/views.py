@@ -24,24 +24,29 @@ CURSOS
 
 class ListaCurso(ListView):
     model = Curso
+    template_name= 'curso/curso_list.html'
 
 
 class DetalleCurso(DetailView):
     model = Curso
+    template_name= 'curso/curso_detail.html'
 
 
 class AltaCurso(CreateView):
     model = Curso
-    success_url = reverse_lazy('lista_cursos')
+    template_name= 'curso/curso_form.html'
+    success_url = reverse_lazy('cursos:lista_cursos')
     fields = ['fecha_inicio','cupo','lugar','horario','precio']
 
 
 class BajaCurso(DeleteView):
     model = Curso
-    success_url = reverse_lazy('lista_cursos')
+    template_name= 'curso/curso_confirm_delete.html'
+    success_url = reverse_lazy('cursos:lista_cursos')
 
 
 class ModificacionCurso(UpdateView):
     model = Curso
-    success_url = reverse_lazy('lista_cursos')
+    template_name= 'curso/curso_form.html'
+    success_url = reverse_lazy('cursos:lista_cursos')
     fields = ['fecha_inicio','cupo','lugar','horario','precio']
