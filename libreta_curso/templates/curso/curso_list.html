@@ -1,18 +1,46 @@
-<h1>LISTADO DE CURSOS</h1>
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
 
-<p>
-    <a href="{% url "cursos:nuevo_curso" %}">Agregar curso</a>
-</p>
+{% block title %}Cursos de Manipulacion de Alimentos{% endblock %}
 
-<ul>
-    {% for curso in object_list %}
-        <li>
-            <p>{{ curso.id }}</p>
-            <p>
-                <a href="{% url "cursos:detalle_curso" curso.id %}">Ver</a> |
-                <a href="{% url "cursos:modificar_curso" curso.id %}">Editar</a> |
-                <a href="{% url "cursos:borrar_curso" curso.id %}">Borrar</a>
-            </p>
-        </li>
-    {% endfor %}
-</ul>
+{% block header-title %}Cursos de Manipulacion de Alimentos{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Cursos{% endblock %}
+
+{% block btn-nuevo %}
+    <a href="{% url 'cursos:nuevo_curso' %}" class="btn btn-sm btn-primary btn-create" role="button">Nuevo Curso</a>
+{% endblock %}
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-list">
+        <thead>
+        <tr>
+            <th>Fecha de Inicio</th>
+            <th>Cupo</th>
+            <th>Lugar</th>
+            <th>Horario</th>
+            <th>Precio</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for curso in object_list %}
+            <tr>
+                <td>{{ curso.fecha_inicio }}</td>
+                <td>{{ curso.cupo }}</td>
+                <td>{{ curso.lugar }}</td>
+                <td>{{ curso.horario }}</td>
+                <td>{{ curso.precio }}</td>
+                <td align="center">
+                    <a class="btn btn-warning" href="{% url 'cursos:detalle_curso' curso.id %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-default" href="{% url 'cursos:modificar_curso' curso.id %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-danger" href="{% url 'cursos:borrar_curso' curso.id %}"><em class="glyphicon glyphicon-trash"></em></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

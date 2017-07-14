@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from libreta_curso import views as lc_views
-
+from . import views
 
 urlpatterns = [
- url(r'^cursos/', include('libreta_curso.urls', namespace='cursos')),
- url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
+    url(r'^$', views.inicio, name="inicio"),
+
+    url(r'^cursos/', include('libreta_curso.urls', namespace='cursos')),
 ]

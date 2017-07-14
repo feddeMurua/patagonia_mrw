@@ -1,0 +1,43 @@
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="shortcut icon" href="{% static 'images/rawson.png' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/particles.css' %}"/>
+    {% block stylesheets %}
+    {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    {% bootstrap_messages %}
+
+    {% include 'base/nav.html' %}
+
+    <ol id="breadcrumb-page" class="breadcrumb _breadcrumb_">
+        {% block breadcrumb-items %}
+        {% endblock %}
+    </ol>
+    <header id="header-page" class="header">
+        <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
+            <span class="glyphicon glyphicon-arrow-left animated pull-right"></span>
+        </a>
+        <h1 class="header-title pull-left">
+            {% block header-title %}{% endblock %}
+        </h1>
+    </header>
+
+    {% include 'base/particles.html' %}
+
+    {% block content %}
+    {% endblock %}
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/particles.js' %}"></script>
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>
