@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -14,7 +13,7 @@ from django.views.generic.edit import (
 from .models import (
     LibretaSanitaria,
     Curso,
-    ExamenClinico   )
+    PersonaFisica)
 
 '''
 CURSOS
@@ -86,3 +85,39 @@ class ModificacionLibreta(UpdateView):
     success_url = reverse_lazy('libretas:lista_libretas')
     fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
                 'observaciones','examen_clinico','foto']
+
+
+'''
+PERSONAS
+'''
+
+
+class ListaPersona(ListView):
+    model = PersonaFisica
+    template_name = 'persona/persona_list.html'
+
+
+class DetallePersona(DetailView):
+    model = PersonaFisica
+    template_name = 'persona/persona_detail.html'
+
+
+class AltaPersona(CreateView):
+    model = PersonaFisica
+    template_name = 'persona/persona_form.html'
+    success_url = reverse_lazy('personas:lista_personas')
+    fields = ['apellido', 'nombre', 'cuil', 'fecha_nacimiento', 'dni', 'nacionalidad', 'obra_social',
+              'domicilio', 'telefono', 'email', 'rubro']
+
+
+class BajaPersona(DeleteView):
+    model = PersonaFisica
+    template_name = 'persona/persona_confirm_delete.html'
+    success_url = reverse_lazy('personas:lista_personas')
+
+
+class ModificacionPersona(UpdateView):
+    model = PersonaFisica
+    template_name = 'persona/persona_form.html'
+    success_url = reverse_lazy('personas:lista_personas')
+    fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro']
