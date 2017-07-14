@@ -39,25 +39,10 @@
 		font-weight: bold
 }
 
-.featurette img { width: 35px; }
-
-#custom_carousel .col-lg-2
-{
-		box-sizing: border-box;
-		padding: 10px;
-}
-
-#custom_carousel .col-lg-2 .logos
-{
-		height: 75px;
-		box-sizing: border-box;
-}
-
-#custom_carousel h4 { padding: 20px; }
-
 .ds-btn li{
     padding:10px;
     display:inline-block;
+    margin-top: 30px;
 }
 
 .ds-btn li a span{
@@ -65,5 +50,4 @@
     padding-right:5px;
     width:100%;
     display:inline-block;
-    text-align:left;
 }

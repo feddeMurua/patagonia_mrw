@@ -5,6 +5,8 @@
 <head>
     <meta charset="UTF-8"/>
     <link rel="shortcut icon" href="{% static 'images/rawson.png' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/particles.css' %}"/>
     {% block stylesheets %}
     {% endblock %}
@@ -19,14 +21,17 @@
         {% block breadcrumb-items %}
         {% endblock %}
     </ol>
-    <header id="header-page" class="header">
-        <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
-            <span class="glyphicon glyphicon-arrow-left animated pull-right"></span>
-        </a>
-        <h1 class="header-title pull-left">
-            {% block header-title %}{% endblock %}
-        </h1>
-    </header>
+
+    {% block no-header %}
+        <header id="header-page" class="header">
+            <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
+                <span class="glyphicon glyphicon-arrow-left animated pull-right"></span>
+            </a>
+            <h1 class="header-title pull-left">
+                {% block header-title %}{% endblock %}
+            </h1>
+        </header>
+    {% endblock %}
 
     {% include 'base/particles.html' %}
 

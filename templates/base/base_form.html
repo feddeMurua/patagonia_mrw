@@ -3,12 +3,15 @@
 {% load staticfiles bootstrap3 %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_form.css' %}"/>
 {% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit"/>
-    </form>
+    <div class="container cuadro-form">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Aceptar"/>
+        </form>
+    </div>
 {% endblock %}

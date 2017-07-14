@@ -1,4 +1,9 @@
-<form method="post">{% csrf_token %}
-    ¿Estás seguro que deseas borrar el curso "{{ object }}"?
-    <input type="submit" value="Submit" />
-</form>
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Cursos de Manipulacion de Alimentos{% endblock %}
+
+{% block header-title %}Baja de Curso{% endblock %}
+
+{% block url-volver %}{% url 'cursos:lista_cursos' %}{% endblock %}
