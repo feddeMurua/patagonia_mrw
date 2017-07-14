@@ -32,10 +32,10 @@
                 <td>{{ curso.cupo }}</td>
                 <td>{{ curso.lugar }}</td>
                 <td>{{ curso.horario }}</td>                
-                <td>
-                    <a class="btn btn-warning btn-mostrar" data-url="{% url 'cursos:detalle_curso' curso.id %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-default" href="{% url 'cursos:modificar_curso' curso.id %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    <a class="btn btn-danger btn-baja" href="{% url 'cursos:borrar_curso' curso.id %}"><em class="glyphicon glyphicon-trash"></em></a>
+                <td align="center">
+                    <a class="btn btn-warning" href="{% url 'cursos:detalle_curso' curso.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-default" href="{% url 'cursos:modificar_curso' curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-danger" href="{% url 'cursos:borrar_curso' curso.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}
@@ -45,7 +45,7 @@
 
 {% block more-scripts %}
     <script>
-        $('a.btn-mostrarb').click(function(e) {
+        $('a.btn-mostrar').click(function(e) {
             var curso = $(this);
             mostrar(curso);
         });
@@ -57,9 +57,8 @@
                     '<p>Fecha de inicio: <i>{{ curso.fecha_inicio }}</i></p>' +
                     '<p>Cupo: <i>{{ curso.cupo }}</i></p>' +
                     '<p>Lugar: <i>{{ curso.lugar }}</i></p>' +
-                    '<p>Horario: <i>{{ curso.horario }}</i></p>' +
-                    '<p>Precio: <i>{{ curso.precio }}</i></p>',
-                showCloseButton: true,
+                    '<p>Horario: <i>{{ curso.horario }}</i></p>',
+                    showCloseButton: true,
                 confirmButtonText:
                     'Aceptar'
             })

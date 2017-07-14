@@ -39,7 +39,7 @@ class LibretaSanitaria(models.Model):
     foto = models.ImageField(upload_to=get_image_path, blank=True, null=True)
 
     def __str__(self):
-        return "%s %s" %  (self.id, self.persona)
+        return "%s %s" %  (self.pk, self.persona)
 
 
 class ExamenClinico(models.Model):
@@ -61,7 +61,7 @@ class Curso(models.Model):
     finalizado = models.BooleanField(default=False)
 
     def __str__(self):
-        return "Curso nro: %s" % self.id
+        return "%s" % self.fecha_inicio
 
 
 class Inscripcion(models.Model):

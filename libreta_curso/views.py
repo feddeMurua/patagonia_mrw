@@ -12,10 +12,8 @@ from django.views.generic.edit import (
 )
 
 from .models import (
-    PersonaFisica,
     LibretaSanitaria,
     Curso,
-    Inscripcion,
     ExamenClinico   )
 
 '''
@@ -51,3 +49,40 @@ class ModificacionCurso(UpdateView):
     template_name = 'curso/curso_form.html'
     success_url = reverse_lazy('cursos:lista_cursos')
     fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
+
+
+'''
+LIBRETRAS SANITARIAS
+'''
+
+
+class ListaLibreta(ListView):
+    model = LibretaSanitaria
+    template_name = 'libreta/libreta_list.html'
+
+
+class DetalleLibreta(DetailView):
+    model = LibretaSanitaria
+    template_name = 'libreta/libreta_detail.html'
+
+
+class AltaLibreta(CreateView):
+    model = LibretaSanitaria
+    template_name = 'libreta/libreta_form.html'
+    success_url = reverse_lazy('libretas:lista_libretas')
+    fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
+                'observaciones','examen_clinico','foto']
+
+
+class BajaLibreta(DeleteView):
+    model = LibretaSanitaria
+    template_name = 'libreta/libreta_confirm_delete.html'
+    success_url = reverse_lazy('libretas:lista_libretas')
+
+
+class ModificacionLibreta(UpdateView):
+    model = LibretaSanitaria
+    template_name = 'libreta/libreta_form.html'
+    success_url = reverse_lazy('libretas:lista_libretas')
+    fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
+                'observaciones','examen_clinico','foto']
