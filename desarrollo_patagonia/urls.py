@@ -20,6 +20,6 @@ from . import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.inicio, name="inicio"),
-
-    url(r'^cursos/', include('libreta_curso.urls', namespace='cursos')),
+    url(r'^cursos/', include('libreta_curso.urls_curso', namespace='cursos')),
+    url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),
 ]
