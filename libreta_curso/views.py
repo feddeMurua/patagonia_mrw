@@ -37,7 +37,7 @@ class AltaCurso(CreateView):
     model = Curso
     template_name = 'curso/curso_form.html'
     success_url = reverse_lazy('cursos:lista_cursos')
-    fields = ['fecha_inicio', 'cupo', 'lugar', 'horario', 'precio']
+    fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
 
 
 class BajaCurso(DeleteView):
@@ -50,4 +50,4 @@ class ModificacionCurso(UpdateView):
     model = Curso
     template_name = 'curso/curso_form.html'
     success_url = reverse_lazy('cursos:lista_cursos')
-    fields = ['fecha_inicio', 'cupo', 'lugar', 'horario', 'precio']
+    fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']

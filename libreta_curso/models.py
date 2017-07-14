@@ -26,13 +26,14 @@ class PersonaFisica(m.PersonaGenerica):
 class LibretaSanitaria(models.Model):
     FILTROS = ["fecha__icontains"]
     nro_ingresos_varios = models.BigIntegerField()
+    arancel = models.FloatField(null=True, blank=True)
     persona = models.OneToOneField(
         'PersonaFisica',
         on_delete=models.CASCADE,
         primary_key=True,
     )
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True,blank=True)
-    observaciones = models.CharField(max_length=200)
+    observaciones = models.CharField(max_length=200, null=True,blank=True)
     examen_clinico = models.ForeignKey('ExamenClinico', on_delete=models.CASCADE)
     fecha = models.DateField(default=now)
     foto = models.ImageField(upload_to=get_image_path, blank=True, null=True)
@@ -58,7 +59,6 @@ class Curso(models.Model):
     lugar = models.CharField(max_length=50)
     horario= models.TimeField()
     finalizado = models.BooleanField(default=False)
-    precio = models.FloatField()
 
     def __str__(self):
         return "Curso nro: %s" % self.id
@@ -69,6 +69,8 @@ class Inscripcion(models.Model):
     nota_curso = models.IntegerField(null=True, blank=True)
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)
+    arancel = models.FloatField(null=True, blank=True)
+    observaciones = models.CharField(max_length=200, null=True,blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
     persona = models.OneToOneField(
         'PersonaFisica',
