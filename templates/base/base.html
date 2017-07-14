@@ -17,12 +17,11 @@
 
     {% include 'base/nav.html' %}
 
-    <ol id="breadcrumb-page" class="breadcrumb _breadcrumb_">
-        {% block breadcrumb-items %}
-        {% endblock %}
-    </ol>
-
     {% block no-header %}
+        <ol id="breadcrumb-page" class="breadcrumb _breadcrumb_">
+            {% block breadcrumb-items %}
+            {% endblock %}
+        </ol>
         <header id="header-page" class="header">
             <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
                 <span class="glyphicon glyphicon-arrow-left animated pull-right"></span>
@@ -33,7 +32,9 @@
         </header>
     {% endblock %}
 
-    {% include 'base/particles.html' %}
+    {% block no-particles %}
+        {% include 'base/particles.html' %}
+    {% endblock %}
 
     {% block content %}
     {% endblock %}

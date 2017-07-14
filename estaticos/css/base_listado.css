@@ -1,9 +1,18 @@
 .panel-table {
-    margin-top: 35px;
+    margin: 35px;
 }
 
 .panel-table .panel-body{
   padding:0;
+}
+
+table th {
+    width: auto !important;
+}
+
+.table tr th,
+.table tr td {
+    text-align: center;
 }
 
 .panel-table .panel-body .table-bordered{
