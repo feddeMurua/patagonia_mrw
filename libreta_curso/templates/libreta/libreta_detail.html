@@ -1,6 +1,6 @@
-<p>Nombre de la persona: <i>{{ libreta.persona.nombre }}</i></p>
-<p>Curso: <i>{{ libreta.curso }}</i></p>
-<p>Observaciones: <i>{{ libreta.observaciones }}</i></p>
+<p>Nombre de la persona: <i>{{ object.persona.nombre }}</i></p>
+<p>Fecha de aprobacion del curso: <i>{{ object.curso.fecha_inicio }}</i></p>
+<p>Observaciones: <i>{{ object.observaciones }}</i></p>
 <p>
     <a href="{% url 'libretas:lista_libretas' %}">Regresar</a>
 </p>
