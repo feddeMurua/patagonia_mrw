@@ -22,6 +22,9 @@ urlpatterns = [
     url(r'^$', views.inicio, name="inicio"),
     url(r'^cursos/', include('libreta_curso.urls_curso', namespace='cursos')),
     url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),
+<<<<<<< HEAD
     url(r'^personas/', include('libreta_curso.urls_persona', namespace='personas')),
+=======
     url(r'^examenes/', include('libreta_curso.urls_examen', namespace='examenes')),
+>>>>>>> 6831a4c143e0e34899757497840ce3355bc66c0f
 ]

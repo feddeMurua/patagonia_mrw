@@ -13,7 +13,9 @@ from django.views.generic.edit import (
 from .models import (
     LibretaSanitaria,
     Curso,
-    PersonaFisica)
+    PersonaFisica,
+    ExamenClinico)
+
 
 '''
 CURSOS
@@ -121,3 +123,49 @@ class ModificacionPersona(UpdateView):
     template_name = 'persona/persona_form.html'
     success_url = reverse_lazy('personas:lista_personas')
     fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro']
+
+
+'''
+EXAMENES CLINICOS
+'''
+
+
+class ListaExamen(ListView):
+    model = ExamenClinico
+    template_name = 'examen/examen_list.html'
+
+
+class DetalleExamen(DetailView):
+    model = ExamenClinico
+    template_name = 'examen/examen_detail.html'
+
+
+class AltaExamen(CreateView):
+    model = ExamenClinico
+    template_name = 'examen/examen_form.html'
+    success_url = reverse_lazy('examenes:lista_examenes')
+    fields = ['fecha', 'profesional', 'centro_atencion']
+
+
+class BajaExamen(DeleteView):
+    model = ExamenClinico
+    template_name = 'examen/examen_confirm_delete.html'
+    success_url = reverse_lazy('examenes:lista_examenes')
+
+
+def cierre_de_curso(request):
+    pass
+
+
+'''
+pseudo codigo cierre de curso:
+
+1) listar fecha con cursos menor < hoy (los que se cargaron en el dia no se pueden cerrar)
+2) listar los alumnos pertenecientes al curso que se selecciono para cerrar
+3) seleccionar un alumno inscripto, agregar nota y portecentaje de asistencia
+4) repetir mietras haya alumnos en la lista
+5) confirmar la operacion luego de repasar los datos ingresados
+6) emitir certificado para todos los alumnos
+7) fin
+
+'''

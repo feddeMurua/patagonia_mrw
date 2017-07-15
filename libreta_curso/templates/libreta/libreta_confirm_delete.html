@@ -1,4 +1,9 @@
-<form method="post">{% csrf_token %}
-    ¿Está seguro que desea borrar esta libreta "{{ object }}"?
-    <input type="submit" value="Submit" />
-</form>
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Libretas Sanitarias{% endblock %}
+
+{% block header-title %}Baja de Libreta{% endblock %}
+
+{% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
