@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^borrar/(?P<pk>\d+)$', BajaLibreta.as_view(), name='borrar_libreta'),
     url(r'^editar/(?P<pk>\d+)$', ModificacionLibreta.as_view(), name='modificar_libreta'),
     url(r'^buscar/$', FilterView.as_view(filterset_class=LibretaListFilter,
-        template_name='libreta/libreta_search.html'), name='buscar'),
+        template_name='libreta/libreta_search.html'), name='buscar_libreta'),
 
 
 ]

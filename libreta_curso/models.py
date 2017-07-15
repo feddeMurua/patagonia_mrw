@@ -42,7 +42,6 @@ class LibretaSanitaria(models.Model):
 
 
 class ExamenClinico(models.Model):
-    FILTROS = ["profesional__icontains"]
     fecha = models.DateField()
     profesional = models.CharField(max_length=50)
     centro_atencion = models.CharField(max_length=50)
@@ -52,7 +51,6 @@ class ExamenClinico(models.Model):
 
 
 class Curso(models.Model):
-    FILTROS = ["cupo__icontains", "horario__icontains"]
     fecha_inicio = models.DateField()
     cupo = models.IntegerField()
     lugar = models.CharField(max_length=50)
@@ -64,7 +62,6 @@ class Curso(models.Model):
 
 
 class Inscripcion(models.Model):
-    FILTROS = ["curso"]
     nota_curso = models.IntegerField(null=True, blank=True)
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)

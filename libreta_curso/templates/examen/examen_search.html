@@ -4,8 +4,10 @@
     <button type="submit">Buscar</button>
   </form>
   <ul>
-  {% for libreta in filter.qs %}
-    <li>{{ libreta.persona }}</li>
+  {% for examen in filter.qs %}
+    <li>{{ examen.fecha }}</li>
+    <li>{{ examen.profesional }}</li>
+    <li>{{ examen.centro_atencion }}</li>
   {% endfor %}
   </ul>
 {% endblock %}

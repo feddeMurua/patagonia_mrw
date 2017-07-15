@@ -1,5 +1,6 @@
 from django.conf.urls import url
-
+from django_filters.views import FilterView
+from .filters import PersonaListFilter
 from .views import (
     ListaPersona,
     DetallePersona,
@@ -15,4 +16,6 @@ urlpatterns = [
     url(r'^nueva$', AltaPersona.as_view(), name='nueva_persona'),
     url(r'^borrar/(?P<pk>\d+)$', BajaPersona.as_view(), name='borrar_persona'),
     url(r'^editar/(?P<pk>\d+)$', ModificacionPersona.as_view(), name='modificar_persona'),
+    url(r'^buscar/$', FilterView.as_view(filterset_class=PersonaListFilter,
+        template_name='persona/persona_search.html'), name='buscar_persona'),
 ]
