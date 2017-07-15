@@ -1,0 +1,9 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Inscripción a Curso{% endblock %}
+
+{% block header-title %}Alta/Modificacion de Inscripcion{% endblock %}
+
+{% block url-volver %}{% url 'inscripciones:lista_inscripciones' %}{% endblock %}

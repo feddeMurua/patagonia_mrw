@@ -10,11 +10,14 @@ from django.views.generic.edit import (
     DeleteView
 )
 
+from .filters import LibretaListFilter
 from .models import (
     LibretaSanitaria,
     Curso,
     PersonaFisica,
-    ExamenClinico)
+    ExamenClinico,
+    Inscripcion
+    )
 
 
 '''
@@ -54,7 +57,7 @@ class ModificacionCurso(UpdateView):
 
 def cierre_de_curso(request):
     pass
-    
+
 '''
 pseudo codigo cierre de curso:
 
@@ -168,24 +171,38 @@ class BajaExamen(DeleteView):
     model = ExamenClinico
     template_name = 'examen/examen_confirm_delete.html'
     success_url = reverse_lazy('examenes:lista_examenes')
-<<<<<<< HEAD
-=======
-
-
-def cierre_de_curso(request):
-    pass
 
 
 '''
-pseudo codigo cierre de curso:
-
-1) listar fecha con cursos menor < hoy (los que se cargaron en el dia no se pueden cerrar)
-2) listar los alumnos pertenecientes al curso que se selecciono para cerrar
-3) seleccionar un alumno inscripto, agregar nota y portecentaje de asistencia
-4) repetir mietras haya alumnos en la lista
-5) confirmar la operacion luego de repasar los datos ingresados
-6) emitir certificado para todos los alumnos
-7) fin
-
+INSCRIPCIONES
 '''
->>>>>>> 45814f8636a2aa5ca967cedc62741392b6aad3c6
+
+
+class ListaInscripcion(ListView):
+    model = Inscripcion
+    template_name = 'inscripcion/inscripcion_list.html'
+
+
+class DetalleInscripcion(DetailView):
+    model = Inscripcion
+    template_name = 'inscripcion/inscripcion_detail.html'
+
+
+class AltaInscripcion(CreateView):
+    model = Inscripcion
+    template_name = 'inscripcion/inscripcion_form.html'
+    success_url = reverse_lazy('inscripciones:lista_inscripciones')
+    fields = ['nro_ingresos_varios', 'arancel','persona','curso', 'observaciones']
+
+
+class BajaInscripcion(DeleteView):
+    model = Inscripcion
+    template_name = 'inscripcion/inscripcion_confirm_delete.html'
+    success_url = reverse_lazy('inscripciones:lista_inscripciones')
+
+
+class ModificacionInscripcion(UpdateView):
+    model = Inscripcion
+    template_name = 'inscripcion/inscripcion_form.html'
+    success_url = reverse_lazy('inscripciones:lista_inscripciones')
+    fields = ['nro_ingresos_varios', 'arancel','persona', 'curso', 'observaciones']

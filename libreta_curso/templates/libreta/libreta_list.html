@@ -10,8 +10,10 @@
 
 {% block panel-title %}Libretas{% endblock %}
 
+
 {% block btn-nuevo %}
     <a href="{% url 'libretas:nueva_libreta' %}" class="btn btn-sm btn-primary btn-create" role="button">Nueva Libreta</a>
+    <a href="{% url 'libretas:buscar' %}" class="btn btn-sm btn-primary btn-info" role="button">Buscar Libreta</a>
 {% endblock %}
 
 {% block tabla %}

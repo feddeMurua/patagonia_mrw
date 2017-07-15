@@ -1,0 +1,9 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Inscripiones a Curso{% endblock %}
+
+{% block header-title %}Baja de Inscripcion{% endblock %}
+
+{% block url-volver %}{% url 'inscripciones:lista_inscripciones' %}{% endblock %}

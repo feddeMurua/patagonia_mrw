@@ -1,0 +1,12 @@
+
+{% block content %}
+  <form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Buscar</button>
+  </form>
+  <ul>
+  {% for libreta in filter.qs %}
+    <li>{{ libreta.persona }}</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

@@ -4,7 +4,7 @@
 
 {% block title %}Cursos de Manipulacion de Alimentos{% endblock %}
 
-{% block header-title %}Cursos de Manipulacion de Alimentos{% endblock %}
+{% block header-title %}Cursos de Manipulación de Alimentos{% endblock %}
 
 {% block url-volver %}{% url 'inicio' %}{% endblock %}
 
@@ -31,7 +31,7 @@
                 <td>{{ curso.fecha_inicio }}</td>
                 <td>{{ curso.cupo }}</td>
                 <td>{{ curso.lugar }}</td>
-                <td>{{ curso.horario }}</td>                
+                <td>{{ curso.horario }}</td>
                 <td align="center">
                     <a class="btn btn-warning btn-mostrar" href="{% url 'cursos:detalle_curso' curso.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" href="{% url 'cursos:modificar_curso' curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
