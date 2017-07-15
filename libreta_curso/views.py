@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -14,7 +13,9 @@ from django.views.generic.edit import (
 from .models import (
     LibretaSanitaria,
     Curso,
-    ExamenClinico   )
+    PersonaFisica,
+    ExamenClinico)
+
 
 '''
 CURSOS
@@ -106,6 +107,42 @@ class ModificacionLibreta(UpdateView):
 
 
 '''
+PERSONAS
+'''
+
+
+class ListaPersona(ListView):
+    model = PersonaFisica
+    template_name = 'persona/persona_list.html'
+
+
+class DetallePersona(DetailView):
+    model = PersonaFisica
+    template_name = 'persona/persona_detail.html'
+
+
+class AltaPersona(CreateView):
+    model = PersonaFisica
+    template_name = 'persona/persona_form.html'
+    success_url = reverse_lazy('personas:lista_personas')
+    fields = ['apellido', 'nombre', 'cuil', 'fecha_nacimiento', 'dni', 'nacionalidad', 'obra_social',
+              'domicilio', 'telefono', 'email', 'rubro']
+
+
+class BajaPersona(DeleteView):
+    model = PersonaFisica
+    template_name = 'persona/persona_confirm_delete.html'
+    success_url = reverse_lazy('personas:lista_personas')
+
+
+class ModificacionPersona(UpdateView):
+    model = PersonaFisica
+    template_name = 'persona/persona_form.html'
+    success_url = reverse_lazy('personas:lista_personas')
+    fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro']
+
+
+'''
 EXAMENES CLINICOS
 '''
 
@@ -131,3 +168,24 @@ class BajaExamen(DeleteView):
     model = ExamenClinico
     template_name = 'examen/examen_confirm_delete.html'
     success_url = reverse_lazy('examenes:lista_examenes')
+<<<<<<< HEAD
+=======
+
+
+def cierre_de_curso(request):
+    pass
+
+
+'''
+pseudo codigo cierre de curso:
+
+1) listar fecha con cursos menor < hoy (los que se cargaron en el dia no se pueden cerrar)
+2) listar los alumnos pertenecientes al curso que se selecciono para cerrar
+3) seleccionar un alumno inscripto, agregar nota y portecentaje de asistencia
+4) repetir mietras haya alumnos en la lista
+5) confirmar la operacion luego de repasar los datos ingresados
+6) emitir certificado para todos los alumnos
+7) fin
+
+'''
+>>>>>>> 45814f8636a2aa5ca967cedc62741392b6aad3c6

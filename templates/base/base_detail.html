@@ -1,0 +1,18 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_detail.css' %}"/>
+{% endblock %}
+
+{% block no-particles %}{% endblock %}
+
+{% block content %}
+    <div class="container container-detail">
+        <div class="panel panel-default">
+            <div class="panel-body">{% block detail %}{% endblock %}</div>
+            <div class="panel-footer">{% block btn-footer %}{% endblock %}</div>
+        </div>
+    </div>
+{% endblock %}

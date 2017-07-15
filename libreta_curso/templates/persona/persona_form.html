@@ -1,0 +1,9 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Personas{% endblock %}
+
+{% block header-title %}Alta/Modificacion de Persona{% endblock %}
+
+{% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}

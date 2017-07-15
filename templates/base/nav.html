@@ -12,7 +12,7 @@
     <div class="featurette" id="about">
       <!------------------------code---------------start---------------->
       <div class="container-fluid">
-        <div id="custom_carousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+        <div id="custom_carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
@@ -37,12 +37,24 @@
                   </ul>
               </div>
             </div>
+              <div class="item">
+                  <div class="container-fluid">
+                      <ul class="ds-btn text-center">
+                          <li>
+                              <a class="btn btn-lg btn-primary" href="{% url 'personas:lista_personas'%}">
+                                  <span>Listado de Personas</span>
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
             <!-- End Item -->
           </div>
           <!-- End Carousel Inner -->
           <div class="controls">
             <ul class="nav">
-              <li data-target="#custom_carousel" data-slide-to="0" class="active"> <a><small>LIBRETAS/CURSOS</small></a></li>
+                <li data-target="#custom_carousel" data-slide-to="0" class="active"> <a><small>LIBRETAS/CURSOS</small></a></li>
+                <li data-target="#custom_carousel" data-slide-to="1"> <a><small>PERSONAS</small></a></li>
             </ul>
           </div>
         </div>
