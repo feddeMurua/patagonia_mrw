@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -9,7 +8,7 @@ from django.views.generic.edit import (
     UpdateView,
     DeleteView
 )
-
+from .forms import *
 from .filters import LibretaListFilter
 from .models import (
     LibretaSanitaria,
@@ -39,7 +38,7 @@ class AltaCurso(CreateView):
     model = Curso
     template_name = 'curso/curso_form.html'
     success_url = reverse_lazy('cursos:lista_cursos')
-    fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
+    form_class = CursoForm
 
 
 class BajaCurso(DeleteView):
@@ -52,10 +51,10 @@ class ModificacionCurso(UpdateView):
     model = Curso
     template_name = 'curso/curso_form.html'
     success_url = reverse_lazy('cursos:lista_cursos')
-    fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
+    form_class = CursoForm
 
 
-def cierre_de_curso(request):
+def cierre_de_curso(request, pk_curso):
     pass
 
 '''
@@ -128,8 +127,7 @@ class AltaPersona(CreateView):
     model = PersonaFisica
     template_name = 'persona/persona_form.html'
     success_url = reverse_lazy('personas:lista_personas')
-    fields = ['apellido', 'nombre', 'cuil', 'fecha_nacimiento', 'dni', 'nacionalidad', 'obra_social',
-              'domicilio', 'telefono', 'email', 'rubro']
+    form_class = PersonaForm
 
 
 class BajaPersona(DeleteView):
@@ -164,7 +162,7 @@ class AltaExamen(CreateView):
     model = ExamenClinico
     template_name = 'examen/examen_form.html'
     success_url = reverse_lazy('examenes:lista_examenes')
-    fields = ['fecha', 'profesional', 'centro_atencion']
+    form_class = ExamenForm
 
 
 class BajaExamen(DeleteView):

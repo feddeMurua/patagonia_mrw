@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django import forms
 from django.db import models
 from django.utils.timezone import now
 from desarrollo_patagonia import models as m
