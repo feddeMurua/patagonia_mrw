@@ -1,0 +1,65 @@
+/*CURSOS*/
+
+INSERT INTO libreta_curso_curso VALUES ( 1, '2017-07-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 2, '2017-08-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 3, '2017-09-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 4, '2017-10-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 5, '2017-11-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 6, '2017-12-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 7, '2018-01-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 8, '2018-02-16', 100,  'ESCUELA IMA', '17:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 9, '2018-03-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 10, '2018-04-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 11, '2018-05-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 12, '2018-06-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 13, '2018-07-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 14, '2018-08-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 15, '2018-09-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 16, '2018-10-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 17, '2018-11-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 18, '2018-12-16', 100,  'ESCUELA IDB', '18:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 19, '2019-01-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 20, '2019-02-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 21, '2019-03-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 22, '2019-04-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 23, '2019-05-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 24, '2019-06-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 25, '2019-07-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 26, '2019-08-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 27, '2019-09-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 28, '2019-10-16', 100,  'ESCUELA 729', '16:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 29, '2019-11-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 30, '2019-12-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 31, '2020-01-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 32, '2020-02-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 33, '2020-03-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 34, '2020-04-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 35, '2020-05-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 36, '2020-06-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 37, '2020-07-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 38, '2020-08-16', 100,  'ESCUELA 752', '15:00:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 39, '2020-09-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 40, '2020-10-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 41, '2020-11-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 42, '2020-12-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 43, '2021-01-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 44, '2021-02-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 45, '2021-03-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 46, '2021-04-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 47, '2021-05-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 48, '2021-06-16', 100,  'ESCUELA 167', '14:30:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 49, '2021-07-16', 100,  'ESCUELA 20', '16:45:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 50, '2021-08-16', 100,  'ESCUELA 20', '16:45:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 51, '2021-09-16', 100,  'ESCUELA 20', '16:45:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 52, '2021-10-16', 100,  'ESCUELA 20', '16:45:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 53, '2021-11-16', 100,  'ESCUELA 20', '16:45:00', 'False');
+INSERT INTO libreta_curso_curso VALUES ( 54, '2021-12-16', 100,  'ESCUELA 20', '16:45:00', 'False');
+
+
+/*PERSONAS*/
+
+/*INSCRIPCIONES*/
+
+/*EXAMENES*/
+
+/*LIBRETAS*/
