@@ -1,22 +1,26 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+from django.shortcuts import render
+from .forms import *
+from .filters import (
+    CursoListFilter,
+    LibretaListFilter,
+    PersonaListFilter,
+    ExamenListFilter,
+    InscripcionListFilter)
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
-    DeleteView
-)
-from .forms import *
-from .filters import LibretaListFilter
+    DeleteView)
 from .models import (
     LibretaSanitaria,
     Curso,
     PersonaFisica,
     ExamenClinico,
-    Inscripcion
-    )
+    Inscripcion)
 
 
 '''
@@ -24,9 +28,10 @@ CURSOS
 '''
 
 
-class ListaCurso(ListView):
-    model = Curso
-    template_name = 'curso/curso_list.html'
+def ListaCurso(request):
+    lista_cursos = Curso.objects.all()
+    filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
+    return render(request, 'curso/curso_list.html', {'filter': filtro_cursos})
 
 
 class DetalleCurso(DetailView):
@@ -76,9 +81,10 @@ LIBRETRAS SANITARIAS
 '''
 
 
-class ListaLibreta(ListView):
-    model = LibretaSanitaria
-    template_name = 'libreta/libreta_list.html'
+def ListaLibreta(request):
+    lista_libretas = LibretaSanitaria.objects.all()
+    filtro_libretas = LibretaListFilter(request.GET, queryset=lista_libretas)
+    return render(request, 'libreta/libreta_list.html', {'filter': filtro_libretas})
 
 
 class DetalleLibreta(DetailView):
@@ -91,7 +97,7 @@ class AltaLibreta(CreateView):
     template_name = 'libreta/libreta_form.html'
     success_url = reverse_lazy('libretas:lista_libretas')
     fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
-                'observaciones','examen_clinico','foto']
+                'observaciones', 'examen_clinico', 'foto']
 
 
 class BajaLibreta(DeleteView):
@@ -105,7 +111,7 @@ class ModificacionLibreta(UpdateView):
     template_name = 'libreta/libreta_form.html'
     success_url = reverse_lazy('libretas:lista_libretas')
     fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
-                'observaciones','examen_clinico','foto']
+                'observaciones', 'examen_clinico', 'foto']
 
 
 '''
@@ -113,9 +119,10 @@ PERSONAS
 '''
 
 
-class ListaPersona(ListView):
-    model = PersonaFisica
-    template_name = 'persona/persona_list.html'
+def ListaPersona(request):
+    lista_personas = PersonaFisica.objects.all()
+    filtro_personas = PersonaListFilter(request.GET, queryset=lista_personas)
+    return render(request, 'persona/persona_list.html', {'filter': filtro_personas})
 
 
 class DetallePersona(DetailView):
@@ -148,9 +155,10 @@ EXAMENES CLINICOS
 '''
 
 
-class ListaExamen(ListView):
-    model = ExamenClinico
-    template_name = 'examen/examen_list.html'
+def ListaExamen(request):
+    lista_examenes = ExamenClinico.objects.all()
+    filtro_examenes = ExamenListFilter(request.GET, queryset=lista_examenes)
+    return render(request, 'examen/examen_list.html', {'filter': filtro_examenes})
 
 
 class DetalleExamen(DetailView):
@@ -176,9 +184,10 @@ INSCRIPCIONES
 '''
 
 
-class ListaInscripcion(ListView):
-    model = Inscripcion
-    template_name = 'inscripcion/inscripcion_list.html'
+def ListaInscripcion(request):
+    lista_inscripciones = Inscripcion.objects.all()
+    filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
+    return render(request, 'inscripcion/inscripcion_list.html', {'filter': filtro_inscripciones})
 
 
 class DetalleInscripcion(DetailView):

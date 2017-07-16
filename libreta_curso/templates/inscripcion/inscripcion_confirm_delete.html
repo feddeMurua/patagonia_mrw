@@ -7,3 +7,5 @@
 {% block header-title %}Baja de Inscripcion{% endblock %}
 
 {% block url-volver %}{% url 'inscripciones:lista_inscripciones' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'inscripciones:lista_inscripciones' %}" class="btn btn-sm btn-primary" role="button">Cancelar</a>{% endblock %}

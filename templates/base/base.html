@@ -6,6 +6,7 @@
     <meta charset="UTF-8"/>
     <link rel="shortcut icon" href="{% static 'images/rawson.png' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/particles.css' %}"/>
     {% block stylesheets %}
@@ -15,7 +16,9 @@
 <body>
     {% bootstrap_messages %}
 
-    {% include 'base/nav.html' %}
+    {% block no-navbar %}
+        {% include 'base/nav.html' %}
+    {% endblock %}
 
     {% block no-header %}
         <ol id="breadcrumb-page" class="breadcrumb _breadcrumb_">
@@ -37,8 +40,7 @@
     {% endblock %}
 
     {% block content %}
-    {% endblock %}    
-    <script src="{% static 'js/jquery.min.js' %}"></script>
+    {% endblock %}
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>

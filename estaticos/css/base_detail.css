@@ -5,3 +5,7 @@
 .panel-footer {
     text-align: right;
 }
+
+#hidden-panel {
+    display: none;
+}

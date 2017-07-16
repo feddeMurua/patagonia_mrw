@@ -12,7 +12,6 @@
 
 {% block btn-nuevo %}
     <a href="{% url 'cursos:nuevo_curso' %}" class="btn btn-sm btn-primary btn-create" role="button">Nuevo Curso</a>
-    <a href="{% url 'cursos:buscar_curso' %}" class="btn btn-sm btn-primary btn-info" role="button">Buscar Curso</a>
 {% endblock %}
 
 {% block tabla %}
@@ -27,18 +26,18 @@
         </tr>
         </thead>
         <tbody>
-        {% for curso in object_list %}
+        {% for curso in filter.qs %}
             <tr align="center">
                 <td>{{ curso.fecha_inicio }}</td>
                 <td>{{ curso.cupo }}</td>
                 <td>{{ curso.lugar }}</td>
                 <td>{{ curso.horario }}</td>
                 <td align="center">
-                    <a class="btn btn-warning btn-mostrar" href="{% url 'cursos:detalle_curso' curso.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-default" href="{% url 'cursos:modificar_curso' curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    <a class="btn btn-danger" href="{% url 'cursos:borrar_curso' curso.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
-                    <a class="btn btn-info" href="#"><em class="glyphicon glyphicon-user"></em></a>
-                    <a class="btn btn-success" href="#"><em class="glyphicon glyphicon-education"></em></a>
+                    <a class="btn btn-warning btn-mostrar" data-toggle="tooltip" title="Detalle" href="{% url 'cursos:detalle_curso' curso.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:modificar_curso' curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'cursos:borrar_curso' curso.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="#"><em class="glyphicon glyphicon-user"></em></a>
+                    <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="#"><em class="glyphicon glyphicon-education"></em></a>
                 </td>
             </tr>
         {% endfor %}

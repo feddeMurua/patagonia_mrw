@@ -7,3 +7,5 @@
 {% block header-title %}Baja de Libreta{% endblock %}
 
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'libretas:lista_libretas' %}" class="btn btn-sm btn-primary" role="button">Cancelar</a>{% endblock %}

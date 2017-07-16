@@ -4,7 +4,6 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_detail.css' %}"/>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 {% endblock %}
 
 {% block no-particles %}{% endblock %}
@@ -19,20 +18,18 @@
 {% endblock %}
 
 {% block scripts %}
-
-  <script type="text/javascript" >
-    $(document).ready(function() {
-        $('.datepicker').datepicker({
-                                dateFormat: "dd/mm/yy",
-                                defaultDate: "+1w",
-                                changeMonth: true,
-                                changeYear: true,
-                                yearRange: '1940:2050',
-                                onClose: function( selectedDate ) {
-                                        $( "#fecha" ).datepicker( "option", "minDate", selectedDate );
-                                }
-                        });
-    });
-  </script>
-
+    <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                dateFormat: "dd/mm/yy",
+                defaultDate: "+1w",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1940:2050',
+                onClose: function(selectedDate) {
+                    $("#fecha").datepicker("option","minDate",selectedDate);
+                }
+            });
+        });
+    </script>
 {% endblock %}

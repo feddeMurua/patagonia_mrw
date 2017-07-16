@@ -1,16 +1,13 @@
 .container-nav {
-    background: white;
+    background: #fff;
 }
 
-#custom_carousel .item
-{
+#custom_carousel .item {
 		color: #fff;
 		background-color: #232323;
-		padding: 0 0 20px 0;
 }
 
-#custom_carousel .controls
-{
+#custom_carousel .controls {
 		overflow-x: auto;
 		overflow-y: hidden;
 		padding: 0;
@@ -21,21 +18,18 @@
 		background: #ddd
 }
 
-#custom_carousel .controls li
-{
+#custom_carousel .controls li {
+        background-color: #232323;
 		display: table-cell;
 		width: 1%;
 		max-width: 90px
 }
 
-#custom_carousel .controls li.active
-{
-		background-color: #232323;
+#custom_carousel .controls li.active {
 		border-top: 3px solid orange;
 }
 
-#custom_carousel .controls a small
-{
+#custom_carousel .controls a small {
 		overflow: hidden;
 		display: block;
 		font-size: 10px;
@@ -43,13 +37,13 @@
 		font-weight: bold
 }
 
-.ds-btn li{
+.ds-btn li {
     padding:10px;
     display:inline-block;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
-.ds-btn li a span{
+.ds-btn li a span {
     padding-left:15px;
     padding-right:5px;
     width:100%;

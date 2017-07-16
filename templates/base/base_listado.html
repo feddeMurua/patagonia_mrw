@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_listado.css' %}"/>
@@ -21,8 +22,32 @@
                             </div>
                             <div class="col col-xs-6 text-right">
                                 {% block btn-nuevo %}{% endblock %}
+                                <a class="btn btn-sm btn-info" role="button" id="buscar">Buscar</a>
                             </div>
                         </div>
+                    </div>
+                    <div class="panel-body" id="hidden-panel">
+                        <form method="get">
+                            <div class="well">
+                                {% csrf_token %}
+                                {% for hidden in filter.form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+
+                                {% for field in filter.form.visible_fields %}
+                                    <div class="form-group">
+                                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {{ field|add_class:'form-control' }}
+                                        {% for error in field.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-search"></span> Buscar
+                                </button>
+                            </div>
+                        </form>
                     </div>
                     <div class="panel-body">
                         {% block tabla %}{% endblock %}
@@ -35,5 +60,20 @@
 
 {% block scripts %}
     <script src="{% static 'js/sweetalert2.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#hidden-panel").hide();
+        });
+
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $(document).ready(function(){
+            $("#buscar").click(function(){
+                $("#hidden-panel").slideToggle("slow");
+            });
+        });
+    </script>
     {% block more-scripts %}{% endblock %}
 {% endblock %}

@@ -12,7 +12,6 @@
 
 {% block btn-nuevo %}
     <a href="{% url 'personas:nueva_persona' %}" class="btn btn-sm btn-primary btn-create" role="button">Nueva Persona</a>
-    <a href="{% url 'personas:buscar_persona' %}" class="btn btn-sm btn-primary btn-info" role="button">Buscar Persona</a>
 {% endblock %}
 
 {% block tabla %}
@@ -27,16 +26,16 @@
         </tr>
         </thead>
         <tbody>
-        {% for persona in object_list %}
+        {% for persona in filter.qs %}
             <tr align="center">
                 <td>{{ persona.apellido }}, {{ persona.nombre }}</td>
                 <td>{{ persona.dni }}</td>
                 <td>{{ persona.domicilio }}</td>
                 <td>{{ persona.telefono }}</td>
                 <td align="center">
-                    <a class="btn btn-warning btn-mostrar" href="{% url 'personas:detalle_persona' persona.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-default" href="{% url 'personas:modificar_persona' persona.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    <a class="btn btn-danger" href="{% url 'personas:borrar_persona' persona.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-warning btn-mostrar" data-toggle="tooltip" title="Detalle" href="{% url 'personas:detalle_persona' persona.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'personas:modificar_persona' persona.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'personas:borrar_persona' persona.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}

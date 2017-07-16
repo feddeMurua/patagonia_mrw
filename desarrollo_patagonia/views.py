@@ -6,6 +6,6 @@ from django.shortcuts import render
 #         return get["o"]
 
 
-# @login_required(login_url='login')
+# @login_required(login_url='registration')
 def inicio(request):
     return render(request, "base/inicio.html")

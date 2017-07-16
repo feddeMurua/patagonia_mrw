@@ -7,3 +7,5 @@
 {% block header-title %}Baja de Persona{% endblock %}
 
 {% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'personas:lista_personas' %}" class="btn btn-sm btn-primary" role="button">Cancelar</a>{% endblock %}

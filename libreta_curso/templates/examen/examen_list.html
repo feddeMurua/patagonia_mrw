@@ -12,7 +12,6 @@
 
 {% block btn-nuevo %}
     <a href="{% url 'examenes:nuevo_examen' %}" class="btn btn-sm btn-primary btn-create" role="button">Nuevo Exámen</a>
-    <a href="{% url 'examenes:buscar_examen' %}" class="btn btn-sm btn-primary btn-info" role="button">Buscar Exámen</a>
 {% endblock %}
 
 {% block tabla %}
@@ -26,14 +25,14 @@
         </tr>
         </thead>
         <tbody>
-        {% for examen in object_list %}
+        {% for examen in filter.qs %}
             <tr>
                 <td>{{ examen.fecha }}</td>
                 <td>{{ examen.profesional }}</td>
                 <td>{{ examen.centro_atencion }}</td>
                 <td align="center">
-                    <a class="btn btn-warning" href="{% url 'examenes:detalle_examen' examen.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-danger" href="{% url 'examenes:borrar_examen' examen.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'examenes:detalle_examen' examen.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'examenes:borrar_examen' examen.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}
