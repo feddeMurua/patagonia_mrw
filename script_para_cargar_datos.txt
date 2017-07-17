@@ -58,8 +58,82 @@ INSERT INTO libreta_curso_curso VALUES ( 54, '2021-12-16', 100,  'ESCUELA 20', '
 
 /*PERSONAS*/
 
+INSERT INTO libreta_curso_personafisica VALUES (1, 'Chacho peñaloza 593', '154730914', 'fedde.murua@gmail.com',
+                                              'APU', 'Federico', 'Murua', '2037147540', '1993-01-31',
+                                              '37147540', 'Argentina', 'Seros');
+
+INSERT INTO libreta_curso_personafisica VALUES (2, 'Una direccion 2', '', '',
+                                              'Un Rubro', 'Una Persona 2', 'Un Apellido 2', '', '2017-07-17',
+                                              'Un DNI 2', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (3, 'Una direccion 3', '', '',
+                                              'Un Rubro', 'Una Persona 3', 'Un Apellido 3', '', '2017-07-17',
+                                              'Un DNI 3', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (4, 'Una direccion 4', '', '',
+                                              'Un Rubro', 'Una Persona 4', 'Un Apellido 4', '', '2017-07-17',
+                                              'Un DNI 4', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (5, 'Una direccion 5', '', '',
+                                              'Un Rubro', 'Una Persona 5', 'Un Apellido 5', '', '2017-07-17',
+                                              'Un DNI 5', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (6, 'Una direccion 6', '', '',
+                                              'Un Rubro', 'Una Persona 6', 'Un Apellido 6', '', '2017-07-17',
+                                              'Un DNI 6', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (7, 'Una direccion 7', '', '',
+                                              'Un Rubro', 'Una Persona 7', 'Un Apellido 7', '', '2017-07-17',
+                                              'Un DNI 7', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (8, 'Una direccion 8', '', '',
+                                              'Un Rubro', 'Una Persona 8', 'Un Apellido 8', '', '2017-07-17',
+                                              'Un DNI 8', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (9, 'Una direccion 9', '', '',
+                                              'Un Rubro', 'Una Persona 9', 'Un Apellido 9', '', '2017-07-17',
+                                              'Un DNI 9', 'Argentina', '');
+
+INSERT INTO libreta_curso_personafisica VALUES (10, 'Una direccion 10', '', '',
+                                              'Un Rubro', 'Una Persona 10', 'Un Apellido 10', '', '2017-07-17',
+                                              'Un DNI 10', 'Argentina', '');
+
 /*INSCRIPCIONES*/
+
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 1,1);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 2,1);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 3,1);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 4,1);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 5,1);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 6,2);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 7,2);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 8,2);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 9,3);
+INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 10,3);
 
 /*EXAMENES*/
 
+INSERT INTO libreta_curso_examenclinico VALUES (1,'2017-01-01','Un profesional 1','Mini Hospital');
+INSERT INTO libreta_curso_examenclinico VALUES (2,'2017-02-13','Un profesional 2','Mini Hospital');
+INSERT INTO libreta_curso_examenclinico VALUES (3,'2017-01-07','Un profesional 3','Mini Hospital');
+INSERT INTO libreta_curso_examenclinico VALUES (4,'2017-03-04','Un profesional 4','Mini Hospital');
+INSERT INTO libreta_curso_examenclinico VALUES (5,'2017-04-01','Un profesional 5','Mini Hospital');
+INSERT INTO libreta_curso_examenclinico VALUES (6,'2017-02-12','Un profesional 6','Hospital santa teresita');
+INSERT INTO libreta_curso_examenclinico VALUES (7,'2017-01-05','Un profesional 7','Hospital santa teresita');
+INSERT INTO libreta_curso_examenclinico VALUES (8,'2017-03-11','Un profesional 8','Hospital santa teresita');
+INSERT INTO libreta_curso_examenclinico VALUES (9,'2017-02-09','Un profesional 9','Hospital santa teresita');
+INSERT INTO libreta_curso_examenclinico VALUES (10,'2017-01-11','Un profesional 10','Hospital santa teresita');
+
 /*LIBRETAS*/
+
+
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,1,'No necesita curso manipulación','2017-01-11', null,null,1);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,2,'No necesita curso manipulación','2017-01-11', null,null,2);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,3,'No necesita curso manipulación','2017-01-11', null,null,3);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,4,'No necesita curso manipulación','2017-01-11', null,null,4);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,5,'No necesita curso manipulación','2017-01-11', null,null,5);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,6,'No necesita curso manipulación','2017-01-11', null,null,6);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,7,'No necesita curso manipulación','2017-01-11', null,null,7);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,8,'No necesita curso manipulación','2017-01-11', null,null,8);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,9,'No necesita curso manipulación','2017-01-11', null,null,9);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,10,'No necesita curso manipulación','2017-01-11', null,null,10);
