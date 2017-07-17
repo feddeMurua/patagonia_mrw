@@ -35,19 +35,39 @@ table th {
   border-left: 0px;
 }
 
-.panel-table .panel-body .table-bordered > tbody > tr:first-of-type > td{
+.panel-table .panel-body .table-bordered > tbody > tr:first-of-type > td {
   border-bottom: 0px;
 }
 
-.panel-table .panel-body .table-bordered > thead > tr:first-of-type > th{
+.panel-table .panel-body .table-bordered > thead > tr:first-of-type > th {
   border-top: 0px;
 }
 
-.panel-table .panel-heading .col h3{
+.panel-table .panel-heading .col h3 {
  line-height: 30px;
  height: 30px;
 }
 
 .panel-table .panel-body .table-bordered > tbody > tr > td{
   line-height: 34px;
+}
+
+.paging-nav {
+  text-align: right;
+  padding-top: 2px;
+}
+
+.paging-nav a {
+  margin: 10px 7px 10px auto;
+  text-decoration: none;
+  display: inline-block;
+  padding: 1px 7px;
+  background: #91b9e6;
+  color: white;
+  border-radius: 3px;
+}
+
+.paging-nav .selected-page {
+  background: #187ed5;
+  font-weight: bold;
 }

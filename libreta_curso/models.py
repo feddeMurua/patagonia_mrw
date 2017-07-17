@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django import forms
 from django.db import models
 from django.utils.timezone import now
 from desarrollo_patagonia import models as m
@@ -16,7 +15,7 @@ class PersonaFisica(m.PersonaGenerica):
     apellido = models.CharField(max_length=50)
     cuil = models.CharField(max_length=50, blank=True)
     fecha_nacimiento = models.DateField()
-    dni = models.CharField(unique=True,max_length=50)
+    dni = models.CharField(unique=True, max_length=50)
     nacionalidad = models.CharField(max_length=50)
     obra_social = models.CharField(max_length=50, blank=True)
 
@@ -44,7 +43,7 @@ class Curso(models.Model):
     fecha_inicio = models.DateField()
     cupo = models.IntegerField()
     lugar = models.CharField(max_length=50)
-    horario= models.TimeField()
+    horario = models.TimeField()
     finalizado = models.BooleanField(default=False)
 
     def __str__(self):
