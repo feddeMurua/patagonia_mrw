@@ -1,11 +1,5 @@
 from django.conf.urls import url
-from .views import (
-    ListaLibreta,
-    DetalleLibreta,
-    AltaLibreta,
-    BajaLibreta,
-    ModificacionLibreta,
-)
+from .views import *
 
 urlpatterns = [
     url(r'^$', ListaLibreta, name='lista_libretas'),

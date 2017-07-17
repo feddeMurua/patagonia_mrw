@@ -19,7 +19,6 @@
         <thead>
         <tr>
             <th>Persona</th>
-            <th>Curso</th>
             <th>Observaciones</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -28,7 +27,6 @@
         {% for inscripcion in filter.qs %}
             <tr>
                 <td>{{ inscripcion.persona }}</td>
-                <td>{{ inscripcion.curso }}</td>
                 <td>{{ inscripcion.observaciones }}</td>
                 <td align="center">
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'inscripciones:detalle_inscripcion' inscripcion.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>

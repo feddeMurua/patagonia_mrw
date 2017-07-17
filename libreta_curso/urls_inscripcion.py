@@ -1,11 +1,5 @@
 from django.conf.urls import url
-from .views import (
-    ListaInscripcion,
-    DetalleInscripcion,
-    AltaInscripcion,
-    BajaInscripcion,
-    ModificacionInscripcion
-)
+from .views import *
 
 urlpatterns = [
     url(r'^$', ListaInscripcion, name='lista_inscripciones'),

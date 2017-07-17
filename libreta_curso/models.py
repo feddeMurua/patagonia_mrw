@@ -8,7 +8,7 @@ import os
 
 
 def get_image_path(instance, filename):
-    return os.path.join('/root/Documents/', str(instance.pk), filename)
+    return os.path.join('images/', str(instance.pk), filename)
 
 
 class PersonaFisica(m.PersonaGenerica):
@@ -21,7 +21,7 @@ class PersonaFisica(m.PersonaGenerica):
     obra_social = models.CharField(max_length=50)
 
     def __str__(self):
-        return "%s - %s - %s" % (self.apellido, self.nombre, self.dni)
+        return "%s, %s - %s" % (self.apellido, self.nombre, self.dni)
 
 
 class LibretaSanitaria(models.Model):
@@ -36,10 +36,10 @@ class LibretaSanitaria(models.Model):
     observaciones = models.CharField(max_length=200, default='',blank=True)
     examen_clinico = models.ForeignKey('ExamenClinico', on_delete=models.CASCADE)
     fecha = models.DateField(default=now)
-    foto = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+    foto = models.ImageField(upload_to='', blank=True, null=True)
 
     def __str__(self):
-        return "%s %s" %  (self.pk, self.persona)
+        return "%s %s" % (self.pk, self.persona)
 
 
 class ExamenClinico(models.Model):
@@ -48,7 +48,7 @@ class ExamenClinico(models.Model):
     centro_atencion = models.CharField(max_length=50)
 
     def __str__(self):
-        return "%s %s - %s %s" % (self.id, self.fecha, self.profesional, self.centro_atencion)
+        return "%s %s - %s %s" % (self.pk, self.fecha, self.profesional, self.centro_atencion)
 
 
 class Curso(models.Model):
@@ -59,7 +59,7 @@ class Curso(models.Model):
     finalizado = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s" % self.fecha_inicio
+        return "%s" % (self.fecha_inicio)
 
 
 class Inscripcion(models.Model):
@@ -67,7 +67,7 @@ class Inscripcion(models.Model):
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)
     arancel = models.FloatField(null=True, blank=True)
-    observaciones = models.CharField(max_length=200, default='',blank=True)
+    observaciones = models.CharField(max_length=200, default='', blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
     persona = models.OneToOneField(
         'PersonaFisica',

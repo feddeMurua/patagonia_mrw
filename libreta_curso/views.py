@@ -5,22 +5,13 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.shortcuts import render
 from .forms import *
-from .filters import (
-    CursoListFilter,
-    LibretaListFilter,
-    PersonaListFilter,
-    ExamenListFilter,
-    InscripcionListFilter)
+from .filters import *
+from .models import *
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
     DeleteView)
-from .models import (
-    LibretaSanitaria,
-    Curso,
-    PersonaFisica,
-    ExamenClinico,
-    Inscripcion)
+
 
 
 '''
@@ -58,6 +49,14 @@ class ModificacionCurso(UpdateView):
     success_url = reverse_lazy('cursos:lista_cursos')
     form_class = CursoForm
 
+'''
+def InscripcionesCurso(request, pk_curso):
+    inscripciones_json = []
+    inscripciones = Inscripcion.objects.filter(curso__pk=pk_curso)
+    for inscripcion in inscripciones:
+        inscripciones_json.append(inscripcion.to_json())
+    return render(request, "curso/curso_inscripciones.html", {'inscripciones': inscripciones_json})
+'''
 
 def cierre_de_curso(request, pk_curso):
     pass

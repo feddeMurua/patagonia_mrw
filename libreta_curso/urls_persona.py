@@ -1,11 +1,5 @@
 from django.conf.urls import url
-from .views import (
-    ListaPersona,
-    DetallePersona,
-    AltaPersona,
-    BajaPersona,
-    ModificacionPersona
-)
+from .views import *
 
 urlpatterns = [
     url(r'^$', ListaPersona, name='lista_personas'),
