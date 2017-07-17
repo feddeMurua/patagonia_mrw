@@ -60,19 +60,18 @@
 
 {% block scripts %}
     <script src="{% static 'js/sweetalert2.js' %}"></script>
+    <script src="{% static 'js/paging.js' %}"></script>
     <script>
         $(document).ready(function(){
             $("#hidden-panel").hide();
-        });
 
-        $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
-        });
 
-        $(document).ready(function(){
             $("#buscar").click(function(){
                 $("#hidden-panel").slideToggle("slow");
             });
+
+            $('.table-list').paging({limit:8});
         });
     </script>
     {% block more-scripts %}{% endblock %}

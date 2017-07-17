@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django import forms
 from django.db import models
 from django.utils.timezone import now
 from desarrollo_patagonia import models as m
@@ -16,7 +15,7 @@ class PersonaFisica(m.PersonaGenerica):
     apellido = models.CharField(max_length=50)
     cuil = models.CharField(max_length=50, blank=True)
     fecha_nacimiento = models.DateField()
-    dni = models.CharField(unique=True,max_length=50)
+    dni = models.CharField(unique=True, max_length=50)
     nacionalidad = models.CharField(max_length=50)
     obra_social = models.CharField(max_length=50, blank=True)
 
@@ -28,8 +27,8 @@ class LibretaSanitaria(models.Model):
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)
     arancel = models.FloatField(null=True, blank=True)
     persona = models.OneToOneField('PersonaFisica', on_delete=models.CASCADE, primary_key=True)
-    curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True,blank=True)
-    observaciones = models.CharField(max_length=200, default='',blank=True)
+    curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
+    observaciones = models.CharField(max_length=200, default='', blank=True)
     examen_clinico = models.ForeignKey('ExamenClinico', on_delete=models.CASCADE)
     fecha = models.DateField(default=now)
     foto = models.ImageField(upload_to='', blank=True, null=True)
@@ -51,7 +50,7 @@ class Curso(models.Model):
     fecha_inicio = models.DateField()
     cupo = models.IntegerField()
     lugar = models.CharField(max_length=50)
-    horario= models.TimeField()
+    horario = models.TimeField()
     finalizado = models.BooleanField(default=False)
 
     def __str__(self):
