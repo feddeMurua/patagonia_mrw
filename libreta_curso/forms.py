@@ -1,17 +1,11 @@
 from django import forms
-from django.forms import ModelForm
 from functools import partial
-from .models import (
-
-    PersonaFisica,
-    ExamenClinico,
-    Curso
-)
+from .models import *
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 
-class PersonaForm(ModelForm):
+class PersonaForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=DateInput())
 
     class Meta:
@@ -20,7 +14,7 @@ class PersonaForm(ModelForm):
                   'domicilio', 'telefono', 'email', 'rubro']
 
 
-class ExamenForm(ModelForm):
+class ExamenForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
 
     class Meta:
@@ -28,9 +22,15 @@ class ExamenForm(ModelForm):
         fields = "__all__"
 
 
-class CursoForm(ModelForm):
+class CursoForm(forms.ModelForm):
     fecha_inicio = forms.DateField(widget=DateInput())
 
     class Meta:
         model = Curso
         fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
+        labels = {
+            'fecha_inicio': _('Fecha de Inicio'),
+            'cupo': _('Cupo'),
+            'lugar': _('Lugar'),
+            'horario': _('Horario')
+        }
