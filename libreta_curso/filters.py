@@ -20,16 +20,6 @@ class PersonaListFilter(django_filters.FilterSet):
         order_by = ['apellido']
 
 
-class ExamenListFilter(django_filters.FilterSet):
-    profesional = django_filters.CharFilter(lookup_expr='icontains')
-    centro_atencion = django_filters.CharFilter(lookup_expr='icontains')
-
-    class Meta:
-        model = ExamenClinico
-        fields = ['fecha', 'profesional', 'centro_atencion']
-        order_by = ['fecha']
-
-
 class CursoListFilter(django_filters.FilterSet):
     class Meta:
         model = Curso

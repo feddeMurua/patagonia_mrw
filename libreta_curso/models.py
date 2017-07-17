@@ -27,23 +27,16 @@ class LibretaSanitaria(models.Model):
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)
     arancel = models.FloatField(null=True, blank=True)
     persona = models.OneToOneField('PersonaFisica', on_delete=models.CASCADE, primary_key=True)
-    curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
-    observaciones = models.CharField(max_length=200, default='', blank=True)
-    examen_clinico = models.ForeignKey('ExamenClinico', on_delete=models.CASCADE)
+    curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True,blank=True)
+    observaciones = models.CharField(max_length=200, default='',blank=True)
+    fecha_examen_clinico = models.DateField()
+    profesional_examen_clinico = models.CharField(max_length=200, default='')
+    lugar_examen_clinico = models.CharField(max_length=200, default='')
     fecha = models.DateField(default=now)
     foto = models.ImageField(upload_to='', blank=True, null=True)
 
     def __str__(self):
         return "%s %s" % (self.pk, self.persona)
-
-
-class ExamenClinico(models.Model):
-    fecha = models.DateField()
-    profesional = models.CharField(max_length=50)
-    centro_atencion = models.CharField(max_length=50)
-
-    def __str__(self):
-        return "%s - %s %s" % (self.fecha, self.profesional, self.centro_atencion)
 
 
 class Curso(models.Model):

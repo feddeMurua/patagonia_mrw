@@ -14,23 +14,19 @@ class PersonaForm(forms.ModelForm):
                   'domicilio', 'telefono', 'email', 'rubro']
 
 
-class ExamenForm(forms.ModelForm):
-    fecha = forms.DateField(widget=DateInput())
-
-    class Meta:
-        model = ExamenClinico
-        fields = "__all__"
-
-
 class CursoForm(forms.ModelForm):
     fecha_inicio = forms.DateField(widget=DateInput())
 
     class Meta:
         model = Curso
         fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
-        labels = {
-            'fecha_inicio': _('Fecha de Inicio'),
-            'cupo': _('Cupo'),
-            'lugar': _('Lugar'),
-            'horario': _('Horario')
-        }
+
+
+class LibretaForm(forms.ModelForm):
+    fecha_examen_clinico = forms.DateField(widget=DateInput())
+
+    class Meta:
+        model = LibretaSanitaria
+        fields = ['nro_ingresos_varios', 'arancel','persona', 'curso',
+                    'observaciones', 'fecha_examen_clinico',
+                    'profesional_examen_clinico', 'lugar_examen_clinico', 'foto']

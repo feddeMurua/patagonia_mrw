@@ -111,29 +111,16 @@ INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesit
 INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 9,3);
 INSERT INTO libreta_curso_inscripcion VALUES (null,null, null, null, 'No necesita curso manipulacion', 10,3);
 
-/*EXAMENES*/
-
-INSERT INTO libreta_curso_examenclinico VALUES (1,'2017-01-01','Un profesional 1','Mini Hospital');
-INSERT INTO libreta_curso_examenclinico VALUES (2,'2017-02-13','Un profesional 2','Mini Hospital');
-INSERT INTO libreta_curso_examenclinico VALUES (3,'2017-01-07','Un profesional 3','Mini Hospital');
-INSERT INTO libreta_curso_examenclinico VALUES (4,'2017-03-04','Un profesional 4','Mini Hospital');
-INSERT INTO libreta_curso_examenclinico VALUES (5,'2017-04-01','Un profesional 5','Mini Hospital');
-INSERT INTO libreta_curso_examenclinico VALUES (6,'2017-02-12','Un profesional 6','Hospital santa teresita');
-INSERT INTO libreta_curso_examenclinico VALUES (7,'2017-01-05','Un profesional 7','Hospital santa teresita');
-INSERT INTO libreta_curso_examenclinico VALUES (8,'2017-03-11','Un profesional 8','Hospital santa teresita');
-INSERT INTO libreta_curso_examenclinico VALUES (9,'2017-02-09','Un profesional 9','Hospital santa teresita');
-INSERT INTO libreta_curso_examenclinico VALUES (10,'2017-01-11','Un profesional 10','Hospital santa teresita');
 
 /*LIBRETAS*/
 
-
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,1,'No necesita curso manipulación','2017-01-11', null,null,1);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,2,'No necesita curso manipulación','2017-01-11', null,null,2);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,3,'No necesita curso manipulación','2017-01-11', null,null,3);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,4,'No necesita curso manipulación','2017-01-11', null,null,4);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,5,'No necesita curso manipulación','2017-01-11', null,null,5);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,6,'No necesita curso manipulación','2017-01-11', null,null,6);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,7,'No necesita curso manipulación','2017-01-11', null,null,7);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,8,'No necesita curso manipulación','2017-01-11', null,null,8);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,9,'No necesita curso manipulación','2017-01-11', null,null,9);
-INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,10,'No necesita curso manipulación','2017-01-11', null,null,10);
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,1,'No necesita curso manipulación', 'Un profesional 1', 'Mini Hospital','2017-01-11', null,null,'2017-03-18' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,2,'No necesita curso manipulación', 'Un profesional 2', 'Mini Hospital','2017-01-10', null,null,'2017-02-09' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,3,'No necesita curso manipulación', 'Un profesional 3', 'Mini Hospital','2017-02-9', null,null,'2017-04-10' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,4,'No necesita curso manipulación', 'Un profesional 4', 'Mini Hospital','2017-01-12', null,null,'2017-05-12' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,5,'No necesita curso manipulación', 'Un profesional 5', 'Mini Hospital','2017-04-18', null,null,'2017-06-13' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,6,'No necesita curso manipulación', 'Un profesional 6', 'Hospital Santa Teresita','2017-05-01', null,null,'2017-08-05' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,7,'No necesita curso manipulación', 'Un profesional 7', 'Hospital Santa Teresita','2017-03-20', null,null,'2017-03-12' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,8,'No necesita curso manipulación', 'Un profesional 8', 'Hospital Santa Teresita','2017-06-21', null,null,'2017-04-07' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,9,'No necesita curso manipulación', 'Un profesional 9', 'Hospital Santa Teresita','2017-06-22', null,null,'2017-05-15' );
+INSERT INTO libreta_curso_libretasanitaria VALUES (null,null,10,'No necesita curso manipulación', 'Un profesional 10', 'Hospital Santa Teresita','2017-01-28', null,null,'2017-06-18' );

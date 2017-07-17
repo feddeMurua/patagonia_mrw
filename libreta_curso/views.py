@@ -95,8 +95,7 @@ class AltaLibreta(CreateView):
     model = LibretaSanitaria
     template_name = 'libreta/libreta_form.html'
     success_url = reverse_lazy('libretas:lista_libretas')
-    fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
-                'observaciones', 'examen_clinico', 'foto']
+    form_class = LibretaForm
 
 
 class BajaLibreta(DeleteView):
@@ -109,8 +108,9 @@ class ModificacionLibreta(UpdateView):
     model = LibretaSanitaria
     template_name = 'libreta/libreta_form.html'
     success_url = reverse_lazy('libretas:lista_libretas')
-    fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
-                'observaciones', 'examen_clinico', 'foto']
+    fields = ['nro_ingresos_varios', 'arancel', 'curso',
+                'observaciones', 'fecha_examen_clinico',
+                'profesional_examen_clinico', 'lugar_examen_clinico', 'foto']
 
 
 '''
@@ -147,35 +147,6 @@ class ModificacionPersona(UpdateView):
     template_name = 'persona/persona_form.html'
     success_url = reverse_lazy('personas:lista_personas')
     fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro']
-
-
-'''
-EXAMENES CLINICOS
-'''
-
-
-def ListaExamen(request):
-    lista_examenes = ExamenClinico.objects.all()
-    filtro_examenes = ExamenListFilter(request.GET, queryset=lista_examenes)
-    return render(request, 'examen/examen_list.html', {'filter': filtro_examenes})
-
-
-class DetalleExamen(DetailView):
-    model = ExamenClinico
-    template_name = 'examen/examen_detail.html'
-
-
-class AltaExamen(CreateView):
-    model = ExamenClinico
-    template_name = 'examen/examen_form.html'
-    success_url = reverse_lazy('examenes:lista_examenes')
-    form_class = ExamenForm
-
-
-class BajaExamen(DeleteView):
-    model = ExamenClinico
-    template_name = 'examen/examen_confirm_delete.html'
-    success_url = reverse_lazy('examenes:lista_examenes')
 
 
 '''
