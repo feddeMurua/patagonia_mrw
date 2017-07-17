@@ -8,10 +8,9 @@ from .models import (
     LibretaSanitaria,
     Curso,
     Inscripcion,
-    ExamenClinico   )
+)
 
 admin.site.register(PersonaFisica)
 admin.site.register(LibretaSanitaria)
 admin.site.register(Curso)
 admin.site.register(Inscripcion)
-admin.site.register(ExamenClinico)

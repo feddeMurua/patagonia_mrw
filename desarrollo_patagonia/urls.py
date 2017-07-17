@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'^inicio/', views.inicio, name="inicio"),
     url(r'^cursos/', include('libreta_curso.urls_curso', namespace='cursos')),
     url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),
-    url(r'^personas/', include('libreta_curso.urls_persona', namespace='personas')),
-    url(r'^examenes/', include('libreta_curso.urls_examen', namespace='examenes')),
+    url(r'^personas/', include('libreta_curso.urls_persona', namespace='personas')),    
     url(r'^inscripciones/', include('libreta_curso.urls_inscripcion', namespace='inscripciones')),
 ]
