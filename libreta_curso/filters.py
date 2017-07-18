@@ -3,7 +3,6 @@ from .models import *
 
 
 class LibretaListFilter(django_filters.FilterSet):
-
     class Meta:
         model = LibretaSanitaria
         fields = ['curso', 'fecha']
@@ -11,9 +10,6 @@ class LibretaListFilter(django_filters.FilterSet):
 
 
 class PersonaListFilter(django_filters.FilterSet):
-    nombre = django_filters.CharFilter(lookup_expr='icontains')
-    apellido = django_filters.CharFilter(lookup_expr='icontains')
-
     class Meta:
         model = PersonaFisica
         fields = ['nombre', 'apellido', 'dni']

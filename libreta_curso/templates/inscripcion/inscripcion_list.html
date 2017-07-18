@@ -4,6 +4,11 @@
 
 {% block title %}Inscripción a Curso{% endblock %}
 
+{% block breadcrumb-items %}
+    <li><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li class="active">Inscripciones</li>
+{% endblock %}
+
 {% block header-title %}Inscripción a Curso{% endblock %}
 
 {% block url-volver %}{% url 'inicio' %}{% endblock %}

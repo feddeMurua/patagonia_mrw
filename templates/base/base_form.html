@@ -11,21 +11,25 @@
 {% block no-particles %}{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <form method="post">
+    <div class="container container-form">
+        <form class="col-md-4" method="post">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
-
             {% for field in form.visible_fields %}
                 <div class="form-group">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field|add_class:'form-control' }}
+                    {% if field.label != 'Foto' %}
+                        {{ field|add_class:'form-control' }}
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
                     {% for error in field.errors %}
                         <span class="help-block">{{ error }}</span>
                     {% endfor %}
                 </div>
+                {% block foto-field %}{% endblock %}
             {% endfor %}
             <input type="submit" class="btn btn-primary" value="Aceptar">
         </form>
@@ -35,39 +39,6 @@
 {% block scripts %}
     <script src="{% static 'js/selectize.js' %}"></script>
     <script>
-        $.datepicker.regional['es'] = {
-            closeText: 'Cerrar',
-            prevText: '< Ant',
-            nextText: 'Sig >',
-            currentText: 'Hoy',
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
-            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
-            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
-            weekHeader: 'Sm',
-            dateFormat: 'dd/mm/yy',
-            firstDay: 1,
-            isRTL: false,
-            showMonthAfterYear: false,
-            yearSuffix: ''
-        };
-
-        $.datepicker.setDefaults($.datepicker.regional['es']);
-
-        $(document).ready(function() {
-            $('.datepicker').datepicker({
-                dateFormat: "dd/mm/yy",
-                defaultDate: "+1w",
-                changeMonth: true,
-                changeYear: true,
-                yearRange: '1940:2050',
-                onClose: function(selectedDate) {
-                    $("#fecha").datepicker("option","minDate",selectedDate);
-                }
-            });
-        });
-
         $('select').selectize({
             sortField: {
                 field: 'text',

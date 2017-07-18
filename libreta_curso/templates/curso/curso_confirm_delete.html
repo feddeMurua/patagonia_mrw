@@ -4,6 +4,12 @@
 
 {% block title %}Cursos de Manipulacion de Alimentos{% endblock %}
 
+{% block breadcrumb-items %}
+    <li><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li><a href="{% url 'cursos:lista_cursos' %}">Cursos</a></li>
+    <li class="active">Borrar curso</li>
+{% endblock %}
+
 {% block header-title %}Baja de Curso{% endblock %}
 
 {% block url-volver %}{% url 'cursos:lista_cursos' %}{% endblock %}

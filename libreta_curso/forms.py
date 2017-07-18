@@ -3,6 +3,7 @@ from functools import partial
 from .models import *
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
+TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
 class PersonaForm(forms.ModelForm):
@@ -16,6 +17,7 @@ class PersonaForm(forms.ModelForm):
 
 class CursoForm(forms.ModelForm):
     fecha_inicio = forms.DateField(widget=DateInput())
+    horario = forms.TimeField(widget=TimeInput())
 
     class Meta:
         model = Curso
@@ -27,6 +29,6 @@ class LibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        fields = ['nro_ingresos_varios', 'arancel','persona', 'curso',
+        fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
                     'observaciones', 'fecha_examen_clinico',
                     'profesional_examen_clinico', 'lugar_examen_clinico', 'foto']

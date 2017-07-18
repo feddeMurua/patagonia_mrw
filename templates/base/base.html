@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/particles.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wickedpicker.css' %}"/>
     {% block stylesheets %}
     {% endblock %}
     <title>{% block title %}{% endblock %}</title>
@@ -18,6 +19,10 @@
 
     {% block no-navbar %}
         {% include 'base/nav.html' %}
+    {% endblock %}
+
+    {% block no-particles %}
+        {% include 'base/particles.html' %}
     {% endblock %}
 
     {% block no-header %}
@@ -35,16 +40,49 @@
         </header>
     {% endblock %}
 
-    {% block no-particles %}
-        {% include 'base/particles.html' %}
-    {% endblock %}
-
     {% block content %}
     {% endblock %}
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/particles.js' %}"></script>
+    <script src="{% static 'js/wickedpicker.js' %}"></script>
+    <script>
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                dateFormat: "dd/mm/yy",
+                defaultDate: "+1w",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1940:2050',
+                onClose: function(selectedDate) {
+                    $("#fecha").datepicker("option","minDate",selectedDate);
+                }
+            });
+
+            $('.timepicker').wickedpicker();
+        });
+    </script>
     {% block scripts %}
     {% endblock %}
 </body>

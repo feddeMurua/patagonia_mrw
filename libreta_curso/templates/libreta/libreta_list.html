@@ -4,6 +4,11 @@
 
 {% block title %}Libretas Sanitarias{% endblock %}
 
+{% block breadcrumb-items %}
+    <li><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li class="active">Libretas</li>
+{% endblock %}
+
 {% block header-title %}Libretas Sanitarias{% endblock %}
 
 {% block url-volver %}{% url 'inicio' %}{% endblock %}

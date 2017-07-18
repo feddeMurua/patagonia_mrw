@@ -4,6 +4,12 @@
 
 {% block title %}Personas{% endblock %}
 
+{% block breadcrumb-items %}
+    <li><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li><a href="{% url 'personas:lista_personas' %}">Personas</a></li>
+    <li class="active">Borrar persona</li>
+{% endblock %}
+
 {% block header-title %}Baja de Persona{% endblock %}
 
 {% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}
