@@ -49,14 +49,11 @@ class ModificacionCurso(UpdateView):
     success_url = reverse_lazy('cursos:lista_cursos')
     form_class = CursoForm
 
-'''
-def InscripcionesCurso(request, pk_curso):
-    inscripciones_json = []
-    inscripciones = Inscripcion.objects.filter(curso__pk=pk_curso)
-    for inscripcion in inscripciones:
-        inscripciones_json.append(inscripcion.to_json())
-    return render(request, "curso/curso_inscripciones.html", {'inscripciones': inscripciones_json})
-'''
+
+def lista_inscripciones_curso(request, id_curso):    
+    inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
+    return render(request, "curso/curso_inscripciones.html", {'inscripciones': inscripciones})
+
 
 def cierre_de_curso(request, pk_curso):
     pass

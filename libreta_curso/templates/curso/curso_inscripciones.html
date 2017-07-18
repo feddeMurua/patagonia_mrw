@@ -6,7 +6,7 @@
 
 {% block header-title %}Inscripción a Curso{% endblock %}
 
-{% block url-volver %}{% url 'inicio' %}{% endblock %}
+{% block url-volver %}{% url 'cursos:lista_cursos' %}{% endblock %}
 
 {% block panel-title %}Inscripciones{% endblock %}
 
@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for inscripcion in filter.qs %}
+        {% for inscripcion in inscripciones %}
             <tr>
                 <td>{{ inscripcion.persona }}</td>
                 <td>{{ inscripcion.observaciones }}</td>
