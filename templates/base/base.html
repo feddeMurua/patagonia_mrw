@@ -7,9 +7,10 @@
     <link rel="shortcut icon" href="{% static 'images/rawson.png' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/hover.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/particles.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/wickedpicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.timepicker.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
     {% block stylesheets %}
     {% endblock %}
@@ -33,7 +34,7 @@
         </ol>
         <header id="header-page" class="header">
             <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
-                <span class="glyphicon glyphicon-arrow-left animated pull-right"></span>
+                <span class="glyphicon glyphicon-arrow-left hvr-buzz pull-right"></span>
             </a>
             <h1 class="header-title pull-left">
                 {% block header-title %}{% endblock %}
@@ -47,7 +48,7 @@
     <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/particles.js' %}"></script>
-    <script src="{% static 'js/wickedpicker.js' %}"></script>
+    <script src="{% static 'js/jquery.timepicker.js' %}"></script>
     <script src="{% static 'js/selectize.js' %}"></script>
     <script>
         $('select').selectize({
@@ -90,7 +91,7 @@
                 }
             });
 
-            $('.timepicker').wickedpicker();
+            $('.timepicker').timepicker({ 'timeFormat': 'H:i' });
         });
     </script>
     {% block scripts %}
