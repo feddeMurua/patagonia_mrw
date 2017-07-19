@@ -25,10 +25,3 @@ class CursoListFilter(django_filters.FilterSet):
         model = Curso
         fields = ['cupo', 'horario']
         order_by = ['cupo']
-
-
-class InscripcionListFilter(django_filters.FilterSet):
-    class Meta:
-        model = Inscripcion
-        fields = ['curso']
-        order_by = ['curso']

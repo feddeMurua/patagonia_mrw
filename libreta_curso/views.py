@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.shortcuts import render
 from .forms import *
@@ -19,7 +19,7 @@ CURSOS
 '''
 
 
-def ListaCurso(request):
+def lista_curso(request):
     lista_cursos = Curso.objects.all()
     filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
     return render(request, 'curso/curso_list.html', {'filter': filtro_cursos})
@@ -50,11 +50,6 @@ class ModificacionCurso(UpdateView):
     form_class = CursoForm
 
 
-def lista_inscripciones_curso(request, id_curso):    
-    inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
-    return render(request, "curso/curso_inscripciones.html", {'inscripciones': inscripciones})
-
-
 def cierre_de_curso(request, pk_curso):
     pass
 
@@ -77,7 +72,7 @@ LIBRETRAS SANITARIAS
 '''
 
 
-def ListaLibreta(request):
+def lista_libreta(request):
     lista_libretas = LibretaSanitaria.objects.all()
     filtro_libretas = LibretaListFilter(request.GET, queryset=lista_libretas)
     return render(request, 'libreta/libreta_list.html', {'filter': filtro_libretas})
@@ -115,7 +110,7 @@ PERSONAS
 '''
 
 
-def ListaPersona(request):
+def lista_persona(request):
     lista_personas = PersonaFisica.objects.all()
     filtro_personas = PersonaListFilter(request.GET, queryset=lista_personas)
     return render(request, 'persona/persona_list.html', {'filter': filtro_personas})
@@ -151,32 +146,49 @@ INSCRIPCIONES
 '''
 
 
-def ListaInscripcion(request):
-    lista_inscripciones = Inscripcion.objects.all()
-    filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
-    return render(request, 'inscripcion/inscripcion_list.html', {'filter': filtro_inscripciones})
-
-
 class DetalleInscripcion(DetailView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_detail.html'
 
 
+def lista_inscripciones_curso(request, id_curso):
+    inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
+    return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'inscripciones': inscripciones})
+
+
 class AltaInscripcion(CreateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'
-    success_url = reverse_lazy('inscripciones:lista_inscripciones')
-    fields = ['nro_ingresos_varios', 'arancel','persona','curso', 'observaciones']
+    form_class = InscripcionForm
+
+    def get_success_url(self):
+        if 'id_curso' in self.kwargs:
+            id_curso = self.kwargs['id_curso']
+        return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
+
+    def get_form_kwargs(self):
+        kwargs = super( AltaInscripcion, self).get_form_kwargs()
+        # update the kwargs for the form init method with yours
+        kwargs.update(self.kwargs)  # self.kwargs contains all url conf params
+        return kwargs
 
 
 class BajaInscripcion(DeleteView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_confirm_delete.html'
-    success_url = reverse_lazy('inscripciones:lista_inscripciones')
+
+    def get_success_url(self):
+        if 'id_curso' in self.kwargs:
+            id_curso = self.kwargs['id_curso']
+        return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
 
 
 class ModificacionInscripcion(UpdateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'
-    success_url = reverse_lazy('inscripciones:lista_inscripciones')
     fields = ['nro_ingresos_varios', 'arancel','persona', 'curso', 'observaciones']
+
+    def get_success_url(self):
+        if 'id_curso' in self.kwargs:
+            id_curso = self.kwargs['id_curso']
+        return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
