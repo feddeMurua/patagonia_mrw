@@ -32,3 +32,16 @@ class LibretaForm(forms.ModelForm):
         fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
                     'observaciones', 'fecha_examen_clinico',
                     'profesional_examen_clinico', 'lugar_examen_clinico', 'foto']
+
+
+class InscripcionForm(forms.ModelForm):
+
+    class Meta:
+        model = Inscripcion
+        fields = ['nro_ingresos_varios', 'arancel','persona','curso', 'observaciones']
+
+    def __init__(self, id_curso=None, *args, **kwargs):
+        super(InscripcionForm, self).__init__(*args, **kwargs)
+        curso = Curso.objects.get(pk=id_curso)
+        self.fields['curso'].initial = curso
+        self.fields['curso'].widget = forms.HiddenInput()

@@ -6,13 +6,13 @@
 
 {% block breadcrumb-items %}
     <li><a href="{% url 'inicio' %}">Inicio</a></li>
-    <li><a href="{% url 'inscripciones:lista_inscripciones' %}">Inscripciones</a></li>
+    <li><a href="{% url 'cursos:inscripciones_curso' object.curso.pk %}">Inscripciones a curso</a></li>
     <li class="active">Detalle de inscripción</li>
 {% endblock %}
 
 {% block header-title %}Detalle de Inscripción{% endblock %}
 
-{% block url-volver %}{% url 'inscripciones:lista_inscripciones' %}{% endblock %}
+{% block url-volver %}{% url 'cursos:lista_cursos' %}{% endblock %}
 
 {% block detail %}
   <p>Nombre de la persona: <i>{{ object.persona.nombre }}</i></p>
@@ -21,5 +21,5 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'inscripciones:lista_inscripciones' %}" class="btn btn-primary" role="button">Regresar</a>
+    <a href="{% url 'cursos:inscripciones_curso' object.curso.pk %}" class="btn btn-primary" role="button">Regresar</a>
 {% endblock %}

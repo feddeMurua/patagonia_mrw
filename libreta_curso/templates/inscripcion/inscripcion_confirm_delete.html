@@ -6,12 +6,12 @@
 
 {% block breadcrumb-items %}
     <li><a href="{% url 'inicio' %}">Inicio</a></li>
-    <li><a href="{% url 'inscripciones:lista_inscripciones' %}">Inscripciones</a></li>
+    <li><a href="{% url 'cursos:inscripciones_curso' object.curso.pk %}">Inscripciones a curso</a></li>
     <li class="active">Borrar inscripción</li>
 {% endblock %}
 
 {% block header-title %}Baja de Inscripcion{% endblock %}
 
-{% block url-volver %}{% url 'inscripciones:lista_inscripciones' %}{% endblock %}
+{% block url-volver %}{% url 'cursos:lista_cursos' %}{% endblock %}
 
-{% block btn-cancelar %}<a href="{% url 'inscripciones:lista_inscripciones' %}" class="btn btn-sm btn-primary" role="button">Cancelar</a>{% endblock %}
+{% block btn-cancelar %}<a href="{% url 'cursos:lista_cursos' %}" class="btn btn-sm btn-primary" role="button">Cancelar</a>{% endblock %}

@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<<<<<<< HEAD
 <div class="container-fluid container-nav">
     <div class="row">
         <div class="col-lg-11">
@@ -22,7 +23,11 @@
                                 <li>
                                     <a class="btn btn-lg btn-primary " href="{% url 'libretas:lista_libretas'%}">
                                     <span>Libretas Sanitarias</span></a>
-                                </li>                                
+                                </li>
+                                <li>
+                                    <a class="btn btn-lg btn-primary" href="{% url 'inscripciones:lista_inscripciones'%}">
+                                    <span>Inscripción a Curso</span></a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -52,10 +57,37 @@
             </div>
             <div>
                 <a class="btn btn-lg btn-default btn-block btn-logout" href="{% url 'logout'%}?next={{request.path}}">Salir</a>
+=======
+<div class="container col-lg-12 container-nav">
+  <div class="row">
+    <div class="featurette" id="about">
+      <!------------------------code---------------start---------------->
+      <div class="container-fluid">
+        <div id="custom_carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
+
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            <div class="item active">
+              <div class="container-fluid">
+                  <ul class="ds-btn text-center">
+                      <li>
+                          <a class="btn btn-lg btn-primary" href="{% url 'cursos:lista_cursos'%}">
+                              <span>Cursos de Manipulacion de Alimentos</span>
+                          </a>
+                      </li>
+                      <li>
+                          <a class="btn btn-lg btn-primary " href="{% url 'libretas:lista_libretas'%}">
+                              <span>Libretas Sanitarias</span>
+                          </a>
+                      </li>                                            
+                  </ul>
+              </div>
+>>>>>>> inscripcion_y_cierre_curso
             </div>
         </div>
     </div>
 </div>
+
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery-ui.js' %}"></script>

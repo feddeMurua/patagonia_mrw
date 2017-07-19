@@ -2,7 +2,7 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
-    url(r'^$', ListaLibreta, name='lista_libretas'),
+    url(r'^$', lista_libreta, name='lista_libretas'),
     url(r'^(?P<pk>\d+)$', DetalleLibreta.as_view(), name='detalle_libreta'),
     url(r'^nueva$', AltaLibreta.as_view(), name='nueva_libreta'),
     url(r'^borrar/(?P<pk>\d+)$', BajaLibreta.as_view(), name='borrar_libreta'),
