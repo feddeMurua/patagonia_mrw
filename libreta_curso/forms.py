@@ -40,4 +40,6 @@ class InscripcionForm(forms.ModelForm):
 
     def __init__(self, id_curso=None, *args, **kwargs):
         super(InscripcionForm, self).__init__(*args, **kwargs)
-        self.fields['curso'].queryset = Curso.objects.filter(pk__in=id_curso)        
+        curso = Curso.objects.get(pk=id_curso)
+        self.fields['curso'].initial = curso
+        self.fields['curso'].widget = forms.HiddenInput()
