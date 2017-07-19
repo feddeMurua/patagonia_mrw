@@ -7,63 +7,60 @@
 </head>
 
 <body>
-<div class="container col-lg-12 container-nav">
-  <div class="row">
-    <div class="featurette" id="about">
-      <!------------------------code---------------start---------------->
-      <div class="container-fluid">
-        <div id="custom_carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
-
-          <!-- Wrapper for slides -->
-          <div class="carousel-inner">
-            <div class="item active">
-              <div class="container-fluid">
-                  <ul class="ds-btn text-center">
-                      <li>
-                          <a class="btn btn-lg btn-primary" href="{% url 'cursos:lista_cursos'%}">
-                              <span>Cursos de Manipulacion de Alimentos</span>
-                          </a>
-                      </li>
-                      <li>
-                          <a class="btn btn-lg btn-primary " href="{% url 'libretas:lista_libretas'%}">
-                              <span>Libretas Sanitarias</span>
-                          </a>
-                      </li>                      
-                      <li>
-                          <a class="btn btn-lg btn-primary" href="{% url 'inscripciones:lista_inscripciones'%}">
-                              <span>Inscripción a Curso</span>
-                          </a>
-                      </li>
-                  </ul>
-              </div>
+<div class="container-fluid container-nav">
+    <div class="row">
+        <div class="col-lg-11">
+            <div id="custom_carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <div class="container-fluid">
+                            <ul class="ds-btn text-center">
+                                <li>
+                                    <a class="btn btn-lg btn-primary" href="{% url 'cursos:lista_cursos'%}">
+                                    <span>Cursos de Manipulacion de Alimentos</span></a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-lg btn-primary " href="{% url 'libretas:lista_libretas'%}">
+                                    <span>Libretas Sanitarias</span></a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-lg btn-primary" href="{% url 'inscripciones:lista_inscripciones'%}">
+                                    <span>Inscripción a Curso</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="container-fluid">
+                            <ul class="ds-btn text-center">
+                                <li>
+                                    <a class="btn btn-lg btn-primary" href="{% url 'personas:lista_personas'%}">
+                                        <span>Listado de Personas</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <ul class="nav">
+                        <li data-target="#custom_carousel" data-slide-to="0" class="active"> <a><small>LIBRETAS/CURSOS</small></a></li>
+                        <li data-target="#custom_carousel" data-slide-to="1"> <a><small>PERSONAS</small></a></li>
+                    </ul>
+                </div>
             </div>
-              <div class="item">
-                  <div class="container-fluid">
-                      <ul class="ds-btn text-center">
-                          <li>
-                              <a class="btn btn-lg btn-primary" href="{% url 'personas:lista_personas'%}">
-                                  <span>Listado de Personas</span>
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
-            <!-- End Item -->
-          </div>
-          <!-- End Carousel Inner -->
-          <div class="controls">
-            <ul class="nav">
-                <li data-target="#custom_carousel" data-slide-to="0" class="active"> <a><small>LIBRETAS/CURSOS</small></a></li>
-                <li data-target="#custom_carousel" data-slide-to="1"> <a><small>PERSONAS</small></a></li>
-            </ul>
-          </div>
         </div>
-        <!-- End Carousel -->
-      </div>
-      <!----Code------end----------------------------------->
+        <div class="col-lg-1 logout-box" align="center">
+            <div class="glyphicon glyphicon-log-out"></div>
+            <div class="username">
+                <td>{{ user.get_username }}</td>
+            </div>
+            <div>
+                <a class="btn btn-lg btn-default btn-block btn-logout" href="{% url 'logout'%}?next={{request.path}}">Salir</a>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery-ui.js' %}"></script>

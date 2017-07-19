@@ -5,7 +5,6 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_form.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
 {% endblock %}
 
 {% block no-particles %}{% endblock %}
@@ -37,14 +36,4 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/selectize.js' %}"></script>
-    <script>
-        $('select').selectize({
-            sortField: {
-                field: 'text',
-                direction: 'asc'
-            },
-            dropdownParent: 'body'
-        });
-    </script>
 {% endblock %}

@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/particles.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/wickedpicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
     {% block stylesheets %}
     {% endblock %}
     <title>{% block title %}{% endblock %}</title>
@@ -47,7 +48,16 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/particles.js' %}"></script>
     <script src="{% static 'js/wickedpicker.js' %}"></script>
+    <script src="{% static 'js/selectize.js' %}"></script>
     <script>
+        $('select').selectize({
+            sortField: {
+                field: 'text',
+                direction: 'asc'
+            },
+            dropdownParent: 'body'
+        });
+
         $.datepicker.regional['es'] = {
             closeText: 'Cerrar',
             prevText: '< Ant',

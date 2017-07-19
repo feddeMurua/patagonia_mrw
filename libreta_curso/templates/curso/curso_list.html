@@ -40,7 +40,7 @@
                 <td align="center">
                     <a class="btn btn-warning btn-mostrar" data-toggle="tooltip" title="Detalle" href="{% url 'cursos:detalle_curso' curso.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:modificar_curso' curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'cursos:borrar_curso' curso.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-danger btn-baja" data-url="{% url 'cursos:borrar_curso' curso.pk %}" data-toggle="tooltip" title="Eliminar" href="{% url 'cursos:borrar_curso' curso.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="#"><em class="glyphicon glyphicon-user"></em></a>
                     <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="#"><em class="glyphicon glyphicon-education"></em></a>
                 </td>
@@ -48,27 +48,4 @@
         {% endfor %}
         </tbody>
     </table>
-{% endblock %}
-
-{% block more-scripts %}
-    <script>
-        $('a.btn-mostrarb').click(function(e) {
-            var curso = document.getElementById("datos");
-            mostrar(curso);
-        });
-
-        function mostrar(curso) {
-            swal({
-                title: '<i>Detalle de Elemento</i>',
-                html:
-                    '<p>Fecha de inicio: <i>{{ curso.fecha_inicio }}</i></p>' +
-                    '<p>Cupo: <i>{{ curso.cupo }}</i></p>' +
-                    '<p>Lugar: <i>{{ curso.lugar }}</i></p>' +
-                    '<p>Horario: <i>{{ curso.horario }}</i></p>',
-                    showCloseButton: true,
-                confirmButtonText:
-                    'Aceptar'
-            })
-        }
-    </script>
 {% endblock %}

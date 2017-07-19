@@ -50,7 +50,15 @@
                         </form>
                     </div>
                     <div class="panel-body">
-                        {% block tabla %}{% endblock %}
+                        {% if filter.qs %}
+                            {% block tabla %}{% endblock %}
+                        {% else %}
+                            <div id="table-empty" class="table-empty">
+                                <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    No se encontraron elementos
+                                </h3>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

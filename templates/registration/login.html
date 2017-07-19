@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}"/>
@@ -13,6 +14,10 @@
 {% block no-header %}{% endblock %}
 
 {% block content %}
+    {% if form.errors %}
+        <p>El nombre de usuario y la contraseña no coinciden. Intente nuevamente.</p>
+    {% endif %}
+
     <div class="container">
         <div class="row">
             <div class="col-sm-6 col-md-4 col-md-offset-4">
@@ -20,11 +25,16 @@
                     <h4 align="center">Bienvenido</h4>
                     <div id="my-tab-content" class="tab-content">
                         <div class="tab-pane active" id="login">
-                            <form class="form-signin" method="post">
+                            <form class="form-signin" method="post" action="{% url 'login' %}">
                                 {% csrf_token %}
-                                <input type="text" class="form-control" placeholder="Nombre de Usuario" required autofocus>
-                                <input type="password" class="form-control" placeholder="Contraseña" required>
-                                <button type="submit" class="btn btn-lg btn-default btn-block">Ingresar</button>
+                                <div>
+                                    <td>{{ form.username|add_class:'form-control'|attr:"placeholder:Usuario" }}</td>
+                                </div>
+                                <div>
+                                    <td>{{ form.password|add_class:'form-control'|attr:"placeholder:Contraseña" }}</td>
+                                </div>
+                                <input type="submit" class="btn btn-lg btn-default btn-block" value="Ingresar"/>
+                                <input type="hidden" name="next" value="{{ next }}"/>
                             </form>
                         </div>
                     </div>

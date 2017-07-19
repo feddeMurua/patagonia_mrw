@@ -131,6 +131,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "estaticos"),
 )
 
-LOGIN_REDIRECT_URL = reverse_lazy('inicio')
+LOGIN_REDIRECT_URL = reverse_lazy('login')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'estaticos/images/upload')

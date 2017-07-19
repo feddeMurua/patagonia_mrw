@@ -3,7 +3,7 @@
 }
 
 .panel-table .panel-body{
-  padding:0;
+    padding:0;
 }
 
 table th {
@@ -16,8 +16,8 @@ table th {
 }
 
 .panel-table .panel-body .table-bordered{
-  border-style: none;
-  margin:0;
+    border-style: none;
+    margin:0;
 }
 
 .panel-table .panel-body .table-bordered > thead > tr > th:first-of-type {
@@ -27,47 +27,80 @@ table th {
 
 .panel-table .panel-body .table-bordered > thead > tr > th:last-of-type,
 .panel-table .panel-body .table-bordered > tbody > tr > td:last-of-type {
-  border-right: 0px;
+    border-right: 0px;
 }
 
 .panel-table .panel-body .table-bordered > thead > tr > th:first-of-type,
 .panel-table .panel-body .table-bordered > tbody > tr > td:first-of-type {
-  border-left: 0px;
+    border-left: 0px;
 }
 
 .panel-table .panel-body .table-bordered > tbody > tr:first-of-type > td {
-  border-bottom: 0px;
+    border-bottom: 0px;
 }
 
 .panel-table .panel-body .table-bordered > thead > tr:first-of-type > th {
-  border-top: 0px;
+    border-top: 0px;
 }
 
 .panel-table .panel-heading .col h3 {
- line-height: 30px;
- height: 30px;
+    line-height: 30px;
+    height: 30px;
 }
 
 .panel-table .panel-body .table-bordered > tbody > tr > td{
-  line-height: 34px;
+    line-height: 34px;
 }
 
 .paging-nav {
-  text-align: right;
-  padding-top: 2px;
+    text-align: right;
+    padding-top: 2px;
+    border-top: 1px solid #D8D8D8;
 }
 
 .paging-nav a {
-  margin: 10px 7px 10px auto;
-  text-decoration: none;
-  display: inline-block;
-  padding: 1px 7px;
-  background: #91b9e6;
-  color: white;
-  border-radius: 3px;
+    margin: 10px 7px 10px auto;
+    text-decoration: none;
+    display: inline-block;
+    padding: 1px 7px;
+    background: #91b9e6;
+    color: white;
+    border-radius: 3px;
 }
 
 .paging-nav .selected-page {
-  background: #187ed5;
-  font-weight: bold;
+    background: #187ed5;
+    font-weight: bold;
+}
+
+.table-empty {
+	position: relative;
+	border: 2px dashed #ccc;
+	padding: 1rem;
+	height: 20rem;
+    overflow: hidden;
+}
+
+.table-empty-title,
+.table-empty-msg {
+	position: absolute;
+	left: 50%; top: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+.table-empty-title {
+	margin: 0;
+	-webkit-transform: translate(-50%, -150%);
+	transform: translate(-50%, -150%);
+}
+
+.table-empty-title span {
+	color: rgb(228,45,64);
+	top: 0;
+}
+
+.table-empty-msg {
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
 }
