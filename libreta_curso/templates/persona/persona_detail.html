@@ -15,17 +15,23 @@
 {% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}
 
 {% block detail %}
-    <p>Apellido: <i>{{ object.apellido }}</i></p>
-    <p>Nombre: <i>{{ object.nombre }}</i></p>
-    <p>Dni: <i>{{ object.dni }}</i></p>
-    <p>Cuil: <i>{{ object.cuil }}</i></p>
-    <p>Fecha de Nacimiento: <i>{{ object.fecha_nacimiento }}</i></p>
-    <p>Nacionalidad: <i>{{ object.nacionalidad }}</i></p>
-    <p>Obra Social: <i>{{ object.obra_social }}</i></p>
-    <p>Domicilio: <i>{{ object.domicilio }}</i></p>
-    <p>Telefono: <i>{{ object.telefono }}</i></p>
-    <p>Email: <i>{{ object.email }}</i></p>
-    <p>Rubro: <i>{{ object.rubro }}</i></p>
+    <p>Apellido: <i>{{ persona.apellido }}</i></p>
+    <p>Nombre: <i>{{ persona.nombre }}</i></p>
+    <p>Dni: <i>{{ persona.dni }}</i></p>
+    <p>Cuil: <i>{{ persona.cuil }}</i></p>
+    <p>Fecha de Nacimiento: <i>{{ persona.fecha_nacimiento }}</i></p>
+    <p>Nacionalidad: <i>{{ persona.nacionalidad }}</i></p>
+    <p>Obra Social: <i>{{ persona.obra_social }}</i></p>
+    <p>Domicilio: <i>{{ persona.domicilio }}</i></p>
+    <p>Telefono: <i>{{ persona.telefono }}</i></p>
+    <p>Email: <i>{{ persona.email }}</i></p>
+    <p>Rubro: <i>{{ persona.rubro }}</i></p>
+    {% for curso in cursos %}
+      <p>Fecha curso inscripto: <i>{{ curso.fecha_inicio }}</i></p>
+      <p>Lugar curso realizado: <i>{{ curso.lugar }}</i></p>
+      <p>Horario curso realizado: <i>{{ curso.horario }}</i></p>
+      <p>Curso finalizado: <i>{{ curso.finalizado }}</i></p>
+    {% endfor %}
 {% endblock %}
 
 {% block btn-footer %}

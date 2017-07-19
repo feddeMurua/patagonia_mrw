@@ -5,7 +5,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.shortcuts import render
-from django.db.models import Q
 from .forms import *
 from .filters import *
 from .models import *
@@ -57,8 +56,7 @@ class ModificacionCurso(LoginRequiredMixin, UpdateView):
 
 @login_required(login_url='login')
 def cierre_de_curso(request, id_curso):
-    lista_inscripciones = Inscripcion.objects.filter(Q(curso__pk=id_curso)
-                                                &Q(nota_curso=None))
+    lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
     filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
     return render(request, "curso/curso_cierre.html", {'id_curso': id_curso,
                                                             'filter': filtro_inscripciones})
@@ -122,11 +120,15 @@ def lista_persona(request):
     return render(request, 'persona/persona_list.html', {'filter': filtro_personas})
 
 
-class DetallePersona(LoginRequiredMixin, DetailView):
-    model = PersonaFisica
-    template_name = 'persona/persona_detail.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+@login_required(login_url='login')
+def lista_detalles_persona(request, id_persona):
+    persona = PersonaFisica.objects.get(id=id_persona)
+    '''
+    LISTADO DE CADA ACTIVIDAD VINCULADA A LA PERSONA
+    '''
+    lista_cursos_inscripciones = Curso.objects.filter(inscripcion__persona__id=id_persona)
+    return render(request, "persona/persona_detail.html", {'persona':persona, 'cursos': lista_cursos_inscripciones})
+
 
 
 class AltaPersona(LoginRequiredMixin, CreateView):
