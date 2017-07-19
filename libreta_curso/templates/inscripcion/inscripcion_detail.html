@@ -15,6 +15,8 @@
 {% block url-volver %}{% url 'cursos:lista_cursos' %}{% endblock %}
 
 {% block detail %}
+  <p>N° ingresos varios: <i>{{ object.nro_ingresos_varios }}</i></p>
+  <p>Arancel: <i>{{ object.arancel }}</i></p>
   <p>Nombre de la persona: <i>{{ object.persona.nombre }}</i></p>
   <p>Fecha de Inscripción del curso: <i>{{ object.curso.fecha_inicio }}</i></p>
   <p>Observaciones: <i>{{ object.observaciones }}</i></p>

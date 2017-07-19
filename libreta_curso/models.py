@@ -24,8 +24,8 @@ class PersonaFisica(m.PersonaGenerica):
 
 
 class LibretaSanitaria(models.Model):
-    nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)
-    arancel = models.FloatField(null=True, blank=True)
+    nro_ingresos_varios = models.BigIntegerField(blank=True)
+    arancel = models.FloatField(blank=True)
     persona = models.OneToOneField('PersonaFisica', on_delete=models.CASCADE, primary_key=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
@@ -33,7 +33,7 @@ class LibretaSanitaria(models.Model):
     profesional_examen_clinico = models.CharField(max_length=200, default='')
     lugar_examen_clinico = models.CharField(max_length=200, default='')
     fecha = models.DateField(default=now)
-    foto = models.ImageField(upload_to='', blank=True, null=True)
+    foto = models.ImageField(upload_to='', blank=True)
 
     def __str__(self):
         return "%s %s" % (self.pk, self.persona)

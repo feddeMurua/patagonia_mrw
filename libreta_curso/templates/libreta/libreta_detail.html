@@ -15,9 +15,16 @@
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
 
 {% block detail %}
+  <p>N° ingresos varios: <i>{{ object.nro_ingresos_varios }}</i></p>
+  <p>Arancel: <i>{{ object.arancel }}</i></p>
+  <p>Fecha emisión: <i>{{ object.fecha }}</i></p>
   <p>Nombre de la persona: <i>{{ object.persona.nombre }}</i></p>
   <p>Fecha de aprobacion del curso: <i>{{ object.curso.fecha_inicio }}</i></p>
-  <p>Observaciones: <i>{{ object.observaciones }}</i></p>  
+  <p>Observaciones: <i>{{ object.observaciones }}</i></p>
+  <p>Profesional examen clínico: <i>{{ object.profesional_examen_clinico }}</i></p>
+  <p>Centro clínico: <i>{{ object.lugar_examen_clinico }}</i></p>
+  <p>Fecha examen clínico: <i>{{ object.fecha_examen_clinico }}</i></p>
+  <p>-------AGREGAR LA FOTO------- </p>
 {% endblock %}
 
 {% block btn-footer %}

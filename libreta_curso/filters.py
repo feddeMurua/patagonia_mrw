@@ -29,4 +29,4 @@ class InscripcionListFilter(django_filters.FilterSet):
     class Meta:
         model = Inscripcion
         fields = ['persona']
-        order_by = ['psersona']
+        order_by = ['persona']
