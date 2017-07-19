@@ -186,7 +186,7 @@ class BajaInscripcion(DeleteView):
 class ModificacionInscripcion(UpdateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'
-    fields = ['nro_ingresos_varios', 'arancel','persona', 'curso', 'observaciones']
+    fields = ['observaciones']
 
     def get_success_url(self):
         if 'id_curso' in self.kwargs:
