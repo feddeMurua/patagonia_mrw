@@ -104,3 +104,16 @@ table th {
 	-webkit-transform: translateX(-50%);
 	transform: translateX(-50%);
 }
+
+.doc-ok {
+    color: green;
+}
+
+.doc-no {
+    color: red;
+}
+
+.doc-ok, .doc-no {
+    font-weight: bold;
+    font-size: 34px;
+}

@@ -4,12 +4,6 @@
 
 {% block title %}Personas{% endblock %}
 
-{% block breadcrumb-items %}
-    <li><a href="{% url 'inicio' %}">Inicio</a></li>
-    <li><a href="{% url 'cursos:lista_cursos' %}">Cursos</a></li>
-    <li class="active">Detalle de curso</li>
-{% endblock %}
-
 {% block header-title %}Detalle de Curso{% endblock %}
 
 {% block url-volver %}{% url 'cursos:lista_cursos' %}{% endblock %}

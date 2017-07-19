@@ -1,3 +1,7 @@
 .container-form {
     margin: 35px auto 35px auto;
 }
+
+.btn-cancelar {
+    margin-left: 5px;
+}

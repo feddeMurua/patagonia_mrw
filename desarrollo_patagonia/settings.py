@@ -134,3 +134,13 @@ STATICFILES_DIRS = (
 LOGIN_REDIRECT_URL = reverse_lazy('login')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'estaticos/images/upload')
+
+
+def FILTERS_VERBOSE_LOOKUPS():
+    from django_filters.conf import DEFAULTS
+
+    verbose_lookups = DEFAULTS['VERBOSE_LOOKUPS'].copy()
+    verbose_lookups.update({
+        'contains': 'contiene',
+    })
+    return verbose_lookups

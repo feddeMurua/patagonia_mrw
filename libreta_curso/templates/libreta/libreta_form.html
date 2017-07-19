@@ -4,12 +4,10 @@
 
 {% block title %}Libretas Sanitarias{% endblock %}
 
-{% block breadcrumb-items %}
-    <li><a href="{% url 'inicio' %}">Inicio</a></li>
-    <li><a href="{% url 'libretas:lista_libretas' %}">Libretas</a></li>
-    <li class="active">Alta-modificación de libreta</li>
-{% endblock %}
-
 {% block header-title %}Alta/Modificacion de Libreta{% endblock %}
 
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'libretas:lista_libretas' %}">Cancelar</a>
+{% endblock %}

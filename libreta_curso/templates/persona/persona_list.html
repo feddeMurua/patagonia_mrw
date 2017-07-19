@@ -4,11 +4,6 @@
 
 {% block title %}Personas{% endblock %}
 
-{% block breadcrumb-items %}
-    <li><a href="{% url 'inicio' %}">Inicio</a></li>
-    <li class="active">Personas</li>
-{% endblock %}
-
 {% block header-title %}Personas{% endblock %}
 
 {% block url-volver %}{% url 'inicio' %}{% endblock %}
@@ -27,6 +22,7 @@
             <th>Dni</th>
             <th>Domicilio</th>
             <th>Telefono</th>
+            <th>Documentacion Retirada</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
         </thead>
@@ -37,6 +33,11 @@
                 <td>{{ persona.dni }}</td>
                 <td>{{ persona.domicilio }}</td>
                 <td>{{ persona.telefono }}</td>
+                {% if persona.documentacion_retirada == True %}
+                    <td class="doc-ok"><span class="glyphicon glyphicon-ok-sign"></span></td>
+                {% else %}
+                    <td class="doc-no"><span class="glyphicon glyphicon-remove-sign"></span></td>
+                {% endif %}
                 <td align="center">
                     <a class="btn btn-warning btn-mostrar" data-toggle="tooltip" title="Detalle" href="{% url 'personas:detalle_persona' persona.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'personas:modificar_persona' persona.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>

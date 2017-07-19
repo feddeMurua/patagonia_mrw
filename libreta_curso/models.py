@@ -18,6 +18,7 @@ class PersonaFisica(m.PersonaGenerica):
     dni = models.CharField(unique=True, max_length=50)
     nacionalidad = models.CharField(max_length=50)
     obra_social = models.CharField(max_length=50, blank=True)
+    documentacion_retirada = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s, %s - %s" % (self.apellido, self.nombre, self.dni)

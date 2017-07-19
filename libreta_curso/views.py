@@ -132,7 +132,7 @@ PERSONAS
 @login_required(login_url='login')
 def lista_persona(request):
     lista_personas = PersonaFisica.objects.all()
-    filtro_personas = PersonaListFilter(request.GET, queryset=lista_personas)
+    filtro_personas = InscripcionListFilter(request.GET, queryset=lista_personas)
     return render(request, 'persona/persona_list.html', {'filter': filtro_personas})
 
 
@@ -164,7 +164,7 @@ class ModificacionPersona(LoginRequiredMixin, UpdateView):
     model = PersonaFisica
     template_name = 'persona/persona_form.html'
     success_url = reverse_lazy('personas:lista_personas')
-    fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro']
+    fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro', 'documentacion_retirada']
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 

@@ -29,8 +29,7 @@ class LibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso',
-                    'observaciones', 'fecha_examen_clinico',
+        fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso', 'observaciones', 'fecha_examen_clinico',
                     'profesional_examen_clinico', 'lugar_examen_clinico', 'foto']
 
 
@@ -38,7 +37,7 @@ class InscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
-        fields = ['nro_ingresos_varios', 'arancel','persona','curso', 'observaciones']
+        fields = ['nro_ingresos_varios', 'arancel', 'persona', 'curso', 'observaciones']
 
     def __init__(self, id_curso=None, *args, **kwargs):
         super(InscripcionForm, self).__init__(*args, **kwargs)

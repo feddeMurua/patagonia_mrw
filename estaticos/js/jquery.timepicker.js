@@ -39,8 +39,8 @@
 		disableTouchKeyboard: false,
 		durationTime: null,
 		forceRoundTime: false,
-		maxTime: null,
-		minTime: null,
+		maxTime: '23:00',
+		minTime: '8:00',
 		noneOption: false,
 		orientation: 'l',
 		roundingFunction: function(seconds, settings) {
@@ -76,7 +76,7 @@
 		showOnFocus: true,
 		step: 30,
 		stopScrollPropagation: false,
-		timeFormat: 'g:ia',
+		timeFormat: 'H:i',
 		typeaheadHighlight: true,
 		useSelect: false,
 		wrapHours: true

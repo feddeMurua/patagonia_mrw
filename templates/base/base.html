@@ -28,10 +28,6 @@
     {% endblock %}
 
     {% block no-header %}
-        <ol id="breadcrumb-page" class="breadcrumb _breadcrumb_">
-            {% block breadcrumb-items %}
-            {% endblock %}
-        </ol>
         <header id="header-page" class="header">
             <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
                 <span class="glyphicon glyphicon-arrow-left hvr-buzz pull-right"></span>
@@ -91,7 +87,7 @@
                 }
             });
 
-            $('.timepicker').timepicker({ 'timeFormat': 'H:i' });
+            $('.timepicker').timepicker();
         });
     </script>
     {% block scripts %}

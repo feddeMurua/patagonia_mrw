@@ -4,12 +4,10 @@
 
 {% block title %}Personas{% endblock %}
 
-{% block breadcrumb-items %}
-    <li><a href="{% url 'inicio' %}">Inicio</a></li>
-    <li><a href="{% url 'personas:lista_personas' %}">Personas</a></li>
-    <li class="active">Alta-Modificacion de persona</li>
-{% endblock %}
-
 {% block header-title %}Alta/Modificacion de Persona{% endblock %}
 
 {% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'personas:lista_personas' %}">Cancelar</a>
+{% endblock %}

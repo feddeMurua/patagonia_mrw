@@ -11,17 +11,10 @@ class LibretaListFilter(django_filters.FilterSet):
         order_by = ['fecha_examen_clinico']
 
 
-class PersonaListFilter(django_filters.FilterSet):
-    class Meta:
-        model = PersonaFisica
-        fields = ['nombre', 'apellido', 'dni']
-        order_by = ['apellido']
-
-
 class CursoListFilter(django_filters.FilterSet):
     class Meta:
         model = Curso
-        fields = ['cupo', 'horario']
+        fields = ['cupo', 'horario', 'fecha_inicio']
         order_by = ['cupo']
 
 
@@ -29,4 +22,4 @@ class InscripcionListFilter(django_filters.FilterSet):
     class Meta:
         model = Inscripcion
         fields = ['persona']
-        order_by = ['psersona']
+        order_by = ['persona']

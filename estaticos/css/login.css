@@ -44,3 +44,10 @@
     font-weight: 400;
     display: block;
 }
+
+.msg-error p {
+    margin-top: 25px;
+    font-size: 17px;
+    color: red;
+    font-weight: bold;
+}
