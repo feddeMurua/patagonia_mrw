@@ -24,7 +24,8 @@ CURSOS
 def lista_curso(request):
     lista_cursos = Curso.objects.all()
     filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
-    return render(request, 'curso/curso_list.html', {'filter': filtro_cursos})
+    fecha_hoy = datetime.date.today()
+    return render(request, 'curso/curso_list.html', { 'fecha_hoy': fecha_hoy,'filter': filtro_cursos})
 
 
 class AltaCurso(LoginRequiredMixin, CreateView):
@@ -183,6 +184,7 @@ class AltaInscripcion(CreateView):
         if 'id_curso' in self.kwargs:
             id_curso = self.kwargs['id_curso']
         return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
+
 
     def get_form_kwargs(self):
         kwargs = super( AltaInscripcion, self).get_form_kwargs()

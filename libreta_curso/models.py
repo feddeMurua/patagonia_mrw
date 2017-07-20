@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.utils.timezone import now
+from django.core.validators import MaxValueValidator, MinValueValidator
 from desarrollo_patagonia import models as m
 import os
 
@@ -41,7 +42,10 @@ class LibretaSanitaria(models.Model):
 
 class Curso(models.Model):
     fecha_inicio = models.DateField()
-    cupo = models.IntegerField()
+    cupo = models.IntegerField(
+        validators=[MaxValueValidator(500),
+        MinValueValidator(1)]
+    )
     lugar = models.CharField(max_length=50)
     horario = models.TimeField()
     finalizado = models.BooleanField(default=False)
@@ -51,6 +55,7 @@ class Curso(models.Model):
 
 
 class Inscripcion(models.Model):
+    fecha_inscripcion = models.DateField(default=now)
     nota_curso = models.IntegerField(null=True, blank=True)
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)

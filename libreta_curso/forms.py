@@ -1,5 +1,7 @@
 from django import forms
 from functools import partial
+import datetime
+import re
 from .models import *
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
@@ -22,6 +24,13 @@ class CursoForm(forms.ModelForm):
     class Meta:
         model = Curso
         fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
+
+    def clean_fecha_inicio(self):
+        fecha = self.cleaned_data['fecha_inicio']
+        if fecha:
+            if fecha < datetime.date.today():
+                raise forms.ValidationError('La fecha no puede ser menor que la actual')
+        return fecha
 
 
 class LibretaForm(forms.ModelForm):
