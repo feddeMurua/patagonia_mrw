@@ -124,12 +124,8 @@ def lista_persona(request):
 @login_required(login_url='login')
 def lista_detalles_persona(request, id_persona):
     persona = PersonaFisica.objects.get(id=id_persona)
-    '''
-    LISTADO DE CADA ACTIVIDAD VINCULADA A LA PERSONA
-    '''
-    lista_cursos_inscripciones = Curso.objects.filter(inscripcion__persona__id=id_persona)
-    return render(request, "persona/persona_detail.html", {'persona':persona, 'cursos': lista_cursos_inscripciones})
-
+    lista_cursos_inscripciones = Inscripcion.objects.filter(persona__id=id_persona)
+    return render(request, "persona/persona_detail.html", {'persona': persona, 'inscripciones': lista_cursos_inscripciones})
 
 
 class AltaPersona(LoginRequiredMixin, CreateView):

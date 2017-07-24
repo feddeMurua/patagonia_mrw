@@ -30,10 +30,6 @@
                         <form method="get">
                             <div class="well">
                                 {% csrf_token %}
-                                {% for hidden in filter.form.hidden_fields %}
-                                    {{ hidden }}
-                                {% endfor %}
-
                                 {% for field in filter.form.visible_fields %}
                                     <div class="form-group">
                                         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
