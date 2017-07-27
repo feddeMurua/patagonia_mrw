@@ -21,6 +21,7 @@
             <th>Apellido(s)</th>
             <th>Nombre(s)</th>
             <th>DNI</th>
+            <th>Calificacion</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
         </thead>
@@ -31,6 +32,7 @@
                 <td>{{ inscripcion.persona.apellido }}</td>
                 <td>{{ inscripcion.persona.nombre }}</td>
                 <td>{{ inscripcion.persona.dni }}</td>
+                <td>{{ inscripcion.nota_curso.Aprobado }}</td>
                 <td align="center">
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:cierre_inscripcion_curso' id_curso inscripcion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                 </td>

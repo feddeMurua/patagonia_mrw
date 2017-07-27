@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.utils.timezone import now
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from desarrollo_patagonia import models as m
+from aenum import Enum
 import os
 
 
@@ -56,7 +57,8 @@ class Curso(models.Model):
 
 class Inscripcion(models.Model):
     fecha_inscripcion = models.DateField(default=now)
-    nota_curso = models.IntegerField(null=True, blank=True)
+    modificado = models.BooleanField(default=False)
+    nota_curso = Enum('nota_curso', 'S/C Aprobado Desaprobado')
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)
     arancel = models.FloatField(null=True, blank=True)
