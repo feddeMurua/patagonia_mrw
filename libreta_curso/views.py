@@ -8,11 +8,11 @@ from django.shortcuts import render
 from .forms import *
 from .filters import *
 from .models import *
+from .choices import *
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
     DeleteView)
-
 
 
 '''
@@ -25,7 +25,7 @@ def lista_curso(request):
     lista_cursos = Curso.objects.all()
     filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
     fecha_hoy = datetime.date.today()
-    return render(request, 'curso/curso_list.html', { 'fecha_hoy': fecha_hoy,'filter': filtro_cursos})
+    return render(request, 'curso/curso_list.html', {'fecha_hoy': fecha_hoy, 'filter': filtro_cursos})
 
 
 class AltaCurso(LoginRequiredMixin, CreateView):
@@ -54,13 +54,11 @@ class ModificacionCurso(LoginRequiredMixin, UpdateView):
     redirect_field_name = 'next'
 
 
-
 @login_required(login_url='login')
 def cierre_de_curso(request, id_curso):
     lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
     filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
-    return render(request, "curso/curso_cierre.html", {'id_curso': id_curso,
-                                                            'filter': filtro_inscripciones})
+    return render(request, "curso/curso_cierre.html", {'id_curso': id_curso, 'filter': filtro_inscripciones})
 
 
 '''
@@ -103,8 +101,8 @@ class ModificacionLibreta(LoginRequiredMixin, UpdateView):
     model = LibretaSanitaria
     template_name = 'libreta/libreta_form.html'
     success_url = reverse_lazy('libretas:lista_libretas')
-    fields = ['observaciones', 'fecha_examen_clinico',
-                'profesional_examen_clinico', 'lugar_examen_clinico', 'foto']
+    fields = ['observaciones', 'fecha_examen_clinico', 'profesional_examen_clinico', 'lugar_examen_clinico',
+              'foto']
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
@@ -125,7 +123,8 @@ def lista_persona(request):
 def lista_detalles_persona(request, id_persona):
     persona = PersonaFisica.objects.get(id=id_persona)
     lista_cursos_inscripciones = Inscripcion.objects.filter(persona__id=id_persona)
-    return render(request, "persona/persona_detail.html", {'persona': persona, 'inscripciones': lista_cursos_inscripciones})
+    return render(request, "persona/persona_detail.html", {'persona': persona,
+                                                           'inscripciones': lista_cursos_inscripciones})
 
 
 class AltaPersona(LoginRequiredMixin, CreateView):
@@ -181,11 +180,9 @@ class AltaInscripcion(CreateView):
             id_curso = self.kwargs['id_curso']
         return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
 
-
     def get_form_kwargs(self):
-        kwargs = super( AltaInscripcion, self).get_form_kwargs()
-        # update the kwargs for the form init method with yours
-        kwargs.update(self.kwargs)  # self.kwargs contains all url conf params
+        kwargs = super(AltaInscripcion, self).get_form_kwargs()
+        kwargs.update(self.kwargs)
         return kwargs
 
 
@@ -200,6 +197,7 @@ class BajaInscripcion(LoginRequiredMixin, DeleteView):
             id_curso = self.kwargs['id_curso']
         return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
 
+
 class ModificacionInscripcion(LoginRequiredMixin, UpdateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'
@@ -210,13 +208,15 @@ class ModificacionInscripcion(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         if 'id_curso' in self.kwargs:
             id_curso = self.kwargs['id_curso']
-        return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
+        return reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso})
 
 
 class CierreCursoInscripcion(ModificacionInscripcion):
+    nota_curso = forms.ChoiceField(choices=Calificaciones, label="Calificacion", initial='', widget=forms.Select())
+
     fields = ['nota_curso', 'porcentaje_asistencia']
 
     def get_success_url(self):
         if 'id_curso' in self.kwargs:
             id_curso = self.kwargs['id_curso']
-        return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
+        return reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso})

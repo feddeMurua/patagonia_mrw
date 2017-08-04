@@ -20,6 +20,7 @@
         <thead>
         <tr>
             <th>Persona</th>
+            <th>Fecha de inscripción</th>
             <th>Observaciones</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -29,6 +30,7 @@
         {% for inscripcion in filter.qs %}
             <tr>
                 <td>{{ inscripcion.persona }}</td>
+                <td>{{ inscripcion.fecha_inscripcion }}</td>
                 <td>{{ inscripcion.observaciones }}</td>
                 <td align="center">
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'inscripciones:detalle_inscripcion' inscripcion.pk id_curso %}"><em class="glyphicon glyphicon-eye-open"></em></a>

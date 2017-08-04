@@ -18,9 +18,9 @@
     <table class="table table-striped table-bordered table-list">
         <thead>
         <tr>
-            <th>Apellido(s)</th>
-            <th>Nombre(s)</th>
-            <th>DNI</th>
+            <th>Persona</th>
+            <th>Porcentaje de asistencia</th>
+            <th>Calificación</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
         </thead>
@@ -28,9 +28,9 @@
 
         {% for inscripcion in filter.qs %}
             <tr>
-                <td>{{ inscripcion.persona.apellido }}</td>
-                <td>{{ inscripcion.persona.nombre }}</td>
-                <td>{{ inscripcion.persona.dni }}</td>
+                <td>{{ inscripcion.persona }}</td>
+                <td>{{ inscripcion.porcentaje_asistencia }}</td>
+                <td>{{ inscripcion.nota_curso }}</td>
                 <td align="center">
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:cierre_inscripcion_curso' id_curso inscripcion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                 </td>
