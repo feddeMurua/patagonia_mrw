@@ -9,10 +9,12 @@
 {% block no-particles %}{% endblock %}
 
 {% block content %}
-    <div class="container container-detail">
-        <div class="panel panel-default">
-            <div class="panel-body">{% block detail %}{% endblock %}</div>
-            <div class="panel-footer">{% block btn-footer %}{% endblock %}</div>
+    <div class="container container-detalle">
+        <div class="row">
+            <div class="panel panel-info">
+                <div class="panel-body">{% block detail %}{% endblock %}</div>
+                <div class="panel-footer">{% block btn-footer %}{% endblock %}</div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -32,4 +34,5 @@
             });
         });
     </script>
+    {% block more-scripts %}{% endblock %}
 {% endblock %}

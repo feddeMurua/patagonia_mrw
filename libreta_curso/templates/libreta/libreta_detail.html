@@ -9,9 +9,46 @@
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
 
 {% block detail %}
-  <p>Nombre de la persona: <i>{{ object.persona.nombre }}</i></p>
-  <p>Fecha de aprobacion del curso: <i>{{ object.curso.fecha_inicio }}</i></p>
-  <p>Observaciones: <i>{{ object.observaciones }}</i></p>  
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>N° Ingresos Varios:</td>
+                <td>{{ object.nro_ingresos_varios }}</td>
+            </tr>
+            <tr>
+                <td>Arancel:</td>
+                <td>$ {{ object.arancel }}</td>
+            </tr>
+            <tr>
+                <td>Fecha de Emisión:</td>
+                <td>{{ object.fecha }}</td>
+            </tr>
+            <tr>
+                <td>Apellido y Nombre:</td>
+                <td>{{ object.persona.apellido }}, {{ object.persona.nombre }}</td>
+            </tr>
+            <tr>
+                <td>Fecha de Aprobacion del Curso:</td>
+                <td>{{ object.curso.fecha_inicio }}</td>
+            </tr>
+            <tr>
+                <td>Observaciones:</td>
+                <td>{{ object.observaciones }}</td>
+            </tr>
+            <tr>
+                <td>Profesional de Examen Clínico:</td>
+                <td>{{ object.profesional_examen_clinico }}</td>
+            </tr>
+            <tr>
+                <td>Centro Clínico:</td>
+                <td>{{ object.lugar_examen_clinico }}</td>
+            </tr>
+            <tr>
+                <td>Fecha de Examen Clínico:</td>
+                <td>{{ object.fecha_examen_clinico }}</td>
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block btn-footer %}

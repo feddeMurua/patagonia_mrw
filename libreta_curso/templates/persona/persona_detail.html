@@ -2,6 +2,10 @@
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_detail.css' %}"/>
+{% endblock %}
+
 {% block title %}Personas{% endblock %}
 
 {% block header-title %}Detalle de Persona{% endblock %}
@@ -9,19 +13,124 @@
 {% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}
 
 {% block detail %}
-    <p>Apellido: <i>{{ object.apellido }}</i></p>
-    <p>Nombre: <i>{{ object.nombre }}</i></p>
-    <p>Dni: <i>{{ object.dni }}</i></p>
-    <p>Cuil: <i>{{ object.cuil }}</i></p>
-    <p>Fecha de Nacimiento: <i>{{ object.fecha_nacimiento }}</i></p>
-    <p>Nacionalidad: <i>{{ object.nacionalidad }}</i></p>
-    <p>Obra Social: <i>{{ object.obra_social }}</i></p>
-    <p>Domicilio: <i>{{ object.domicilio }}</i></p>
-    <p>Telefono: <i>{{ object.telefono }}</i></p>
-    <p>Email: <i>{{ object.email }}</i></p>
-    <p>Rubro: <i>{{ object.rubro }}</i></p>
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>Apellido y Nombre:</td>
+                <td>{{ persona.apellido }}, {{ persona.nombre }}</td>
+            </tr>
+            <tr>
+                <td>DNI:</td>
+                <td>{{ persona.dni }}</td>
+            </tr>
+            <tr>
+                <td>Cuil:</td>
+                <td>{{ persona.cuil }}</td>
+            </tr>
+            <tr>
+                <td>Fecha de Nacimiento:</td>
+                <td>{{ persona.fecha_nacimiento }}</td>
+            </tr>
+            <tr>
+                <td>Nacionalidad:</td>
+                <td>{{ persona.nacionalidad }}</td>
+            </tr>
+            <tr>
+                <td>Obra Social:</td>
+                <td>{{ persona.obra_social }}</td>
+            </tr>
+            <tr>
+                <td>Domicilio:</td>
+                <td>{{ persona.domicilio }}</td>
+            </tr>
+            <tr>
+                <td>Teléfono:</td>
+                <td>{{ persona.telefono }}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>{{ persona.email }}</td>
+            </tr>
+            <tr>
+                <td>Rubro:</td>
+                <td>{{ persona.rubro }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="container-fluid container-list">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default panel-table">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col col-xs-6">
+                                <h3 class="panel-title">Inscripciones a Cursos</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        {% if inscripciones %}
+                            <table class="table table-striped table-bordered table-hover table-list">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha de curso</th>
+                                        <th>Fecha de inscripcion</th>
+                                        <th>Lugar</th>
+                                        <th>Horario</th>
+                                        <th>Curso finalizado</th>
+                                        <th>Porcentaje de asistencia</th>
+                                        <th>Calificación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for inscripcion in inscripciones %}
+                                    <tr align="center">
+                                        <td>{{ inscripcion.curso.fecha_inicio }}</td>
+                                        <td>{{ inscripcion.fecha_inscripcion }}</td>
+                                        <td>{{ inscripcion.curso.lugar }}</td>
+                                        <td>{{ inscripcion.curso.horario }}</td>
+                                        {% if inscripcion.curso.finalizado == True %}
+                                            <td align="center"><span class="glyphicon glyphicon-ok-sign"></span></td>
+                                        {% else %}
+                                            <td align="center"><span class="glyphicon glyphicon-remove-sign"></span></td>
+                                        {% endif %}
+                                        <td>{{ inscripcion.porcentaje_asistencia }}</td>
+                                        <td>{{ inscripcion.nota_curso }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div id="table-empty" class="table-empty">
+                                <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    No se encontraron elementos
+                                </h3>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'personas:lista_personas' %}" class="btn btn-primary" role="button">Regresar</a>
+    <a href="{% url 'personas:lista_personas' %}" class="btn btn-primary">Regresar</a>
+{% endblock %}
+
+{% block more-scripts %}
+    <script src="{% static 'js/paging.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#hidden-panel").hide();
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $("#buscar").click(function(){
+                $("#hidden-panel").slideToggle("slow");
+            });
+
+            $('.table-list').paging({limit:3});
+        });
+    </script>
 {% endblock %}
