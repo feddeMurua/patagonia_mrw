@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.shortcuts import render
+from easy_pdf.views import PDFTemplateView
 from .forms import *
 from .filters import *
 from .models import *
@@ -220,3 +221,16 @@ class CierreCursoInscripcion(ModificacionInscripcion):
         if 'id_curso' in self.kwargs:
             id_curso = self.kwargs['id_curso']
         return reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso})
+
+
+class pdfInscripcion(PDFTemplateView):
+    template_name = 'inscripcion/inscripcion_pdf.html'
+
+    def get_context_data(self, pk, id_curso):
+        inscripcion = Inscripcion.objects.get(pk=pk)
+        return super(pdfInscripcion, self).get_context_data(
+            pagesize="A4",
+            inscripcion=inscripcion,
+            title="Detalle de Inscripcion"
+        )
+

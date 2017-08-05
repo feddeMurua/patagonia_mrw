@@ -1,0 +1,38 @@
+{% extends "easy_pdf/base.html" %}
+
+{%block page_header%}
+    <div id="page-header">
+        <div class="header">
+            <p>Detalle de Inscripcion</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <table>
+                <tr>
+                    <td>N° Ingresos Varios:</td>
+                    <td>{{ inscripcion.nro_ingresos_varios }}</td>
+                </tr>
+                <tr>
+                    <td>Arancel:</td>
+                    <td>$ {{ inscripcion.arancel }}</td>
+                </tr>
+                <tr>
+                    <td>Apellido y Nombre:</td>
+                    <td>{{ inscripcion.persona.apellido }}, {{ inscripcion.persona.nombre }}</td>
+                </tr>
+                <tr>
+                    <td>Fecha de Inscripción:</td>
+                    <td>{{ inscripcion.fecha_inscripcion }}</td>
+                </tr>
+                <tr>
+                    <td>Observaciones:</td>
+                    <td>{{ inscripcion.observaciones }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

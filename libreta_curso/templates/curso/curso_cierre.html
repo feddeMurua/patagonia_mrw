@@ -13,7 +13,6 @@
 {% block btn-nuevo %}
 {% endblock %}
 
-
 {% block tabla %}
     <table class="table table-striped table-bordered table-list">
         <thead>
@@ -29,11 +28,19 @@
         {% for inscripcion in filter.qs %}
             <tr>
                 <td>{{ inscripcion.persona }}</td>
-                <td>{{ inscripcion.porcentaje_asistencia }}</td>
+                {% if inscripcion.porcentaje_asistencia %}
+                    <td>{{ inscripcion.porcentaje_asistencia }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
                 <td>{{ inscripcion.nota_curso }}</td>
-                <td align="center">
-                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:cierre_inscripcion_curso' id_curso inscripcion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                </td>
+                {% if inscripcion.modificado %}
+                    <td></td>
+                {% else %}
+                    <td align="center">
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:cierre_inscripcion_curso' id_curso inscripcion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>

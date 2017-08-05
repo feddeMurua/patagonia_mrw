@@ -14,6 +14,7 @@ TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 class PersonaForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=DateInput())
     regex = re.compile(r"^[a-zñA-ZÑ]+((\s[a-zñA-ZÑ]+)+)?$")
+
     class Meta:
         model = PersonaFisica
         fields = ['nombre', 'apellido', 'cuil', 'fecha_nacimiento', 'dni', 'nacionalidad', 'obra_social',
@@ -100,6 +101,7 @@ class CursoForm(forms.ModelForm):
         if not CursoForm.regex.match(lugar):
                 raise forms.ValidationError('El lugar no puede contener caracteres especiales')
         return lugar
+
 
 class LibretaForm(forms.ModelForm):
     fecha_examen_clinico = forms.DateField(widget=DateInput())

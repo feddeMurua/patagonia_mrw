@@ -57,7 +57,7 @@ class Curso(models.Model):
 
 class Inscripcion(models.Model):
     fecha_inscripcion = models.DateField(default=now)
-    modificado = models.BooleanField(default=False)nota_curso = Enum('nota_curso', 'S/C Aprobado Desaprobado')
+    modificado = models.BooleanField(default=False)
     nota_curso = models.CharField(max_length=15, choices=Calificaciones, blank=True)
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)

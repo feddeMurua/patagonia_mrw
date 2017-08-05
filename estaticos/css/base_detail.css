@@ -1,11 +1,19 @@
 .container-detail {
-    margin-top: 35px;
+    margin-top: 35xpx;
 }
 
 .panel-footer {
     text-align: right;
 }
 
-#hidden-panel {
-    display: none;
+.table-information > tbody > tr {
+    border-top: 1px solid rgb(221, 221, 221);
+}
+
+.table-information > tbody > tr:first-child {
+    border-top: 0;
+}
+
+.table-information > tbody > tr > td {
+    border-top: 0;
 }

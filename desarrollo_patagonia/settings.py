@@ -44,7 +44,8 @@ INSTALLED_APPS = [
 
     # Librerias
     'bootstrap3',
-    'widget_tweaks',    
+    'widget_tweaks',
+    'easy_pdf',
 ]
 
 MIDDLEWARE = [
