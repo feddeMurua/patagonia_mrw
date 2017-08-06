@@ -11,7 +11,11 @@
 {% block panel-title %}Inscripciones{% endblock %}
 
 {% block btn-nuevo %}
-    <a href="{% url 'inscripciones:nueva_inscripcion' id_curso %}" class="btn btn-sm btn-primary btn-create" >Nueva Inscripción</a>
+    {% if fecha_hoy < curso.fecha_inicio %}
+        {% if cupo_restante > 0 %}
+            <a href="{% url 'inscripciones:nueva_inscripcion' id_curso %}" class="btn btn-sm btn-primary btn-create" >Nueva Inscripción</a>
+        {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block tabla %}
@@ -25,7 +29,6 @@
         </tr>
         </thead>
         <tbody>
-
         {% for inscripcion in filter.qs %}
             <tr>
                 <td>{{ inscripcion.persona }}</td>
@@ -33,10 +36,18 @@
                 <td>{{ inscripcion.observaciones }}</td>
                 <td align="center">
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'inscripciones:detalle_inscripcion' inscripcion.pk id_curso %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'inscripciones:modificar_inscripcion' inscripcion.pk id_curso %}"><em class="glyphicon glyphicon-pencil"></em></a>                    
+                    {% if not curso.finalizado %}
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'inscripciones:modificar_inscripcion' inscripcion.pk id_curso %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block panel-footer %}
+    <div class="panel-footer" align="right">
+        <b>Cupo restante: {{ cupo_restante }}</b>
+    </div>
 {% endblock %}

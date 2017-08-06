@@ -11,7 +11,7 @@
 {% block panel-title %}Cursos{% endblock %}
 
 {% block btn-nuevo %}
-    <a href="{% url 'cursos:nuevo_curso' %}" class="btn btn-sm btn-primary btn-create" role="button">Nuevo Curso</a>
+    <a href="{% url 'cursos:nuevo_curso' %}" class="btn btn-sm btn-primary btn-create">Nuevo Curso</a>
 {% endblock %}
 
 {% block tabla %}
@@ -35,10 +35,14 @@
                 <td align="center">
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:modificar_curso' curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                     <a class="btn btn-danger btn-baja" data-url="{% url 'cursos:borrar_curso' curso.pk %}" data-toggle="tooltip" title="Eliminar" href="{% url 'cursos:borrar_curso' curso.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
-                    {% if fecha_hoy < curso.fecha_inicio %}
                     <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="{% url 'cursos:inscripciones_curso' curso.pk %}"><em class="glyphicon glyphicon-user"></em></a>
+                    {% if not curso.finalizado %}
+                        <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="{% url 'cursos:cierre_curso' curso.pk %}"><em class="glyphicon glyphicon-education"></em></a>
                     {% endif %}
+<<<<<<< HEAD
                     <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="{% url 'cursos:cierre_curso' curso.pk %}"><em class="glyphicon glyphicon-education"></em></a>                    
+=======
+>>>>>>> 1b5a0b43dfca7a31d36f8f11fc9948721038d531
                 </td>
             </tr>
         {% endfor %}

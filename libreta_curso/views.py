@@ -25,8 +25,7 @@ CURSOS
 def lista_curso(request):
     lista_cursos = Curso.objects.all()
     filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
-    fecha_hoy = datetime.date.today()
-    return render(request, 'curso/curso_list.html', {'fecha_hoy': fecha_hoy, 'filter': filtro_cursos})
+    return render(request, 'curso/curso_list.html', {'filter': filtro_cursos})
 
 
 class AltaCurso(LoginRequiredMixin, CreateView):
@@ -57,18 +56,21 @@ class ModificacionCurso(LoginRequiredMixin, UpdateView):
 
 @login_required(login_url='login')
 def cierre_de_curso(request, id_curso):
-    lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
-    filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
-    apto_cierre = True
-    for inscripcion in lista_inscripciones:
-        if not inscripcion.modificado:
-            apto_cierre = False
-    if apto_cierre:
-        curso = Curso.objects.get(id=id_curso)
+    if request.method == 'POST':
+        curso = Curso.objects.get(pk=id_curso)
         curso.finalizado = True
         curso.save()
-    return render(request, "curso/curso_cierre.html", {'id_curso': id_curso, 'filter': filtro_inscripciones,
-                                                       'apto_cierre': apto_cierre})
+        return redirect('cursos:lista_cursos')
+    else:
+        lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
+        filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
+        apto_cierre = True
+        for inscripcion in lista_inscripciones:
+            if not inscripcion.modificado:
+                apto_cierre = False
+                break
+        return render(request, "curso/curso_cierre.html", {'id_curso': id_curso, 'filter': filtro_inscripciones,
+                                                           'apto_cierre': apto_cierre})
 
 
 '''
@@ -122,18 +124,23 @@ INSCRIPCIONES
 '''
 
 
-def lista_inscripciones_curso(request, id_curso):
-    lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
-    filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
-    return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'filter': filtro_inscripciones})
-
-
 class DetalleInscripcion(LoginRequiredMixin, DetailView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_detail.html'
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
-    
+
+
+def lista_inscripciones_curso(request, id_curso):
+    lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
+    filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
+    curso = Curso.objects.get(pk=id_curso)
+    cupo_restante = curso.cupo - len(lista_inscripciones)
+    fecha_hoy = datetime.date.today()
+    return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'fecha_hoy': fecha_hoy,
+                                                              'curso': curso, 'cupo_restante': cupo_restante,
+                                                              'filter': filtro_inscripciones})
+
 
 class AltaInscripcion(LoginRequiredMixin, CreateView):
     model = Inscripcion
@@ -192,14 +199,13 @@ class CierreCursoInscripcion(ModificacionInscripcion):
         return reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso})
 
 
-class pdfInscripcion(PDFTemplateView):
+class PdfInscripcion(PDFTemplateView):
     template_name = 'inscripcion/inscripcion_pdf.html'
 
     def get_context_data(self, pk, id_curso):
         inscripcion = Inscripcion.objects.get(pk=pk)
-        return super(pdfInscripcion, self).get_context_data(
+        return super(PdfInscripcion, self).get_context_data(
             pagesize="A4",
             inscripcion=inscripcion,
             title="Detalle de Inscripcion"
         )
-
