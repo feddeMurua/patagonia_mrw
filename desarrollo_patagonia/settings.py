@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # Gestiones
     'libreta_curso',
+    'animales',
 
     # Librerias
     'bootstrap3',

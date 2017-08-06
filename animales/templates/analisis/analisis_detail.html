@@ -1,0 +1,43 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Análisis{% endblock %}
+
+{% block header-title %}Detalle de Análisis{% endblock %}
+
+{% block url-volver %}{% url 'analisis:lista_analisis' %}{% endblock %}
+ 
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>N° Ingresos Varios:</td>
+                <td>{{ object.nro_ingreso }}</td>
+            </tr>
+            <tr>
+                <td>Fecha:</td>
+                <td>{{ object.fecha }}</td>
+            </tr>            
+            <tr>
+                <td>Apellido y Nombre del Interesado:</td>
+                <td>{{ object.interesado.apellido }}, {{ object.interesado.nombre }}</td>
+            </tr>
+            <tr>
+                <td>Procedencia:</td>
+                <td>{{ object.procedencia }}</td>
+            </tr>
+            <tr>
+                <td>Medico Veterinario:</td>
+                <td>{{ object.medico_veterinario }}</td>
+            </tr>
+            <tr>
+                <td>Resultado:</td>
+                <td>{{ object.resultado }}</td>
+            </tr>            
+    </table>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'analisis:lista_analisis' %}" class="btn btn-primary" role="button">Regresar</a>
+{% endblock %}
