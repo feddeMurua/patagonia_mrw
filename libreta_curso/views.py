@@ -135,21 +135,23 @@ class DetalleInscripcion(LoginRequiredMixin, DetailView):
     redirect_field_name = 'next'
     
 
-class AltaInscripcion(CreateView):
+class AltaInscripcion(LoginRequiredMixin, CreateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'
     form_class = InscripcionForm
-
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+    
     def get_success_url(self):
         if 'id_curso' in self.kwargs:
             id_curso = self.kwargs['id_curso']
         return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
-
+    
     def get_form_kwargs(self):
         kwargs = super(AltaInscripcion, self).get_form_kwargs()
         kwargs.update(self.kwargs)
         return kwargs
-
+    
 
 class BajaInscripcion(LoginRequiredMixin, DeleteView):
     model = Inscripcion
