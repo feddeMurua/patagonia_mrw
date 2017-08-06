@@ -10,7 +10,6 @@ import datetime
 from .forms import *
 from .filters import *
 from .models import *
-#from .choices import *
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
