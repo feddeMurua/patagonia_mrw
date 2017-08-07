@@ -140,6 +140,8 @@ def lista_inscripciones_curso(request, id_curso):
     return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'fecha_hoy': fecha_hoy,
                                                               'curso': curso, 'cupo_restante': cupo_restante,
                                                               'filter': filtro_inscripciones})
+
+
 class AltaInscripcion(CreateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'
@@ -195,14 +197,13 @@ class CierreCursoInscripcion(ModificacionInscripcion):
         return reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso})
 
 
-class pdfInscripcion(PDFTemplateView):
+class PdfInscripcion(PDFTemplateView):
     template_name = 'inscripcion/inscripcion_pdf.html'
 
     def get_context_data(self, pk, id_curso):
         inscripcion = Inscripcion.objects.get(pk=pk)
-        return super(pdfInscripcion, self).get_context_data(
+        return super(PdfInscripcion, self).get_context_data(
             pagesize="A4",
             inscripcion=inscripcion,
             title="Detalle de Inscripcion"
         )
-

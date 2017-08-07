@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from .forms import *
-from .models import *
 from .filters import *
 from libreta_curso import models as m
 from django.views.generic.edit import (
