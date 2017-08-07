@@ -120,51 +120,6 @@ class ModificacionLibreta(LoginRequiredMixin, UpdateView):
 
 
 '''
-PERSONAS
-'''
-
-
-@login_required(login_url='login')
-def lista_persona(request):
-    lista_personas = PersonaFisica.objects.all()
-    filtro_personas = InscripcionListFilter(request.GET, queryset=lista_personas)
-    return render(request, 'persona/persona_list.html', {'filter': filtro_personas})
-
-
-@login_required(login_url='login')
-def lista_detalles_persona(request, id_persona):
-    persona = PersonaFisica.objects.get(id=id_persona)
-    lista_cursos_inscripciones = Inscripcion.objects.filter(persona__id=id_persona)
-    return render(request, "persona/persona_detail.html", {'persona': persona,
-                                                           'inscripciones': lista_cursos_inscripciones})
-
-
-class AltaPersona(LoginRequiredMixin, CreateView):
-    model = PersonaFisica
-    template_name = 'persona/persona_form.html'
-    success_url = reverse_lazy('personas:lista_personas')
-    form_class = PersonaForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
-class BajaPersona(LoginRequiredMixin, DeleteView):
-    model = PersonaFisica
-    template_name = 'persona/persona_confirm_delete.html'
-    success_url = reverse_lazy('personas:lista_personas')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
-class ModificacionPersona(LoginRequiredMixin, UpdateView):
-    model = PersonaFisica
-    template_name = 'persona/persona_form.html'
-    success_url = reverse_lazy('personas:lista_personas')
-    fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro', 'documentacion_retirada']
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-'''
 INSCRIPCIONES
 '''
 
@@ -185,8 +140,6 @@ def lista_inscripciones_curso(request, id_curso):
     return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'fecha_hoy': fecha_hoy,
                                                               'curso': curso, 'cupo_restante': cupo_restante,
                                                               'filter': filtro_inscripciones})
-
-
 class AltaInscripcion(CreateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'

@@ -4,7 +4,7 @@ from .choices import *
 from django.db import models
 from django.utils.timezone import now
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
-from desarrollo_patagonia import models as m
+from personas import models as m
 import os
 
 
@@ -12,24 +12,10 @@ def get_image_path(instance, filename):
     return os.path.join('images/', str(instance.pk), filename)
 
 
-class PersonaFisica(m.PersonaGenerica):
-    nombre = models.CharField(max_length=50)
-    apellido = models.CharField(max_length=50)
-    cuil = models.CharField(max_length=50, blank=True)
-    fecha_nacimiento = models.DateField()
-    dni = models.CharField(unique=True, max_length=50)
-    nacionalidad = models.CharField(max_length=50)
-    obra_social = models.CharField(max_length=50, blank=True)
-    documentacion_retirada = models.BooleanField(default=False)
-
-    def __str__(self):
-        return "%s, %s - %s" % (self.apellido, self.nombre, self.dni)
-
-
 class LibretaSanitaria(models.Model):
     nro_ingresos_varios = models.BigIntegerField(blank=True)
     arancel = models.FloatField(blank=True)
-    persona = models.OneToOneField('PersonaFisica', on_delete=models.CASCADE, primary_key=True)
+    persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE, primary_key=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
     fecha_examen_clinico = models.DateField()
@@ -62,7 +48,7 @@ class Inscripcion(models.Model):
     arancel = models.FloatField(null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
-    persona = models.ForeignKey('PersonaFisica', on_delete=models.CASCADE)
+    persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Numero inscripcion:%s" % self.pk
