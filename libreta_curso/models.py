@@ -44,10 +44,7 @@ class LibretaSanitaria(models.Model):
 
 class Curso(models.Model):
     fecha_inicio = models.DateField()
-    cupo = models.IntegerField(
-        validators=[MaxValueValidator(500),
-        MinValueValidator(1)]
-    )
+    cupo = models.IntegerField(validators=[MaxValueValidator(500), MinValueValidator(1)])
     lugar = models.CharField(max_length=50)
     horario = models.TimeField()
     finalizado = models.BooleanField(default=False)

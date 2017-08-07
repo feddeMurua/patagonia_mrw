@@ -48,6 +48,11 @@
 
 {% block panel-footer %}
     {% if apto_cierre %}
-        <a class="btn btn-default" href="{% url 'cursos:lista_cursos' %}">Cerrar Curso</a>
+        <div class="panel-footer" align="right">
+            <form method="post">
+                {% csrf_token %}
+                <input class="btn btn-default" type="submit" value="Cerrar Curso">
+            </form>
+        </div>
     {% endif %}
 {% endblock %}
