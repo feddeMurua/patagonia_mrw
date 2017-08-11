@@ -38,11 +38,7 @@
                     <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="{% url 'cursos:inscripciones_curso' curso.pk %}"><em class="glyphicon glyphicon-user"></em></a>
                     {% if not curso.finalizado %}
                         <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="{% url 'cursos:cierre_curso' curso.pk %}"><em class="glyphicon glyphicon-education"></em></a>
-                    {% endif %}
-<<<<<<< HEAD
-                    <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="{% url 'cursos:cierre_curso' curso.pk %}"><em class="glyphicon glyphicon-education"></em></a>                    
-=======
->>>>>>> 1b5a0b43dfca7a31d36f8f11fc9948721038d531
+                    {% endif %}                    
                 </td>
             </tr>
         {% endfor %}

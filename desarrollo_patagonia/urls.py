@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^personas/', include('personas.urls_persona', namespace='personas')),    
     url(r'^inscripciones/', include('libreta_curso.urls_inscripcion', namespace='inscripciones')),
     url(r'^analisis/', include('animales.urls_analisis', namespace='analisis')),
+    url(r'^patentes/', include('patentamiento.urls_patentes', namespace='patentes')),    
 ]

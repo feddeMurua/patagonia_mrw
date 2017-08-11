@@ -1,0 +1,48 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Patentes{% endblock %}
+
+{% block header-title %}Patentes{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Patentes{% endblock %}
+
+
+{% block btn-nuevo %}
+    <a href="{% url 'patentes:nueva_patente' %}" class="btn btn-sm btn-primary btn-create">Nueva Patente</a>
+{% endblock %}
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-list">
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>nro ingresos varios</th>
+            <th>Arancel</th> 
+            <th>Persona</th>
+            <th>Mascota</th>                        
+            <th>Observaciones</th>            
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patente in filter.qs %}
+            <tr>
+                <td>{{ patente.fecha }}</td>
+                <td>{{ patente.nro_ingresos_varios }}</td>
+                <td>{{ patente.persona }}</td>
+                <td>{{ patente.mascota }}</td>
+                <td>{{ patente.arancel }}</td>
+                <td>{{ patente.observaciones }}</td>
+                <td align="center">
+                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'patentes:modificar_patente' patente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'patentes:borrar_patente' patente.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
