@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from .models import (
-    Analisis,
-    Animal,    
-)
+from .models import *
 
 admin.site.register(Analisis)
-admin.site.register(Animal)
+admin.site.register(Porcino)
+admin.site.register(ControlAntirrabico)
+admin.site.register(Esterilizacion)
+admin.site.register(RetiroEntregaAnimal)
+
+

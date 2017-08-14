@@ -14,7 +14,7 @@ class PersonaForm(forms.ModelForm):
 
     class Meta:
         model = PersonaFisica
-        fields = ['nombre', 'apellido', 'cuil', 'fecha_nacimiento', 'dni', 'nacionalidad', 'obra_social',
+        fields = ['nombre', 'apellido', 'fecha_nacimiento', 'dni', 'nacionalidad', 'obra_social',
                   'domicilio', 'telefono', 'email', 'rubro']
 
     def clean_nombre(self):
@@ -28,17 +28,7 @@ class PersonaForm(forms.ModelForm):
         if not PersonaForm.regex.match(apellido):
             raise forms.ValidationError('El apellido de la persona solo puede contener letras y espacios')
         return apellido
-
-    def clean_cuil(self):
-        cuil = self.cleaned_data['cuil']
-        if cuil:
-            if PersonaFisica.objects.filter(cuil=cuil).exists():
-                raise forms.ValidationError('Ya existe una persona con este CUIL')
-
-            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuil):
-                raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
-        return cuil
-
+  
     def clean_dni(self):
         dni = self.cleaned_data['dni']
         if not re.match(r"^[0-9]{7,}$", dni):
@@ -75,3 +65,18 @@ class PersonaForm(forms.ModelForm):
         if not PersonaForm.regex.match(rubro):
             raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
         return rubro
+
+
+'''
+persona juridica
+
+  def clean_cuil(self):
+        cuil = self.cleaned_data['cuil']
+        if cuil:
+            if PersonaFisica.objects.filter(cuil=cuil).exists():
+                raise forms.ValidationError('Ya existe una persona con este CUIL')
+
+            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuil):
+                raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
+        return cuil
+'''
