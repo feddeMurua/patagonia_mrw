@@ -1,0 +1,13 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Mascotas{% endblock %}
+
+{% block header-title %}Alta/Modificacion de Mascota{% endblock %}
+
+{% block url-volver %}{% url 'mascotas:lista_mascotas' %}{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'mascotas:lista_mascotas' %}">Cancelar</a>
+{% endblock %}

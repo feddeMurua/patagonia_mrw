@@ -9,3 +9,9 @@ Resultados = (
     ('Negativo', _("Negativo")),
     ('Positivo', _("Positivo")),        
 )
+
+Categoria_Porcino = (
+    ('Lechon', _("Lechon")),
+    ('Porker', _("Porker")),
+    ('Adulto', _("Adulto"))
+)

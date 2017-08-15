@@ -48,7 +48,7 @@ class Inscripcion(models.Model):
     arancel = models.FloatField(null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
-    persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
+    persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Numero inscripcion:%s" % self.pk

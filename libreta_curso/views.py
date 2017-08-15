@@ -3,13 +3,13 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.views.generic.detail import DetailView
 from django.shortcuts import render, redirect
 from easy_pdf.views import PDFTemplateView
 from .forms import *
 from .filters import *
 from .models import *
 from .choices import *
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
@@ -143,21 +143,23 @@ def lista_inscripciones_curso(request, id_curso):
                                                               'filter': filtro_inscripciones})
 
 
-class AltaInscripcion(CreateView):
+class AltaInscripcion(LoginRequiredMixin, CreateView):
     model = Inscripcion
     template_name = 'inscripcion/inscripcion_form.html'
     form_class = InscripcionForm
-
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+    
     def get_success_url(self):
         if 'id_curso' in self.kwargs:
             id_curso = self.kwargs['id_curso']
         return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
-
+    
     def get_form_kwargs(self):
         kwargs = super(AltaInscripcion, self).get_form_kwargs()
         kwargs.update(self.kwargs)
         return kwargs
-
+    
 
 class BajaInscripcion(LoginRequiredMixin, DeleteView):
     model = Inscripcion

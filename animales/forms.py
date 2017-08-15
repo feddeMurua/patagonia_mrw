@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django import forms
-from django.forms.formsets import BaseFormSet, formset_factory
+from django.forms.formsets import formset_factory
 from functools import partial
 from .models import *
 from .choices import *
@@ -23,6 +23,6 @@ class AnalisisForm(forms.ModelForm):
 class PorcinoForm(forms.ModelForm):
     class Meta:
         model = Porcino
-        fields = ['precinto', 'tipo']
+        fields = ['precinto', 'categoria_porcino']
 
 PorcinoFormSet = formset_factory(PorcinoForm, min_num=1)

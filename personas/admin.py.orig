@@ -4,6 +4,12 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from .models import *
 
+<<<<<<< HEAD
+admin.site.register(PersonaFisica)
+=======
+from .models import *
+
 admin.site.register(PersonaFisica)
 admin.site.register(PersonaJuridica)
 admin.site.register(PersonalPropio)
+>>>>>>> a43feca04129ff79b03f99c6686a24a8e7dd2476
