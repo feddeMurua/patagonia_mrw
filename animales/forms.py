@@ -17,3 +17,21 @@ class AnalisisForm(forms.ModelForm):
     class Meta:
         model = Analisis
         fields = ['fecha', 'nro_ingreso', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
+
+
+class HabilitacionForm(forms.ModelForm):
+    fecha_disposicion = forms.DateField(widget=DateInput())   
+    
+    class Meta:
+        model = HabilitacionCriaderoCerdos
+        fields = ['fecha_disposicion', 'nro_disposicion', 'interesado']
+
+
+class EsterilizacionForm(forms.ModelForm):    
+    turno = forms.TimeField(widget=TimeInput())
+    
+    class Meta:
+        model = Esterilizacion
+        fields = ['turno', 'interesado']
+
+

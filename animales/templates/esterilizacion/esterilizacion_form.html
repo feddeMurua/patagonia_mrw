@@ -1,0 +1,13 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Esterilización de Mascotas{% endblock %}
+
+{% block header-title %}Alta de Esterilización {% endblock %}
+
+{% block url-volver %}{% url 'esterilizacion:lista_esterilizaciones' %}{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'esterilizacion:lista_esterilizaciones' %}">Cancelar</a>
+{% endblock %}

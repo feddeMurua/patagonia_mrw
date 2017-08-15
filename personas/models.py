@@ -10,7 +10,7 @@ class PersonaGenerica(models.Model):
     telefono = models.CharField(max_length=50)
     email = models.CharField(max_length=50, blank=True)
     rubro = models.CharField(max_length=50)
-
+    
     def __str__(self):
         return "%s" % self.nombre
 

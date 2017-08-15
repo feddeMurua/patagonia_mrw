@@ -19,13 +19,11 @@ from django.views.generic.edit import (
 ANALISIS
 '''
 
-
 @login_required(login_url='login')
 def lista_analisis(request):
     lista_analisis = Analisis.objects.all()
-    filtro_analisis = AnalisisListFilter(request.GET, queryset=lista_analisis)
-    fecha_hoy = datetime.date.today()
-    return render(request, 'analisis/analisis_list.html', {'fecha_hoy': fecha_hoy, 'filter': filtro_analisis})
+    filtro_analisis = AnalisisListFilter(request.GET, queryset=lista_analisis)    
+    return render(request, 'analisis/analisis_list.html', {'filter': filtro_analisis})
 
 
 class AltaAnalisis(LoginRequiredMixin, CreateView):
@@ -48,5 +46,45 @@ class BajaAnalisis(LoginRequiredMixin, DeleteView):
 class DetalleAnalisis(LoginRequiredMixin, DetailView):
     model = Analisis
     template_name = 'analisis/analisis_detail.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+'''
+HABILITACION CRIADERO DE CERDOS
+'''
+
+@login_required(login_url='login')
+def lista_habilitaciones(request):
+    lista_habilitaciones = HabilitacionCriaderoCerdos.objects.all()
+    filtro_habilitaciones = HabilitacionListFilter(request.GET, queryset=lista_habilitaciones)    
+    return render(request, 'habilitacion/habilitacion_list.html', {'filter': filtro_habilitaciones})
+
+
+class AltaHabilitacion(LoginRequiredMixin, CreateView):
+    model = HabilitacionCriaderoCerdos
+    template_name = 'habilitacion/habilitacion_form.html'
+    success_url = reverse_lazy('habilitacion:lista_habilitaciones')
+    form_class = HabilitacionForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+'''
+ESTERILIZACION
+'''
+
+@login_required(login_url='login')
+def lista_esterilizaciones(request):
+    lista_esterilizaciones = Esterilizacion.objects.all()
+    filtro_esterilizaciones = EsterilizacionListFilter(request.GET, queryset=lista_esterilizaciones)    
+    return render(request, 'esterilizacion/esterilizacion_list.html', {'filter': filtro_esterilizaciones})
+
+
+class AltaEsterilizacion(LoginRequiredMixin, CreateView):
+    model = Esterilizacion
+    template_name = 'esterilizacion/esterilizacion_form.html'
+    success_url = reverse_lazy('esterilizacion:lista_esterilizaciones')
+    form_class = EsterilizacionForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
