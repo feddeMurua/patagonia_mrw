@@ -25,7 +25,8 @@ CURSOS
 def lista_curso(request):
     lista_cursos = Curso.objects.all()
     filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
-    return render(request, 'curso/curso_list.html', {'filter': filtro_cursos})
+    fecha_hoy = datetime.date.today()
+    return render(request, 'curso/curso_list.html', {'fecha_hoy': fecha_hoy, 'filter': filtro_cursos})
 
 
 class AltaCurso(LoginRequiredMixin, CreateView):

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import datetime
 from .forms import *
 from .filters import *
@@ -28,13 +28,21 @@ def lista_analisis(request):
     return render(request, 'analisis/analisis_list.html', {'fecha_hoy': fecha_hoy, 'filter': filtro_analisis})
 
 
-class AltaAnalisis(LoginRequiredMixin, CreateView):
-    model = Analisis
-    template_name = 'analisis/analisis_form.html'
-    success_url = reverse_lazy('analisis:lista_analisis')
-    form_class = AnalisisForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def alta_analisis(request):
+    if request.method == 'POST':
+        analisis_form = AnalisisForm(request.POST)
+        porcino_formset = PorcinoFormSet(request.POST)
+        if analisis_form.is_valid() & porcino_formset.is_valid():
+            analisis = analisis_form.save()
+            for porcino_form in porcino_formset:
+                porcino = porcino_form.save(commit=False)
+                porcino.analisis = analisis
+                porcino.save()
+            return redirect('analisis:lista_analisis')
+    else:
+        form = AnalisisForm()
+        formset = PorcinoFormSet()
+        return render(request, 'analisis/analisis_form.html', {"form": form, "formset": formset})
 
 
 class BajaAnalisis(LoginRequiredMixin, DeleteView):
@@ -45,8 +53,7 @@ class BajaAnalisis(LoginRequiredMixin, DeleteView):
     redirect_field_name = 'next'
 
 
-class DetalleAnalisis(LoginRequiredMixin, DetailView):
-    model = Analisis
-    template_name = 'analisis/analisis_detail.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def detalle_analisis(request, pk):
+    analisis = Analisis.objects.get(pk=pk)
+    porcinos = Porcino.objects.filter(analisis__pk=pk)
+    return render(request, 'analisis/analisis_detail.html', {'analisis': analisis, 'porcinos': porcinos})

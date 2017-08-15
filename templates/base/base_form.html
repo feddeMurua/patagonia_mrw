@@ -5,27 +5,34 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_form.css' %}"/>
+    {% block more-stylesheets %}{% endblock %}
 {% endblock %}
 
 {% block no-particles %}{% endblock %}
 
 {% block content %}
     <div class="container container-form">
-        <form class="col-md-4" method="post">
+        <form method="post">
             {% csrf_token %}
-            {% for field in form.visible_fields %}
-                <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% if field.label != 'Foto' %}
-                        {{ field|add_class:'form-control' }}
-                    {% else %}
-                        {{ field }}
-                    {% endif %}
+            <div class="row">
+                <div class="col-xs-12 col-md-7" id="container-form-left">
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.label != 'Foto' %}
+                                {{ field|add_class:'form-control' }}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
                 </div>
-                {% block foto-field %}{% endblock %}
-            {% endfor %}
-            <input type="submit" class="btn btn-primary" value="Aceptar">
-            {% block btn-cancelar %}{% endblock %}
+                {% block formset %}{% endblock %}
+            </div>
+            <div class="row">
+                <input type="submit" class="btn btn-primary" value="Aceptar">
+                {% block btn-cancelar %}{% endblock %}
+            </div>
         </form>
     </div>
 {% endblock %}
