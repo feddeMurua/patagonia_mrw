@@ -24,8 +24,10 @@ urlpatterns = [
     url(r'^$', views.inicio, name="inicio"),
     url(r'^cursos/', include('libreta_curso.urls_curso', namespace='cursos')),
     url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),
-    url(r'^personas/', include('personas.urls_persona', namespace='personas')),    
     url(r'^inscripciones/', include('libreta_curso.urls_inscripcion', namespace='inscripciones')),
+    url(r'^personas/', include('personas.urls_persona', namespace='personas')),        
     url(r'^analisis/', include('animales.urls_analisis', namespace='analisis')),
+    url(r'^habilitaciones/', include('animales.urls_habilitacionCriadero', namespace='habilitacion')),
+    url(r'^esterilizaciones/', include('animales.urls_esterilizacion', namespace='esterilizacion')),
     url(r'^patentes/', include('patentamiento.urls_patentes', namespace='patentes')),    
 ]

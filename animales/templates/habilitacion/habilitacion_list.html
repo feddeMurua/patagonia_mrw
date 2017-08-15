@@ -1,0 +1,40 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Habilitación de Criadero de Cerdos{% endblock %}
+
+{% block header-title %}Habilitación de Criadero de Cerdos{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Disposiciones{% endblock %}
+
+{% block btn-nuevo %} 
+    <a href="{% url 'habilitacion:nueva_habilitacion' %}" class="btn btn-sm btn-primary btn-create">Nueva Habilitación</a>  
+{% endblock %}
+
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-hover table-list">
+        <thead>
+            <tr>
+                <th>Fecha Disposición</th>                
+                <th>N° Disposición</th>                                
+                <th><em class="glyphicon glyphicon-cog"></em></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for habilitacion in filter.qs %}
+            <tr align="center">
+                <td>{{ habilitacion.fecha_disposicion }}</td>
+                <td>{{ habilitacion.nro_disposicion }}</td>                
+                <td align="center">
+                  
+                </td>
+            </tr>          
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

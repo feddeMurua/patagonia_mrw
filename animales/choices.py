@@ -15,3 +15,8 @@ Categoria_Porcino = (
     ('Porker', _("Porker")),
     ('Adulto', _("Adulto"))
 )
+
+Sexo = (
+    ('Macho', _("Macho")),
+    ('Hembra', _("Hembra")),
+)

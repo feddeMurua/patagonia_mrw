@@ -1,0 +1,48 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_form.css' %}"/>
+    {% block more-stylesheets %}{% endblock %}
+{% endblock %}
+
+{% block no-particles %}{% endblock %}
+
+{% block content %}
+    <div class="container container-form">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12 col-md-7" id="container-form-left">
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.label != 'Foto' %}
+                                {{ field|add_class:'form-control' }}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+<<<<<<< HEAD
+                {% block formset %}{% endblock %}
+            </div>
+            <div class="row">
+                <input type="submit" class="btn btn-primary" value="Aceptar">
+                {% block btn-cancelar %}{% endblock %}
+            </div>
+=======
+                {% block foto-field %}{% endblock %}
+            {% endfor %}            
+            <input type="submit" class="btn btn-primary" value="Aceptar">
+            {% block btn-cancelar %}{% endblock %}
+>>>>>>> c909c0e652c4520a352b4cfce79c690e9924b7be
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
