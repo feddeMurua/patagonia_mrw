@@ -13,8 +13,6 @@ def get_image_path(instance, filename):
 
 
 class LibretaSanitaria(models.Model):
-    nro_ingresos_varios = models.BigIntegerField(blank=True)
-    arancel = models.FloatField(blank=True)
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE, primary_key=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
@@ -44,8 +42,6 @@ class Inscripcion(models.Model):
     modificado = models.BooleanField(default=False)
     nota_curso = models.CharField(max_length=15, choices=Calificaciones, blank=True)
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
-    nro_ingresos_varios = models.BigIntegerField(null=True, blank=True)
-    arancel = models.FloatField(null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)

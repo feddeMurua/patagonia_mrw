@@ -52,7 +52,7 @@ class HabilitacionCriaderoCerdos(models.Model):
 
 class Esterilizacion(models.Model):
     interesado = models.OneToOneField(m.PersonaGenerica, on_delete=models.CASCADE)
-    mascota = models.OneToOneField(Mascota, on_delete=models.SET_NULL, null=True, blank=True)
+    mascota = models.OneToOneField('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
     turno = models.TimeField()
 
     def __str__(self):
@@ -61,8 +61,9 @@ class Esterilizacion(models.Model):
 
 class RetiroEntregaAnimal(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
+    baja = models.BooleanField(default=False)
     interesado = models.OneToOneField(m.PersonaGenerica, on_delete=models.CASCADE)
-    mascota = models.OneToOneField(Mascota, on_delete=models.SET_NULL, null=True, blank=True)
+    mascota = models.OneToOneField('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
     # baja logica, se hace sobre la mascota
 
     def __str__(self):
@@ -82,9 +83,7 @@ class Mascota(models.Model):
 
 
 class Patente(models.Model):
-    nro_ingresos_varios = models.BigIntegerField()
     fecha = models.DateField(default=now)
-    arancel = models.FloatField()
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
     mascota = models.OneToOneField('Mascota', on_delete=models.CASCADE)
     observaciones = models.TextField(max_length=200, default='', blank=True)

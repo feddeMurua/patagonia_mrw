@@ -19,7 +19,7 @@
                     {% for field in form.visible_fields %}
                         <div class="form-group">
                             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {% if field.label != 'Foto' %}
+                            {% if field.label != 'Foto' %} <!-- para que no se rompa el boton browse file -->
                                 {{ field|add_class:'form-control' }}
                             {% else %}
                                 {{ field }}

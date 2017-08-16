@@ -3,12 +3,13 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic.detail import DetailView
+from easy_pdf.views import PDFTemplateView
 from django.shortcuts import render, redirect
 import datetime
 from .forms import *
 from .filters import *
 from .models import *
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
@@ -78,6 +79,18 @@ class AltaHabilitacion(LoginRequiredMixin, CreateView):
     form_class = HabilitacionForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
+
+
+class PdfHabilitacion(PDFTemplateView):
+    template_name = 'habilitacion/habilitacion_pdf.html'
+
+    def get_context_data(self, pk):
+        habilitacion = HabilitacionCriaderoCerdos.objects.get(pk=pk)
+        return super(PdfHabilitacion, self).get_context_data(
+            pagesize="A4",
+            habilitacion=habilitacion,
+            title="Solicitud de Habilitacion"
+        )
 
 
 '''

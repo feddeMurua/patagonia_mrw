@@ -56,4 +56,4 @@ class PatenteForm(forms.ModelForm):
 
     class Meta:
         model = Patente
-        fields = ['nro_ingresos_varios', 'arancel', 'persona', 'mascota', 'observaciones']
+        fields = ['persona', 'mascota', 'observaciones']

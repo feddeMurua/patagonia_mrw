@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'libreta_curso',
     'animales',
     'personas',
-    'patentamiento',
     
     # Librerias
     'bootstrap3',

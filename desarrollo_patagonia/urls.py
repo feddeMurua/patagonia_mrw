@@ -29,5 +29,5 @@ urlpatterns = [
     url(r'^analisis/', include('animales.urls_analisis', namespace='analisis')),
     url(r'^habilitaciones/', include('animales.urls_habilitacionCriadero', namespace='habilitacion')),
     url(r'^esterilizaciones/', include('animales.urls_esterilizacion', namespace='esterilizacion')),
-    url(r'^patentes/', include('patentamiento.urls_patentes', namespace='patentes')),    
+    url(r'^patentes/', include('animales.urls_patentes', namespace='patentes')),
 ]

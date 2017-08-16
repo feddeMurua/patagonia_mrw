@@ -20,8 +20,6 @@
         <thead>
         <tr>
             <th>Fecha</th>
-            <th>nro ingresos varios</th>
-            <th>Arancel</th> 
             <th>Persona</th>
             <th>Mascota</th>                        
             <th>Observaciones</th>            
@@ -32,10 +30,8 @@
         {% for patente in filter.qs %}
             <tr>
                 <td>{{ patente.fecha }}</td>
-                <td>{{ patente.nro_ingresos_varios }}</td>
                 <td>{{ patente.persona }}</td>
                 <td>{{ patente.mascota }}</td>
-                <td>{{ patente.arancel }}</td>
                 <td>{{ patente.observaciones }}</td>
                 <td align="center">
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'patentes:modificar_patente' patente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
