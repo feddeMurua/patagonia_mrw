@@ -41,8 +41,7 @@ class ControlAntirrabico(models.Model):
 
 
 class HabilitacionCriaderoCerdos(models.Model):
-    interesado = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
-    # funcionario_actuante ?
+    interesado = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)    
     fecha_disposicion = models.DateField()
     nro_disposicion = models.BigIntegerField()
 
