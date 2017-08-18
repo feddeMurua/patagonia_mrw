@@ -1,0 +1,219 @@
+ 	{
+		"model": "personas.Provincia",
+		"id": 2,
+		"fields": {
+			"nombre": "CATAMARCA",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 3,
+		"fields": {
+			"nombre": "CHACO",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 4,
+		"fields": {
+			"nombre": "CHUBUT",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 5,
+		"fields": {
+			"nombre": "CÓRDOBA",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 6,
+		"fields": {
+			"nombre": "CORRIENTES",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 7,
+		"fields": {
+			"nombre": "ENTRE RÍOS",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 8,
+		"fields": {
+			"nombre": "FORMOSA",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 9,
+		"fields": {
+			"nombre": "JUJUY",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 10,
+		"fields": {
+			"nombre": "LA PAMPA",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 11,
+		"fields": {
+			"nombre": "LA RIOJA",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 12,
+		"fields": {
+			"nombre": "MENDOZA",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 13,
+		"fields": {
+			"nombre": "MISIONES",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 14,
+		"fields": {
+			"nombre": "NEUQUÉN",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 15,
+		"fields": {
+			"nombre": "RÍO NEGRO",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 16,
+		"fields": {
+			"nombre": "SALTA",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 17,
+		"fields": {
+			"nombre": "SAN JUAN",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 18,
+		"fields": {
+			"nombre": "SAN LUIS",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 19,
+		"fields": {
+			"nombre": "SANTA CRUZ",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 20,
+		"fields": {
+			"nombre": "SANTA FÉ",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 21,
+		"fields": {
+			"nombre": "SANTIAGO DEL ESTERO",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 22,
+		"fields": {
+			"nombre": "TIERRA DEL FUEGO",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	} ,
+
+	{
+		"model": "personas.Provincia",
+		"id": 23,
+		"fields": {
+			"nombre": "TUCUMÁN",
+			"nacionalidad": "ARGENTINA"
+		}		
+
+	}
