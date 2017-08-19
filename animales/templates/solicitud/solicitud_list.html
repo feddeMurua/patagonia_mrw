@@ -1,0 +1,48 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Habilitación de Criadero de Cerdos{% endblock %}
+
+{% block header-title %}Habilitación de Criadero de Cerdos{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Solicitudes{% endblock %}
+
+{% block btn-nuevo %}
+    <a href="{% url 'solicitud:nueva_solicitud' %}" class="btn btn-sm btn-warning btn-create">Nueva Solicitud</a>
+{% endblock %}
+
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-hover table-list">
+        <thead>
+            <tr>
+                <th>Fecha de Solicitud</th>
+                <th>Interesado</th>
+                <th>Domicilio del Criadero</th>
+                <th>Estado</th>
+                <th><em class="glyphicon glyphicon-cog"></em></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for solicitud in filter.qs %}
+            <tr align="center">
+                <td>{{ solicitud.fecha_solicitud }}</td>
+                <td>{{ solicitud.interesado }}</td>
+                <td>{{ solicitud.domicilio_criadero }}</td>
+                <td>{{ solicitud.estado }}</td>
+                <td align="center">
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'solicitud:borrar_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'solicitud:detalle_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    {% if not solicitud.estado == 'Aprobada' %}
+                        <a class="btn btn-info" data-toggle="tooltip" title="Aplazar" href="{% url 'solicitud:aplazo_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-remove"></em></a>
+                        <a class="btn btn-success" data-toggle="tooltip" title="Registrar disposicion" href="{% url 'disposicion:nueva_disposicion' solicitud.pk %}"><em class="glyphicon glyphicon-ok"></em></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

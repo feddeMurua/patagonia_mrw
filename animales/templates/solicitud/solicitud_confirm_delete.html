@@ -1,0 +1,11 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Solicitudes{% endblock %}
+
+{% block header-title %}Baja de Solicitud{% endblock %}
+
+{% block url-volver %}{% url 'solicitud:lista_solicitudes' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'solicitud:lista_solicitudes' %}" class="btn btn-sm btn-primary">Cancelar</a>{% endblock %}

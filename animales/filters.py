@@ -11,12 +11,12 @@ class AnalisisListFilter(django_filters.FilterSet):
         order_by = ['fecha']
 
 
-class HabilitacionListFilter(django_filters.FilterSet):
+class SolicitudListFilter(django_filters.FilterSet):
 
     class Meta:
-        model = HabilitacionCriaderoCerdos
-        fields = ['fecha_disposicion']
-        order_by = ['fecha_disposicion']
+        model = SolicitudCriaderoCerdos
+        fields = ['interesado']
+        order_by = ['interesado']
 
 
 class EsterilizacionListFilter(django_filters.FilterSet):

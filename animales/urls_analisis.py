@@ -6,4 +6,4 @@ urlpatterns = [
     url(r'^nuevo$', alta_analisis, name='nuevo_analisis'),
     url(r'^borrar/(?P<pk>\d+)$', BajaAnalisis.as_view(), name='borrar_analisis'),
     url(r'^(?P<pk>\d+)$', detalle_analisis, name='detalle_analisis'),
- ]
+]

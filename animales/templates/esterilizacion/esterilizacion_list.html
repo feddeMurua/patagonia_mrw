@@ -20,18 +20,14 @@
         <thead>
             <tr>
                 <th>Turno</th>                
-                <th>Interesado</th>                                
-                <th><em class="glyphicon glyphicon-cog"></em></th>
+                <th>Interesado</th>
             </tr>
         </thead>
         <tbody>
         {% for esterilizacion in filter.qs %}
             <tr align="center">
                 <td>{{ esterilizacion.turno }}</td>
-                <td>{{ esterilizacion.interesado }}</td>                
-                <td align="center">
-                  
-                </td>
+                <td>{{ esterilizacion.interesado }}</td>
             </tr>          
         {% endfor %}
         </tbody>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
@@ -132,6 +133,7 @@ class DetalleInscripcion(LoginRequiredMixin, DetailView):
     redirect_field_name = 'next'
 
 
+@login_required(login_url='login')
 def lista_inscripciones_curso(request, id_curso):
     lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
     filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
@@ -143,23 +145,19 @@ def lista_inscripciones_curso(request, id_curso):
                                                               'filter': filtro_inscripciones})
 
 
-class AltaInscripcion(LoginRequiredMixin, CreateView):
-    model = Inscripcion
-    template_name = 'inscripcion/inscripcion_form.html'
-    form_class = InscripcionForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-    
-    def get_success_url(self):
-        if 'id_curso' in self.kwargs:
-            id_curso = self.kwargs['id_curso']
-        return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
-    
-    def get_form_kwargs(self):
-        kwargs = super(AltaInscripcion, self).get_form_kwargs()
-        kwargs.update(self.kwargs)
-        return kwargs
-    
+@login_required(login_url='login')
+def alta_inscripcion(request, id_curso):
+    if request.method == 'POST':
+        inscripcion_form = InscripcionForm(request.POST)
+        if inscripcion_form.is_valid():
+            inscripcion = inscripcion_form.save(commit=False)
+            inscripcion.curso = Curso.objects.get(pk=id_curso)
+            inscripcion.save()
+            return HttpResponseRedirect(reverse('cursos:inscripciones_curso', args=id_curso))
+    else:
+        form = InscripcionForm
+        return render(request, "inscripcion/inscripcion_form.html", {'id_curso': id_curso, 'form': form})
+
 
 class BajaInscripcion(LoginRequiredMixin, DeleteView):
     model = Inscripcion
@@ -203,7 +201,7 @@ class CierreCursoInscripcion(ModificacionInscripcion):
 class PdfInscripcion(PDFTemplateView):
     template_name = 'inscripcion/inscripcion_pdf.html'
 
-    def get_context_data(self, pk, id_curso):
+    def get_context_data(self, pk):
         inscripcion = Inscripcion.objects.get(pk=pk)
         return super(PdfInscripcion, self).get_context_data(
             pagesize="A4",

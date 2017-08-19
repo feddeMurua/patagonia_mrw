@@ -46,13 +46,4 @@ class InscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
-        fields = ['persona', 'curso', 'observaciones']
-        
-    def __init__(self, id_curso=None, *args, **kwargs):
-        super(InscripcionForm, self).__init__(*args, **kwargs)
-        curso = Curso.objects.get(pk=id_curso)
-        # self.fields['curso'].widget = forms.HiddenInput()
-        self.fields['curso'].initial = curso
-        '''
-        Pendiente en la siguiente version para ocultar campo
-        '''
+        fields = ['persona', 'observaciones']

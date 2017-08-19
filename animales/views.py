@@ -29,6 +29,7 @@ def lista_analisis(request):
     return render(request, 'analisis/analisis_list.html', {'fecha_hoy': fecha_hoy, 'filter': filtro_analisis})
 
 
+@login_required(login_url='login')
 def alta_analisis(request):
     if request.method == 'POST':
         analisis_form = AnalisisForm(request.POST)
@@ -61,36 +62,92 @@ def detalle_analisis(request, pk):
 
 
 '''
-HABILITACION CRIADERO DE CERDOS
+SOLICITUD/HABILITACION CRIADERO DE CERDOS
 '''
 
 
 @login_required(login_url='login')
-def lista_habilitaciones(request):
-    lista_habilitaciones = HabilitacionCriaderoCerdos.objects.all()
-    filtro_habilitaciones = HabilitacionListFilter(request.GET, queryset=lista_habilitaciones)    
-    return render(request, 'habilitacion/habilitacion_list.html', {'filter': filtro_habilitaciones})
+def lista_solicitudes(request):
+    solicitudes = SolicitudCriaderoCerdos.objects.all()
+    filtro_solicitudes = SolicitudListFilter(request.GET, queryset=solicitudes)
+    return render(request, 'solicitud/solicitud_list.html', {'filter': filtro_solicitudes})
 
 
-class AltaHabilitacion(LoginRequiredMixin, CreateView):
-    model = HabilitacionCriaderoCerdos
-    template_name = 'habilitacion/habilitacion_form.html'
-    success_url = reverse_lazy('habilitacion:lista_habilitaciones')
-    form_class = HabilitacionForm
+class AltaSolicitud(LoginRequiredMixin, CreateView):
+    model = SolicitudCriaderoCerdos
+    template_name = 'solicitud/solicitud_form.html'
+    success_url = reverse_lazy('solicitud:lista_solicitudes')
+    form_class = SolicitudForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
 
-class PdfHabilitacion(PDFTemplateView):
-    template_name = 'habilitacion/habilitacion_pdf.html'
+class BajaSolicitud(LoginRequiredMixin, DeleteView):
+    model = SolicitudCriaderoCerdos
+    template_name = 'solicitud/solicitud_confirm_delete.html'
+    success_url = reverse_lazy('solicitud:lista_solicitudes')
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+@login_required(login_url='login')
+def detalles_solicitud(request, pk):
+    solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
+    aplazos = AplazoSolicitud.objects.filter(solicitud__pk=pk)
+    return render(request, "solicitud/solicitud_detail.html", {'solicitud': solicitud,
+                                                           'aplazos': aplazos})
+
+
+class DetalleSolicitud(LoginRequiredMixin, DetailView):
+    model = SolicitudCriaderoCerdos
+    template_name = 'solicitud/solicitud_detail.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+@login_required(login_url='login')
+def aplazo_solicitud(request, pk):
+    if request.method == 'POST':
+        aplazo_form = AplazoSolicitudForm(request.POST)
+        if aplazo_form.is_valid():
+            aplazo = aplazo_form.save(commit=False)
+            solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
+            solicitud.motivo_aplazo = aplazo.motivo_aplazo
+            solicitud.estado = 'Aplazada'
+            solicitud.save()
+            aplazo.solicitud = solicitud
+            return redirect('solicitud:lista_solicitudes')
+    else:
+        form = AplazoSolicitudForm
+        return render(request, 'solicitud/solicitud_aplazo.html', {"form": form})
+
+
+class PdfSolicitud(PDFTemplateView):
+    template_name = 'solicitud/solicitud_pdf.html'
 
     def get_context_data(self, pk):
-        habilitacion = HabilitacionCriaderoCerdos.objects.get(pk=pk)
-        return super(PdfHabilitacion, self).get_context_data(
+        solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
+        return super(PdfSolicitud, self).get_context_data(
             pagesize="A4",
-            habilitacion=habilitacion,
+            solicitud=solicitud,
             title="Solicitud de Habilitacion"
         )
+
+
+def alta_disposicion(request, pk):
+    if request.method == 'POST':
+        disposicion_form = DisposicionForm(request.POST)
+        if disposicion_form.is_valid():
+            disposicion = disposicion_form.save(commit=False)
+            solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
+            solicitud.estado = 'Aprobada'
+            solicitud.save()
+            disposicion.solicitud = solicitud
+            disposicion.save()
+            return redirect('solicitud:lista_solicitudes')
+    else:
+        form = DisposicionForm
+        return render(request, 'disposicion/disposicion_form.html', {"form": form})
 
 
 '''

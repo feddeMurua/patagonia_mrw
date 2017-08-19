@@ -1,0 +1,38 @@
+{% extends "easy_pdf/base.html" %}
+
+{%block page_header%}
+    <div id="page-header">
+        <div class="header">
+            <p>Solicitud de Habilitacion de Criadero de Cerdos</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <p align="right">RAWSON (CHUBUT) {{ solicitud.fecha_solicitud }}</p>
+            <p>
+                AL DIRECTOR DE<br>
+                VETERINARIA Y ABASTO,<br>
+                DR. HUGO IBAÑEZ<br>
+                S_________/_________D<br><br>
+                El que suscribe {{ solicitud.interesado.apellido }}, {{ solicitud.interesado.nombre }} DNI/LE/LC N°
+                {{ solicitud.interesado.dni }}, mayor de edad, con domicilio particular en
+                {{ solicitud.interesado.domicilio }}, telefono N° {{ solicitud.interesado.telefono }}, tiene el agrado
+                de dirigirse a Ud., a fin de solicitarle me extienda HABILITACION MUNICIPAL ANUAL, para el criadero
+                categoria: {{ solicitud.categoria_criadero }},
+                sito en {{ solicitud.domicilio_criadero }}.
+            </p>
+            <p align="right">
+                Asimismo, me notifico de los alcances y sanciones de la Ordenanza N° 4322.<br>
+                Sin otro particular, saludo a UD. muy atentamente.<br><br><br>
+                __________________________________<br>
+                        Firma y Aclaracion        <br>
+            </p>
+            <p>
+                LOS DATOS CONSIGNADOS TIENEN CARACTER DE DECLARACION JURADA.
+            </p>
+        </div>
+    </div>
+{% endblock %}

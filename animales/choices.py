@@ -20,3 +20,9 @@ Sexo = (
     ('Macho', _("Macho")),
     ('Hembra', _("Hembra")),
 )
+
+Categoria_Criadero = (
+    ('CONSUMO FAMILIAR', _("CONSUMO FAMILIAR")),
+    ('MINI EMPRENDIMIENTO PRODUCTIVO PORCINO', _("MINI EMPRENDIMIENTO PRODUCTIVO PORCINO")),
+    ('ESTABLECIMIENTO DE CRIA PORCINA', _("ESTABLECIMIENTO DE CRIA PORCINA"))
+)

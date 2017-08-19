@@ -44,14 +44,14 @@ class PersonaForm(forms.ModelForm):
     def clean_obra_social(self):
         obra_social = self.cleaned_data['obra_social']
         if not PersonaForm.regex.match(obra_social):
-                raise forms.ValidationError('La obra social de la persona no puede contener caracteres especiales')
+            raise forms.ValidationError('La obra social de la persona no puede contener caracteres especiales')
         return obra_social
 
     def clean_domicilio(self):
         domicilio = self.cleaned_data['domicilio']
         regex = re.compile(r"^[a-zñA-ZÑ\d]+((\s[a-zñA-ZÑ\d]+)+)?$")
         if not regex.match(domicilio):
-                raise forms.ValidationError('El domicilio de la persona no puede contener caracteres especiales')
+            raise forms.ValidationError('El domicilio de la persona no puede contener caracteres especiales')
         return domicilio
 
     def clean_telefono(self):

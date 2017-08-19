@@ -40,14 +40,34 @@ class ControlAntirrabico(models.Model):
         return "%s " % self.fecha_suceso
 
 
-class HabilitacionCriaderoCerdos(models.Model):
-    interesado = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
+class DisposicionCriaderoCerdos(models.Model):
     # funcionario_actuante ?
     fecha_disposicion = models.DateField()
     nro_disposicion = models.BigIntegerField()
+    solicitud = models.OneToOneField('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s - %s" % (self.fecha_disposicion, self.nro_disposicion)
+
+
+class SolicitudCriaderoCerdos(models.Model):
+    fecha_solicitud = models.DateField(default=now)
+    interesado = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
+    categoria_criadero = models.CharField(max_length=50, choices=Categoria_Criadero)
+    domicilio_criadero = models.CharField(max_length=50)
+    estado = models.CharField(max_length=10, default='En curso')
+
+    def __str__(self):
+        return "%s - %s" % (self.fecha_solicitud, self.interesado)
+
+
+class AplazoSolicitud(models.Model):
+    fecha_aplazo = models.DateField(default=now)
+    motivo_aplazo = models.TextField(max_length=200)
+    solicitud = models.OneToOneField('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s - %s" % (self.fecha_aplazo, self.motivo_aplazo)
 
 
 class Esterilizacion(models.Model):

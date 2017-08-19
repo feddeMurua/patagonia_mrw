@@ -28,12 +28,27 @@ class PorcinoForm(forms.ModelForm):
 PorcinoFormSet = formset_factory(PorcinoForm, min_num=1)
 
 
-class HabilitacionForm(forms.ModelForm):
+class SolicitudForm(forms.ModelForm):
+    categoria_criadero = forms.ChoiceField(choices=Categoria_Criadero, label="Categoria", initial='', widget=forms.Select())
+
+    class Meta:
+        model = SolicitudCriaderoCerdos
+        fields = ['interesado', 'categoria_criadero', 'domicilio_criadero']
+
+
+class AplazoSolicitudForm(forms.ModelForm):
+
+    class Meta:
+        model = AplazoSolicitud
+        fields = ['motivo_aplazo']
+
+
+class DisposicionForm(forms.ModelForm):
     fecha_disposicion = forms.DateField(widget=DateInput())   
     
     class Meta:
-        model = HabilitacionCriaderoCerdos
-        fields = ['fecha_disposicion', 'nro_disposicion', 'interesado']
+        model = DisposicionCriaderoCerdos
+        fields = ['nro_disposicion', 'fecha_disposicion']
 
 
 class EsterilizacionForm(forms.ModelForm):    

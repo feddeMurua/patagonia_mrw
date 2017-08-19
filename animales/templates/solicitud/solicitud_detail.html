@@ -1,0 +1,84 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Solicitud{% endblock %}
+
+{% block header-title %}Detalle de Solicitud{% endblock %}
+
+{% block url-volver %}{% url 'solicitud:lista_solicitudes' %}{% endblock %}
+
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>Fecha de Solicitud:</td>
+                <td>{{ solicitud.fecha_solicitud }}</td>
+            </tr>
+            <tr>
+                <td>Interesado:</td>
+                <td>{{ solicitud.interesado.apellido }}, {{ solicitud.interesado.nombre }}</td>
+            </tr>
+            <tr>
+                <td>DNI de interesado:</td>
+                <td>{{ solicitud.interesado.dni }}</td>
+            </tr>
+            <tr>
+                <td>Domicilio de interesado:</td>
+                <td>{{ solicitud.interesado.domicilio }}</td>
+            </tr>
+            <tr>
+                <td>Categoria del Criadero:</td>
+                <td>{{ solicitud.categoria_criadero }}</td>
+            </tr>
+            <tr>
+                <td>Domicilio del criadero:</td>
+                <td>{{ solicitud.domicilio_criadero }}</td>
+            </tr>
+            <tr>
+                <td>Estado:</td>
+                <td>{{ solicitud.estado }}</td>
+            </tr>
+            {% if solicitud.estado == 'Aplazada' %}
+                <div class="container-fluid container-list">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default panel-table">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col col-xs-6">
+                                            <h3 class="panel-title">Aplazos de Solicitud</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-striped table-bordered table-hover table-list">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha de Aplazo</th>
+                                                <th>Motivo de Aplazo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for aplazo in aplazos %}
+                                            <tr align="center">
+                                                <td>{{ aplazo.fecha_aplazo }}</td>
+                                                <td>{{ aplazo.motivo_aplazo }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'solicitud:lista_solicitudes' %}" class="btn btn-primary">Regresar</a>
+    <a href="{% url 'solicitud:pdf_solicitud' solicitud.pk%}" class="btn btn-warning">Imprimir</a>
+{% endblock %}
