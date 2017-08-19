@@ -41,7 +41,6 @@ class ControlAntirrabico(models.Model):
 
 
 class DisposicionCriaderoCerdos(models.Model):
-    # funcionario_actuante ?
     fecha_disposicion = models.DateField()
     nro_disposicion = models.BigIntegerField()
     solicitud = models.OneToOneField('SolicitudCriaderoCerdos', on_delete=models.CASCADE)

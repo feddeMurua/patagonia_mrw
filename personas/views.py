@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
@@ -27,6 +27,24 @@ def lista_detalles_persona(request, id_persona):
     lista_cursos_inscripciones = m.Inscripcion.objects.filter(persona__id=id_persona)
     return render(request, "persona/persona_detail.html", {'persona': persona,
                                                            'inscripciones': lista_cursos_inscripciones})
+
+
+def alta_persona(request):
+    if request.method == 'POST':
+        persona_form = PersonaForm(request.POST)
+        domicilio_form = DomicilioForm(request.POST)
+        if persona_form.is_valid() & domicilio_form.is_valid():
+            persona = persona_form.save(commit=False)
+            domicilio = domicilio_form.save(commit=False)
+            domicilio.save()
+            persona.domicilio = domicilio
+            persona.save()
+            return redirect('personas:lista_personas')
+    else:
+        persona_form = PersonaForm
+        domicilio_form = DomicilioForm
+        return render(request, "persona/persona_form.html", {'persona_form': persona_form,
+                                                             'domicilio_form': domicilio_form})
 
 
 class AltaPersona(LoginRequiredMixin, CreateView):

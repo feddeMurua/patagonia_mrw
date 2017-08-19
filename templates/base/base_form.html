@@ -14,24 +14,26 @@
     <div class="container container-form">
         <form method="post">
             {% csrf_token %}
-            <div class="row">
-                <div class="col-xs-12 col-md-7" id="container-form-left">
-                    {% for field in form.visible_fields %}
-                        <div class="form-group">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {% if field.label != 'Foto' %} <!-- para que no se rompa el boton browse file -->
-                                {{ field|add_class:'form-control' }}
-                            {% else %}
-                                {{ field }}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-xs-12 col-md-7" id="container-form-left">
+                        {% for field in form.visible_fields %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {% if field.label != 'Foto' %} <!-- para que no se rompa el boton browse file -->
+                                    {{ field|add_class:'form-control' }}
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% block form-right %}{% endblock %}
                 </div>
-                {% block formset %}{% endblock %}
-            </div>
-            <div class="row">
-                <input type="submit" class="btn btn-primary" value="Aceptar">
-                {% block btn-cancelar %}{% endblock %}
+                <div class="panel-footer">
+                    <input type="submit" class="btn btn-primary" value="Aceptar">
+                    {% block btn-cancelar %}{% endblock %}
+                </div>
             </div>
         </form>
     </div>

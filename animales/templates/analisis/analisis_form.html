@@ -13,7 +13,7 @@
 
 {% block url-volver %}{% url 'analisis:lista_analisis' %}{% endblock %}
 
-{% block formset %}
+{% block form-right %}
     <div class="col-xs-12 col-md-5" id="container-form-right">
         <p class="porcinos-title">Porcinos</p>
         {% bootstrap_dynamic_formset formset can_delete=True %}
