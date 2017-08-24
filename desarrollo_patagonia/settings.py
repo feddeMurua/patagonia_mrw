@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'easy_pdf',
     'django_bootstrap_dynamic_formsets',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
