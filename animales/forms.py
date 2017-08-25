@@ -77,5 +77,12 @@ class PatenteForm(forms.ModelForm):
 class ControlAntirrabicoForm(forms.ModelForm):
 
     class Meta:
-        model = ControlAntirrabico
-        fields = ['mordido', 'responsable', 'observaciones']
+        model = RetiroEntregaAnimal
+        fields = ['interesado', 'mascota', 'observaciones']
+
+
+class RetiroEntregaForm(forms.ModelForm):
+
+    class Meta:
+        model = RetiroEntregaAnimal
+        fields = ['interesado', 'mascota', 'observaciones']

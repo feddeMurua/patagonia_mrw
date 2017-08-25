@@ -80,7 +80,7 @@ class Esterilizacion(models.Model):
 
 class RetiroEntregaAnimal(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
-    baja = models.BooleanField(default=False)
+    baja = models.BooleanField(default=False) #si es por sacrificio
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     mascota = models.OneToOneField('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
     # baja logica, se hace sobre la mascota

@@ -44,21 +44,31 @@
                                         <span>Análisis de Triquinósis</span></a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-lg btn-primary" href="{% url 'patentes:lista_patentes'%}">
-                                        <span>Patentamiento</span></a>
-                                </li>
-                                <li>
                                     <a class="btn btn-lg btn-primary" href="{% url 'solicitud:lista_solicitudes'%}">
                                         <span>Habilitación para Criadero de Cerdos</span></a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-lg btn-primary" href="{% url 'esterilizacion:lista_esterilizaciones'%}">
-                                        <span>Esterilización de Mascotas</span></a>
                                 </li>
                                 <li>
                                     <a class="btn btn-lg btn-primary" href="{% url 'controles:lista_controles'%}">
                                         <span>Control Antirrábico</span></a>
                                 </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="container-fluid">
+                            <ul class="ds-btn text-center">
+                              <li>
+                                  <a class="btn btn-lg btn-primary" href="{% url 'patentes:lista_patentes'%}">
+                                      <span>Patentamiento</span></a>
+                              </li>
+                              <li>
+                                  <a class="btn btn-lg btn-primary" href="{% url 'esterilizacion:lista_esterilizaciones'%}">
+                                      <span>Esterilización de Mascotas</span></a>
+                              </li>
+                              <li>
+                                  <a class="btn btn-lg btn-primary" href="{% url 'retiros_entregas:lista_retiro_entrega'%}">
+                                      <span>Retiro/Entrega de Animales</span></a>
+                              </li>
                             </ul>
                         </div>
                     </div>
@@ -68,6 +78,7 @@
                         <li data-target="#custom_carousel" data-slide-to="0" class="hvr-rectangle-out active"> <a><small>LIBRETAS/CURSOS</small></a></li>
                         <li data-target="#custom_carousel" data-slide-to="1" class="hvr-rectangle-out"> <a><small>PERSONAS</small></a></li>
                          <li data-target="#custom_carousel" data-slide-to="2" class="hvr-rectangle-out"> <a><small>ANIMALES</small></a></li>
+                         <li data-target="#custom_carousel" data-slide-to="3" class="hvr-rectangle-out"> <a><small>MASCOTAS</small></a></li>
                     </ul>
                 </div>
             </div>

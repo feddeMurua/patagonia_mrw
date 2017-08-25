@@ -41,3 +41,11 @@ class ControlListFilter(django_filters.FilterSet):
         model = ControlAntirrabico
         fields = ['fecha_suceso']
         order_by = ['fecha_suceso']
+
+
+class RetiroEntregaListFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = RetiroEntregaAnimal
+        fields = ['interesado']
+        order_by = ['interesado']

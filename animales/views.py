@@ -240,6 +240,28 @@ def alta_control(request):
         form = ControlAntirrabicoForm()
         return render(request, 'control/control_form.html', {"form": form})
 
+
+'''
+RETIRO/ENTREGA ANIMALES
+'''
+
+
+@login_required(login_url='login')
+def lista_retiro_entrega(request):
+    lista_retiro_entrega = RetiroEntregaAnimal.objects.all()
+    filtro_retiro_entrega = RetiroEntregaListFilter(request.GET, queryset=lista_retiro_entrega)
+    return render(request, 'retiroEntrega/retiroEntrega_list.html', {'filter': filtro_retiro_entrega})
+
+
+class AltaRetiroEntrega(LoginRequiredMixin, CreateView):
+    model = RetiroEntregaAnimal
+    template_name = 'retiroEntrega/retiroEntrega_form.html'
+    success_url = reverse_lazy('retiros_entregas:lista_retiro_entrega')
+    form_class = RetiroEntregaForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
 '''
 MASCOTAS
 
