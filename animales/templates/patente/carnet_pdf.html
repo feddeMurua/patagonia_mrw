@@ -1,0 +1,70 @@
+{% extends "easy_pdf/base.html" %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <div class="panel panel-default">
+                <div class="panel-header">
+                    Fecha de Emision de Patente: {{ patente.fecha }}
+                </div>
+                <div class="panel-body">
+                    <div class="row panel panel-default col-md-6">
+                        <div class="panel-header">
+                            Datos del Propietario
+                        </div>
+                        <div class="panel-body">
+                            <table>
+                                <tr>
+                                    <td>Apellido y Nombre:</td>
+                                    <td>{{ patente.persona.apellido }}, {{ patente.persona.nombre }}</td>
+                                </tr>
+                                <tr>
+                                    <td>DNI:</td>
+                                    <td>{{ patente.persona.dni }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Domicilio:</td>
+                                    <td>{{ patente.persona.domicilio }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Telefono:</td>
+                                    <td>{{ patente.persona.telefono }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row panel panel-default col-md-6">
+                        <div class="panel-header">
+                            Datos de la Mascota
+                        </div>
+                        <div class="panel-body">
+                            <table>
+                                <tr>
+                                    <td>Nombre:</td>
+                                    <td>{{ patente.mascota.nombre }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pelaje:</td>
+                                    <td>{{ patente.mascota.pelaje }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Raza:</td>
+                                    <td>{{ patente.mascota.raza }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Sexo:</td>
+                                    <td>{{ patente.mascota.sexo }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Fecha de Nacimiento:</td>
+                                    <td>{{ patente.mascota.fecha_nacimiento }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    Observaciones: {{ patente.observaciones }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

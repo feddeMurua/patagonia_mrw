@@ -47,15 +47,6 @@ def alta_persona(request):
                                                              'domicilio_form': domicilio_form})
 
 
-class AltaPersona(LoginRequiredMixin, CreateView):
-    model = PersonaFisica
-    template_name = 'persona/persona_form.html'
-    success_url = reverse_lazy('personas:lista_personas')
-    form_class = PersonaForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
 class BajaPersona(LoginRequiredMixin, DeleteView):
     model = PersonaFisica
     template_name = 'persona/persona_confirm_delete.html'

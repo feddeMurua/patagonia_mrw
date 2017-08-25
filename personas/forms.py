@@ -37,5 +37,3 @@ persona juridica
                 raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
         return cuil
 '''
-
-

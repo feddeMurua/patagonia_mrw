@@ -8,12 +8,9 @@
 
 {% block url-volver %}{% url 'inicio' %}{% endblock %}
 
-{% block panel-title %}Turnos{% endblock %}
-
-{% block btn-nuevo %} 
-    <a href="{% url 'esterilizacion:nueva_esterilizacion' %}" class="btn btn-sm btn-primary btn-create">Nueva Esterilización</a>  
+{% block btn-nuevo %}
+    <a href="{% url 'esterilizacion:nueva_esterilizacion' %}" class="btn btn-sm btn-primary btn-create">Nuevo Turno</a>
 {% endblock %}
-
 
 {% block tabla %}
     <table class="table table-striped table-bordered table-hover table-list">
@@ -21,16 +18,19 @@
             <tr>
                 <th>Turno</th>                
                 <th>Interesado</th>
+                <th><em class="glyphicon glyphicon-cog"></em></th>
             </tr>
         </thead>
         <tbody>
         {% for esterilizacion in filter.qs %}
             <tr align="center">
                 <td>{{ esterilizacion.turno }}</td>
-                <td>{{ esterilizacion.interesado }}</td>
+                <td>{{ esterilizacion.interesado }} - {{ esterilizacion.interesado.dni }}</td>
+                <td align="center">
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir Consentimiento" href="{% url 'esterilizacion:pdf_consentimiento' esterilizacion.pk %}"><em class="glyphicon glyphicon-print"></em></a>
+                </td>
             </tr>          
         {% endfor %}
         </tbody>
     </table>
 {% endblock %}
-

@@ -17,7 +17,7 @@ class AnalisisForm(forms.ModelForm):
 
     class Meta:
         model = Analisis
-        fields = ['fecha', 'nro_ingreso', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
+        fields = ['fecha', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
 
 
 class PorcinoForm(forms.ModelForm):
@@ -33,7 +33,7 @@ class SolicitudForm(forms.ModelForm):
 
     class Meta:
         model = SolicitudCriaderoCerdos
-        fields = ['interesado', 'categoria_criadero', 'domicilio_criadero']
+        fields = ['interesado', 'categoria_criadero']
 
 
 class AplazoSolicitudForm(forms.ModelForm):
@@ -52,11 +52,11 @@ class DisposicionForm(forms.ModelForm):
 
 
 class EsterilizacionForm(forms.ModelForm):
-    turno = forms.TimeField(widget=TimeInput())
-
+    turno = forms.DateTimeField()
+    
     class Meta:
         model = Esterilizacion
-        fields = ['turno', 'interesado']
+        fields = ['turno', 'interesado', 'mascota']
 
 
 class MascotaForm(forms.ModelForm):
@@ -64,7 +64,7 @@ class MascotaForm(forms.ModelForm):
 
     class Meta:
         model = Mascota
-        fields = ['nombre', 'pelaje', 'raza', 'fecha_nacimiento', 'sexo']
+        fields = ['nombre', 'pelaje', 'raza', 'categoria_mascota', 'fecha_nacimiento', 'sexo']
 
 
 class PatenteForm(forms.ModelForm):

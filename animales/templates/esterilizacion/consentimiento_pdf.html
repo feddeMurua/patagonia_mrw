@@ -1,0 +1,53 @@
+{% extends "easy_pdf/base.html" %}
+
+{%block page_header%}
+    <div id="page-header">
+        <div class="header">
+            <p>CONSENTIMIENTO INFORMADO PARA CIRUGIA</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <p>En el dia de la fecha el Sr.(a) {{ esterilizacion.interesado.apellido }},
+                {{ esterilizacion.interesado.nombre }} DNI N° {{ esterilizacion.interesado.dni }} domiciliado en
+                {{ esterilizacion.interesado.domicilio }} del ejido de Rawson, provincia del Chubut, propietario de la
+                mascota {{ mascota.categoria_mascota }}, {{ esterilizacion.mascota.sexo }}, que responde al nombre de
+                {{ esterilizacion.mascota.nombre }} y cuya edad es de {{ edad_mascota }} {{ tiempo_edad }}, ha
+                solicitado un turno para cirugia de esterilizacion.<br>
+                En relacion al acto quirurgico DECLARA:<br>
+                Tener conocimiento de la intervencion quirúrgica a la que se someterá la mascota.<br>
+                Haber sido debida y completamente informado sobre los objetivos de la intervencion y sus
+                caracteristicas.<br>
+                Aceptar que todo procedimiento quirúrgico tiene implícito en su ejecucion riesgos y/o complicaciones;
+                incluso algunos asociados a la técnica de anestesia que se debe utilizar; todos los cuales a pesar de
+                todas las medidas y cuidados adoptados por el equipo médico, son inevitables en su ocurrencia, como
+                por ejemplo problemas cardiovasculares, afecciones pulmnares y/o respiratorias, infecciones,
+                compromisos o daño neurológico, hemorragias, reacciones alérgicas, trombosis, y otros tales como el
+                riesgo de mortalidad que existe en un porcentaje muy menor de los casos.<br>
+                Que la realizacion de todo procedimiento quirúrgico supone necesariamente un periodo de recuperación,
+                en general variable conforme al tratamiento realizado y, en particular, dependiente de las
+                características propias de cada individuo, su evolucion y capacidad de recuperación.<br>
+                Que siempre existe la posibilidad que, ante la evidencia de hallazgos intraoperatorios no esperados,
+                el cirujano deba suspender la cirugia o intervención programada, o variar la técnica escogida
+                previamente.<br>
+                Que no obstante lo expuesto presta su conformidad para la realizacion de la cirugia, para lo cual
+                firma al pie de la presente.<br><br><br>
+            </p>
+            <p align="right">
+                _________________________________<br>
+                Firma del Propietario/Responsable<br>
+            </p>
+            <p>
+                Turno: {{ esterilizacion.turno }}<br><br>
+                Atiende: _________________________<br>
+            </p>
+            <p class="consentimiento-footer" align="center">
+                Dirección de Veterinaria, Saneamiento y Abasto - Municipalidad de Rawson<br>
+                Avenida Libertad y Morel - Teléfono: (0280) 4483628
+            </p>
+        </div>
+    </div>
+{% endblock %}

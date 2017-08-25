@@ -8,16 +8,15 @@ from .choices import *
 
 class Analisis(models.Model):
     fecha = models.DateField(default=now)
-    nro_ingreso = models.BigIntegerField()
     interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="interesado")
     procedencia = models.ForeignKey(m.Localidad, on_delete=models.CASCADE)
-    medico_veterinario = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE,
+    medico_veterinario = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE,
                                               related_name="medico_veterinario")
     resultado = models.CharField(max_length=15, choices=Resultados)
     categoria = models.CharField(max_length=15, choices=Categorias)
 
     def __str__(self):
-        return "%s - %s" % (self.fecha, self.nro_ingreso)
+        return "%s" % self.fecha
 
 
 class Porcino(models.Model):
@@ -53,7 +52,8 @@ class SolicitudCriaderoCerdos(models.Model):
     fecha_solicitud = models.DateField(default=now)
     interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     categoria_criadero = models.CharField(max_length=50, choices=Categoria_Criadero)
-    domicilio_criadero = models.CharField(max_length=50)
+    domicilio_criadero = models.ForeignKey(m.Domicilio)
+    observaciones = models.TextField(max_length=100, null=True, blank=True)
     estado = models.CharField(max_length=10, default='En curso')
 
     def __str__(self):
@@ -63,7 +63,7 @@ class SolicitudCriaderoCerdos(models.Model):
 class AplazoSolicitud(models.Model):
     fecha_aplazo = models.DateField(default=now)
     motivo_aplazo = models.TextField(max_length=200)
-    solicitud = models.OneToOneField('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
+    solicitud = models.ForeignKey('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s - %s" % (self.fecha_aplazo, self.motivo_aplazo)
@@ -72,17 +72,24 @@ class AplazoSolicitud(models.Model):
 class Esterilizacion(models.Model):
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
-    turno = models.TimeField()
+    turno = models.DateTimeField()
 
     def __str__(self):
-        return "%s - %s" % (self.interesado, self.turno)
+        return "%s" % self.interesado
+
+'''
+class Turno(models.Model):
+    id = models.IntegerField(primary_key=True)
+    fecha_hora = models.DateTimeField()
+    esterilizacion = models.ForeignKey('Esterilizacion', on_delete=models.CASCADE)
+'''
 
 
 class RetiroEntregaAnimal(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
     baja = models.BooleanField(default=False) #si es por sacrificio
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-    mascota = models.OneToOneField('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
+    mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
     # baja logica, se hace sobre la mascota
 
     def __str__(self):
@@ -92,19 +99,20 @@ class RetiroEntregaAnimal(models.Model):
 class Mascota(models.Model):
     nombre = models.CharField(max_length=50)
     pelaje = models.CharField(max_length=50)
+    categoria_mascota = models.CharField(max_length=6, choices=Categoria_Mascota)
     raza = models.CharField(max_length=50)
     sexo = models.CharField(max_length=15, choices=Sexo, blank=True)
     fecha_nacimiento = models.DateField(blank=True, null=True)
     baja = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s %s" % (self.nombre, self.raza)
+        return "%s - %s - %s" % (self.nombre, self.raza, self.pelaje)
 
 
 class Patente(models.Model):
     fecha = models.DateField(default=now)
-    persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
-    mascota = models.OneToOneField('Mascota', on_delete=models.CASCADE)
+    persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
+    mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):

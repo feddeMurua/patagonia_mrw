@@ -47,4 +47,4 @@ class Inscripcion(models.Model):
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Numero inscripcion:%s" % self.pk
+        return "Numero de inscripcion:%s" % self.pk

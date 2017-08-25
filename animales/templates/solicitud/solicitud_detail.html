@@ -39,7 +39,17 @@
                 <td>Estado:</td>
                 <td>{{ solicitud.estado }}</td>
             </tr>
-            {% if solicitud.estado == 'Aplazada' %}
+            {% if solicitud.estado == 'Aprobada' %}
+                <tr>
+                    <td>N° de disposicion:</td>
+                    <td>{{ disposicion.nro_disposicion }}</td>
+                </tr>
+                <tr>
+                    <td>Fecha de disposicion:</td>
+                    <td>{{ disposicion.fecha_disposicion }}</td>
+                </tr>
+            {% endif %}
+            {% if aplazos %}
                 <div class="container-fluid container-list">
                     <div class="row">
                         <div class="col-md-12">
@@ -52,7 +62,7 @@
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <table class="table table-striped table-bordered table-hover table-list">
+                                    <table class="table table-bordered table-hover table-list">
                                         <thead>
                                             <tr>
                                                 <th>Fecha de Aplazo</th>

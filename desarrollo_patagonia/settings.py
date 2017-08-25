@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'desarrollo_patagonia.urls'
@@ -141,7 +141,7 @@ LOGIN_REDIRECT_URL = reverse_lazy('login')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'estaticos/images/upload')
 
 
-def FILTERS_VERBOSE_LOOKUPS():
+def filters_verbose_lookups():
     from django_filters.conf import DEFAULTS
 
     verbose_lookups = DEFAULTS['VERBOSE_LOOKUPS'].copy()
