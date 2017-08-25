@@ -1,0 +1,47 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Abastecedores{% endblock %}
+
+{% block header-title %}Abastecedores{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Abastecedores{% endblock %}
+
+{% block btn-nuevo %}
+  <a href="{% url 'abastecedores:nuevo_abastecedor' %}" class="btn btn-sm btn-primary btn-create">Nuevo Abastecedor</a>
+{% endblock %}
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-hover table-list">
+        <thead>
+        <tr>
+            <th>Apellido y Nombre</th>
+            <th>Dni</th>
+            <th>Domicilio</th>
+            <th>Empresa y/o Transporte</th>
+            <th>Rubro</th>
+
+
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for abastecedor in filter.qs %}
+            <tr align="center">
+                <td>{{ abastecedor.persona.apellido }}, {{ abastecedor.persona.nombre }}</td>
+                <td>{{ abastecedor.persona.dni }}</td>
+                <td>{{ abastecedor.persona.domicilio }}</td>
+                <td>{{ abastecedor.empresa_y_o_transporte }}</td>
+                <td>{{ abastecedor.rubro }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block more-scripts %}
+{% endblock %}

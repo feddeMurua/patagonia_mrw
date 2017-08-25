@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'libreta_curso',
     'animales',
     'personas',
-    
+    'saneamiento_abasto',
+
     # Librerias
     'bootstrap3',
     'widget_tweaks',
