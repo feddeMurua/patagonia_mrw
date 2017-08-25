@@ -33,3 +33,11 @@ class PatenteListFilter(django_filters.FilterSet):
         model = Patente
         fields = ['fecha']
         order_by = ['fecha']
+
+
+class ControlListFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = ControlAntirrabico
+        fields = ['fecha_suceso']
+        order_by = ['fecha_suceso']

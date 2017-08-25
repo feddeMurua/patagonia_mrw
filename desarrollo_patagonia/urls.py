@@ -25,10 +25,11 @@ urlpatterns = [
     url(r'^cursos/', include('libreta_curso.urls_curso', namespace='cursos')),
     url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),
     url(r'^inscripciones/', include('libreta_curso.urls_inscripcion', namespace='inscripciones')),
-    url(r'^personas/', include('personas.urls_persona', namespace='personas')),        
+    url(r'^personas/', include('personas.urls_persona', namespace='personas')),
     url(r'^analisis/', include('animales.urls_analisis', namespace='analisis')),
     url(r'^solicitudes/', include('animales.urls_solicitudCriadero', namespace='solicitud')),
     url(r'^disposiciones/', include('animales.urls_disposicionCriadero', namespace='disposicion')),
     url(r'^esterilizaciones/', include('animales.urls_esterilizacion', namespace='esterilizacion')),
     url(r'^patentes/', include('animales.urls_patentes', namespace='patentes')),
+    url(r'^controles/', include('animales.urls_controlAntirrabico', namespace='controles')),
 ]

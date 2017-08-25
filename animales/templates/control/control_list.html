@@ -1,0 +1,43 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Controles{% endblock %}
+
+{% block header-title %}Control Antirrábico{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Controles{% endblock %}
+
+
+{% block btn-nuevo %}
+    <a href=" {% url 'controles:nuevo_control' %}" class="btn btn-sm btn-primary btn-create">Nuevo Control</a>    
+{% endblock %}
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-list">
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Mordido</th>
+            <th>Responsable</th>
+            <th>Observaciones</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for control in filter.qs %}
+            <tr>
+                <td>{{ control.fecha_suceso }}</td>
+                <td>{{ control.mordido }}</td>
+                <td>{{ control.responsable }}</td>
+                <td>{{ control.observaciones }}</td>
+                <td align="center">
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -14,7 +14,7 @@ class AnalisisForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
     categoria = forms.ChoiceField(choices=Categorias, label="Categoria", initial='', widget=forms.Select())
     resultado = forms.ChoiceField(choices=Resultados, label="Resultado", initial='', widget=forms.Select())
-    
+
     class Meta:
         model = Analisis
         fields = ['fecha', 'nro_ingreso', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
@@ -44,16 +44,16 @@ class AplazoSolicitudForm(forms.ModelForm):
 
 
 class DisposicionForm(forms.ModelForm):
-    fecha_disposicion = forms.DateField(widget=DateInput())   
-    
+    fecha_disposicion = forms.DateField(widget=DateInput())
+
     class Meta:
         model = DisposicionCriaderoCerdos
         fields = ['nro_disposicion', 'fecha_disposicion']
 
 
-class EsterilizacionForm(forms.ModelForm):    
+class EsterilizacionForm(forms.ModelForm):
     turno = forms.TimeField(widget=TimeInput())
-    
+
     class Meta:
         model = Esterilizacion
         fields = ['turno', 'interesado']
@@ -72,3 +72,10 @@ class PatenteForm(forms.ModelForm):
     class Meta:
         model = Patente
         fields = ['persona', 'mascota', 'observaciones']
+
+
+class ControlAntirrabicoForm(forms.ModelForm):
+
+    class Meta:
+        model = ControlAntirrabico
+        fields = ['mordido', 'responsable', 'observaciones']

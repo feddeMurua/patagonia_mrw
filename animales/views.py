@@ -9,6 +9,7 @@ import datetime
 from .forms import *
 from .filters import *
 from .models import *
+from personas import models as m
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import (
     CreateView,
@@ -158,7 +159,7 @@ ESTERILIZACION
 @login_required(login_url='login')
 def lista_esterilizaciones(request):
     lista_esterilizaciones = Esterilizacion.objects.all()
-    filtro_esterilizaciones = EsterilizacionListFilter(request.GET, queryset=lista_esterilizaciones)    
+    filtro_esterilizaciones = EsterilizacionListFilter(request.GET, queryset=lista_esterilizaciones)
     return render(request, 'esterilizacion/esterilizacion_list.html', {'filter': filtro_esterilizaciones})
 
 
@@ -208,6 +209,36 @@ class ModificacionPatente(LoginRequiredMixin, UpdateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
+
+'''
+CONTROL ANTIRRABICO
+'''
+
+
+@login_required(login_url='login')
+def lista_controles(request):
+    lista_controles = ControlAntirrabico.objects.all()
+    filtro_controles = ControlListFilter(request.GET, queryset=lista_controles)
+    return render(request, 'control/control_list.html', {'filter': filtro_controles})
+
+
+@login_required(login_url='login')
+def alta_control(request):
+    if request.method == 'POST':
+        control_form = ControlAntirrabicoForm(request.POST)
+        if control_form.is_valid():
+            control_antirrabico = control_form.save(commit=False)
+            mordido = m.PersonaFisica.objects.get(dni=control_antirrabico.mordido.dni)
+            responsable = m.PersonaFisica.objects.get(dni=control_antirrabico.responsable.dni)
+            if mordido.dni != responsable.dni:
+                control_antirrabico.save()
+                return redirect('controles:lista_controles')
+            else:
+                #ACA SE TIENE QUE VERIFICAR SI LAS PERSONAS SON IGUALES
+                return redirect('controles:nuevo_control')
+    else:
+        form = ControlAntirrabicoForm()
+        return render(request, 'control/control_form.html', {"form": form})
 
 '''
 MASCOTAS

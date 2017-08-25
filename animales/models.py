@@ -9,9 +9,9 @@ from .choices import *
 class Analisis(models.Model):
     fecha = models.DateField(default=now)
     nro_ingreso = models.BigIntegerField()
-    interesado = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE, related_name="interesado")
-    procedencia = models.CharField(max_length=50)
-    medico_veterinario = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE,
+    interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="interesado")
+    procedencia = models.ForeignKey(m.Localidad, on_delete=models.CASCADE)
+    medico_veterinario = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE,
                                               related_name="medico_veterinario")
     resultado = models.CharField(max_length=15, choices=Resultados)
     categoria = models.CharField(max_length=15, choices=Categorias)
@@ -31,8 +31,8 @@ class Porcino(models.Model):
 
 class ControlAntirrabico(models.Model):
     fecha_suceso = models.DateField(default=now)
-    mordido = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE, related_name="mordido")
-    responsable = models.OneToOneField(m.PersonaFisica, on_delete=models.SET_NULL, null=True, blank=True,
+    mordido = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="mordido")
+    responsable = models.ForeignKey(m.PersonaFisica, on_delete=models.SET_NULL, null=True, blank=True,
                                        related_name="responsable")
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
@@ -51,7 +51,7 @@ class DisposicionCriaderoCerdos(models.Model):
 
 class SolicitudCriaderoCerdos(models.Model):
     fecha_solicitud = models.DateField(default=now)
-    interesado = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
+    interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     categoria_criadero = models.CharField(max_length=50, choices=Categoria_Criadero)
     domicilio_criadero = models.CharField(max_length=50)
     estado = models.CharField(max_length=10, default='En curso')
@@ -70,8 +70,8 @@ class AplazoSolicitud(models.Model):
 
 
 class Esterilizacion(models.Model):
-    interesado = models.OneToOneField(m.PersonaGenerica, on_delete=models.CASCADE)
-    mascota = models.OneToOneField('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
+    interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
+    mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
     turno = models.TimeField()
 
     def __str__(self):
@@ -81,7 +81,7 @@ class Esterilizacion(models.Model):
 class RetiroEntregaAnimal(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
     baja = models.BooleanField(default=False)
-    interesado = models.OneToOneField(m.PersonaGenerica, on_delete=models.CASCADE)
+    interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     mascota = models.OneToOneField('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
     # baja logica, se hace sobre la mascota
 
