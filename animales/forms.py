@@ -53,7 +53,7 @@ class DisposicionForm(forms.ModelForm):
 
 class EsterilizacionForm(forms.ModelForm):
     turno = forms.DateTimeField()
-    
+
     class Meta:
         model = Esterilizacion
         fields = ['turno', 'interesado', 'mascota']
@@ -77,8 +77,8 @@ class PatenteForm(forms.ModelForm):
 class ControlAntirrabicoForm(forms.ModelForm):
 
     class Meta:
-        model = RetiroEntregaAnimal
-        fields = ['interesado', 'mascota', 'observaciones']
+        model = ControlAntirrabico
+        fields = ['mordido', 'responsable', 'observaciones']
 
 
 class RetiroEntregaForm(forms.ModelForm):
