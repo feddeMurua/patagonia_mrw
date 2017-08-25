@@ -1,7 +1,7 @@
 [
 	{
 		"model": "personas.Provincia",
-		"id": 1,		
+		"id": 1,
 		"fields": {
 			"nombre": "BUENOS AIRES",
 			"nacionalidad": "1"
@@ -14,7 +14,7 @@
 		"fields": {
 			"nombre": "CATAMARCA",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -24,7 +24,7 @@
 		"fields": {
 			"nombre": "CHACO",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -34,7 +34,7 @@
 		"fields": {
 			"nombre": "CHUBUT",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -42,9 +42,9 @@
 		"model": "personas.Provincia",
 		"id": 5,
 		"fields": {
-			"nombre": "CÓRDOBA",
+			"nombre": "CORDOBA",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -54,7 +54,7 @@
 		"fields": {
 			"nombre": "CORRIENTES",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -62,9 +62,9 @@
 		"model": "personas.Provincia",
 		"id": 7,
 		"fields": {
-			"nombre": "ENTRE RÍOS",
+			"nombre": "ENTRE RIOS",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -74,7 +74,7 @@
 		"fields": {
 			"nombre": "FORMOSA",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -84,7 +84,7 @@
 		"fields": {
 			"nombre": "JUJUY",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -94,7 +94,7 @@
 		"fields": {
 			"nombre": "LA PAMPA",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -104,7 +104,7 @@
 		"fields": {
 			"nombre": "LA RIOJA",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -114,7 +114,7 @@
 		"fields": {
 			"nombre": "MENDOZA",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -124,7 +124,7 @@
 		"fields": {
 			"nombre": "MISIONES",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -132,9 +132,9 @@
 		"model": "personas.Provincia",
 		"id": 14,
 		"fields": {
-			"nombre": "NEUQUÉN",
+			"nombre": "NEUQUEN",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -142,9 +142,9 @@
 		"model": "personas.Provincia",
 		"id": 15,
 		"fields": {
-			"nombre": "RÍO NEGRO",
+			"nombre": "RIO NEGRO",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -154,7 +154,7 @@
 		"fields": {
 			"nombre": "SALTA",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -164,7 +164,7 @@
 		"fields": {
 			"nombre": "SAN JUAN",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -174,7 +174,7 @@
 		"fields": {
 			"nombre": "SAN LUIS",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -184,7 +184,7 @@
 		"fields": {
 			"nombre": "SANTA CRUZ",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -192,9 +192,9 @@
 		"model": "personas.Provincia",
 		"id": 20,
 		"fields": {
-			"nombre": "SANTA FÉ",
+			"nombre": "SANTA FE",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -204,7 +204,7 @@
 		"fields": {
 			"nombre": "SANTIAGO DEL ESTERO",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -214,7 +214,7 @@
 		"fields": {
 			"nombre": "TIERRA DEL FUEGO",
 			"nacionalidad": "1"
-		}		
+		}
 
 	} ,
 
@@ -222,11 +222,11 @@
 		"model": "personas.Provincia",
 		"id": 23,
 		"fields": {
-			"nombre": "TUCUMÁN",
+			"nombre": "TUCUMAN",
 			"nacionalidad": "1"
-		}		
+		}
 
 	}
 
-	
+
 ]
