@@ -3,13 +3,14 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
-from django.utils.timezone import now
 from easy_pdf.views import PDFTemplateView
 from django.shortcuts import render, redirect
 from datetime import datetime
 from .forms import *
 from .filters import *
 from .models import *
+from personas import models as m
+from personas import forms as f
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import (
     CreateView,
@@ -74,13 +75,22 @@ def lista_solicitudes(request):
     return render(request, 'solicitud/solicitud_list.html', {'filter': filtro_solicitudes})
 
 
-class AltaSolicitud(LoginRequiredMixin, CreateView):
-    model = SolicitudCriaderoCerdos
-    template_name = 'solicitud/solicitud_form.html'
-    success_url = reverse_lazy('solicitud:lista_solicitudes')
-    form_class = SolicitudForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def alta_solicitud(request):
+    if request.method == 'POST':
+        solicitud_form = SolicitudForm(request.POST)
+        domicilio_form = f.DomicilioForm(request.POST)
+        if solicitud_form.is_valid() & domicilio_form.is_valid():
+            solicitud = solicitud_form.save(commit=False)
+            domicilio = domicilio_form.save(commit=False)
+            domicilio.save()
+            solicitud.domicilio_criadero = domicilio
+            solicitud.save()
+            return redirect('solicitud:lista_solicitudes')
+    else:
+        solicitud_form = SolicitudForm
+        domicilio_form = f.DomicilioForm
+        return render(request, "solicitud/solicitud_form.html", {'solicitud_form': solicitud_form,
+                                                             'domicilio_form': domicilio_form})
 
 
 class BajaSolicitud(LoginRequiredMixin, DeleteView):
@@ -160,10 +170,6 @@ ESTERILIZACION
 
 @login_required(login_url='login')
 def lista_esterilizaciones(request):
-    '''
-    form = EsterilizacionForm
-    return render(request, 'esterilizacion/esterilizacion_list.html', {"form": form})
-    '''
     lista_esterilizaciones = Esterilizacion.objects.all()
     filtro_esterilizaciones = EsterilizacionListFilter(request.GET, queryset=lista_esterilizaciones)
     return render(request, 'esterilizacion/esterilizacion_list.html', {'filter': filtro_esterilizaciones})
@@ -257,6 +263,58 @@ class ModificacionPatente(LoginRequiredMixin, UpdateView):
     template_name = 'patente/patente_form.html'
     success_url = reverse_lazy('patentes:lista_patentes')
     fields = ['persona', 'observaciones']
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+'''
+CONTROL ANTIRRABICO
+'''
+
+
+@login_required(login_url='login')
+def lista_controles(request):
+    lista_controles = ControlAntirrabico.objects.all()
+    filtro_controles = ControlListFilter(request.GET, queryset=lista_controles)
+    return render(request, 'control/control_list.html', {'filter': filtro_controles})
+
+
+@login_required(login_url='login')
+def alta_control(request):
+    if request.method == 'POST':
+        control_form = ControlAntirrabicoForm(request.POST)
+        if control_form.is_valid():
+            control_antirrabico = control_form.save(commit=False)
+            mordido = m.PersonaFisica.objects.get(dni=control_antirrabico.mordido.dni)
+            responsable = m.PersonaFisica.objects.get(dni=control_antirrabico.responsable.dni)
+            if mordido.dni != responsable.dni:
+                control_antirrabico.save()
+                return redirect('controles:lista_controles')
+            else:
+                #ACA SE TIENE QUE VERIFICAR SI LAS PERSONAS SON IGUALES
+                return redirect('controles:nuevo_control')
+    else:
+        form = ControlAntirrabicoForm()
+        return render(request, 'control/control_form.html', {"form": form})
+
+
+'''
+RETIRO/ENTREGA ANIMALES
+'''
+
+
+@login_required(login_url='login')
+def lista_retiro_entrega(request):
+    lista_retiro_entrega = RetiroEntregaAnimal.objects.all()
+    filtro_retiro_entrega = RetiroEntregaListFilter(request.GET, queryset=lista_retiro_entrega)
+    return render(request, 'retiroEntrega/retiroEntrega_list.html', {'filter': filtro_retiro_entrega})
+
+
+class AltaRetiroEntrega(LoginRequiredMixin, CreateView):
+    model = RetiroEntregaAnimal
+    template_name = 'retiroEntrega/retiroEntrega_form.html'
+    success_url = reverse_lazy('retiros_entregas:lista_retiro_entrega')
+    form_class = RetiroEntregaForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 

@@ -42,7 +42,7 @@ class ControlAntirrabico(models.Model):
 class DisposicionCriaderoCerdos(models.Model):
     fecha_disposicion = models.DateField()
     nro_disposicion = models.BigIntegerField()
-    solicitud = models.ForeignKey('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
+    solicitud = models.OneToOneField('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s - %s" % (self.fecha_disposicion, self.nro_disposicion)
@@ -87,7 +87,7 @@ class Turno(models.Model):
 
 class RetiroEntregaAnimal(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
-    baja = models.BooleanField(default=False)
+    baja = models.BooleanField(default=False) #si es por sacrificio
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
     # baja logica, se hace sobre la mascota

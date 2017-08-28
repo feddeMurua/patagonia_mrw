@@ -14,7 +14,7 @@ class AnalisisForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
     categoria = forms.ChoiceField(choices=Categorias, label="Categoria", initial='', widget=forms.Select())
     resultado = forms.ChoiceField(choices=Resultados, label="Resultado", initial='', widget=forms.Select())
-    
+
     class Meta:
         model = Analisis
         fields = ['fecha', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
@@ -33,7 +33,7 @@ class SolicitudForm(forms.ModelForm):
 
     class Meta:
         model = SolicitudCriaderoCerdos
-        fields = ['interesado', 'categoria_criadero', 'domicilio_criadero']
+        fields = ['interesado', 'categoria_criadero']
 
 
 class AplazoSolicitudForm(forms.ModelForm):
@@ -44,18 +44,19 @@ class AplazoSolicitudForm(forms.ModelForm):
 
 
 class DisposicionForm(forms.ModelForm):
-    fecha_disposicion = forms.DateField(widget=DateInput())   
-    
+    fecha_disposicion = forms.DateField(widget=DateInput())
+
     class Meta:
         model = DisposicionCriaderoCerdos
         fields = ['nro_disposicion', 'fecha_disposicion']
 
 
 class EsterilizacionForm(forms.ModelForm):
-
+    turno = forms.DateTimeField()
+    
     class Meta:
         model = Esterilizacion
-        fields = ['interesado', 'mascota']
+        fields = ['turno', 'interesado', 'mascota']
 
 
 class MascotaForm(forms.ModelForm):
@@ -71,3 +72,17 @@ class PatenteForm(forms.ModelForm):
     class Meta:
         model = Patente
         fields = ['persona', 'mascota', 'observaciones']
+
+
+class ControlAntirrabicoForm(forms.ModelForm):
+
+    class Meta:
+        model = RetiroEntregaAnimal
+        fields = ['interesado', 'mascota', 'observaciones']
+
+
+class RetiroEntregaForm(forms.ModelForm):
+
+    class Meta:
+        model = RetiroEntregaAnimal
+        fields = ['interesado', 'mascota', 'observaciones']
