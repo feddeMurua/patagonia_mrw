@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
+from django.utils.timezone import now
 from easy_pdf.views import PDFTemplateView
 from django.shortcuts import render, redirect
-import datetime
+from datetime import datetime
 from .forms import *
 from .filters import *
 from .models import *
@@ -25,7 +26,7 @@ ANALISIS
 def lista_analisis(request):
     lista_analisis = Analisis.objects.all()
     filtro_analisis = AnalisisListFilter(request.GET, queryset=lista_analisis)
-    fecha_hoy = datetime.date.today()
+    fecha_hoy = now
     return render(request, 'analisis/analisis_list.html', {'fecha_hoy': fecha_hoy, 'filter': filtro_analisis})
 
 
@@ -94,8 +95,9 @@ class BajaSolicitud(LoginRequiredMixin, DeleteView):
 def detalles_solicitud(request, pk):
     solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
     aplazos = AplazoSolicitud.objects.filter(solicitud__pk=pk)
-    return render(request, "solicitud/solicitud_detail.html", {'solicitud': solicitud,
-                                                           'aplazos': aplazos})
+    disposicion = DisposicionCriaderoCerdos.objects.get(solicitud__pk=pk)
+    return render(request, "solicitud/solicitud_detail.html", {'solicitud': solicitud, 'aplazos': aplazos,
+                                                               'disposicion': disposicion})
 
 
 class DetalleSolicitud(LoginRequiredMixin, DetailView):
@@ -116,6 +118,7 @@ def aplazo_solicitud(request, pk):
             solicitud.estado = 'Aplazada'
             solicitud.save()
             aplazo.solicitud = solicitud
+            aplazo.save()
             return redirect('solicitud:lista_solicitudes')
     else:
         form = AplazoSolicitudForm
@@ -157,9 +160,46 @@ ESTERILIZACION
 
 @login_required(login_url='login')
 def lista_esterilizaciones(request):
+    '''
+    form = EsterilizacionForm
+    return render(request, 'esterilizacion/esterilizacion_list.html', {"form": form})
+    '''
     lista_esterilizaciones = Esterilizacion.objects.all()
-    filtro_esterilizaciones = EsterilizacionListFilter(request.GET, queryset=lista_esterilizaciones)    
+    filtro_esterilizaciones = EsterilizacionListFilter(request.GET, queryset=lista_esterilizaciones)
     return render(request, 'esterilizacion/esterilizacion_list.html', {'filter': filtro_esterilizaciones})
+
+
+class PdfConsentimiento(PDFTemplateView):
+    template_name = 'esterilizacion/consentimiento_pdf.html'
+
+    def get_context_data(self, pk_esterilizacion):
+        esterilizacion = Esterilizacion.objects.get(pk=pk_esterilizacion)
+        edad_mascota = (datetime.now().date() - esterilizacion.mascota.fecha_nacimiento).days / 30
+        tiempo_edad = 'MESES'
+        if 11 < edad_mascota < 24:
+            edad_mascota = 1
+            tiempo_edad = 'AÑO'
+        elif edad_mascota > 23:
+            edad_mascota = int(edad_mascota/12)
+            tiempo_edad = 'AÑOS'
+        return super(PdfConsentimiento, self).get_context_data(
+            pagesize="A4",
+            esterilizacion=esterilizacion,
+            tiempo_edad=tiempo_edad,
+            edad_mascota=edad_mascota,
+            title="Consentimiento de Esterilizacion"
+        )
+
+'''
+@login_required(login_url='login')
+def get_mascotas(pk_interesado):
+    patentes = Patente.objects.filter(interesado__pk=pk_interesado)
+    mascotas = []
+    for patente in patentes:
+        if patente.mascota.categoria_mascota == 'CANINA' or patente.mascota.categoria_mascota == 'FELINA':
+            mascotas.append({'text': patente.mascota, 'value': patente.mascota})
+    return mascotas
+'''
 
 
 class AltaEsterilizacion(LoginRequiredMixin, CreateView):
@@ -190,6 +230,18 @@ class AltaPatente(LoginRequiredMixin, CreateView):
     form_class = PatenteForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
+
+
+class PdfCarnet(PDFTemplateView):
+    template_name = 'patente/carnet_pdf.html'
+
+    def get_context_data(self, pk):
+        patente = Patente.objects.get(pk=pk)
+        return super(PdfCarnet, self).get_context_data(
+            pagesize="A4",
+            patente=patente,
+            title="Impresion de Carnet"
+        )
 
 
 class BajaPatente(LoginRequiredMixin, DeleteView):

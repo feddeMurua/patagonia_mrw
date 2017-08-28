@@ -11,3 +11,45 @@
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'esterilizacion:lista_esterilizaciones' %}">Cancelar</a>
 {% endblock %}
+
+
+{% block scripts %}
+    <script>
+        jQuery('#id_turno').datetimepicker({
+            format:'d/m/Y H:i',
+            step:30,
+            yearStart:2017,
+            disabledWeekDays:[0,6]
+        });
+        $.datetimepicker.setLocale('es');
+    </script>
+    <!--
+    var $selectInteresado = $('#id_interesado-selectized'),
+        $selectMascota = $('#id_mascota-selectized');
+
+    $selectInteresado.on('change', setOptionsSelect);
+    setOptionsSelect();
+
+    function setOptionsSelect() {
+        var pk_interesado = $selectInteresado.val()
+        if(pk_interesado) {
+            $.ajax({
+                type: 'GET',
+                url: '/getMascotas/' + pk_interesado + '/',
+                dataType: 'json',
+                success: function(data){
+                    console.log(data)
+                    var selectize =   $('select')[1].selectize;
+                    selectize.clearOptions();
+                    $.each(data, function(key, opt) {
+                        selectize.addOption({value: opt['value'], text: opt['text']});
+                    })
+                },
+                error: function(err){
+                    alert("Fallo Ajax");
+                }
+            });
+        }
+    }
+    -->
+{% endblock %}

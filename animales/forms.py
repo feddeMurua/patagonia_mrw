@@ -17,7 +17,7 @@ class AnalisisForm(forms.ModelForm):
     
     class Meta:
         model = Analisis
-        fields = ['fecha', 'nro_ingreso', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
+        fields = ['fecha', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
 
 
 class PorcinoForm(forms.ModelForm):
@@ -51,12 +51,11 @@ class DisposicionForm(forms.ModelForm):
         fields = ['nro_disposicion', 'fecha_disposicion']
 
 
-class EsterilizacionForm(forms.ModelForm):    
-    turno = forms.TimeField(widget=TimeInput())
-    
+class EsterilizacionForm(forms.ModelForm):
+
     class Meta:
         model = Esterilizacion
-        fields = ['turno', 'interesado']
+        fields = ['interesado', 'mascota']
 
 
 class MascotaForm(forms.ModelForm):
@@ -64,7 +63,7 @@ class MascotaForm(forms.ModelForm):
 
     class Meta:
         model = Mascota
-        fields = ['nombre', 'pelaje', 'raza', 'fecha_nacimiento', 'sexo']
+        fields = ['nombre', 'pelaje', 'raza', 'categoria_mascota', 'fecha_nacimiento', 'sexo']
 
 
 class PatenteForm(forms.ModelForm):

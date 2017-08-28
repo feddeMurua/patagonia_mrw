@@ -4,16 +4,52 @@
 
 {% block title %}Esterilización de Mascotas{% endblock %}
 
+{% block more-stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dhtmlxscheduler.css' %}"/>
+{% endblock %}
+
 {% block header-title %}Esterilización de Mascotas {% endblock %}
 
 {% block url-volver %}{% url 'inicio' %}{% endblock %}
 
-{% block panel-title %}Turnos{% endblock %}
-
-{% block btn-nuevo %} 
-    <a href="{% url 'esterilizacion:nueva_esterilizacion' %}" class="btn btn-sm btn-primary btn-create">Nueva Esterilización</a>  
+<!--
+{% block content %}
+    <div id="my_form">
+        <label for="description">Event text </label><input type="text" name="description" value="" id="description"><br>
+        <label for="custom1">Custom 1 </label><input type="text" name="custom1" value="" id="custom1"><br>
+        <label for="custom2">Custom 2 </label><input type="text" name="custom2" value="" id="custom2"><br><br>
+        <input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
+        <input type="button" name="close" value="Close" id="close" style='width:100px;' onclick="close_form()">
+        <input type="button" name="delete" value="Delete" id="delete" style='width:100px;' onclick="delete_event()">
+    </div>
+    <div class="container-fluid container-list col-md-12">
+        <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col col-xs-6">
+                        <h3 class="panel-title">Turnos</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
+                    <div class="dhx_cal_navline">
+                        <div class="dhx_cal_prev_button">&nbsp;</div>
+                        <div class="dhx_cal_next_button">&nbsp;</div>
+                        <div class="dhx_cal_today_button"></div>
+                        <div class="dhx_cal_date"></div>
+                        <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+                        <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+                        <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+                    </div>
+                    <div class="dhx_cal_header"></div>
+                    <div class="dhx_cal_data"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
-
+ -->
 
 {% block tabla %}
     <table class="table table-striped table-bordered table-hover table-list">
@@ -21,16 +57,60 @@
             <tr>
                 <th>Turno</th>                
                 <th>Interesado</th>
+                <th><em class="glyphicon glyphicon-cog"></em></th>
             </tr>
         </thead>
         <tbody>
         {% for esterilizacion in filter.qs %}
             <tr align="center">
                 <td>{{ esterilizacion.turno }}</td>
-                <td>{{ esterilizacion.interesado }}</td>
+                <td>{{ esterilizacion.interesado }} - {{ esterilizacion.interesado.dni }}</td>
+                <td align="center">
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir Consentimiento" href="{% url 'esterilizacion:pdf_consentimiento' esterilizacion.pk %}"><em class="glyphicon glyphicon-print"></em></a>
+                </td>
             </tr>          
         {% endfor %}
         </tbody>
     </table>
 {% endblock %}
 
+<!--
+{% block more-scripts %}
+    <script src="{% static 'js/dhtmlxscheduler.js' %}"></script>
+    <script src="{% static 'js/locale_es.js' %}" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+		scheduler.init('scheduler_here', new Date(), "month");
+
+		var html = function(id) { return document.getElementById(id); }; //just a helper
+
+		scheduler.showLightbox = function(id) {
+			var ev = scheduler.getEvent(id);
+			scheduler.startLightbox(id, html("my_form"));
+
+			html("description").focus();
+			html("description").value = ev.text;
+			html("custom1").value = ev.custom1 || "";
+			html("custom2").value = ev.custom2 || "";
+		};
+
+		function save_form() {
+			var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
+			ev.text = html("description").value;
+			ev.custom1 = html("custom1").value;
+			ev.custom2 = html("custom2").value;
+
+			scheduler.endLightbox(true, html("my_form"));
+		}
+		function close_form() {
+			scheduler.endLightbox(false, html("my_form"));
+		}
+
+		function delete_event() {
+			var event_id = scheduler.getState().lightbox_id;
+			scheduler.endLightbox(false, html("my_form"));
+			scheduler.deleteEvent(event_id);
+		}
+
+	</script>
+{% endblock %}
+-->

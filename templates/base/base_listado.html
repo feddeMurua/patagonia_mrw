@@ -6,59 +6,56 @@
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_listado.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert2.css' %}"/>
+    {% block more-stylesheets %}{% endblock %}
 {% endblock %}
 
 {% block no-particles %}{% endblock %}
 
 {% block content %}
-    <div class="container-fluid container-list">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default panel-table">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col col-xs-6">
-                                <h3 class="panel-title">{% block panel-title %}{% endblock %}</h3>
-                            </div>
-                            <div class="col col-xs-6 text-right">
-                                {% block btn-nuevo %}{% endblock %}
-                                <a class="btn btn-sm btn-info" id="buscar">Buscar</a>
-                            </div>
-                        </div>
+    <div class="container-fluid container-list col-md-12">
+        <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col col-xs-6">
+                        <h3 class="panel-title">{% block panel-title %}{% endblock %}</h3>
                     </div>
-                    <div class="panel-body" id="hidden-panel">
-                        <form method="get">
-                            <div class="well">
-                                {% csrf_token %}
-                                {% for field in filter.form.visible_fields %}
-                                    <div class="form-group">
-                                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                        {{ field|add_class:'form-control' }}
-                                        {% for error in field.errors %}
-                                            <span class="help-block">{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% endfor %}
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="glyphicon glyphicon-search"></span> Buscar
-                                </button>
-                            </div>
-                        </form>
+                    <div class="col col-xs-6 text-right">
+                        {% block btn-nuevo %}{% endblock %}
+                        <a class="btn btn-sm btn-info" id="buscar">Buscar</a>
                     </div>
-                    <div class="panel-body">
-                        {% if filter.qs %}
-                            {% block tabla %}{% endblock %}
-                        {% else %}
-                            <div id="table-empty" class="table-empty">
-                                <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
-                                    No se encontraron elementos
-                                </h3>
-                            </div>
-                        {% endif %}
-                    </div>
-                    {% block panel-footer %}{% endblock %}
                 </div>
             </div>
+            <div class="panel-body" id="hidden-panel">
+                <form method="get">
+                    <div class="well">
+                        {% csrf_token %}
+                        {% for field in filter.form.visible_fields %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field|add_class:'form-control' }}
+                                {% for error in field.errors %}
+                                    <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span> Buscar
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-body">
+                {% if filter.qs %}
+                    {% block tabla %}{% endblock %}
+                {% else %}
+                    <div id="table-empty" class="table-empty">
+                        <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                            No se encontraron elementos
+                        </h3>
+                    </div>
+                {% endif %}
+            </div>
+            {% block panel-footer %}{% endblock %}
         </div>
     </div>
 {% endblock %}
