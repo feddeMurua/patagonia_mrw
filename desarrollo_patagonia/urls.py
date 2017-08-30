@@ -32,6 +32,5 @@ urlpatterns = [
     url(r'^esterilizaciones/', include('animales.urls_esterilizacion', namespace='esterilizacion')),
     url(r'^patentes/', include('animales.urls_patentes', namespace='patentes')),
     url(r'^controles/', include('animales.urls_controlAntirrabico', namespace='controles')),
-    url(r'^retiros_entregas/', include('animales.urls_retiroEntrega', namespace='retiros_entregas')),
-    url(r'^domicilios/', include('personas.urls_domicilio', namespace='domicilios')),
+    url(r'^retiros_entregas/', include('animales.urls_retiroEntrega', namespace='retiros_entregas'))
 ]

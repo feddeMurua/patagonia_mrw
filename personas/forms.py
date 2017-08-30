@@ -24,6 +24,14 @@ class DomicilioForm(forms.ModelForm):
         model = Domicilio
         fields = ['barrio', 'calle', 'nro', 'dpto', 'piso', 'localidad']
 
+
+class DomicilioRuralForm(forms.ModelForm):
+
+    class Meta:
+        model = DomicilioRural
+        fields = ['chacra', 'parcela', 'sector', 'circunscripcion', 'ruta']
+
+
 '''
 persona juridica
 

@@ -52,7 +52,7 @@ class SolicitudCriaderoCerdos(models.Model):
     fecha_solicitud = models.DateField(default=now)
     interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     categoria_criadero = models.CharField(max_length=50, choices=Categoria_Criadero)
-    domicilio_criadero = models.ForeignKey(m.Domicilio)
+    domicilio_criadero = models.ForeignKey(m.DomicilioRural)
     observaciones = models.TextField(max_length=100, null=True, blank=True)
     estado = models.CharField(max_length=10, default='En curso')
 

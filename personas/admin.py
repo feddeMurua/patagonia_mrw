@@ -6,6 +6,7 @@ from .models import *
 
 admin.site.register(PersonaFisica)
 admin.site.register(Domicilio)
+admin.site.register(DomicilioRural)
 admin.site.register(Localidad)
 admin.site.register(Provincia)
 admin.site.register(Nacionalidad)

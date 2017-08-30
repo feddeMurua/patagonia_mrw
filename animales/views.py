@@ -78,7 +78,7 @@ def lista_solicitudes(request):
 def alta_solicitud(request):
     if request.method == 'POST':
         solicitud_form = SolicitudForm(request.POST)
-        domicilio_form = f.DomicilioForm(request.POST)
+        domicilio_form = f.DomicilioRuralForm(request.POST)
         if solicitud_form.is_valid() & domicilio_form.is_valid():
             solicitud = solicitud_form.save(commit=False)
             domicilio = domicilio_form.save(commit=False)
@@ -88,7 +88,7 @@ def alta_solicitud(request):
             return redirect('solicitud:lista_solicitudes')
     else:
         solicitud_form = SolicitudForm
-        domicilio_form = f.DomicilioForm
+        domicilio_form = f.DomicilioRuralForm
         return render(request, "solicitud/solicitud_form.html", {'solicitud_form': solicitud_form,
                                                              'domicilio_form': domicilio_form})
 
@@ -105,7 +105,7 @@ class BajaSolicitud(LoginRequiredMixin, DeleteView):
 def detalles_solicitud(request, pk):
     solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
     aplazos = AplazoSolicitud.objects.filter(solicitud__pk=pk)
-    disposicion = DisposicionCriaderoCerdos.objects.get(solicitud__pk=pk)
+    disposicion = DisposicionCriaderoCerdos.objects.filter(solicitud__pk=pk).first()
     return render(request, "solicitud/solicitud_detail.html", {'solicitud': solicitud, 'aplazos': aplazos,
                                                                'disposicion': disposicion})
 
@@ -229,13 +229,22 @@ def lista_patente(request):
     return render(request, 'patente/patente_list.html', {'filter': filtro_patentes})
 
 
-class AltaPatente(LoginRequiredMixin, CreateView):
-    model = Patente
-    template_name = 'patente/patente_form.html'
-    success_url = reverse_lazy('patentes:lista_patentes')
-    form_class = PatenteForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def alta_patente(request):
+    if request.method == 'POST':
+        patente_form = PatenteForm(request.POST)
+        mascota_form = MascotaForm(request.POST)
+        if patente_form.is_valid() & mascota_form.is_valid():
+            patente = patente_form.save(commit=False)
+            mascota = mascota_form.save(commit=False)
+            mascota.save()
+            patente.mascota = mascota
+            patente.save()
+            return redirect('patentes:lista_patentes')
+    else:
+        patente_form = PatenteForm
+        mascota_form = MascotaForm
+        return render(request, "patente/patente_form.html", {'patente_form': patente_form,
+                                                             'mascota_form': mascota_form})
 
 
 class PdfCarnet(PDFTemplateView):

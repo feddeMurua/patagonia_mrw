@@ -71,7 +71,7 @@ class PatenteForm(forms.ModelForm):
 
     class Meta:
         model = Patente
-        fields = ['persona', 'mascota', 'observaciones']
+        fields = ['persona', 'observaciones']
 
 
 class ControlAntirrabicoForm(forms.ModelForm):

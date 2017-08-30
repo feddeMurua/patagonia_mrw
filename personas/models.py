@@ -36,9 +36,18 @@ class Domicilio(models.Model):
     localidad = models.ForeignKey('Localidad', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s, %s %s" % (self.barrio, self.calle, self.nro)
-        # TENER EN CUENTA CASO DEPARTAMENTOS.
+        return "%s %s %s" % (self.barrio, self.calle, self.nro)
 
+
+class DomicilioRural(models.Model):
+    chacra = models.CharField(max_length=4)
+    parcela = models.CharField(max_length=4, null=True, blank=True)
+    sector = models.CharField(max_length=3, null=True, blank=True)
+    circunscripcion = models.CharField(max_length=3, null=True, blank=True)
+    ruta = models.CharField(max_length=25, null=True, blank=True)
+
+    def __str__(self):
+        return "Chacra %s, %s" % (self.chacra, self.ruta)
 
 class PersonaGenerica(models.Model):
     nombre = models.CharField(max_length=50)
