@@ -13,6 +13,10 @@ from django.views.generic.edit import (
     UpdateView,
     DeleteView)
 
+'''
+ABASTECEDORES
+'''
+
 @login_required(login_url='login')
 def lista_abastecedor(request):
     lista_abastecedores = Abastecedor.objects.all()
@@ -25,5 +29,42 @@ class AltaAbastecedor(LoginRequiredMixin, CreateView):
     template_name = 'abastecedor/abastecedor_form.html'
     success_url = reverse_lazy('abastecedores:lista_abastecedores')
     form_class = AbastecedorForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class BajaAbastecedor(LoginRequiredMixin, DeleteView):
+    model = Abastecedor
+    template_name = 'abastecedor/abastecedor_confirm_delete.html'
+    success_url = reverse_lazy('abastecedores:lista_abastecedores')
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class ModificacionAbastecedor(LoginRequiredMixin, UpdateView):
+    model = Abastecedor
+    template_name = 'abastecedor/abastecedor_form.html'
+    success_url = reverse_lazy('abastecedores:lista_abastecedores')
+    form_class = AbastecedorForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+'''
+REINSPECCIONES
+'''
+
+@login_required(login_url='login')
+def lista_reinspeccion(request):
+    lista_reinspecciones = Reinspeccion.objects.all()
+    filtro_reinspecciones = ReinspeccionListFilter(request.GET, queryset=lista_reinspecciones)
+    return render(request, 'reinspeccion/reinspeccion_list.html', {'filter': filtro_reinspecciones})
+
+
+class AltaReinspeccion(LoginRequiredMixin, CreateView):
+    model = Reinspeccion
+    template_name = 'reinspeccion/reinspeccion_form.html'
+    success_url = reverse_lazy('reinspecciones:lista_reinspecciones')
+    form_class = ReinspeccionForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
