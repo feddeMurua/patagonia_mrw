@@ -72,6 +72,29 @@
             });
 
             $('.table-list').paging({limit:8});
+
+            $('.btn-baja').click(function confirmarBaja(e) {
+                var urlBaja = $(e.target).data('url');
+                swal({
+                    title: "¿Esta seguro?",
+                    text: "¿Desea eliminar este elemento?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Confirmar",
+                    cancelButtonText: "Cancelar"
+                }).then(function(){
+                    $.ajax({
+                        url: urlBaja,
+                        success: function() {
+                            swal('Baja confirmada', 'El elemento se dio de baja correctamente', 'success');
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            swal('Error de operacion', 'Por favor intente nuevamente', 'error');
+                        }
+                    });
+                });
+            });
         });
     </script>
     {% block more-scripts %}{% endblock %}

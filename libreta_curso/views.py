@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
@@ -39,10 +39,15 @@ class AltaCurso(LoginRequiredMixin, CreateView):
     redirect_field_name = 'next'
 
 
+def baja_curso(request, pk):
+    curso = Curso.objects.get(pk=pk)
+    curso.delete()
+    return HttpResponse()
+
+
 class BajaCurso(LoginRequiredMixin, DeleteView):
     model = Curso
     template_name = 'curso/curso_confirm_delete.html'
-    success_url = reverse_lazy('cursos:lista_cursos')
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
