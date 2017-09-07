@@ -8,6 +8,7 @@ from .models import *
 admin.site.register(Analisis)
 admin.site.register(Porcino)
 admin.site.register(ControlAntirrabico)
+admin.site.register(Visita)
 admin.site.register(Esterilizacion)
 admin.site.register(RetiroEntregaAnimal)
 admin.site.register(Patente)

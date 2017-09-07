@@ -1,0 +1,11 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Visitas{% endblock %}
+
+{% block header-title %}Baja de Visita{% endblock %}
+
+{% block url-volver %}{% url 'controles:lista_controles' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'controles:lista_controles' %}" class="btn btn-sm btn-primary">Cancelar</a>{% endblock %}

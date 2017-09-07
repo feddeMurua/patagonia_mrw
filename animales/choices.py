@@ -32,3 +32,9 @@ Categoria_Mascota = (
     ('CANINA', _("CANINA")),
     ('FELINA', _("FELINA"))
 )
+
+Tramites = (
+    ('ENTREGA', _("ENTREGA")),
+    ('ADOPCION', _("ADOPCION")),
+    ('RETIRO', _("RETIRO"))
+)

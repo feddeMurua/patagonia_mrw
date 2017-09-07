@@ -1,0 +1,96 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Patentes{% endblock %}
+
+{% block header-title %}Detalle de Patente{% endblock %}
+
+{% block url-volver %}{% url 'patentes:lista_patentes' %}{% endblock %}
+
+{% block detail %}
+    <div class="panel panel-heading">Fecha de emision: {{ object.fecha }}</div>
+    <div class="panel panel-default col-md-6">
+        <div class="panel-heading">Datos de la persona</div>
+        <div class="panel-body">
+            <table class="table table-information">
+                <tbody>
+                    <tr>
+                        <td>Apellido:</td>
+                        <td>{{ object.persona.apellido }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nombre:</td>
+                        <td>{{ object.persona.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td>DNI:</td>
+                        <td>{{ object.persona.dni }}</td>
+                    </tr>
+                    <tr>
+                        <td>Domicilio:</td>
+                        <td>{{ object.persona.domicilio }}</td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono:</td>
+                        <td>{{ object.persona.telefono }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default col-md-6">
+        <div class="panel-heading">Datos del animal</div>
+        <div class="panel-body">
+            <table class="table table-information">
+                <tbody>
+                    <tr>
+                        <td>Nombre:</td>
+                        <td>{{ object.mascota.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pelaje:</td>
+                        <td>{{ object.mascota.pelaje }}</td>
+                    </tr>
+                    <tr>
+                        <td>Raza:</td>
+                        <td>{{ object.mascota.raza }}</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha Nacimiento:</td>
+                        <td>{{ object.mascota.fecha_nacimiento }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sexo:</td>
+                        <td>{{ object.mascota.sexo }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-information">
+                <tbody>
+                    <tr>
+                        <td>Ultima entrega de Garrapaticida</td>
+                        <td>{{ object.fecha_garrapaticida }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ultima entrega de Antiparasitario</td>
+                        <td>{{ object.fecha_antiparasitario }}</td>
+                    </tr>
+                    <tr>
+                        <td>Observaciones:</td>
+                        <td>{{ object.observaciones }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'patentes:lista_patentes' %}" class="btn btn-primary">Regresar</a>
+{% endblock %}

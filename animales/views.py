@@ -2,10 +2,11 @@
 from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from easy_pdf.views import PDFTemplateView
 from django.shortcuts import render, redirect
 from datetime import datetime
+from django.http import HttpResponseRedirect, HttpResponse
 from .forms import *
 from .filters import *
 from .models import *
@@ -16,6 +17,15 @@ from django.views.generic.edit import (
     CreateView,
     UpdateView,
     DeleteView)
+
+
+@login_required(login_url='login')
+def get_mascotas(request, pk_interesado):
+    patentes = Patente.objects.filter(persona__pk=pk_interesado)
+    mascotas = []
+    for patente in patentes:
+        mascotas.append({'text': patente.mascota.nombre, 'value': patente.mascota.nombre})
+    return HttpResponse(mascotas)
 
 
 '''
@@ -196,17 +206,6 @@ class PdfConsentimiento(PDFTemplateView):
             title="Consentimiento de Esterilizacion"
         )
 
-'''
-@login_required(login_url='login')
-def get_mascotas(pk_interesado):
-    patentes = Patente.objects.filter(interesado__pk=pk_interesado)
-    mascotas = []
-    for patente in patentes:
-        if patente.mascota.categoria_mascota == 'CANINA' or patente.mascota.categoria_mascota == 'FELINA':
-            mascotas.append({'text': patente.mascota, 'value': patente.mascota})
-    return mascotas
-'''
-
 
 class AltaEsterilizacion(LoginRequiredMixin, CreateView):
     model = Esterilizacion
@@ -229,6 +228,29 @@ def lista_patente(request):
     return render(request, 'patente/patente_list.html', {'filter': filtro_patentes})
 
 
+def retiro_garrapaticida(request, pk):
+    patente = Patente.objects.get(pk=pk)
+    dias_ultimo_retiro = (now().date() - patente.fecha_garrapaticida).days
+    if dias_ultimo_retiro <= 7:
+        return HttpResponse("Aun no han pasado 7 dias desde el último retiro")
+    else:
+        patente.fecha_garrapaticida = datetime.now()
+        patente.save()
+        return HttpResponse("Retiro confirmado")
+
+
+def retiro_antiparasitario(request, pk):
+    patente = Patente.objects.get(pk=pk)
+    meses_ultimo_retiro = ((now().date() - patente.fecha_antiparasitario).days / 30)
+    print (meses_ultimo_retiro)
+    if meses_ultimo_retiro <= 6:
+        return HttpResponse("Aun no han pasado 6 meses desde el último retiro")
+    else:
+        patente.fecha_antiparasitario = datetime.now()
+        patente.save()
+        return HttpResponse("Retiro confirmado")
+
+
 def alta_patente(request):
     if request.method == 'POST':
         patente_form = PatenteForm(request.POST)
@@ -245,6 +267,9 @@ def alta_patente(request):
         mascota_form = MascotaForm
         return render(request, "patente/patente_form.html", {'patente_form': patente_form,
                                                              'mascota_form': mascota_form})
+
+
+
 
 
 class PdfCarnet(PDFTemplateView):
@@ -276,6 +301,14 @@ class ModificacionPatente(LoginRequiredMixin, UpdateView):
     redirect_field_name = 'next'
 
 
+class DetallePatente(LoginRequiredMixin, DetailView):
+    model = Patente
+    template_name = 'patente/patente_detail.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+
 '''
 CONTROL ANTIRRABICO
 '''
@@ -300,11 +333,76 @@ def alta_control(request):
                 control_antirrabico.save()
                 return redirect('controles:lista_controles')
             else:
-                #ACA SE TIENE QUE VERIFICAR SI LAS PERSONAS SON IGUALES
+                # ACA SE TIENE QUE VERIFICAR SI LAS PERSONAS SON IGUALES
                 return redirect('controles:nuevo_control')
     else:
         form = ControlAntirrabicoForm()
         return render(request, 'control/control_form.html', {"form": form})
+
+
+class PdfInfraccion(PDFTemplateView):
+    template_name = 'control/infraccion_pdf.html'
+
+    def get_context_data(self, pk_control):
+        control = ControlAntirrabico.objects.get(pk=pk_control)
+        return super(PdfInfraccion, self).get_context_data(
+            pagesize="A4",
+            control=control,
+            title="Acta de Infraccion"
+        )
+
+
+
+@login_required(login_url='login')
+def lista_visitas_control(request, pk_control):
+    lista_visitas = Visita.objects.filter(control__pk=pk_control)
+    filtro_visitas = VisitaListFilter(request.GET, queryset=lista_visitas)
+    control = ControlAntirrabico.objects.get(pk=pk_control)
+    dias_suceso = (now().date() - control.fecha_suceso).days
+    ultima_visita = lista_visitas.last()
+    apto_visita = True
+    if dias_suceso > 10 or (ultima_visita and ultima_visita.fecha_visita == now().date()):
+          apto_visita = False
+    return render(request, 'control/visita_list.html', {'pk_control': pk_control, 'filter': filtro_visitas,
+                                                        'apto_visita': apto_visita})
+
+
+def alta_visita(request, pk_control):
+    if request.method == 'POST':
+        visita_form = VisitaForm(request.POST)
+        if visita_form.is_valid():
+            visita = visita_form.save(commit=False)
+            visita.control = ControlAntirrabico.objects.get(pk=pk_control)
+            visita.save()
+            return HttpResponseRedirect(reverse('controles:lista_visitas', args=pk_control))
+    else:
+        form = VisitaForm
+        return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
+
+
+class BajaVisita(LoginRequiredMixin, DeleteView):
+    model = Visita
+    template_name = 'control/visita_confirm_delete.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_success_url(self):
+        if 'pk_control' in self.kwargs:
+            pk_control = self.kwargs['pk_control']
+        return reverse('controles:lista_visitas', kwargs={'pk_control': pk_control})
+
+
+class ModificacionVisita(LoginRequiredMixin, UpdateView):
+    model = Visita
+    template_name = 'control/visita_form.html'
+    fields = ['observaciones']
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_success_url(self):
+        if 'pk_control' in self.kwargs:
+            pk_control = self.kwargs['pk_control']
+        return reverse('controles:lista_visitas', kwargs={'pk_control': pk_control})
 
 
 '''
@@ -319,18 +417,22 @@ def lista_retiro_entrega(request):
     return render(request, 'retiroEntrega/retiroEntrega_list.html', {'filter': filtro_retiro_entrega})
 
 
-class AltaRetiroEntrega(LoginRequiredMixin, CreateView):
-    model = RetiroEntregaAnimal
-    template_name = 'retiroEntrega/retiroEntrega_form.html'
-    success_url = reverse_lazy('retiros_entregas:lista_retiro_entrega')
-    form_class = RetiroEntregaForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def alta_retiro_etrega(request):
+    if request.method == 'POST':
+        pass
+    else:
+        tramite_form = TramiteForm
+        mascota_patente_form = MascotaPatentadaForm
+        mascota_form = MascotaForm
+        patente_form = PatenteForm
+        return render(request, 'retiroEntrega/retiroEntrega_form.html', {'tramite_form': tramite_form,
+                                                                         'mascota_form': mascota_form,
+                                                                         'patente_form': patente_form,
+                                                                         'mascota_patente_form': mascota_patente_form})
 
 
 '''
 MASCOTAS
-
 
 
 class DetalleMascota(LoginRequiredMixin, DetailView):

@@ -126,13 +126,6 @@ INSCRIPCIONES
 '''
 
 
-class DetalleInscripcion(LoginRequiredMixin, DetailView):
-    model = Inscripcion
-    template_name = 'inscripcion/inscripcion_detail.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
 @login_required(login_url='login')
 def lista_inscripciones_curso(request, id_curso):
     lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)

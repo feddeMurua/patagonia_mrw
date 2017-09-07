@@ -43,6 +43,14 @@ class ControlListFilter(django_filters.FilterSet):
         order_by = ['fecha_suceso']
 
 
+class VisitaListFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Visita
+        fields = ['fecha_visita']
+        order_by = ['fecha_visita']
+
+
 class RetiroEntregaListFilter(django_filters.FilterSet):
 
     class Meta:

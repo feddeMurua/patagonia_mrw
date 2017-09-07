@@ -36,7 +36,16 @@ class ControlAntirrabico(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):
-        return "%s " % self.fecha_suceso
+        return "%s - %s" % (self.fecha_suceso, self.mordido)
+
+
+class Visita(models.Model):
+    fecha_visita = models.DateField(default=now)
+    control = models.ForeignKey('ControlAntirrabico')
+    observaciones = models.TextField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return "%s" % self.fecha_visita
 
 
 class DisposicionCriaderoCerdos(models.Model):
@@ -86,11 +95,10 @@ class Turno(models.Model):
 
 
 class RetiroEntregaAnimal(models.Model):
-    observaciones = models.TextField(max_length=200, default='', blank=True)
-    baja = models.BooleanField(default=False) #si es por sacrificio
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-    mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
-    # baja logica, se hace sobre la mascota
+    mascota = models.ForeignKey('Mascota')
+    tramite = models.CharField(max_length=10, choices=Tramites)
+    observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):
         return "%s" % self.interesado
@@ -113,14 +121,9 @@ class Patente(models.Model):
     fecha = models.DateField(default=now)
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)
+    fecha_garrapaticida = models.DateField(null=True)
+    fecha_antiparasitario = models.DateField(null=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):
         return "%s %s" % (self.fecha, self.persona)
-
-
-class Beneficio(models.Model):
-    patente = models.ForeignKey('Patente', on_delete=models.CASCADE)
-    fecha_antiparasitario = models.DateField()
-    fecha_garrapaticida = models.DateField()
-    observaciones = models.TextField(max_length=200, default='', blank=True)

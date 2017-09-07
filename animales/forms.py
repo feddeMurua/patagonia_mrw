@@ -81,8 +81,22 @@ class ControlAntirrabicoForm(forms.ModelForm):
         fields = ['mordido', 'responsable', 'observaciones']
 
 
-class RetiroEntregaForm(forms.ModelForm):
+class VisitaForm(forms.ModelForm):
+
+    class Meta:
+        model = Visita
+        fields = ['observaciones']
+
+
+class TramiteForm(forms.ModelForm):
 
     class Meta:
         model = RetiroEntregaAnimal
-        fields = ['interesado', 'mascota', 'observaciones']
+        fields = ['interesado', 'tramite', 'observaciones']
+
+
+class MascotaPatentadaForm(forms.ModelForm):
+
+    class Meta:
+        model = RetiroEntregaAnimal
+        fields = ['mascota']

@@ -21,8 +21,8 @@
         <tr>
             <th>Fecha</th>
             <th>Persona</th>
-            <th>Mascota</th>                        
-            <th>Observaciones</th>            
+            <th>Mascota</th>
+            <th>Retiro de Beneficios</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
         </thead>
@@ -32,9 +32,13 @@
                 <td>{{ patente.fecha }}</td>
                 <td>{{ patente.persona }}</td>
                 <td>{{ patente.mascota }}</td>
-                <td>{{ patente.observaciones }}</td>
                 <td align="center">
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir Carnet" href="{% url 'patentes:carnet_pdf' patente.pk %}"><em class="glyphicon glyphicon-print"></em></a>
+                    <a class="btn btn-info btn-beneficio garrapaticida" data-url="{% url 'patentes:retiro_garrapaticida' patente.pk %}">Garrapaticida</a>
+                    <a class="btn btn-info btn-beneficio antiparasitario" data-url="{% url 'patentes:retiro_antiparasitario' patente.pk %}">Antiparasitario</a>
+                </td>
+                <td align="center">
+                    <a class="btn btn-success" data-toggle="tooltip" title="Imprimir Carnet" href="{% url 'patentes:carnet_pdf' patente.pk %}"><em class="glyphicon glyphicon-print"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Detalles" href="{% url 'patentes:detalle_patente' patente.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'patentes:modificar_patente' patente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                     <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'patentes:borrar_patente' patente.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
@@ -42,4 +46,33 @@
         {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        $(document).ready(function(){
+            $('.btn-beneficio').click(function confirmarRetiro(e) {
+                var urlBeneficio = $(e.target).data('url');
+                swal({
+                    title: "¿Esta seguro?",
+                    text: "¿Desea confirmar el retiro de este beneficio?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Confirmar",
+                    cancelButtonText: "Cancelar"
+                }).then(function(){
+                    $.ajax({
+                        url: urlBeneficio,
+                        success: function(msg) {
+                            swal(msg);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            swal("Error de operacion", "Por favor intente nuevamente");
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 {% endblock %}

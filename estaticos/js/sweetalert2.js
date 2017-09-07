@@ -1,5 +1,5 @@
 /*!
- * sweetalert2 v6.6.6
+ * sweetalert2 v6.6.10
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -116,6 +116,12 @@ var states = {
    * Add modal + overlay to DOM
    */
 };var init = function init(params) {
+  // Clean up the old modal if it exists
+  var c = getContainer();
+  if (c) {
+    c.parentNode.removeChild(c);
+  }
+
   if (typeof document === 'undefined') {
     console.error('SweetAlert2 requires document to initialize');
     return;
@@ -125,11 +131,7 @@ var states = {
   container.className = swalClasses.container;
   container.innerHTML = sweetHTML;
 
-  var targetElement = document.querySelector(params.target);
-  if (!targetElement) {
-    console.warn('SweetAlert2: Can\'t find the target "' + params.target + '"');
-    targetElement = document.body;
-  }
+  var targetElement = typeof params.target === 'string' ? document.querySelector(params.target) : params.target;
   targetElement.appendChild(container);
 
   var modal = getModal();
@@ -247,8 +249,23 @@ var getFocusableElements = function getFocusableElements(focusCancel) {
   if (focusCancel) {
     buttons.reverse();
   }
-  var focusableElements = buttons.concat(Array.prototype.slice.call(getModal().querySelectorAll('button, input:not([type=hidden]), textarea, select, a, *[tabindex]:not([tabindex="-1"])')));
-  return uniqueArray(focusableElements);
+
+  var focusableElementsWithTabindex = Array.from(getModal().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])'))
+  // sort according to tabindex
+  .sort(function (a, b) {
+    a = parseInt(a.getAttribute('tabindex'));
+    b = parseInt(b.getAttribute('tabindex'));
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    }
+    return 0;
+  });
+
+  var otherFocusableElements = Array.prototype.slice.call(getModal().querySelectorAll('button, input:not([type=hidden]), textarea, select, a, [tabindex="0"]'));
+
+  return uniqueArray(buttons.concat(focusableElementsWithTabindex, otherFocusableElements));
 };
 
 var hasClass = function hasClass(elem, className) {
@@ -467,10 +484,24 @@ var swal2Observer = void 0;
  * Set type, text and actions on modal
  */
 var setParameters = function setParameters(params) {
-  var modal = getModal() || init(params);
+  // If a custom element is set, determine if it is valid
+  if (typeof params.target === 'string' && !document.querySelector(params.target) || typeof params.target !== 'string' && !params.target.appendChild) {
+    console.warn('SweetAlert2: Target parameter is not valid, defaulting to "body"');
+    params.target = 'body';
+  }
+
+  var modal = void 0;
+  var oldModal = getModal();
+  var targetElement = typeof params.target === 'string' ? document.querySelector(params.target) : params.target;
+  // If the model target has changed, refresh the modal
+  if (oldModal && targetElement && oldModal.parentNode !== targetElement.parentNode) {
+    modal = init(params);
+  } else {
+    modal = oldModal || init(params);
+  }
 
   for (var param in params) {
-    if (!defaultParams.hasOwnProperty(param) && param !== 'extraParams') {
+    if (!sweetAlert.isValidParameter(param)) {
       console.warn('SweetAlert2: Unknown parameter "' + param + '"');
     }
   }
@@ -679,6 +710,11 @@ var setParameters = function setParameters(params) {
     removeClass(modal, swalClasses.noanimation);
   } else {
     addClass(modal, swalClasses.noanimation);
+  }
+
+  // showLoaderOnConfirm && preConfirm
+  if (params.showLoaderOnConfirm && !params.preConfirm) {
+    console.warn('SweetAlert2: showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'https://limonte.github.io/sweetalert2/#ajax-request');
   }
 };
 
@@ -1442,7 +1478,7 @@ var sweetAlert = function sweetAlert() {
 
     openModal(params.animation, params.onOpen);
 
-    // Focus the first element (input or button)
+    // Focus the first focusable element
     if (params.allowEnterKey) {
       setFocus(-1, 1);
     } else {
@@ -1604,16 +1640,24 @@ sweetAlert.showLoading = sweetAlert.enableLoading = function () {
 };
 
 /**
- * Set default params for each popup
- * @param {Object} userParams
+ * Is valid parameter
+ * @param {String} paramName
  */
+sweetAlert.isValidParameter = function (paramName) {
+  return defaultParams.hasOwnProperty(paramName) || paramName === 'extraParams';
+};
+
+/**
+* Set default params for each popup
+* @param {Object} userParams
+*/
 sweetAlert.setDefaults = function (userParams) {
   if (!userParams || (typeof userParams === 'undefined' ? 'undefined' : _typeof(userParams)) !== 'object') {
     return console.error('SweetAlert2: the argument for setDefaults() is required and has to be a object');
   }
 
   for (var param in userParams) {
-    if (!defaultParams.hasOwnProperty(param) && param !== 'extraParams') {
+    if (!sweetAlert.isValidParameter(param)) {
       console.warn('SweetAlert2: Unknown parameter "' + param + '"');
       delete userParams[param];
     }
@@ -1631,7 +1675,7 @@ sweetAlert.resetDefaults = function () {
 
 sweetAlert.noop = function () {};
 
-sweetAlert.version = '6.6.6';
+sweetAlert.version = '6.6.10';
 
 sweetAlert.default = sweetAlert;
 
