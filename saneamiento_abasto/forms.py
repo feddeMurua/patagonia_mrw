@@ -2,10 +2,10 @@
 from __future__ import unicode_literals
 from django import forms
 from functools import partial
-import re
 from .models import *
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
+TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 class AbastecedorForm(forms.ModelForm):
 
@@ -16,7 +16,7 @@ class AbastecedorForm(forms.ModelForm):
 
 class ReinspeccionForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
-
+    turno = forms.TimeField(widget=TimeInput())
     class Meta:
         model = Reinspeccion
         fields = ['fecha', 'primer_inspector', 'segundo_inspector',

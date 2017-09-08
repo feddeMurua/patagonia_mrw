@@ -41,12 +41,35 @@
                 <td>{{ reinspeccion.num_certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
                 <td align="center">
-                  <a class="btn btn-warning" data-toggle="tooltip" title="Agregar Item" href="#"><em class="glyphicon glyphicon-edit"></em></a>
+                  <a class="btn btn-warning" data-toggle="modal" data-target="#myModal" title="Agregar Item" href="#"><em class="glyphicon glyphicon-edit"></em></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <form class="well contact-form" method="post" action="#">
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Agregar Producto</h4>
+            </div>
+            <div class="modal-body">
+              <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
 {% endblock %}
 
 {% block more-scripts %}

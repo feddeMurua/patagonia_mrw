@@ -35,7 +35,7 @@ class Reinspeccion(models.Model):
     fecha = models.DateField()
     primer_inspector = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE, related_name="inspector_1")
     segundo_inspector = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE, related_name="inspector_2", null=True, blank=True)
-    turno = models.DateTimeField()
+    turno = models.TimeField()
     precintado = models.IntegerField()
     num_certificado = models.BigIntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
