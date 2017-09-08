@@ -33,8 +33,8 @@
                 <td>{{ patente.persona }}</td>
                 <td>{{ patente.mascota }}</td>
                 <td align="center">
-                    <a class="btn btn-info btn-beneficio garrapaticida" data-url="{% url 'patentes:retiro_garrapaticida' patente.pk %}">Garrapaticida</a>
-                    <a class="btn btn-info btn-beneficio antiparasitario" data-url="{% url 'patentes:retiro_antiparasitario' patente.pk %}">Antiparasitario</a>
+                    <a class="btn btn-info btn-beneficio" data-url="{% url 'patentes:retiro_garrapaticida' patente.pk %}">Garrapaticida</a>
+                    <a class="btn btn-info btn-beneficio" data-url="{% url 'patentes:retiro_antiparasitario' patente.pk %}">Antiparasitario</a>
                 </td>
                 <td align="center">
                     <a class="btn btn-success" data-toggle="tooltip" title="Imprimir Carnet" href="{% url 'patentes:carnet_pdf' patente.pk %}"><em class="glyphicon glyphicon-print"></em></a>
@@ -65,10 +65,10 @@
                     $.ajax({
                         url: urlBeneficio,
                         success: function(msg) {
-                            swal(msg);
+                            swal('Finalizado', msg, 'success');
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
-                            swal("Error de operacion", "Por favor intente nuevamente");
+                            swal("Error de operacion", "Por favor intente nuevamente", "error");
                         }
                     });
                 });

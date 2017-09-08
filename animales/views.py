@@ -230,25 +230,22 @@ def lista_patente(request):
 
 def retiro_garrapaticida(request, pk):
     patente = Patente.objects.get(pk=pk)
-    dias_ultimo_retiro = (now().date() - patente.fecha_garrapaticida).days
-    if dias_ultimo_retiro <= 7:
+    if patente.fecha_garrapaticida and (now().date() - patente.fecha_garrapaticida).days <= 7:
         return HttpResponse("Aun no han pasado 7 dias desde el último retiro")
     else:
         patente.fecha_garrapaticida = datetime.now()
         patente.save()
-        return HttpResponse("Retiro confirmado")
+        return HttpResponse("El retiro de garrapaticida se registro correctamente")
 
 
 def retiro_antiparasitario(request, pk):
     patente = Patente.objects.get(pk=pk)
-    meses_ultimo_retiro = ((now().date() - patente.fecha_antiparasitario).days / 30)
-    print (meses_ultimo_retiro)
-    if meses_ultimo_retiro <= 6:
+    if patente.fecha_antiparasitario and ((now().date() - patente.fecha_antiparasitario).days / 30) <= 6:
         return HttpResponse("Aun no han pasado 6 meses desde el último retiro")
     else:
         patente.fecha_antiparasitario = datetime.now()
         patente.save()
-        return HttpResponse("Retiro confirmado")
+        return HttpResponse("El retiro de antiparasitario se registro correctamente")
 
 
 def alta_patente(request):
@@ -267,9 +264,6 @@ def alta_patente(request):
         mascota_form = MascotaForm
         return render(request, "patente/patente_form.html", {'patente_form': patente_form,
                                                              'mascota_form': mascota_form})
-
-
-
 
 
 class PdfCarnet(PDFTemplateView):
