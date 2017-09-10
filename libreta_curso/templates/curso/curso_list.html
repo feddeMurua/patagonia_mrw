@@ -38,7 +38,7 @@
                     <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="{% url 'cursos:inscripciones_curso' curso.pk %}"><em class="glyphicon glyphicon-user"></em></a>
                     {% if not curso.finalizado and fecha_hoy >= curso.fecha_inicio %}
                         <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="{% url 'cursos:cierre_curso' curso.pk %}"><em class="glyphicon glyphicon-education"></em></a>
-                    {% endif %}                    
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

@@ -68,3 +68,63 @@ class AltaReinspeccion(LoginRequiredMixin, CreateView):
     form_class = ReinspeccionForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
+
+
+'''
+TSA
+'''
+
+@login_required(login_url='login')
+def lista_tsa(request):
+    lista_tsa = Tsa.objects.all()
+    filtro_tsa = TsaListFilter(request.GET, queryset=lista_tsa)
+    return render(request, 'tsa/tsa_list.html', {'filter': filtro_tsa})
+
+
+class AltaTsa(LoginRequiredMixin, CreateView):
+    model = Tsa
+    template_name = 'tsa/tsa_form.html'
+    success_url = reverse_lazy('tsa:lista_tsa')
+    form_class = TsaForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+'''
+TPP
+'''
+
+@login_required(login_url='login')
+def lista_tpp(request):
+    lista_tpp = Tpp.objects.all()
+    filtro_tpp = TppListFilter(request.GET, queryset=lista_tpp) #Tener en cuenta que en filter = TSA porque son iguales los modelos.
+    return render(request, 'tpp/tpp_list.html', {'filter': filtro_tpp})
+
+
+class AltaTpp(LoginRequiredMixin, CreateView):
+    model = Tpp
+    template_name = 'tpp/tpp_form.html'
+    success_url = reverse_lazy('tpp:lista_tpp')
+    form_class = TppForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+'''
+DESINFECCIONES
+'''
+
+@login_required(login_url='login')
+def lista_desinfecciones(request):
+    lista_desinfecciones = Desinfeccion.objects.all()
+    filtro_desinfeccion = DesinfeccionListFilter(request.GET, queryset=lista_desinfecciones) #Tener en cuenta que en filter = TSA.
+    return render(request, 'desinfeccion/desinfeccion_list.html', {'filter': filtro_desinfeccion})
+
+
+class AltaDesinfeccion(LoginRequiredMixin, CreateView):
+    model = Desinfeccion
+    template_name = 'desinfeccion/desinfeccion_form.html'
+    success_url = reverse_lazy('desinfecciones:lista_desinfecciones')
+    form_class = DesinfeccionForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'

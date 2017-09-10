@@ -1,0 +1,14 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}Desinfecciones{% endblock %}
+
+{% block header-title %}Alta/Modificacion de Desinfeccion{% endblock %}
+
+{% block url-volver %}{% url 'desinfecciones:lista_desinfecciones' %}{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'desinfecciones:lista_desinfecciones' %}">Cancelar</a>
+{% endblock %}

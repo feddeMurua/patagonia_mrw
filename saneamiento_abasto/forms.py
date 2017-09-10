@@ -11,7 +11,7 @@ class AbastecedorForm(forms.ModelForm):
 
     class Meta:
         model = Abastecedor
-        fields = ['persona', 'empresa_y_o_transporte', 'rubro']
+        fields = ['persona', 'empresa', 'tsa']
 
 
 class ReinspeccionForm(forms.ModelForm):
@@ -21,3 +21,24 @@ class ReinspeccionForm(forms.ModelForm):
         model = Reinspeccion
         fields = ['fecha', 'primer_inspector', 'segundo_inspector',
         'segundo_inspector', 'turno','precintado','num_certificado','abastecedor']
+
+
+class TsaForm(forms.ModelForm):
+
+    class Meta:
+        model = Tsa
+        fields = ['persona', 'vehiculo']
+
+
+class TppForm(forms.ModelForm):
+
+    class Meta:
+        model = Tpp
+        fields = ['persona', 'vehiculo']
+
+
+class DesinfeccionForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DateInput())
+    class Meta:
+        model = Desinfeccion
+        fields = ['fecha','quincena', 'transporte']

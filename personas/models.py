@@ -55,7 +55,6 @@ class PersonaGenerica(models.Model):
     domicilio = models.ForeignKey('domicilio')
     telefono = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, blank=True)
-    rubro = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return "%s" % self.nombre
@@ -63,6 +62,7 @@ class PersonaGenerica(models.Model):
 
 class PersonaJuridica(PersonaGenerica):
     cuit = models.CharField(unique=True, max_length=20)
+    rubro = models.CharField(max_length=50)
 
     def __str__(self):
         datos = " - %s" % self.cuit
@@ -76,6 +76,7 @@ class PersonaFisica(PersonaGenerica):
     nacionalidad = models.ForeignKey('Nacionalidad', on_delete=models.CASCADE)
     obra_social = models.CharField(max_length=50, blank=True)
     documentacion_retirada = models.BooleanField(default=False)
+    rubro = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         datos = " %s - %s" % (self.apellido, self.dni)
