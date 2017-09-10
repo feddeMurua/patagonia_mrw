@@ -11,7 +11,7 @@ class AbastecedorForm(forms.ModelForm):
 
     class Meta:
         model = Abastecedor
-        fields = ['persona', 'empresa', 'tsa']
+        fields = ['persona', 'empresa']
 
 
 class ReinspeccionForm(forms.ModelForm):
@@ -27,14 +27,14 @@ class TsaForm(forms.ModelForm):
 
     class Meta:
         model = Tsa
-        fields = ['persona', 'vehiculo']
+        fields = ['vehiculo','persona', 'abastecedor']
 
 
 class TppForm(forms.ModelForm):
 
     class Meta:
         model = Tpp
-        fields = ['persona', 'vehiculo']
+        fields = ['vehiculo','persona']
 
 
 class DesinfeccionForm(forms.ModelForm):

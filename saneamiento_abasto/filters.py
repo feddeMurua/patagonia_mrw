@@ -13,8 +13,8 @@ class AbastecedorListFilter(django_filters.FilterSet):
 class ReinspeccionListFilter(django_filters.FilterSet):
     class Meta:
         model = Reinspeccion
-        fields = ['abastecedor']
-        order_by = ['abastecedor']
+        fields = ['fecha']
+        order_by = ['fecha']
 
 
 class TsaListFilter(django_filters.FilterSet):

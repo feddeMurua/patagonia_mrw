@@ -1,0 +1,11 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Abastecedores{% endblock %}
+
+{% block header-title %}Baja de Abastecedor{% endblock %}
+
+{% block url-volver %}{% url 'abastecedores:lista_abastecedores' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'abastecedores:lista_abastecedores' %}" class="btn btn-sm btn-primary">Cancelar</a>{% endblock %}

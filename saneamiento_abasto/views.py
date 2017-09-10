@@ -69,6 +69,22 @@ class AltaReinspeccion(LoginRequiredMixin, CreateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
+class BajaReinspeccion(LoginRequiredMixin, DeleteView):
+    model = Reinspeccion
+    template_name = 'reinspeccion/reinspeccion_confirm_delete.html'
+    success_url = reverse_lazy('reinspecciones:lista_reinspecciones')
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class ModificacionReinspeccion(LoginRequiredMixin, UpdateView):
+    model = Reinspeccion
+    template_name = 'reinspeccion/reinspeccion_form.html'
+    success_url = reverse_lazy('reinspecciones:lista_reinspecciones')
+    form_class = ReinspeccionForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
 
 '''
 TSA
@@ -90,9 +106,27 @@ class AltaTsa(LoginRequiredMixin, CreateView):
     redirect_field_name = 'next'
 
 
+class BajaTsa(LoginRequiredMixin, DeleteView):
+    model = Tsa
+    template_name = 'tsa/tsa_confirm_delete.html'
+    success_url = reverse_lazy('tsa:lista_tsa')
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class ModificacionTsa(LoginRequiredMixin, UpdateView):
+    model = Tsa
+    template_name = 'tsa/tsa_form.html'
+    success_url = reverse_lazy('tsa:lista_tsa')
+    form_class = TsaForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
 '''
 TPP
 '''
+
 
 @login_required(login_url='login')
 def lista_tpp(request):
@@ -102,6 +136,23 @@ def lista_tpp(request):
 
 
 class AltaTpp(LoginRequiredMixin, CreateView):
+    model = Tpp
+    template_name = 'tpp/tpp_form.html'
+    success_url = reverse_lazy('tpp:lista_tpp')
+    form_class = TppForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class BajaTpp(LoginRequiredMixin, DeleteView):
+    model = Tpp
+    template_name = 'tpp/tpp_confirm_delete.html'
+    success_url = reverse_lazy('tpp:lista_tpp')
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class ModificacionTpp(LoginRequiredMixin, UpdateView):
     model = Tpp
     template_name = 'tpp/tpp_form.html'
     success_url = reverse_lazy('tpp:lista_tpp')
@@ -122,6 +173,23 @@ def lista_desinfecciones(request):
 
 
 class AltaDesinfeccion(LoginRequiredMixin, CreateView):
+    model = Desinfeccion
+    template_name = 'desinfeccion/desinfeccion_form.html'
+    success_url = reverse_lazy('desinfecciones:lista_desinfecciones')
+    form_class = DesinfeccionForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class BajaDesinfeccion(LoginRequiredMixin, DeleteView):
+    model = Desinfeccion
+    template_name = 'desinfeccion/desinfeccion_confirm_delete.html'
+    success_url = reverse_lazy('desinfecciones:lista_desinfecciones')
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class ModificacionDesinfeccion(LoginRequiredMixin, UpdateView):
     model = Desinfeccion
     template_name = 'desinfeccion/desinfeccion_form.html'
     success_url = reverse_lazy('desinfecciones:lista_desinfecciones')

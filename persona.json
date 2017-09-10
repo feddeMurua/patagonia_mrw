@@ -257,6 +257,24 @@
   }
 },
 {
+  "model": "personas.personagenerica",
+  "pk": 2,
+  "fields": {
+    "nombre": "MI empresa",
+    "domicilio": 1,
+    "telefono": "2222-222222",
+    "email": ""
+  }
+},
+{
+  "model": "personas.personajuridica",
+  "pk": 2,
+  "fields": {
+    "cuit": "309292919920",
+    "rubro": "un rubro"
+  }
+},
+{
   "model": "personas.personafisica",
   "pk": 1,
   "fields": {

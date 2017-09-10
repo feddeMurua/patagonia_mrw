@@ -8,11 +8,10 @@ from .choices import *
 class Abastecedor(models.Model):
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
     empresa = models.ForeignKey(m.PersonaJuridica, on_delete=models.CASCADE, null=True, blank=True)
-    tsa = models.OneToOneField('Tsa', on_delete=models.CASCADE, null=True, blank=True)
-    #PREGUNTA: UN TSA PUEDE ESTAR EN MULTIPLES ABASTACEDORES? NO! solo importa un solo lado. (abastecedores-> muchos tsa)
+
 
     def __str__(self):
-        return "%s -%s -%s" % (self.persona, self.empresa, self.tsa)
+        return "%s -%s" % (self.persona, self.empresa)
 
 
 class ReinspeccionProducto(models.Model):
@@ -64,7 +63,8 @@ class Transporte(models.Model):
 class Tsa (Transporte):
     #TRANSPORTE DE SUSTANCIA ALIMENTICIAS
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE,null=True, blank=True)
-    #Observacion: Controlar desde la visa que exista que un tsa tenga un abastecedor asociado
+    abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE, null=True, blank=True)
+    #PREGUNTA: UN TSA PUEDE ESTAR EN MULTIPLES ABASTACEDORES? NO! solo importa un solo lado. (abastecedores-> muchos tsa)
 
     def __str__(self):
         return "%s " % (self.persona)
@@ -80,7 +80,7 @@ class Tpp(Transporte):
 
 class Desinfeccion(models.Model):
     #todos los meses es obligatoria
-    quincena = models.CharField(max_length=15, choices=Quincenas)
+    quincena = models.CharField(max_length=30, choices=Quincenas)
     transporte = models.ForeignKey('Transporte', on_delete=models.CASCADE)
     fecha = models.DateField()
 
