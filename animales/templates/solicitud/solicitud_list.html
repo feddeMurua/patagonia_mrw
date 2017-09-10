@@ -34,7 +34,7 @@
                 <td>{{ solicitud.domicilio_criadero }}</td>
                 <td>{{ solicitud.estado }}</td>
                 <td align="center">
-                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'solicitud:borrar_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'solicitud:borrar_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'solicitud:detalle_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     {% if not solicitud.estado == 'Aprobada' %}
                         <a class="btn btn-info" data-toggle="tooltip" title="Aplazar" href="{% url 'solicitud:aplazo_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-remove"></em></a>

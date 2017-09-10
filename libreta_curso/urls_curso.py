@@ -8,6 +8,5 @@ urlpatterns = [
     url(r'^editar/(?P<pk>\d+)$', ModificacionCurso.as_view(), name='modificar_curso'),
     url(r'^inscripciones/(?P<id_curso>\d+)$', lista_inscripciones_curso, name='inscripciones_curso'),
     url(r'^cierre/(?P<id_curso>\d+)$', cierre_de_curso, name='cierre_curso'),
-    url(r'^cierre/(?P<id_curso>\d+)/inscripcion/(?P<pk>\d+)$', CierreCursoInscripcion.as_view(), name='cierre_inscripcion_curso'),
 
 ]

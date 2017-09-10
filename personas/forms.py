@@ -8,14 +8,20 @@ from .models import *
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 
-class PersonaForm(forms.ModelForm):
+class AltaPersonaFisicaForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=DateInput())
-    regex = re.compile(r"^[a-zñA-ZÑ]+((\s[a-zñA-ZÑ]+)+)?$")
 
     class Meta:
         model = PersonaFisica
-        fields = ['nombre', 'apellido', 'fecha_nacimiento', 'dni', 'nacionalidad', 'obra_social', 'telefono', 'email',
+        fields = ['nombre', 'apellido', 'fecha_nacimiento', 'dni', 'nacionalidad', 'telefono', 'email', 'obra_social',
                   'rubro']
+
+
+class ModificacionPersonaFisicaForm(forms.ModelForm):
+
+    class Meta:
+        model = PersonaFisica
+        fields = ['telefono', 'email', 'obra_social', 'rubro', 'documentacion_retirada']
 
 
 class DomicilioForm(forms.ModelForm):
@@ -30,6 +36,13 @@ class DomicilioRuralForm(forms.ModelForm):
     class Meta:
         model = DomicilioRural
         fields = ['chacra', 'parcela', 'sector', 'circunscripcion', 'ruta']
+
+
+class LocalidadForm(forms.ModelForm):
+
+    class Meta:
+        model = Localidad
+        fields = ['nombre', 'cp', 'provincia']
 
 
 '''

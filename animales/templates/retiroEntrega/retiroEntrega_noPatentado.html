@@ -3,11 +3,15 @@
 {% load staticfiles bootstrap3 %}
 {% load widget_tweaks %}
 
-{% block title %}Esterilización de Mascotas{% endblock %}
+{% block title %}Retiro/Entrega{% endblock %}
 
-{% block header-title %}Alta de Esterilización{% endblock %}
+{% block more-stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/alta_retiroEntrega.css' %}"/>
+{% endblock %}
 
-{% block url-volver %}{% url 'esterilizacion:lista_esterilizaciones' %}{% endblock %}
+{% block header-title %}Retiro/Entrega de animales{% endblock %}
+
+{% block url-volver %}{% url 'retiros_entregas:lista_retiro_entrega' %}{% endblock %}
 
 {% block content %}
     <div class="container container-form">
@@ -15,13 +19,7 @@
             {% csrf_token %}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="col-xs-12 col-md-5" id="container-form-left">
-                        {% for field in turno_form %}
-                            <div class="form-group">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field|add_class:'form-control' }}
-                            </div>
-                        {% endfor %}
+                    <div class="col-xs-12 col-md-7" id="container-form-left">
                         {% for field in interesado_form %}
                             <div class="form-group">
                                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -29,7 +27,7 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="panel panel-default col-xs-12 col-md-7" id="container-form-right">
+                    <div class="panel panel-default col-xs-12 col-md-5" id="container-form-right">
                         <div class="panel-heading domicilio-title">Datos de la Mascota</div>
                         <div class="panel-body">
                             {% for field in mascota_form %}
@@ -43,7 +41,7 @@
                 </div>
                 <div class="panel-footer">
                     <input type="submit" class="btn btn-primary" value="Aceptar">
-                    <a class="btn btn-danger btn-cancelar" href="{% url 'esterilizacion:lista_esterilizaciones' %}">Cancelar</a>
+                    <a class="btn btn-danger btn-cancelar" href="{% url 'retiros_entregas:lista_retiro_entrega' %}">Cancelar</a>
                 </div>
             </div>
         </form>
@@ -52,15 +50,6 @@
 
 {% block scripts %}
     <script>
-        jQuery('#id_turno').datetimepicker({
-            format:'d/m/Y H:i',
-            step:30,
-            minDate: new Date(),
-            disabledWeekDays:[0,6]
-        });
-
-        $.datetimepicker.setLocale('es');
-
         $.datepicker.setDefaults({
             maxDate: new Date()
         });

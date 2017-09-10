@@ -35,6 +35,5 @@ Categoria_Mascota = (
 
 Tramites = (
     ('ENTREGA', _("ENTREGA")),
-    ('ADOPCION', _("ADOPCION")),
     ('RETIRO', _("RETIRO"))
 )

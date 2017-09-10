@@ -11,3 +11,11 @@
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'cursos:lista_cursos' %}">Cancelar</a>
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        $.datepicker.setDefaults({
+            minDate: new Date()
+        });
+    </script>
+{% endblock %}

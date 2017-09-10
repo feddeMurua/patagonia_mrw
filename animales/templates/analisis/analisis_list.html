@@ -30,7 +30,7 @@
                 <td>{{ analisis.medico_veterinario }}</td>                
                 <td align="center">
                     <a class="btn btn-warning btn-mostrar" data-toggle="tooltip" title="Detalle" href="{% url 'analisis:detalle_analisis' analisis.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>                          
-                    <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'analisis:borrar_analisis' analisis.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'analisis:borrar_analisis' analisis.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>          
         {% endfor %}

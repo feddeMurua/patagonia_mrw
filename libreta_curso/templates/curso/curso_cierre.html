@@ -37,7 +37,7 @@
                         <td></td>
                     {% else %}
                         <td align="center">
-                            <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:cierre_inscripcion_curso' id_curso inscripcion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                            <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'inscripciones:cierre_inscripcion' inscripcion.pk id_curso %}"><em class="glyphicon glyphicon-pencil"></em></a>
                         </td>
                     {% endif %}
                 </tr>

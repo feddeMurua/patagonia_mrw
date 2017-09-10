@@ -13,8 +13,7 @@ from .choices import *
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import (
     CreateView,
-    UpdateView,
-    DeleteView)
+    UpdateView)
 
 
 '''
@@ -39,17 +38,11 @@ class AltaCurso(LoginRequiredMixin, CreateView):
     redirect_field_name = 'next'
 
 
+@login_required(login_url='login')
 def baja_curso(request, pk):
     curso = Curso.objects.get(pk=pk)
     curso.delete()
     return HttpResponse()
-
-
-class BajaCurso(LoginRequiredMixin, DeleteView):
-    model = Curso
-    template_name = 'curso/curso_confirm_delete.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
 
 
 class ModificacionCurso(LoginRequiredMixin, UpdateView):
@@ -108,12 +101,12 @@ class AltaLibreta(LoginRequiredMixin, CreateView):
     redirect_field_name = 'next'
 
 
-class BajaLibreta(LoginRequiredMixin, DeleteView):
-    model = LibretaSanitaria
-    template_name = 'libreta/libreta_confirm_delete.html'
-    success_url = reverse_lazy('libretas:lista_libretas')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+@login_required(login_url='login')
+def baja_libreta(request, pk):
+    libreta = LibretaSanitaria.objects.get(pk=pk)
+    libreta.delete()
+    return HttpResponse()
+
 
 
 class ModificacionLibreta(LoginRequiredMixin, UpdateView):
@@ -157,43 +150,45 @@ def alta_inscripcion(request, id_curso):
         return render(request, "inscripcion/inscripcion_form.html", {'id_curso': id_curso, 'form': form})
 
 
-class BajaInscripcion(LoginRequiredMixin, DeleteView):
-    model = Inscripcion
-    template_name = 'inscripcion/inscripcion_confirm_delete.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_success_url(self):
-        if 'id_curso' in self.kwargs:
-            id_curso = self.kwargs['id_curso']
-        return reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso})
+@login_required(login_url='login')
+def baja_inscripcion(request, pk):
+    inscripcion = Inscripcion.objects.get(pk=pk)
+    inscripcion.delete()
+    return HttpResponse()
 
 
-class ModificacionInscripcion(LoginRequiredMixin, UpdateView):
-    model = Inscripcion
-    template_name = 'inscripcion/inscripcion_form.html'
-    fields = ['observaciones']
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def modificacion_inscripcion(request, pk, id_curso):
+    inscripcion = Inscripcion.objects.get(pk=pk)
+    if request.method == 'POST':
+        observaciones_form = ObservacionesForm(request.POST)
+        if observaciones_form.is_valid():
+            observaciones = observaciones_form.cleaned_data['observaciones']
+            inscripcion.observaciones = observaciones
+            inscripcion.save()
+            return HttpResponseRedirect(reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso}))
+    else:
+        form = ObservacionesForm(initial={'observaciones': inscripcion.observaciones})
+        url_return = 'cursos:inscripciones_curso'
+        return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
+                                                                     'url_return': url_return})
 
-    def get_success_url(self):
-        if 'id_curso' in self.kwargs:
-            id_curso = self.kwargs['id_curso']
-        return reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso})
 
-
-class CierreCursoInscripcion(ModificacionInscripcion):
-    nota_curso = forms.ChoiceField(choices=Calificaciones, label="Calificacion", initial='', widget=forms.Select())
-
-    fields = ['nota_curso', 'porcentaje_asistencia']
-
-    def get_success_url(self):
-        if 'id_curso' in self.kwargs:
-            id_curso = self.kwargs['id_curso']
-            inscripcion = Inscripcion.objects.get(pk=self.kwargs['pk'])
+def cierre_inscripcion(request, pk, id_curso):
+    if request.method == 'POST':
+        inscripcion_form = CierreInscripcionForm(request.POST)
+        if inscripcion_form.is_valid():
+            inscripcion = Inscripcion.objects.get(pk=pk)
+            calificacion = inscripcion_form.save(commit=False)
+            inscripcion.nota_curso = calificacion.nota_curso
+            inscripcion.porcentaje_asistencia = calificacion.porcentaje_asistencia
             inscripcion.modificado = True
             inscripcion.save()
-        return reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso})
+            return HttpResponseRedirect(reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso}))
+    else:
+        form = CierreInscripcionForm
+        url_return = 'cursos:cierre_curso'
+        return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
+                                                                     'url_return': url_return})
 
 
 class PdfInscripcion(PDFTemplateView):

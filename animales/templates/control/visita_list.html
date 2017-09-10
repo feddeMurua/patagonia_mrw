@@ -32,7 +32,7 @@
                 <td>{{ visita.fecha_visita }}</td>
                 <td>{{ visita.observaciones }}</td>
                 <td align="center">
-                    <a class="btn btn-danger" data-toggle="tooltip" title="Eliminar" href="{% url 'controles:borrar_visita' visita.pk pk_control %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'controles:borrar_visita' visita.pk pk_control %}"><em class="glyphicon glyphicon-trash"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar Observacion" href="{% url 'controles:modificar_observacion_visita' visita.pk pk_control %}"><em class="glyphicon glyphicon-pencil"></em></a>
                 </td>
             </tr>

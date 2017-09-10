@@ -96,12 +96,17 @@ class Turno(models.Model):
 
 class RetiroEntregaAnimal(models.Model):
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-    mascota = models.ForeignKey('Mascota')
+    patentado = models.BooleanField(default=False)
+    mascota = models.ForeignKey('Mascota', null=True)
     tramite = models.CharField(max_length=10, choices=Tramites)
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):
         return "%s" % self.interesado
+
+    def to_json(self):
+        if self.tramite:
+            return {'tramite': self.tramite, 'observaciones': self.observaciones, 'patentado': self.patentado}
 
 
 class Mascota(models.Model):

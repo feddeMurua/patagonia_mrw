@@ -16,7 +16,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="col-xs-12 col-md-7" id="container-form-left">
-                        {% for field in patente_form.visible_fields %}
+                        {% for field in patente_form %}
                             <div class="form-group">
                                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field|add_class:'form-control' }}
@@ -26,7 +26,7 @@
                     <div class="panel panel-default col-xs-12 col-md-5" id="container-form-right">
                         <div class="panel-heading domicilio-title">Datos de la Mascota</div>
                         <div class="panel-body">
-                            {% for field in mascota_form.visible_fields %}
+                            {% for field in mascota_form %}
                                 <div class="form-group">
                                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                     {{ field|add_class:'form-control' }}
@@ -42,4 +42,12 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $.datepicker.setDefaults({
+            maxDate: new Date()
+        });
+    </script>
 {% endblock %}

@@ -5,13 +5,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponse
 from .forms import *
 from .filters import *
 from libreta_curso import models as m
 from django.views.generic.edit import (
-    CreateView,
-    UpdateView,
-    DeleteView)
+    UpdateView)
 
 
 @login_required(login_url='login')
@@ -31,7 +30,7 @@ def lista_detalles_persona(request, id_persona):
 
 def alta_persona(request):
     if request.method == 'POST':
-        persona_form = PersonaForm(request.POST)
+        persona_form = AltaPersonaFisicaForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
         if persona_form.is_valid() & domicilio_form.is_valid():
             persona = persona_form.save(commit=False)
@@ -41,25 +40,41 @@ def alta_persona(request):
             persona.save()
             return redirect('personas:lista_personas')
     else:
-        persona_form = PersonaForm
+        persona_form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
+        localidad_form = LocalidadForm
+        return render(request, "persona/persona_form.html", {'persona_form': persona_form,
+                                                             'domicilio_form': domicilio_form,
+                                                             'localidad_form': localidad_form})
+
+
+def baja_persona(request, pk):
+    persona = PersonaFisica.objects.get(pk=pk)
+    persona.delete()
+    return HttpResponse()
+
+
+def modificacion_persona(request, pk):
+    persona = PersonaFisica.objects.get(pk=pk)
+    if request.method == 'POST':
+        persona_form = ModificacionPersonaFisicaForm(request.POST, instance=persona)
+        if persona_form.is_valid():
+            persona_form.save()
+            return redirect('personas:lista_personas')
+    else:
+        persona_form = ModificacionPersonaFisicaForm(instance=persona)
+        domicilio_form = DomicilioForm(instance=persona.domicilio)
         return render(request, "persona/persona_form.html", {'persona_form': persona_form,
                                                              'domicilio_form': domicilio_form})
 
 
-class BajaPersona(LoginRequiredMixin, DeleteView):
-    model = PersonaFisica
-    template_name = 'persona/persona_confirm_delete.html'
-    success_url = reverse_lazy('personas:lista_personas')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def get_provincias(request):
+    provincias = Provincia.objects.filter()
+    options = []
+    for provincia in provincias:
+        options.append({'text': provincia, 'value': provincia})
+    return HttpResponse(options)
 
 
-class ModificacionPersona(LoginRequiredMixin, UpdateView):
-    model = PersonaFisica
-    template_name = 'persona/persona_form.html'
-    success_url = reverse_lazy('personas:lista_personas')
-    fields = ['obra_social', 'domicilio', 'telefono', 'email', 'rubro', 'documentacion_retirada']
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
+def alta_localidad(request):
+    pass

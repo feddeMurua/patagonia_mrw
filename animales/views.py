@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from easy_pdf.views import PDFTemplateView
 from django.shortcuts import render, redirect
 from datetime import datetime
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from .forms import *
 from .filters import *
 from .models import *
@@ -15,8 +15,21 @@ from personas import forms as f
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import (
     CreateView,
-    UpdateView,
-    DeleteView)
+    UpdateView)
+
+
+def limpiar_sesion(lista, session):
+    for item in lista:
+        if item in session:
+            del session[item]
+
+
+def set_sesion(request, session, data):
+    if not request.is_ajax() or not request.method == 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    request.session[session] = data
+    return HttpResponse('ok')
 
 
 @login_required(login_url='login')
@@ -59,12 +72,10 @@ def alta_analisis(request):
         return render(request, 'analisis/analisis_form.html', {"form": form, "formset": formset})
 
 
-class BajaAnalisis(LoginRequiredMixin, DeleteView):
-    model = Analisis
-    template_name = 'analisis/analisis_confirm_delete.html'
-    success_url = reverse_lazy('analisis:lista_analisis')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def baja_analisis(request, pk):
+    analisis = Analisis.objects.get(pk=pk)
+    analisis.delete()
+    return HttpResponse()
 
 
 def detalle_analisis(request, pk):
@@ -103,12 +114,10 @@ def alta_solicitud(request):
                                                              'domicilio_form': domicilio_form})
 
 
-class BajaSolicitud(LoginRequiredMixin, DeleteView):
-    model = SolicitudCriaderoCerdos
-    template_name = 'solicitud/solicitud_confirm_delete.html'
-    success_url = reverse_lazy('solicitud:lista_solicitudes')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def baja_solicitud(request, pk):
+    solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
+    solicitud.delete()
+    return HttpResponse()
 
 
 @login_required(login_url='login')
@@ -207,13 +216,50 @@ class PdfConsentimiento(PDFTemplateView):
         )
 
 
-class AltaEsterilizacion(LoginRequiredMixin, CreateView):
-    model = Esterilizacion
-    template_name = 'esterilizacion/esterilizacion_form.html'
-    success_url = reverse_lazy('esterilizacion:lista_esterilizaciones')
-    form_class = EsterilizacionForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def alta_esterilizacion(request):
+    limpiar_sesion(["turno"], request.session)
+    if request.method == 'POST':
+        turno_form = TurnoForm(request.POST)
+        patente_form = ListaPatentesForm(request.POST)
+        if turno_form.is_valid() and patente_form.is_valid():
+            esterilizacion = Esterilizacion()
+            turno = turno_form.cleaned_data['turno']
+            patente = patente_form.cleaned_data['patente']
+            esterilizacion.turno = turno
+            esterilizacion.interesado = patente.persona
+            esterilizacion.mascota = patente.mascota
+            esterilizacion.save()
+            return redirect('esterilizacion:lista_esterilizaciones')
+    else:
+        turno_form = TurnoForm
+        patente_form = ListaPatentesForm
+        return render(request, 'esterilizacion/esterilizacion_turno.html', {'turno_form': turno_form,
+                                                                            'patente_form': patente_form})
+
+
+def alta_esterilizacion_nopatentado(request):
+    if request.method == 'POST':
+        interesado_form = ListaPersonasGenericasForm(request.POST)
+        mascota_form = MascotaForm(request.POST)
+        turno_form = TurnoForm(request.POST)
+        if interesado_form.is_valid() and mascota_form.is_valid() and turno_form.is_valid():
+            interesado = interesado_form.cleaned_data['persona']
+            mascota = mascota_form.save(commit=False)
+            mascota.save()
+            turno = turno_form.cleaned_data['turno']
+            esterilizacion = Esterilizacion()
+            esterilizacion.interesado = interesado
+            esterilizacion.mascota = mascota
+            esterilizacion.turno = turno
+            esterilizacion.save()
+            return redirect('esterilizacion:lista_esterilizaciones')
+    else:
+        interesado_form = ListaPersonasGenericasForm
+        mascota_form = MascotaForm
+        turno_form = TurnoForm
+        return render(request, 'esterilizacion/esterilizacion_form.html', {'interesado_form': interesado_form,
+                                                                           'mascota_form': mascota_form,
+                                                                           'turno_form': turno_form})
 
 
 '''
@@ -278,12 +324,10 @@ class PdfCarnet(PDFTemplateView):
         )
 
 
-class BajaPatente(LoginRequiredMixin, DeleteView):
-    model = Patente
-    template_name = 'patente/patente_confirm_delete.html'
-    success_url = reverse_lazy('patentes:lista_patentes')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def baja_patente(request, pk):
+    patente = Patente.objects.get(pk=pk)
+    patente.delete()
+    return HttpResponse()
 
 
 class ModificacionPatente(LoginRequiredMixin, UpdateView):
@@ -346,7 +390,6 @@ class PdfInfraccion(PDFTemplateView):
         )
 
 
-
 @login_required(login_url='login')
 def lista_visitas_control(request, pk_control):
     lista_visitas = Visita.objects.filter(control__pk=pk_control)
@@ -374,16 +417,10 @@ def alta_visita(request, pk_control):
         return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
 
 
-class BajaVisita(LoginRequiredMixin, DeleteView):
-    model = Visita
-    template_name = 'control/visita_confirm_delete.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_success_url(self):
-        if 'pk_control' in self.kwargs:
-            pk_control = self.kwargs['pk_control']
-        return reverse('controles:lista_visitas', kwargs={'pk_control': pk_control})
+def baja_visita(request, pk):
+    visita = Visita.objects.get(pk=pk)
+    visita.delete()
+    return HttpResponse()
 
 
 class ModificacionVisita(LoginRequiredMixin, UpdateView):
@@ -411,18 +448,70 @@ def lista_retiro_entrega(request):
     return render(request, 'retiroEntrega/retiroEntrega_list.html', {'filter': filtro_retiro_entrega})
 
 
-def alta_retiro_etrega(request):
+def alta_tramite(request):
+    limpiar_sesion(["tramite"], request.session)
     if request.method == 'POST':
-        pass
+        retiro_entrega_form = RetiroEntregaForm(request.POST)
+        if retiro_entrega_form.is_valid():
+            retiro_entrega = retiro_entrega_form.save(commit=False)
+            request.session['tramite'] = retiro_entrega.to_json()
+            if retiro_entrega.patentado:
+                return redirect('retiros_entregas:nuevo_tramite_patentado')
+            else:
+                return redirect('retiros_entregas:nuevo_tramite_nopatentado')
     else:
-        tramite_form = TramiteForm
-        mascota_patente_form = MascotaPatentadaForm
+        form = RetiroEntregaForm
+        return render(request, 'retiroEntrega/retiroEntrega_tramite.html', {'form': form})
+
+
+def alta_tramite_patentado(request):
+    if request.method == 'POST':
+        tramite = request.session['tramite']
+        patente_form = ListaPatentesForm(request.POST)
+        if patente_form.is_valid():
+            patente = patente_form.cleaned_data['patente']
+            retiro_entrega = RetiroEntregaAnimal()
+            retiro_entrega.tramite = tramite['tramite']
+            retiro_entrega.observaciones = tramite['observaciones']
+            retiro_entrega.patentado = tramite['patentado']
+            retiro_entrega.interesado = patente.persona
+            retiro_entrega.mascota = patente.mascota
+            if retiro_entrega.tramite == 'RETIRO':
+                retiro_entrega.mascota.baja = True
+                retiro_entrega.mascota.save()
+            retiro_entrega.save()
+            patente.delete()
+            return redirect('retiros_entregas:lista_retiro_entrega')
+    else:
+        form = ListaPatentesForm
+        return render(request, 'retiroEntrega/retiroEntrega_patentado.html', {'form': form})
+
+
+def alta_tramite_nopatentado(request):
+    if request.method == 'POST':
+        interesado_form = ListaPersonasGenericasForm(request.POST)
+        mascota_form = MascotaForm(request.POST)
+        if interesado_form.is_valid() and mascota_form.is_valid():
+            mascota = mascota_form.save(commit=False)
+            mascota.save()
+            interesado = interesado_form.cleaned_data['persona']
+            tramite = request.session['tramite']
+            retiro_entrega = RetiroEntregaAnimal()
+            retiro_entrega.tramite = tramite['tramite']
+            retiro_entrega.observaciones = tramite['observaciones']
+            retiro_entrega.patentado = tramite['patentado']
+            retiro_entrega.mascota = mascota
+            retiro_entrega.interesado = interesado
+            retiro_entrega.save()
+            if retiro_entrega.tramite == 'RETIRO':
+                mascota.baja = True
+                mascota.save()
+            return redirect('retiros_entregas:lista_retiro_entrega')
+    else:
+        interesado_form = ListaPersonasGenericasForm
         mascota_form = MascotaForm
-        patente_form = PatenteForm
-        return render(request, 'retiroEntrega/retiroEntrega_form.html', {'tramite_form': tramite_form,
-                                                                         'mascota_form': mascota_form,
-                                                                         'patente_form': patente_form,
-                                                                         'mascota_patente_form': mascota_patente_form})
+        return render(request, 'retiroEntrega/retiroEntrega_noPatentado.html', {'interesado_form': interesado_form,
+                                                                                'mascota_form': mascota_form})
 
 
 '''

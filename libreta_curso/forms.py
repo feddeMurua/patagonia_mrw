@@ -19,19 +19,6 @@ class CursoForm(forms.ModelForm):
         model = Curso
         fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
 
-    def clean_fecha_inicio(self):
-        fecha = self.cleaned_data['fecha_inicio']
-        if fecha:
-            if fecha < datetime.date.today():
-                raise forms.ValidationError('La fecha no puede ser menor que la actual')
-        return fecha
-
-    def clean_lugar(self):
-        lugar = self.cleaned_data['lugar']
-        if not CursoForm.regex.match(lugar):
-                raise forms.ValidationError('El lugar no puede contener caracteres especiales')
-        return lugar
-
 
 class LibretaForm(forms.ModelForm):
     fecha_examen_clinico = forms.DateField(widget=DateInput())
@@ -47,3 +34,14 @@ class InscripcionForm(forms.ModelForm):
     class Meta:
         model = Inscripcion
         fields = ['persona', 'observaciones']
+
+
+class CierreInscripcionForm(forms.ModelForm):
+
+    class Meta:
+        model = Inscripcion
+        fields = ['nota_curso', 'porcentaje_asistencia']
+
+
+class ObservacionesForm(forms.Form):
+    observaciones = forms.CharField(widget=forms.Textarea)

@@ -51,12 +51,8 @@ class DisposicionForm(forms.ModelForm):
         fields = ['nro_disposicion', 'fecha_disposicion']
 
 
-class EsterilizacionForm(forms.ModelForm):
-    turno = forms.DateTimeField()
-
-    class Meta:
-        model = Esterilizacion
-        fields = ['turno', 'interesado', 'mascota']
+class TurnoForm(forms.Form):
+    turno = forms.DateTimeField(required=True)
 
 
 class MascotaForm(forms.ModelForm):
@@ -88,15 +84,16 @@ class VisitaForm(forms.ModelForm):
         fields = ['observaciones']
 
 
-class TramiteForm(forms.ModelForm):
+class RetiroEntregaForm(forms.ModelForm):
 
     class Meta:
         model = RetiroEntregaAnimal
-        fields = ['interesado', 'tramite', 'observaciones']
+        fields = ['tramite', 'observaciones', 'patentado']
 
 
-class MascotaPatentadaForm(forms.ModelForm):
+class ListaPersonasGenericasForm(forms.Form):
+    persona = forms.ModelChoiceField(queryset=m.PersonaGenerica.objects.all(), required=True)
 
-    class Meta:
-        model = RetiroEntregaAnimal
-        fields = ['mascota']
+
+class ListaPatentesForm(forms.Form):
+    patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)

@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.timepicker.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert2.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/swal-forms.css' %}"/>
     {% block stylesheets %}
     {% endblock %}
     <title>{% block title %}{% endblock %}</title>
@@ -48,6 +50,8 @@
     <script src="{% static 'js/jquery.timepicker.js' %}"></script>
     <script src="{% static 'js/selectize.js' %}"></script>
     <script src="{% static 'js/jquery.datetimepicker.full.js' %}"></script>
+    <script src="{% static 'js/sweetalert2.js' %}"></script>
+    <script src="{% static 'js/swal-forms.js' %}"></script>
     <script>
         $('select').selectize({
             sortField: {
@@ -83,7 +87,7 @@
                 defaultDate: "+1w",
                 changeMonth: true,
                 changeYear: true,
-                yearRange: '1940:2050',
+                yearRange: '1930:2050',
                 onClose: function(selectedDate) {
                     $("#fecha").datepicker("option","minDate",selectedDate);
                 }
