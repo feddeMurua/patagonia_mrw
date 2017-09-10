@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from .models import *
 from .forms import *
 from .filters import *
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
@@ -97,6 +98,13 @@ def lista_tsa(request):
     return render(request, 'tsa/tsa_list.html', {'filter': filtro_tsa})
 
 
+class DetalleTsa(LoginRequiredMixin, DetailView):
+    model = Tsa
+    template_name = 'tsa/tsa_detail.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
 class AltaTsa(LoginRequiredMixin, CreateView):
     model = Tsa
     template_name = 'tsa/tsa_form.html'
@@ -133,6 +141,13 @@ def lista_tpp(request):
     lista_tpp = Tpp.objects.all()
     filtro_tpp = TppListFilter(request.GET, queryset=lista_tpp) #Tener en cuenta que en filter = TSA porque son iguales los modelos.
     return render(request, 'tpp/tpp_list.html', {'filter': filtro_tpp})
+
+
+class DetalleTpp(LoginRequiredMixin, DetailView):
+    model = Tpp
+    template_name = 'tpp/tpp_detail.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
 
 
 class AltaTpp(LoginRequiredMixin, CreateView):
