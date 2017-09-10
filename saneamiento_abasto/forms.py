@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django import forms
+from django.core.exceptions import ValidationError
 from functools import partial
 from .models import *
 
@@ -28,6 +29,12 @@ class TsaForm(forms.ModelForm):
     class Meta:
         model = Tsa
         fields = ['vehiculo','persona', 'abastecedor']
+
+    def clean(self):
+        check = [self.cleaned_data['persona'], self.cleaned_data['abastecedor']]
+        if any(check) and not all(check):
+            return self.cleaned_data
+        raise ValidationError('Por favor, seleccione una opcion (Abastecedor o Persona Particular)')
 
 
 class TppForm(forms.ModelForm):
