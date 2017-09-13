@@ -1,0 +1,36 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}vehiculo{% endblock %}
+
+{% block header-title %}Detalle de vehiculo{% endblock %}
+
+{% block url-volver %}{% url 'vehiculo:lista_vehiculos' %}{% endblock %}
+
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>Datos del Vehiculo:</td>
+                <td>{{ object.marca }}, dominio: {{ object.dominio }} </td>
+            </tr>
+            <tr>
+                <td>Apellido y Nombre del particular:</td>
+                <td>{{ object.titular.apellido }}, {{ object.titular.nombre }} </td>
+            </tr>
+            <tr>
+                <td>Domicilio del particular:</td>
+                <td>B° {{ object.titular.domicilio.barrio }}, {{ object.titular.domicilio.calle }}, {{ object.titular.domicilio.nro }}</td>
+            </tr>
+            <tr>
+                <td>Telefono del particular:</td>
+                <td>{{ object.titular.telefono }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'vehiculo:lista_vehiculos' %}" class="btn btn-primary" role="button">Regresar</a>
+{% endblock %}

@@ -6,8 +6,8 @@ from .models import *
 class AbastecedorListFilter(django_filters.FilterSet):
     class Meta:
         model = Abastecedor
-        fields = ['persona']
-        order_by = ['persona']
+        fields = ['empresa']
+        order_by = ['empresa']
 
 
 class ReinspeccionListFilter(django_filters.FilterSet):
@@ -17,22 +17,15 @@ class ReinspeccionListFilter(django_filters.FilterSet):
         order_by = ['fecha']
 
 
-class TsaListFilter(django_filters.FilterSet):
+class VehiculoListFilter(django_filters.FilterSet):
     class Meta:
-        model = Tsa
-        fields = ['persona']
-        order_by = ['persona']
-
-
-class TppListFilter(django_filters.FilterSet):
-    class Meta:
-        model = Tsa
-        fields = ['persona']
-        order_by = ['persona']
+        model = Vehiculo
+        fields = ['dominio']
+        order_by = ['dominio']
 
 
 class DesinfeccionListFilter(django_filters.FilterSet):
     class Meta:
         model = Desinfeccion
-        fields = ['transporte']
-        order_by = ['transporte']
+        fields = ['vehiculo']
+        order_by = ['vehiculo']

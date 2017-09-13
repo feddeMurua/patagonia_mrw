@@ -9,7 +9,6 @@
 
 {% block url-volver %}{% url 'abastecedores:lista_abastecedores' %}{% endblock %}
 
-{% block btn-cancelar %}
-    <a class="btn btn-primary" href="{% url 'abastecedores:nuevo_abastecedor' %}">Nuevo Abastecedor</a>
+{% block btn-cancelar %}    
     <a class="btn btn-danger btn-cancelar" href="{% url 'abastecedores:lista_abastecedores' %}">Cancelar</a>
 {% endblock %}

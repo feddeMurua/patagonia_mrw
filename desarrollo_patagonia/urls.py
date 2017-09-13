@@ -35,7 +35,6 @@ urlpatterns = [
     url(r'^retiros_entregas/', include('animales.urls_retiroEntrega', namespace='retiros_entregas')),
     url(r'^abastecedores/', include('saneamiento_abasto.urls_abastecedor', namespace='abastecedores')),
     url(r'^reinspecciones/', include('saneamiento_abasto.urls_reinspeccion', namespace='reinspecciones')),
-    url(r'^tsa/', include('saneamiento_abasto.urls_tsa', namespace='tsa')),
-    url(r'^tpp/', include('saneamiento_abasto.urls_tpp', namespace='tpp')),
+    url(r'^vehiculos/', include('saneamiento_abasto.urls_vehiculo', namespace='vehiculo')),
     url(r'^desinfecciones/', include('saneamiento_abasto.urls_desinfecciones', namespace='desinfecciones')),
 ]
