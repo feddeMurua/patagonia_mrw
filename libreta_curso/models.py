@@ -13,7 +13,7 @@ def get_image_path(instance, filename):
 
 
 class LibretaSanitaria(models.Model):
-    persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE, primary_key=True)
+    persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
     fecha_examen_clinico = models.DateField()
@@ -34,7 +34,7 @@ class Curso(models.Model):
     finalizado = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s" % self.fecha_inicio
+        return "Curso Nro: %s - %s" % (self.pk, self.fecha_inicio)
 
 
 class Inscripcion(models.Model):
@@ -44,7 +44,7 @@ class Inscripcion(models.Model):
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
-    persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
+    persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Numero de inscripcion:%s" % self.pk
+        return "Inscripcion Nro: %s" % self.pk

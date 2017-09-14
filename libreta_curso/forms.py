@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 from django import forms
 from functools import partial
-import datetime
 import re
+import datetime
 from .models import *
+from django.utils.translation import ugettext as _
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
@@ -34,6 +35,21 @@ class InscripcionForm(forms.ModelForm):
     class Meta:
         model = Inscripcion
         fields = ['persona', 'observaciones']
+
+    def __init__(self, *args, **kwargs):
+        self.id_curso = kwargs.pop('id_curso', None)
+        super(InscripcionForm, self).__init__(*args, **kwargs)
+
+    def clean_persona(self):
+        persona = self.cleaned_data['persona']
+        inscripciones = Inscripcion.objects.filter(persona__pk=persona.pk)
+        if inscripciones:
+            id_curso = int(self.id_curso)
+            for inscripcion in inscripciones:
+                if inscripcion.curso.pk == id_curso:
+                    raise forms.ValidationError(_('Ya existe una inscripcion a este curso a nombre de la persona '
+                                                  'seleccionada'), code='invalid')
+        return persona
 
 
 class CierreInscripcionForm(forms.ModelForm):

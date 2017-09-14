@@ -5,6 +5,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_listado.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert2.css' %}"/>
     {% block more-stylesheets %}{% endblock %}
 {% endblock %}
 
@@ -60,6 +61,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'js/sweetalert2.js' %}"></script>
     <script src="{% static 'js/paging.js' %}"></script>
     <script src="{% static 'js/js.cookie.js' %}"></script>
     <script>

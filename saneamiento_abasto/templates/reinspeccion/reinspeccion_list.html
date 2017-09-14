@@ -25,8 +25,6 @@
             <th>Precintado</th>
             <th>Certificado</th>
             <th>Abastecedor</th>
-
-
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
         </thead>
@@ -41,7 +39,9 @@
                 <td>{{ reinspeccion.num_certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
                 <td align="center">
-                  <a class="btn btn-warning" data-toggle="tooltip" title="Agregar Item" href="#"><em class="glyphicon glyphicon-edit"></em></a>
+                  <a class="btn btn-warning" href="#"><em class="glyphicon glyphicon-edit"></em></a>
+                  <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                  <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'reinspecciones:borrar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}

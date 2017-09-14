@@ -25,7 +25,7 @@ class Porcino(models.Model):
     analisis = models.ForeignKey('Analisis', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s" % (self.categoria_porcino, self.precinto)
+        return "%s - %s" % (self.precinto, self.categoria_porcino)
 
 
 class ControlAntirrabico(models.Model):

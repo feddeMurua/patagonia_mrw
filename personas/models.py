@@ -30,13 +30,15 @@ class Nacionalidad(models.Model):
 class Domicilio(models.Model):
     barrio = models.CharField(max_length=20, null=True, blank=True)
     calle = models.CharField(max_length=50)
+    calle_entre1 = models.CharField(max_length=50, null=True, blank=True)
+    calle_entre2 = models.CharField(max_length=50, null=True, blank=True)
     nro = models.IntegerField()
     dpto = models.CharField(max_length=2, null=True, blank=True)
     piso = models.IntegerField(null=True, blank=True)
     localidad = models.ForeignKey('Localidad', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s %s %s" % (self.barrio, self.calle, self.nro)
+        return "%s, %s %s" % (self.barrio, self.calle, self.nro)
 
 
 class DomicilioRural(models.Model):
@@ -47,7 +49,7 @@ class DomicilioRural(models.Model):
     ruta = models.CharField(max_length=25, null=True, blank=True)
 
     def __str__(self):
-        return "Chacra %s, %s" % (self.chacra, self.ruta)
+        return "Chacra %s, sobre ruta %s" % (self.chacra, self.ruta)
 
 
 class PersonaGenerica(models.Model):
@@ -55,7 +57,6 @@ class PersonaGenerica(models.Model):
     domicilio = models.ForeignKey('domicilio')
     telefono = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, blank=True)
-    rubro = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return "%s" % self.nombre
@@ -63,6 +64,7 @@ class PersonaGenerica(models.Model):
 
 class PersonaJuridica(PersonaGenerica):
     cuit = models.CharField(unique=True, max_length=20)
+    rubro = models.CharField(max_length=50)
 
     def __str__(self):
         datos = " - %s" % self.cuit
@@ -76,6 +78,7 @@ class PersonaFisica(PersonaGenerica):
     nacionalidad = models.ForeignKey('Nacionalidad', on_delete=models.CASCADE)
     obra_social = models.CharField(max_length=50, blank=True)
     documentacion_retirada = models.BooleanField(default=False)
+    rubro = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         datos = " %s - %s" % (self.apellido, self.dni)

@@ -3,122 +3,62 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}"/>
 </head>
 
 <body>
-<div class="container-fluid container-nav">
-    <div class="row">
-        <div class="col-lg-11">
-            <div id="custom_carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <div class="container-fluid">
-                            <ul class="ds-btn text-center">
-                                <li>
-                                    <a class="btn btn-lg btn-primary" href="{% url 'cursos:lista_cursos'%}">
-                                    <span>Cursos de Manipulacion de Alimentos</span></a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-lg btn-primary " href="{% url 'libretas:lista_libretas'%}">
-                                    <span>Libretas Sanitarias</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="container-fluid">
-                            <ul class="ds-btn text-center">
-                                <li>
-                                    <a class="btn btn-lg btn-primary" href="{% url 'personas:lista_personas'%}">
-                                        <span>Listado de Personas</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="container-fluid">
-                            <ul class="ds-btn text-center">
-                                <li>
-                                    <a class="btn btn-lg btn-primary" href="{% url 'analisis:lista_analisis'%}">
-                                        <span>Análisis de Triquinósis</span></a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-lg btn-primary" href="{% url 'solicitud:lista_solicitudes'%}">
-                                        <span>Habilitación para Criadero de Cerdos</span></a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-lg btn-primary" href="{% url 'controles:lista_controles'%}">
-                                        <span>Control Antirrábico</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="container-fluid">
-                            <ul class="ds-btn text-center">
-                              <li>
-                                  <a class="btn btn-lg btn-primary" href="{% url 'patentes:lista_patentes'%}">
-                                      <span>Patentamiento</span></a>
-                              </li>
-                              <li>
-                                  <a class="btn btn-lg btn-primary" href="{% url 'esterilizacion:lista_esterilizaciones'%}">
-                                      <span>Esterilización de Mascotas</span></a>
-                              </li>
-                              <li>
-                                  <a class="btn btn-lg btn-primary" href="{% url 'retiros_entregas:lista_retiro_entrega'%}">
-                                      <span>Retiro/Entrega de Mascotas</span></a>
-                              </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="container-fluid">
-                            <ul class="ds-btn text-center">
-                              <li>
-                                  <a class="btn btn-lg btn-primary" href="{% url 'abastecedores:lista_abastecedores'%}">
-                                      <span>Abastecedores</span></a>
-                              </li>
-                              <li>
-                                  <a class="btn btn-lg btn-primary" href="{% url 'reinspecciones:lista_reinspecciones'%}">
-                                      <span>Reinspecciones</span></a>
-                              </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="controls">
-                    <ul class="nav">
-                        <li data-target="#custom_carousel" data-slide-to="0" class="hvr-rectangle-out active"> <a><small>LIBRETAS/CURSOS</small></a></li>
-                        <li data-target="#custom_carousel" data-slide-to="1" class="hvr-rectangle-out"> <a><small>PERSONAS</small></a></li>
-                         <li data-target="#custom_carousel" data-slide-to="2" class="hvr-rectangle-out"> <a><small>ANIMALES</small></a></li>
-                         <li data-target="#custom_carousel" data-slide-to="3" class="hvr-rectangle-out"> <a><small>MASCOTAS</small></a></li>
-                         <li data-target="#custom_carousel" data-slide-to="4" class="hvr-rectangle-out"> <a><small>ABASTO</small></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-1 logout-box" align="center">
-            <div class="glyphicon glyphicon-log-out"></div>
-            <div class="username">
-                <td>{{ user.get_username }}</td>
-            </div>
-            <div>
-                <a class="btn btn-lg btn-default btn-block btn-logout" href="{% url 'logout'%}?next={{request.path}}">Salir</a>
-            </div>
-        </div>
+    <div id="cssmenu">
+        <ul>
+            <li class="has-sub"><a href="#"><span>Personas</span></a>
+                <ul>
+                    <li><a href="{% url 'personas:lista_personas'%}"><span>Personas Físicas</span></a></li>
+                    <li><a href="#"><span>Personas Jurídicas</span></a></li>
+                    <li><a href="#"><span>Personal Propio</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="#"><span>Cursos y Libretas</span></a>
+                <ul>
+                    <li><a href="{% url 'cursos:lista_cursos'%}"><span>Curso de Manipulacion de Alimentos</span></a></li>
+                    <li><a href="{% url 'libretas:lista_libretas'%}"><span>Libreta Sanitaria</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="#"><span>Analisis y Controles</span></a>
+                <ul>
+                    <li><a href="{% url 'analisis:lista_analisis'%}"><span>Analisis de Triquinosis</span></a></li>
+                    <li><a href="{% url 'solicitud:lista_solicitudes'%}"><span>Habilitacion de Criadero de Cerdos</span></a></li>
+                    <li><a href="{% url 'controles:lista_controles'%}"><span>Control Antirrabico</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="#"><span>Mascotas</span></a>
+                <ul>
+                    <li><a href="{% url 'patentes:lista_patentes'%}"><span>Pantetamiento</span></a></li>
+                    <li><a href="{% url 'esterilizacion:lista_esterilizaciones'%}"><span>Esterilizacion</span></a></li>
+                    <li><a href="{% url 'retiros_entregas:lista_retiro_entrega'%}"><span>Retiros y Entregas</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="#"><span>Abasto</span></a>
+                <ul>
+                    <li><a href="{% url 'abastecedores:lista_abastecedores'%}"><span>Abastecedores</span></a></li>
+                    <li><a href="{% url 'reinspecciones:lista_reinspecciones'%}"><span>Reinspecciones</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="#"><span>Transporte y Desinfeccion</span></a>
+                <ul>
+                    <li><a href="{% url 'tsa:lista_tsa'%}"><span>Transportes de Sustancias Alimenticias</span></a></li>
+                    <li><a href="{% url 'tpp:lista_tpp'%}"><span>Transportes Públicos de Pasajeros </span></a></li>
+                    <li><a href="{% url 'desinfecciones:lista_desinfecciones'%}"><span>Desinfecciones</span></a></li>
+                </ul>
+            </li>
+            <li class="pull-right"><a href="#"><span>{{ user.get_username }}</span></a>
+                <ul>
+                    <li><a href="{% url 'logout'%}?next={{request.path}}">Salir</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
-</div>
 
-<script src="{% static 'js/jquery.js' %}"></script>
-<script src="{% static 'js/jquery-ui.js' %}"></script>
-<script src="{% static 'js/bootstrap.js' %}"></script>
-<script>
-  $(document).ready(function (ev) {
-      $('#custom_carousel').on('slide.bs.carousel', function (evt) {
-          $('#custom_carousel .controls li.active').removeClass('active');
-          $('#custom_carousel .controls li:eq(' + $(evt.relatedTarget).index() + ')').addClass('active');
-      })
-  });
-</script>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
 </body>

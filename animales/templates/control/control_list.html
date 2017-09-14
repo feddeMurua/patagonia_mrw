@@ -10,7 +10,6 @@
 
 {% block panel-title %}Controles{% endblock %}
 
-
 {% block btn-nuevo %}
     <a href=" {% url 'controles:nuevo_control' %}" class="btn btn-sm btn-primary btn-create">Nuevo Control</a>    
 {% endblock %}
@@ -35,6 +34,7 @@
                 <td>{{ control.observaciones }}</td>
                 <td align="center">
                     <a class="btn btn-warning" data-toggle="tooltip" title="Acta de Infraccion" href="#"><em class="glyphicon glyphicon-file"></em></a>
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'controles:borrar_control' control.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Registro de Visitas" href="{% url 'controles:lista_visitas' control.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                 </td>
             </tr>

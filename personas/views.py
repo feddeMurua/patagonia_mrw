@@ -3,14 +3,10 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse
 from .forms import *
 from .filters import *
 from libreta_curso import models as m
-from django.views.generic.edit import (
-    UpdateView)
 
 
 @login_required(login_url='login')

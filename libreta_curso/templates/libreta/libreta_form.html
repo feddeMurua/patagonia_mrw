@@ -11,3 +11,11 @@
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'libretas:lista_libretas' %}">Cancelar</a>
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        $.datepicker.setDefaults({
+            maxDate: new Date()
+        });
+    </script>
+{% endblock %}

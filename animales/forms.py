@@ -10,7 +10,7 @@ DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
-class AnalisisForm(forms.ModelForm):
+class AltaAnalisisForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
     categoria = forms.ChoiceField(choices=Categorias, label="Categoria", initial='', widget=forms.Select())
     resultado = forms.ChoiceField(choices=Resultados, label="Resultado", initial='', widget=forms.Select())
@@ -20,16 +20,29 @@ class AnalisisForm(forms.ModelForm):
         fields = ['fecha', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
 
 
+class ModificacionAnalisisForm(forms.ModelForm):
+    categoria = forms.ChoiceField(choices=Categorias, label="Categoria", initial='', widget=forms.Select())
+    resultado = forms.ChoiceField(choices=Resultados, label="Resultado", initial='', widget=forms.Select())
+
+    class Meta:
+        model = Analisis
+        fields = ['procedencia', 'resultado', 'categoria']
+
+
 class PorcinoForm(forms.ModelForm):
     class Meta:
         model = Porcino
         fields = ['precinto', 'categoria_porcino']
 
-PorcinoFormSet = formset_factory(PorcinoForm, min_num=1)
+
+AltaPorcinoFormSet = formset_factory(PorcinoForm, min_num=1, validate_min=True, extra=0)
+
+ModificacionPorcinoFormSet = forms.modelformset_factory(Porcino, fields=('precinto', 'categoria_porcino'), extra=0)
 
 
 class SolicitudForm(forms.ModelForm):
-    categoria_criadero = forms.ChoiceField(choices=Categoria_Criadero, label="Categoria", initial='', widget=forms.Select())
+    categoria_criadero = forms.ChoiceField(choices=Categoria_Criadero, label="Categoria", initial='',
+                                           widget=forms.Select())
 
     class Meta:
         model = SolicitudCriaderoCerdos

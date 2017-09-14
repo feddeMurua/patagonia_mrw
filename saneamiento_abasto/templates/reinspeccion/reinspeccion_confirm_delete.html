@@ -1,0 +1,11 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Reinspección{% endblock %}
+
+{% block header-title %}Baja de Reinspección{% endblock %}
+
+{% block url-volver %}{% url 'reinspecciones:lista_reinspecciones' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'reinspecciones:lista_reinspecciones' %}" class="btn btn-sm btn-primary">Cancelar</a>{% endblock %}

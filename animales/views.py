@@ -10,20 +10,19 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotAllow
 from .forms import *
 from .filters import *
 from .models import *
-from personas import models as m
 from personas import forms as f
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import (
-    CreateView,
-    UpdateView)
+from django.views.generic.edit import UpdateView
 
 
+@login_required(login_url='login')
 def limpiar_sesion(lista, session):
     for item in lista:
         if item in session:
             del session[item]
 
 
+@login_required(login_url='login')
 def set_sesion(request, session, data):
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
@@ -57,27 +56,52 @@ def lista_analisis(request):
 @login_required(login_url='login')
 def alta_analisis(request):
     if request.method == 'POST':
-        analisis_form = AnalisisForm(request.POST)
-        porcino_formset = PorcinoFormSet(request.POST)
-        if analisis_form.is_valid() & porcino_formset.is_valid():
-            analisis = analisis_form.save()
-            for porcino_form in porcino_formset:
+        form = AltaAnalisisForm(request.POST)
+        formset = AltaPorcinoFormSet(request.POST)
+        if form.is_valid() & formset.is_valid():
+            analisis = form.save()
+            porcinos = []
+            for porcino_form in formset:
                 porcino = porcino_form.save(commit=False)
-                porcino.analisis = analisis
+                if porcino.precinto is not None and porcino.categoria_porcino != '':
+                    porcino.analisis = analisis
+                    porcinos.append(porcino)
+            for porcino in porcinos:
                 porcino.save()
             return redirect('analisis:lista_analisis')
     else:
-        form = AnalisisForm()
-        formset = PorcinoFormSet()
-        return render(request, 'analisis/analisis_form.html', {"form": form, "formset": formset})
+        form = AltaAnalisisForm()
+        formset = AltaPorcinoFormSet()
+    return render(request, 'analisis/analisis_form.html', {"form": form, "formset": formset, 'can_delete': True})
 
 
+@login_required(login_url='login')
 def baja_analisis(request, pk):
     analisis = Analisis.objects.get(pk=pk)
     analisis.delete()
     return HttpResponse()
 
 
+@login_required(login_url='login')
+def modificacion_analisis(request, pk):
+    analisis = Analisis.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ModificacionAnalisisForm(request.POST, instance=analisis)
+        formset = ModificacionPorcinoFormSet(request.POST)
+        if form.is_valid() & formset.is_valid():
+            analisis = form.save()
+            for porcino_form in formset:
+                porcino = porcino_form.save(commit=False)
+                porcino.analisis = analisis
+                porcino.save()
+            return redirect('analisis:lista_analisis')
+    else:
+        form = ModificacionAnalisisForm(instance=analisis)
+        formset = ModificacionPorcinoFormSet(queryset=Porcino.objects.filter(analisis__pk=pk))
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'can_delete': False})
+
+
+@login_required(login_url='login')
 def detalle_analisis(request, pk):
     analisis = Analisis.objects.get(pk=pk)
     porcinos = Porcino.objects.filter(analisis__pk=pk)
@@ -96,14 +120,14 @@ def lista_solicitudes(request):
     return render(request, 'solicitud/solicitud_list.html', {'filter': filtro_solicitudes})
 
 
+@login_required(login_url='login')
 def alta_solicitud(request):
     if request.method == 'POST':
         solicitud_form = SolicitudForm(request.POST)
         domicilio_form = f.DomicilioRuralForm(request.POST)
         if solicitud_form.is_valid() & domicilio_form.is_valid():
             solicitud = solicitud_form.save(commit=False)
-            domicilio = domicilio_form.save(commit=False)
-            domicilio.save()
+            domicilio = domicilio_form.save()
             solicitud.domicilio_criadero = domicilio
             solicitud.save()
             return redirect('solicitud:lista_solicitudes')
@@ -114,6 +138,7 @@ def alta_solicitud(request):
                                                              'domicilio_form': domicilio_form})
 
 
+@login_required(login_url='login')
 def baja_solicitud(request, pk):
     solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
     solicitud.delete()
@@ -127,13 +152,6 @@ def detalles_solicitud(request, pk):
     disposicion = DisposicionCriaderoCerdos.objects.filter(solicitud__pk=pk).first()
     return render(request, "solicitud/solicitud_detail.html", {'solicitud': solicitud, 'aplazos': aplazos,
                                                                'disposicion': disposicion})
-
-
-class DetalleSolicitud(LoginRequiredMixin, DetailView):
-    model = SolicitudCriaderoCerdos
-    template_name = 'solicitud/solicitud_detail.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
 
 
 @login_required(login_url='login')
@@ -154,8 +172,10 @@ def aplazo_solicitud(request, pk):
         return render(request, 'solicitud/solicitud_aplazo.html', {"form": form})
 
 
-class PdfSolicitud(PDFTemplateView):
+class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
     template_name = 'solicitud/solicitud_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
 
     def get_context_data(self, pk):
         solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
@@ -166,6 +186,7 @@ class PdfSolicitud(PDFTemplateView):
         )
 
 
+@login_required(login_url='login')
 def alta_disposicion(request, pk):
     if request.method == 'POST':
         disposicion_form = DisposicionForm(request.POST)
@@ -194,8 +215,10 @@ def lista_esterilizaciones(request):
     return render(request, 'esterilizacion/esterilizacion_list.html', {'filter': filtro_esterilizaciones})
 
 
-class PdfConsentimiento(PDFTemplateView):
+class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
     template_name = 'esterilizacion/consentimiento_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
 
     def get_context_data(self, pk_esterilizacion):
         esterilizacion = Esterilizacion.objects.get(pk=pk_esterilizacion)
@@ -216,8 +239,8 @@ class PdfConsentimiento(PDFTemplateView):
         )
 
 
+@login_required(login_url='login')
 def alta_esterilizacion(request):
-    limpiar_sesion(["turno"], request.session)
     if request.method == 'POST':
         turno_form = TurnoForm(request.POST)
         patente_form = ListaPatentesForm(request.POST)
@@ -237,6 +260,7 @@ def alta_esterilizacion(request):
                                                                             'patente_form': patente_form})
 
 
+@login_required(login_url='login')
 def alta_esterilizacion_nopatentado(request):
     if request.method == 'POST':
         interesado_form = ListaPersonasGenericasForm(request.POST)
@@ -244,8 +268,7 @@ def alta_esterilizacion_nopatentado(request):
         turno_form = TurnoForm(request.POST)
         if interesado_form.is_valid() and mascota_form.is_valid() and turno_form.is_valid():
             interesado = interesado_form.cleaned_data['persona']
-            mascota = mascota_form.save(commit=False)
-            mascota.save()
+            mascota = mascota_form.save()
             turno = turno_form.cleaned_data['turno']
             esterilizacion = Esterilizacion()
             esterilizacion.interesado = interesado
@@ -274,6 +297,7 @@ def lista_patente(request):
     return render(request, 'patente/patente_list.html', {'filter': filtro_patentes})
 
 
+@login_required(login_url='login')
 def retiro_garrapaticida(request, pk):
     patente = Patente.objects.get(pk=pk)
     if patente.fecha_garrapaticida and (now().date() - patente.fecha_garrapaticida).days <= 7:
@@ -284,6 +308,7 @@ def retiro_garrapaticida(request, pk):
         return HttpResponse("El retiro de garrapaticida se registro correctamente")
 
 
+@login_required(login_url='login')
 def retiro_antiparasitario(request, pk):
     patente = Patente.objects.get(pk=pk)
     if patente.fecha_antiparasitario and ((now().date() - patente.fecha_antiparasitario).days / 30) <= 6:
@@ -294,14 +319,14 @@ def retiro_antiparasitario(request, pk):
         return HttpResponse("El retiro de antiparasitario se registro correctamente")
 
 
+@login_required(login_url='login')
 def alta_patente(request):
     if request.method == 'POST':
         patente_form = PatenteForm(request.POST)
         mascota_form = MascotaForm(request.POST)
         if patente_form.is_valid() & mascota_form.is_valid():
             patente = patente_form.save(commit=False)
-            mascota = mascota_form.save(commit=False)
-            mascota.save()
+            mascota = mascota_form.save()
             patente.mascota = mascota
             patente.save()
             return redirect('patentes:lista_patentes')
@@ -312,8 +337,10 @@ def alta_patente(request):
                                                              'mascota_form': mascota_form})
 
 
-class PdfCarnet(PDFTemplateView):
+class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
     template_name = 'patente/carnet_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
 
     def get_context_data(self, pk):
         patente = Patente.objects.get(pk=pk)
@@ -324,6 +351,7 @@ class PdfCarnet(PDFTemplateView):
         )
 
 
+@login_required(login_url='login')
 def baja_patente(request, pk):
     patente = Patente.objects.get(pk=pk)
     patente.delete()
@@ -346,7 +374,6 @@ class DetallePatente(LoginRequiredMixin, DetailView):
     redirect_field_name = 'next'
 
 
-
 '''
 CONTROL ANTIRRABICO
 '''
@@ -364,22 +391,24 @@ def alta_control(request):
     if request.method == 'POST':
         control_form = ControlAntirrabicoForm(request.POST)
         if control_form.is_valid():
-            control_antirrabico = control_form.save(commit=False)
-            mordido = m.PersonaFisica.objects.get(dni=control_antirrabico.mordido.dni)
-            responsable = m.PersonaFisica.objects.get(dni=control_antirrabico.responsable.dni)
-            if mordido.dni != responsable.dni:
-                control_antirrabico.save()
-                return redirect('controles:lista_controles')
-            else:
-                # ACA SE TIENE QUE VERIFICAR SI LAS PERSONAS SON IGUALES
-                return redirect('controles:nuevo_control')
+            control_antirrabico = control_form.save()
+            return redirect('controles:lista_controles')
     else:
         form = ControlAntirrabicoForm()
         return render(request, 'control/control_form.html', {"form": form})
 
 
-class PdfInfraccion(PDFTemplateView):
+@login_required(login_url='login')
+def baja_control(request, pk):
+    control = ControlAntirrabico.objects.get(pk=pk)
+    control.delete()
+    return HttpResponse()
+
+
+class PdfInfraccion(LoginRequiredMixin, PDFTemplateView):
     template_name = 'control/infraccion_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
 
     def get_context_data(self, pk_control):
         control = ControlAntirrabico.objects.get(pk=pk_control)
@@ -404,6 +433,7 @@ def lista_visitas_control(request, pk_control):
                                                         'apto_visita': apto_visita})
 
 
+@login_required(login_url='login')
 def alta_visita(request, pk_control):
     if request.method == 'POST':
         visita_form = VisitaForm(request.POST)
@@ -417,6 +447,7 @@ def alta_visita(request, pk_control):
         return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
 
 
+@login_required(login_url='login')
 def baja_visita(request, pk):
     visita = Visita.objects.get(pk=pk)
     visita.delete()
@@ -448,6 +479,7 @@ def lista_retiro_entrega(request):
     return render(request, 'retiroEntrega/retiroEntrega_list.html', {'filter': filtro_retiro_entrega})
 
 
+@login_required(login_url='login')
 def alta_tramite(request):
     limpiar_sesion(["tramite"], request.session)
     if request.method == 'POST':
@@ -464,6 +496,7 @@ def alta_tramite(request):
         return render(request, 'retiroEntrega/retiroEntrega_tramite.html', {'form': form})
 
 
+@login_required(login_url='login')
 def alta_tramite_patentado(request):
     if request.method == 'POST':
         tramite = request.session['tramite']
@@ -487,13 +520,13 @@ def alta_tramite_patentado(request):
         return render(request, 'retiroEntrega/retiroEntrega_patentado.html', {'form': form})
 
 
+@login_required(login_url='login')
 def alta_tramite_nopatentado(request):
     if request.method == 'POST':
         interesado_form = ListaPersonasGenericasForm(request.POST)
         mascota_form = MascotaForm(request.POST)
         if interesado_form.is_valid() and mascota_form.is_valid():
-            mascota = mascota_form.save(commit=False)
-            mascota.save()
+            mascota = mascota_form.save()
             interesado = interesado_form.cleaned_data['persona']
             tramite = request.session['tramite']
             retiro_entrega = RetiroEntregaAnimal()

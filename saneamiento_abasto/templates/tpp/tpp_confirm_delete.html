@@ -1,0 +1,11 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Tpp{% endblock %}
+
+{% block header-title %}Baja de TPP{% endblock %}
+
+{% block url-volver %}{% url 'tpp:lista_tpp' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'tpp:lista_tpp' %}" class="btn btn-sm btn-primary">Cancelar</a>{% endblock %}

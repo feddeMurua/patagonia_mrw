@@ -1,0 +1,11 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Desinfeccion{% endblock %}
+
+{% block header-title %}Baja de Desinfeccion{% endblock %}
+
+{% block url-volver %}{% url 'desinfecciones:lista_desinfecciones' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'desinfecciones:lista_desinfecciones' %}" class="btn btn-sm btn-primary">Cancelar</a>{% endblock %}

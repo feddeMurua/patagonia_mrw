@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/alta_analisis.css' %}"/>
 {% endblock %}
 
-{% block header-title %}Alta de Análisis{% endblock %}
+{% block header-title %}Alta/Modificacion de Análisis{% endblock %}
 
 {% block url-volver %}{% url 'analisis:lista_analisis' %}{% endblock %}
 
@@ -28,5 +28,19 @@
     <script>
         var h = $('#container-form-left').height();
         $('#container-form-right').css('height', h - 13 + 'px');
+
+        $.datepicker.setDefaults({
+            maxDate: new Date()
+        });
+
+        var False = false, True = true;
+        if (!{{ can_delete }}) {
+            $('.add-form-form').addClass('hidden');
+            $('.delete-form-form').addClass('hidden');
+        }
+
+        $(document).ready(function(){
+            $('.well').find('.delete-form-form').first().prop('disabled', true);
+        });
     </script>
 {% endblock %}
