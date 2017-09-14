@@ -1,7 +1,6 @@
 {% extends "base/base_form.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
 
 {% block title %}Reinspeccion{% endblock %}
 
@@ -11,4 +10,28 @@
 
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'reinspecciones:lista_reinspecciones' %}">Cancelar</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        jQuery('#id_turno').datetimepicker({
+            format:'d/m/Y H:i',
+            step:30,
+            minDate: new Date(),
+            disabledWeekDays:[0]
+        });
+
+        $.datetimepicker.setLocale('es');
+
+        $('.input-tags').selectize({
+            plugins: ['remove_button'],
+            persist: false,
+            create: true,
+            render: {
+                item: function(data, escape) {
+                    return '<div>"' + escape(data.text) + '"</div>';
+                }
+            }
+        });
+    </script>
 {% endblock %}

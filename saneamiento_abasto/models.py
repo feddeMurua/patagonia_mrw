@@ -3,8 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from personas import models as m
 from .choices import *
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+
 
 class Abastecedor(m.PersonaFisica):
     empresa = models.CharField(max_length=25, unique=True)
@@ -33,16 +32,14 @@ class Producto(models.Model):
 
 class Reinspeccion(models.Model):
     # FALTA MONTO POR INSPECCION, CUANDO SE DISEÑE EL ARQUEO DE CAJA, AGREGAR.
-    fecha = models.DateField()
-    primer_inspector = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, related_name="inspector_1")
-    # formset inspector o manyto manty
-    turno = models.TimeField()
+    turno = models.DateTimeField()
+    inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField()
     num_certificado = models.BigIntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s " % self.fecha
+        return "%s " % self.turno
 
 
 class Vehiculo(models.Model):
@@ -70,7 +67,6 @@ MATUTINO, VESPERTINO, SABADO , FERIADO, o,  EXCPECION: FUERA DE HORARIO(COMPUTA 
 
 
 class Desinfeccion(models.Model):
-    # todos los meses es obligatoria
     quincena = models.CharField(max_length=30, choices=Quincenas)
     vehiculo = models.ForeignKey('Vehiculo', on_delete=models.CASCADE)
 

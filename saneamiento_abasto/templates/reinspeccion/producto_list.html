@@ -1,0 +1,42 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Reinspeccion: Lista de Productos{% endblock %}
+
+{% block header-title %}Reinspeccion: Lista de Productos{% endblock %}
+
+{% block url-volver %}{% url 'reinspecciones:lista_reinspecciones' %}{% endblock %}
+
+{% block panel-title %}Productos{% endblock %}
+
+{% block btn-nuevo %}
+    <a href="{% url 'reinspecciones:nuevo_producto' reinspeccion_pk %}" class="btn btn-sm btn-primary btn-create">Nuevo Producto</a>
+{% endblock %}
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-hover table-list">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Peso</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for producto in filter.qs %}
+            <tr align="center">
+                <td>{{ producto.producto.nombre }}</td>
+                <td>{{ producto.kilo_producto }} Kg</td>
+                <td align="center">
+                  <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_producto' producto.pk reinspeccion_pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                  <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'reinspecciones:borrar_producto' producto.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block more-scripts %}
+{% endblock %}

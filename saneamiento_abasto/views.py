@@ -8,7 +8,7 @@ from personas import forms as f
 from .forms import *
 from .filters import *
 from django.views.generic.detail import DetailView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
@@ -117,6 +117,35 @@ class ModificacionReinspeccion(LoginRequiredMixin, UpdateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
+
+def lista_productos(request, reinspeccion_pk):
+    lista_productos = ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk)
+    filtro_productos = ReinspeccionProductoListFilter(request.GET, queryset=lista_productos)
+    return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
+                                                               'filter': filtro_productos})
+
+
+def nuevo_producto(request, reinspeccion_pk):
+    if request.method == 'POST':
+        form = ReinspeccionProductoForm(request.POST, reinspeccion_pk=reinspeccion_pk)
+        if form.is_valid():
+            producto = form.save(commit=False)
+            producto.reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
+            producto.save()
+            return HttpResponseRedirect(reverse('reinspecciones:lista_productos', args=reinspeccion_pk))
+    else:
+        form = ReinspeccionProductoForm
+    return render(request, "reinspeccion/producto_form.html", {'reinspeccion_pk': reinspeccion_pk, 'form': form})
+
+
+def borrar_producto(request, pk):
+    producto = ReinspeccionProducto.objects.get(pk=pk)
+    producto.delete()
+    return HttpResponse()
+
+
+def modificar_producto(request, pk, reinspeccion_pk):
+    pass
 
 '''
 VEHICULO

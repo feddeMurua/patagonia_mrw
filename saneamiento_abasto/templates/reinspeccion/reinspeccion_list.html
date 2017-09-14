@@ -11,16 +11,13 @@
 {% block panel-title %}Reinspecciones{% endblock %}
 
 {% block btn-nuevo %}
-<a href="{% url 'reinspecciones:nueva_reinspeccion' %}" class="btn btn-sm btn-primary btn-create">Nueva Reinspeccion</a>
+    <a href="{% url 'reinspecciones:nueva_reinspeccion' %}" class="btn btn-sm btn-primary btn-create">Nueva Reinspeccion</a>
 {% endblock %}
 
 {% block tabla %}
     <table class="table table-striped table-bordered table-hover table-list">
         <thead>
         <tr>
-            <th>Fecha</th>
-            <th>Inspector 1</th>
-            <th>Inspector 2</th>
             <th>Turno</th>
             <th>Precintado</th>
             <th>Certificado</th>
@@ -31,15 +28,12 @@
         <tbody>
         {% for reinspeccion in filter.qs %}
             <tr align="center">
-                <td>{{ reinspeccion.fecha }}</td>
-                <td>{{ reinspeccion.primer_inspector }}</td>
-                <td>{{ reinspeccion.segundo_inspector }}</td>
                 <td>{{ reinspeccion.turno }}</td>
                 <td>{{ reinspeccion.precintado }}</td>
                 <td>{{ reinspeccion.num_certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
                 <td align="center">
-                  <a class="btn btn-warning" href="#"><em class="glyphicon glyphicon-edit"></em></a>
+                  <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-edit"></em></a>
                   <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                   <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'reinspecciones:borrar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
