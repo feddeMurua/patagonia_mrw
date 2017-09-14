@@ -8,7 +8,7 @@ DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 
 class ListaPersonasGenericasForm(forms.Form):
-    persona = forms.ModelChoiceField(queryset=m.PersonaGenerica.objects.all(), required=True)
+    persona = forms.ModelChoiceField(queryset=PersonaGenerica.objects.all(), required=True)
 
 
 class AltaPersonaFisicaForm(forms.ModelForm):
@@ -28,7 +28,7 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
 
 
 class ListaPersonasFisicasForm(forms.Form):
-    persona = forms.ModelChoiceField(queryset=m.PersonaFisica.objects.all(), required=True)
+    persona = forms.ModelChoiceField(queryset=PersonaFisica.objects.all(), required=True)
 
 
 class DomicilioForm(forms.ModelForm):
