@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
-from .models import *
+from personas import forms as f
 from .forms import *
 from .filters import *
+from django.views.generic.detail import DetailView
+from django.http import HttpResponseRedirect
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
@@ -25,13 +26,41 @@ def lista_abastecedor(request):
     return render(request, 'abastecedor/abastecedor_list.html', {'filter': filtro_abastecedores})
 
 
-class AltaAbastecedor(LoginRequiredMixin, CreateView):
-    model = Abastecedor
-    template_name = 'abastecedor/abastecedor_form.html'
-    success_url = reverse_lazy('abastecedores:lista_abastecedores')
-    form_class = AbastecedorForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def alta_abastecedor(request):
+    if request.method == 'POST':
+        form = f.ListaPersonasFisicasForm(request.POST)
+        if form.is_valid():
+            persona = form.cleaned_data['persona']
+            return HttpResponseRedirect(reverse('abastecedores:razon_social_abastecedor', args=[persona.pk]))
+    else:
+        form = f.ListaPersonasFisicasForm
+        return render(request, 'abastecedor/abastecedor_form.html', {'form': form})
+
+
+def razon_social_abastecedor(request, pk):
+    if request.method == 'POST':
+        form = RazonSocialForm(request.POST)
+        if form.is_valid():
+            persona = m.PersonaFisica.objects.get(pk=pk)
+            abastecedor = Abastecedor(personafisica_ptr=persona)
+            razon_social = form.cleaned_data['razon_social']
+            abastecedor.empresa = razon_social
+            abastecedor.save_base(raw=True)
+            return redirect('abastecedores:lista_abastecedores')
+    else:
+        form = RazonSocialForm()
+    return render(request, 'abastecedor/razon_social_form.html', {'form': form})
+
+
+def nuevo_abastecedor(request):
+    if request.method == 'POST':
+        form = AbastecedorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('abastecedores:lista_abastecedores')
+    else:
+        form = AbastecedorForm
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form})
 
 
 class BajaAbastecedor(LoginRequiredMixin, DeleteView):
@@ -90,78 +119,46 @@ class ModificacionReinspeccion(LoginRequiredMixin, UpdateView):
 
 
 '''
-TSA
+VEHICULO
 '''
 
 
 @login_required(login_url='login')
-def lista_tsa(request):
-    lista_tsa = Tsa.objects.all()
-    filtro_tsa = TsaListFilter(request.GET, queryset=lista_tsa)
-    return render(request, 'tsa/tsa_list.html', {'filter': filtro_tsa})
+def lista_vehiculo(request):
+    lista_vehiculo = Vehiculo.objects.all()
+    filtro_vehiculo = VehiculoListFilter(request.GET, queryset=lista_vehiculo)
+    return render(request, 'vehiculo/vehiculo_list.html', {'filter': filtro_vehiculo})
 
 
-class AltaTsa(LoginRequiredMixin, CreateView):
-    model = Tsa
-    template_name = 'tsa/tsa_form.html'
-    success_url = reverse_lazy('tsa:lista_tsa')
-    form_class = TsaForm
+class DetalleVehiculo(LoginRequiredMixin, DetailView):
+    model = Vehiculo
+    template_name = 'vehiculo/vehiculo_detail.html'
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
 
-class BajaTsa(LoginRequiredMixin, DeleteView):
-    model = Tsa
-    template_name = 'tsa/tsa_confirm_delete.html'
-    success_url = reverse_lazy('tsa:lista_tsa')
+class AltaVehiculo(LoginRequiredMixin, CreateView):
+    model = Vehiculo
+    template_name = 'vehiculo/vehiculo_form.html'
+    success_url = reverse_lazy('vehiculo:lista_vehiculos')
+    form_class = VehiculoForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
 
-class ModificacionTsa(LoginRequiredMixin, UpdateView):
-    model = Tsa
-    template_name = 'tsa/tsa_form.html'
-    success_url = reverse_lazy('tsa:lista_tsa')
-    form_class = TsaForm
+class BajaVehiculo(LoginRequiredMixin, DeleteView):
+    model = Vehiculo
+    template_name = 'vehiculo/vehiculo_confirm_delete.html'
+    success_url = reverse_lazy('vehiculo:lista_vehiculos')
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
 
-'''
-TPP
-'''
-
-
-@login_required(login_url='login')
-def lista_tpp(request):
-    lista_tpp = Tpp.objects.all()
-    filtro_tpp = TppListFilter(request.GET, queryset=lista_tpp)
-    # Tener en cuenta que en filter = TSA porque son iguales los modelos.
-    return render(request, 'tpp/tpp_list.html', {'filter': filtro_tpp})
-
-
-class AltaTpp(LoginRequiredMixin, CreateView):
-    model = Tpp
-    template_name = 'tpp/tpp_form.html'
-    success_url = reverse_lazy('tpp:lista_tpp')
-    form_class = TppForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
-class BajaTpp(LoginRequiredMixin, DeleteView):
-    model = Tpp
-    template_name = 'tpp/tpp_confirm_delete.html'
-    success_url = reverse_lazy('tpp:lista_tpp')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
-class ModificacionTpp(LoginRequiredMixin, UpdateView):
-    model = Tpp
-    template_name = 'tpp/tpp_form.html'
-    success_url = reverse_lazy('tpp:lista_tpp')
-    form_class = TppForm
+class ModificacionVehiculo(LoginRequiredMixin, UpdateView):
+    model = Vehiculo
+    template_name = 'vehiculo/vehiculo_form.html'
+    success_url = reverse_lazy('vehiculo:lista_vehiculos')
+    form_class = VehiculoForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 

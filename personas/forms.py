@@ -2,10 +2,13 @@
 from __future__ import unicode_literals
 from django import forms
 from functools import partial
-import re
 from .models import *
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
+
+
+class ListaPersonasGenericasForm(forms.Form):
+    persona = forms.ModelChoiceField(queryset=m.PersonaGenerica.objects.all(), required=True)
 
 
 class AltaPersonaFisicaForm(forms.ModelForm):
@@ -24,22 +27,26 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
         fields = ['telefono', 'email', 'obra_social', 'rubro', 'documentacion_retirada']
 
 
+class ListaPersonasFisicasForm(forms.Form):
+    persona = forms.ModelChoiceField(queryset=m.PersonaFisica.objects.all(), required=True)
+
+
 class DomicilioForm(forms.ModelForm):
 
     class Meta:
         model = Domicilio
-        fields = ['barrio', 'calle', 'calle_entre1', 'calle_entre2', 'nro', 'dpto', 'piso', 'localidad']
+        fields = '__all__'
 
 
 class DomicilioRuralForm(forms.ModelForm):
 
     class Meta:
         model = DomicilioRural
-        fields = ['chacra', 'parcela', 'sector', 'circunscripcion', 'ruta']
+        fields = '__all__'
 
 
 class LocalidadForm(forms.ModelForm):
 
     class Meta:
         model = Localidad
-        fields = ['nombre', 'cp', 'provincia']
+        fields = '__all__'

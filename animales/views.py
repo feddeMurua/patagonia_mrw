@@ -263,7 +263,7 @@ def alta_esterilizacion(request):
 @login_required(login_url='login')
 def alta_esterilizacion_nopatentado(request):
     if request.method == 'POST':
-        interesado_form = ListaPersonasGenericasForm(request.POST)
+        interesado_form = f.ListaPersonasGenericasForm(request.POST)
         mascota_form = MascotaForm(request.POST)
         turno_form = TurnoForm(request.POST)
         if interesado_form.is_valid() and mascota_form.is_valid() and turno_form.is_valid():
@@ -277,7 +277,7 @@ def alta_esterilizacion_nopatentado(request):
             esterilizacion.save()
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
-        interesado_form = ListaPersonasGenericasForm
+        interesado_form = f.ListaPersonasGenericasForm
         mascota_form = MascotaForm
         turno_form = TurnoForm
         return render(request, 'esterilizacion/esterilizacion_form.html', {'interesado_form': interesado_form,
@@ -523,7 +523,7 @@ def alta_tramite_patentado(request):
 @login_required(login_url='login')
 def alta_tramite_nopatentado(request):
     if request.method == 'POST':
-        interesado_form = ListaPersonasGenericasForm(request.POST)
+        interesado_form = f.ListaPersonasGenericasForm(request.POST)
         mascota_form = MascotaForm(request.POST)
         if interesado_form.is_valid() and mascota_form.is_valid():
             mascota = mascota_form.save()
@@ -541,7 +541,7 @@ def alta_tramite_nopatentado(request):
                 mascota.save()
             return redirect('retiros_entregas:lista_retiro_entrega')
     else:
-        interesado_form = ListaPersonasGenericasForm
+        interesado_form = f.ListaPersonasGenericasForm
         mascota_form = MascotaForm
         return render(request, 'retiroEntrega/retiroEntrega_noPatentado.html', {'interesado_form': interesado_form,
                                                                                 'mascota_form': mascota_form})

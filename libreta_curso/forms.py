@@ -14,7 +14,6 @@ TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 class CursoForm(forms.ModelForm):
     fecha_inicio = forms.DateField(widget=DateInput())
     horario = forms.TimeField(widget=TimeInput())
-    regex = re.compile(r"^[a-zñA-ZÑ]+((\s[a-zñA-ZÑ]+)+)?$")
 
     class Meta:
         model = Curso

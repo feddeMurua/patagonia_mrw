@@ -86,6 +86,7 @@ class Esterilizacion(models.Model):
     def __str__(self):
         return "%s" % self.interesado
 
+
 '''
 class Turno(models.Model):
     id = models.IntegerField(primary_key=True)

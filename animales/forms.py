@@ -17,7 +17,7 @@ class AltaAnalisisForm(forms.ModelForm):
 
     class Meta:
         model = Analisis
-        fields = ['fecha', 'interesado', 'procedencia', 'medico_veterinario', 'resultado', 'categoria']
+        fields = '__all__'
 
 
 class ModificacionAnalisisForm(forms.ModelForm):
@@ -102,10 +102,6 @@ class RetiroEntregaForm(forms.ModelForm):
     class Meta:
         model = RetiroEntregaAnimal
         fields = ['tramite', 'observaciones', 'patentado']
-
-
-class ListaPersonasGenericasForm(forms.Form):
-    persona = forms.ModelChoiceField(queryset=m.PersonaGenerica.objects.all(), required=True)
 
 
 class ListaPatentesForm(forms.Form):
