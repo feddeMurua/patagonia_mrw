@@ -6,8 +6,10 @@ from .choices import *
 
 
 class Abastecedor(m.PersonaFisica):
-    empresa = models.CharField(max_length=25, unique=True)
+    empresa = models.CharField(max_length=25, blank=True, null=True)
     # POR EL MOMENTO SOLO SE REQUIERE EL NOMBRE
+    categoria = models.CharField(max_length=500, choices=Categoria)
+    rubro_abastecedor = models.CharField(max_length=150)
 
     def __str__(self):
         datos = " - %s" % self.empresa
@@ -54,8 +56,25 @@ class Vehiculo(models.Model):
 '''
 rubro SI Y NO CON LA EMPRESA (EJ. DON LEON)
 CATEGORIA (A,B,C,D)
-TRANSPORTE CERRADO, ABIERTO, REFRIGERADO Y CONGELADO
-ASOCIAR CATEGOGIRA Y RUBRO
+ASOCIAR CATEGOGIRA Y RUBRO:
+
+1 transporte isotérmico con equipo de frio para transportar productos congelados.
+(productos carneos, aves. pescados, mariscos, hielo, helados)
+
+2 transporte isotérmico con equipo de frio para transportar productos refrigerados.
+(productos carneos, aves, fiambres, lacteos, pastas, productos del mar, sandwiches, productos de rotisería)
+
+3 transporte isotérmico de productos envasados que no requieran refrigeración.
+(bebidas, aguas, panificación y afines)
+
+4 transporte con caja abierta y protección mediante lona o toldo.
+(frutas, verduras, huevos, bebidas)
+
+5 otros.
+
+***tener en cuenta qe se puede tener otros agregados
+
+
 RUBRO QE ESTA EN PERSONA ES PARA LO DEL CARNET!!!!
 EN EMPRESA PARA EL ABASTECEDOR ES QE SE RELACIONAN
 ABASTACEDORES ES PARA EL EJIDO

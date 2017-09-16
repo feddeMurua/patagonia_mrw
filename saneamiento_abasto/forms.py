@@ -15,12 +15,15 @@ class AbastecedorForm(forms.ModelForm):
 
     class Meta:
         model = Abastecedor
-        fields = ['nombre', 'domicilio', 'telefono', 'email', 'apellido', 'fecha_nacimiento', 'dni', 'nacionalidad',
-                  'obra_social', 'empresa']
+        fields = ['nombre', 'domicilio', 'telefono', 'email', 'apellido', 'fecha_nacimiento', 'dni',
+                    'nacionalidad', 'obra_social', 'empresa', 'categoria', 'rubro_abastecedor']
 
 
-class RazonSocialForm(forms.Form):
-    razon_social = forms.CharField(max_length=25, required=True)
+class AbastecedorAdicionalForm(forms.ModelForm):
+
+    class Meta:
+        model = Abastecedor
+        fields = ['empresa', 'categoria', 'rubro_abastecedor']
 
 
 class ReinspeccionForm(forms.ModelForm):

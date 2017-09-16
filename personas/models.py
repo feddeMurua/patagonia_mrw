@@ -57,14 +57,20 @@ class PersonaGenerica(models.Model):
     domicilio = models.ForeignKey('domicilio')
     telefono = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, blank=True)
-
+    '''
+    class Meta:
+        abstract = True
+    '''
     def __str__(self):
         return "%s" % self.nombre
 
 
 class PersonaJuridica(PersonaGenerica):
     cuit = models.CharField(unique=True, max_length=20)
-    rubro = models.CharField(max_length=50)
+    #rubro = models.CharField(max_length=50)
+    '''
+    En teoria, este rubro identifica mas al abastecedor que a la empresa.
+    '''
 
     def __str__(self):
         datos = " - %s" % self.cuit

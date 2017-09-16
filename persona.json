@@ -270,8 +270,7 @@
   "model": "personas.personajuridica",
   "pk": 2,
   "fields": {
-    "cuit": "309292919920",
-    "rubro": "un rubro"
+    "cuit": "309292919920"    
   }
 },
 {
