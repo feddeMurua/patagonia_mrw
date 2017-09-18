@@ -87,6 +87,7 @@ MATUTINO, VESPERTINO, SABADO , FERIADO, o,  EXCPECION: FUERA DE HORARIO(COMPUTA 
 
 
 class Desinfeccion(models.Model):
+    fecha = models.DateField()
     quincena = models.CharField(max_length=30, choices=Quincenas)
     vehiculo = models.ForeignKey('Vehiculo', on_delete=models.CASCADE)
 
