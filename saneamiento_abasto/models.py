@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from personas import models as m
+from django.utils.timezone import now
 from .choices import *
 
 
@@ -91,3 +92,14 @@ class Desinfeccion(models.Model):
 
     def __str__(self):
         return "%s -%s -%s -%s" % (self.fecha, self.quincena, self.vehiculo.dominio, self.vehiculo.titular)
+
+
+class ControlDePlaga(models.Model):
+    #TENER EN CUENTA CERTIFICADO DE DEUDA
+    fecha_hoy = models.DateField(default=now)
+    responsable = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="responsable_propietario")
+    funcionario_actuante = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="funcionario")
+    tipo_plaga = models.CharField(max_length=50, choices=Plagas)
+    procedimiento = models.CharField(max_length=400) #(aplicacion de producto en el acta)
+    recomendaciones = models.CharField(max_length=400, blank=True, null=True)
+    fecha_prox_visita = models.DateField(blank=True, null=True)

@@ -1,0 +1,11 @@
+{% extends "base/base_baja.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Control de Plagas{% endblock %}
+
+{% block header-title %}Baja de Control de Plaga{% endblock %}
+
+{% block url-volver %}{% url 'controles_plagas:lista_controles_plagas' %}{% endblock %}
+
+{% block btn-cancelar %}<a href="{% url 'controles_plagas:lista_controles_plagas' %}" class="btn btn-sm btn-primary">Cancelar</a>{% endblock %}

@@ -250,3 +250,48 @@ class ModificacionDesinfeccion(LoginRequiredMixin, UpdateView):
     form_class = DesinfeccionForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
+
+
+'''
+CONTROLES DE PLAGAS
+'''
+
+
+@login_required(login_url='login')
+def lista_controles_plaga(request):
+    lista_controles_plaga = ControlDePlaga.objects.all()
+    filtro_controles = ControlDePlagaListFilter(request.GET, queryset=lista_controles_plaga)
+    return render(request, 'controlPlaga/control_plaga_list.html', {'filter': filtro_controles})
+
+
+class DetalleControlPlaga(LoginRequiredMixin, DetailView):
+    model = ControlDePlaga
+    template_name = 'controlPlaga/control_plaga_detail.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class AltaControlPlaga(LoginRequiredMixin, CreateView):
+    model = ControlDePlaga
+    template_name = 'controlPlaga/control_plaga_form.html'
+    success_url = reverse_lazy('controles_plagas:lista_controles_plagas')
+    form_class = ControlDePlagaForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class BajaControlPlaga(LoginRequiredMixin, DeleteView):
+    model = ControlDePlaga
+    template_name = 'controlPlaga/control_plaga_confirm_delete.html'
+    success_url = reverse_lazy('controles_plagas:lista_controles_plagas')
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class ModificacionControlPlaga(LoginRequiredMixin, UpdateView):
+    model = ControlDePlaga
+    template_name = 'controlPlaga/control_plaga_form.html'
+    success_url = reverse_lazy('controles_plagas:lista_controles_plagas')
+    form_class = ControlDePlagaForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'

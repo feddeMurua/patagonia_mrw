@@ -1,0 +1,32 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Control de Plagas{% endblock %}
+
+{% block header-title %}Detalle de control{% endblock %}
+
+{% block url-volver %}{% url 'controles_plagas:lista_controles_plagas' %}{% endblock %}
+
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>Procedimiento:</td>
+                <td>{{ object.procedimiento }}</td>
+            </tr>
+            <tr>
+                <td>Recomendaciones:</td>
+                <td>{{ object.recomendaciones }}</td>
+            </tr>
+            <tr>
+                <td>Fecha próxima visita:</td>
+                <td>B° {{ object.fecha_prox_visita</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'controles_plagas:lista_controles_plagas' %}" class="btn btn-primary" role="button">Regresar</a>
+{% endblock %}

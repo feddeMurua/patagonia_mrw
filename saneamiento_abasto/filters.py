@@ -36,3 +36,10 @@ class DesinfeccionListFilter(django_filters.FilterSet):
         model = Desinfeccion
         fields = ['vehiculo']
         order_by = ['vehiculo']
+
+
+class ControlDePlagaListFilter(django_filters.FilterSet):
+    class Meta:
+        model = ControlDePlaga
+        fields = ['fecha_hoy']
+        order_by = ['fecha_hoy']

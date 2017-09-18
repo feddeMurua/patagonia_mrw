@@ -15,9 +15,8 @@ class AbastecedorForm(forms.ModelForm):
 
     class Meta:
         model = Abastecedor
-        fields = ['nombre', 'domicilio', 'telefono', 'email', 'apellido', 'fecha_nacimiento', 'dni',
-                    'nacionalidad', 'obra_social', 'empresa', 'categoria', 'rubro_abastecedor']
-
+        exclude = ('documentacion_retirada','rubro',)
+        fields = '__all__'
 
 class AbastecedorAdicionalForm(forms.ModelForm):
 
@@ -80,3 +79,11 @@ class DesinfeccionForm(forms.ModelForm):
     class Meta:
         model = Desinfeccion
         fields = ['fecha', 'quincena', 'vehiculo']
+
+
+class ControlDePlagaForm(forms.ModelForm):
+
+    class Meta:
+        model = ControlDePlaga
+        exclude = ('fecha_hoy',)
+        fields = '__all__'

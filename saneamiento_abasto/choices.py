@@ -26,3 +26,15 @@ Categoria = (
         ('Categoria E',
          _("Otros")),
 )
+
+Plagas = (
+    ('Palomas', _("Palomas")),
+    ('Ratas', _("Ratas")),
+    ('Cucarachas', _("Cucarachas")),
+    ('Murciélagos', _("Murciélagos")),
+    ('Hormigas', _("Hormigas")),
+    ('Chinches', _("Chinches")),
+    ('Garrapatas', _("Garrapatas")),
+    ('Pulgas', _("Pulgas")),
+    ('Otros', _("Otros")),
+)
