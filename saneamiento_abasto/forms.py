@@ -82,6 +82,7 @@ class DesinfeccionForm(forms.ModelForm):
 
 
 class ControlDePlagaForm(forms.ModelForm):
+    fecha_prox_visita = forms.DateField(widget=DateInput(), required=False)
 
     class Meta:
         model = ControlDePlaga
