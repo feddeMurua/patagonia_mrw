@@ -13,7 +13,7 @@ from .models import *
 from personas import forms as f
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
-
+from parte_diario_caja import models as m
 
 @login_required(login_url='login')
 def limpiar_sesion(lista, session):
@@ -329,6 +329,22 @@ def alta_patente(request):
             mascota = mascota_form.save()
             patente.mascota = mascota
             patente.save()
+            #relacion con el movimiento diario
+            #buscar Servicio
+            servicio = m.Servicio.objects.get(codigo=1)
+            #buscar Detalle movimiento
+            detalle_movimiento_diario = m.DetalleMovimiento()
+            detalle_movimiento_diario.servicio = servicio
+            detalle_movimiento_diario.detalle = "AlTA PATENTE, CHAPA: " + str(patente.mascota.id)
+            detalle_movimiento_diario.save()
+            movimiento_diario = m.MoviemientoDiario()
+            movimiento_diario.nro_ingreso = patente.nro_ingreso_varios
+            movimiento_diario.detalle = detalle_movimiento_diario
+            movimiento_diario.titular = patente.persona
+            movimiento_diario.tipo_pago = patente.tipo_pago
+            movimiento_diario.save()
+
+
             return redirect('patentes:lista_patentes')
     else:
         patente_form = PatenteForm

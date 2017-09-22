@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'animales',
     'personas',
     'saneamiento_abasto',
+    'parte_diario_caja',
 
     # Librerias
     'bootstrap3',

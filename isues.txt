@@ -13,3 +13,7 @@ se otorga despues el numero (a la semana por ej.)
 
 si es tpp
 resolucion intendencia(num)
+
+
+MOVIMIENTO DIARIO:
+* Controlar forma pago por cheque en patente
