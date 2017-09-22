@@ -7,7 +7,7 @@ Categorias = (
 
 Resultados = (
     ('Negativo', _("Negativo")),
-    ('Positivo', _("Positivo")),        
+    ('Positivo', _("Positivo")),
 )
 
 Categoria_Porcino = (
@@ -36,4 +36,10 @@ Categoria_Mascota = (
 Tramites = (
     ('ENTREGA', _("ENTREGA")),
     ('RETIRO', _("RETIRO"))
+)
+
+TipoPago = (
+    ('efectivo', _("efectivo")),
+    ('tarjeta', _("tarjeta")),
+    ('cheque', _("cheque")),
 )

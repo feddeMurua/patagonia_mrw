@@ -1,3 +1,19 @@
 LISTADO:
- 
-* alta reinspeccion : todos los inspectores
+
+Abastecedor no teiene relacion con la categoria ( es del vehiculo)
+puede tener varios rubros el Abastecedor
+abastecedor : pfisica o juridica
+
+RESPINSPCCION:
+si no existe precinto, 000 (puede ser null)
+
+tsa.
+disposcion propia (num)
+se otorga despues el numero (a la semana por ej.)
+
+si es tpp
+resolucion intendencia(num)
+
+
+MOVIMIENTO DIARIO:
+* Controlar forma pago por cheque en patente
