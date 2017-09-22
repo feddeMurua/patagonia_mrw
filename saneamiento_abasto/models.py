@@ -8,7 +8,6 @@ from .choices import *
 
 class Abastecedor(m.PersonaFisica):
     empresa = models.CharField(max_length=25, blank=True, null=True)
-    # POR EL MOMENTO SOLO SE REQUIERE EL NOMBRE
     categoria = models.CharField(max_length=500, choices=Categoria)
     rubro_abastecedor = models.CharField(max_length=150)
 
@@ -30,7 +29,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=150)
 
     def __str__(self):
-        return "%s " % self.nombre
+        return "%s" % self.nombre
 
 
 class Reinspeccion(models.Model):
@@ -42,7 +41,7 @@ class Reinspeccion(models.Model):
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s " % self.turno
+        return "%s" % self.turno
 
 
 class Vehiculo(models.Model):
@@ -54,10 +53,11 @@ class Vehiculo(models.Model):
     def __str__(self):
         return "%s - %s" % (self.marca, self.dominio)
 
+
 '''
 rubro SI Y NO CON LA EMPRESA (EJ. DON LEON)
 CATEGORIA (A,B,C,D)
-ASOCIAR CATEGOGIRA Y RUBRO:
+ASOCIAR CATEGORIA Y RUBRO:
 
 1 transporte isotérmico con equipo de frio para transportar productos congelados.
 (productos carneos, aves. pescados, mariscos, hielo, helados)
@@ -76,13 +76,11 @@ ASOCIAR CATEGOGIRA Y RUBRO:
 ***tener en cuenta qe se puede tener otros agregados
 
 
-RUBRO QE ESTA EN PERSONA ES PARA LO DEL CARNET!!!!
-EN EMPRESA PARA EL ABASTECEDOR ES QE SE RELACIONAN
-ABASTACEDORES ES PARA EL EJIDO
-TSA DENTRO DE LA CIUDAD O SALE
-EN LA REINSPECCION PUEDEN HABER N CANTIDAD DE INSPECTORES (POR AHI 3)
-TURNO EN RESPINSPCCION:
-MATUTINO, VESPERTINO, SABADO , FERIADO, o,  EXCPECION: FUERA DE HORARIO(COMPUTA DOBLE) (CHOICE) (son 5)
+EN EMPRESA PARA EL ABASTECEDOR ES QUE SE RELACIONAN
+ - ABASTACEDORES ES PARA EL EJIDO
+ - TSA DENTRO DE LA CIUDAD O SALE
+TURNO EN RESPINSPECCION:
+    MATUTINO, VESPERTINO, SABADO, FERIADO, o EXCPECION: FUERA DE HORARIO (COMPUTA DOBLE) (CHOICE) (son 5)
 '''
 
 
@@ -91,15 +89,18 @@ class Desinfeccion(models.Model):
     vehiculo = models.ForeignKey('Vehiculo', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s -%s -%s -%s" % (self.fecha, self.quincena, self.vehiculo.dominio, self.vehiculo.titular)
+        return "%s - %s - %s" % (self.quincena, self.vehiculo.dominio, self.vehiculo.titular)
 
 
 class ControlDePlaga(models.Model):
-    #TENER EN CUENTA CERTIFICADO DE DEUDA
+    # TENER EN CUENTA CERTIFICADO DE DEUDA
     fecha_hoy = models.DateField(default=now)
     responsable = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="responsable_propietario")
-    funcionario_actuante = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="funcionario")
+    funcionario_actuante = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, related_name="funcionario")
     tipo_plaga = models.CharField(max_length=50, choices=Plagas)
-    procedimiento = models.CharField(max_length=400) #(aplicacion de producto en el acta)
+    procedimiento = models.CharField(max_length=400)  # (aplicacion de producto en el acta)
     recomendaciones = models.CharField(max_length=400, blank=True, null=True)
     fecha_prox_visita = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return "%s - %s - %s" % (self.fecha_hoy, self.responsable.dominio, self.tipo_plaga)

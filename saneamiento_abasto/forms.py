@@ -15,10 +15,12 @@ class AbastecedorForm(forms.ModelForm):
 
     class Meta:
         model = Abastecedor
-        exclude = ('documentacion_retirada','rubro',)
+        exclude = ['documentacion_retirada', 'rubro']
         fields = '__all__'
 
+
 class AbastecedorAdicionalForm(forms.ModelForm):
+    rubro_abastecedor = forms.ChoiceField()
 
     class Meta:
         model = Abastecedor
@@ -26,6 +28,8 @@ class AbastecedorAdicionalForm(forms.ModelForm):
 
 
 class ReinspeccionForm(forms.ModelForm):
+    inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
+        rol_actuante__nombre='Inspector'))
 
     class Meta:
         model = Reinspeccion
@@ -42,7 +46,7 @@ class ReinspeccionProductoForm(forms.ModelForm):
         self.id_curso = kwargs.pop('reinspeccion_pk', None)
         super(ReinspeccionProductoForm, self).__init__(*args, **kwargs)
 
-    def clean_persona(self):
+    def clean_producto(self):
         producto = self.cleaned_data['producto']
         reinspecciones = ReinspeccionProductoForm.objects.filter(producto__pk=producto.pk)
         if reinspecciones:
@@ -86,5 +90,5 @@ class ControlDePlagaForm(forms.ModelForm):
 
     class Meta:
         model = ControlDePlaga
-        exclude = ('fecha_hoy',)
+        exclude = ['fecha_hoy']
         fields = '__all__'

@@ -12,4 +12,6 @@ admin.site.register(Provincia)
 admin.site.register(Nacionalidad)
 admin.site.register(PersonaJuridica)
 admin.site.register(PersonalPropio)
+admin.site.register(RolActuante)
+
 

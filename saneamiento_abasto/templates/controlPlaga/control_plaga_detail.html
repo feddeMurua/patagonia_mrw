@@ -15,13 +15,17 @@
                 <td>Procedimiento:</td>
                 <td>{{ object.procedimiento }}</td>
             </tr>
-            <tr>
-                <td>Recomendaciones:</td>
-                <td>{{ object.recomendaciones }}</td>
-            </tr>
+                <tr>
+                    <td>Recomendaciones:</td>
+                    {% if object.recomendaciones %}
+                        <td>{{ object.recomendaciones }}</td>
+                    {% endif %}
+                </tr>
             <tr>
                 <td>Fecha próxima visita:</td>
-                <td>{{ object.fecha_prox_visita }}</td>
+                {% if object.fecha_prox_visita %}
+                    <td>{{ object.fecha_prox_visita }}</td>
+                {% endif %}
             </tr>
         </tbody>
     </table>

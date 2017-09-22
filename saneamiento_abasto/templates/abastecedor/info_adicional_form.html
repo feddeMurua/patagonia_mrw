@@ -12,3 +12,34 @@
 {% block btn-cancelar %}    
     <a class="btn btn-danger btn-cancelar" href="{% url 'abastecedores:alta_abastecedor' %}">Cancelar</a>
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        var $selectCategoria = $('#id_categoria'),
+        $selectRubro = $('#id_rubro_abastecedor');
+
+        $selectCategoria.on('change', setOptionsSelect);
+        setOptionsSelect();
+
+        function setOptionsSelect() {
+            var id_categoria = $selectCategoria.val()
+            if (id_categoria) {
+                $.ajax({
+                    url: '/getRubros/' + id_categoria,
+                    dataType: 'json',
+                    success: function(data){
+                        console.log(data);
+                        var selectize = $('select')[1].selectize;
+                        selectize.clearOptions();
+                        $.each(data, function(key, opt) {
+                            selectize.addOption({value: opt, text: key});
+                        })
+                    },
+                    error: function(err){
+                        alert("Fallo Ajax");
+                    }
+                });
+            }
+        }
+    </script>
+{% endblock %}

@@ -7,16 +7,29 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from personas import forms as f
 from .forms import *
 from .filters import *
+from .choices import *
 from django.views.generic.detail import DetailView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
     DeleteView)
 
+
 '''
 ABASTECEDORES
 '''
+
+
+@login_required(login_url='login')
+def get_rubros(request, id_categoria):
+    return JsonResponse({
+        'Categoria_A': Categoria_A,
+        'Categoria_B': Categoria_B,
+        'Categoria_C': Categoria_C,
+        'Categoria_D': Categoria_D,
+        'Categoria_E': Categoria_E
+    }.get(id_categoria, None))
 
 
 @login_required(login_url='login')

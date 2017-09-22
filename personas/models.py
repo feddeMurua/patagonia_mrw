@@ -67,10 +67,6 @@ class PersonaGenerica(models.Model):
 
 class PersonaJuridica(PersonaGenerica):
     cuit = models.CharField(unique=True, max_length=20)
-    #rubro = models.CharField(max_length=50)
-    '''
-    En teoria, este rubro identifica mas al abastecedor que a la empresa.
-    '''
 
     def __str__(self):
         datos = " - %s" % self.cuit
@@ -91,9 +87,18 @@ class PersonaFisica(PersonaGenerica):
         return super(PersonaFisica, self).__str__() + datos
 
 
-class PersonalPropio(PersonaFisica):
-    rol_actuante = models.CharField(max_length=50)
+class RolActuante(models.Model):
+    nombre = models.CharField(max_length=25)
 
     def __str__(self):
-            datos = " - %s" % self.rol_actuante
-            return super(PersonalPropio, self).__str__() + datos
+        return "%s" % self.nombre
+
+
+class PersonalPropio(PersonaFisica):
+    rol_actuante = models.ManyToManyField(RolActuante)
+
+    def __str__(self):
+        return super(PersonalPropio, self).__str__()
+
+
+
