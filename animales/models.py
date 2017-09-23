@@ -124,9 +124,7 @@ class Mascota(models.Model):
 
 
 class Patente(models.Model):
-    fecha = models.DateField(default=now)
-    nro_ingreso_varios = models.BigIntegerField()
-    tipo_pago = models.CharField(max_length=50, choices=TipoPago)
+    fecha = models.DateField(default=now)    
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)
     fecha_garrapaticida = models.DateField(null=True)

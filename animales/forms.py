@@ -80,7 +80,7 @@ class PatenteForm(forms.ModelForm):
 
     class Meta:
         model = Patente
-        fields = ['persona', 'observaciones', 'nro_ingreso_varios', 'tipo_pago']
+        fields = ['persona', 'observaciones']
 
 
 class ControlAntirrabicoForm(forms.ModelForm):

@@ -14,6 +14,7 @@ from personas import forms as f
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from parte_diario_caja import models as m
+from parte_diario_caja import forms as pd_f
 
 @login_required(login_url='login')
 def limpiar_sesion(lista, session):
@@ -324,33 +325,33 @@ def alta_patente(request):
     if request.method == 'POST':
         patente_form = PatenteForm(request.POST)
         mascota_form = MascotaForm(request.POST)
-        if patente_form.is_valid() & mascota_form.is_valid():
+        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
+
+        if patente_form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & mov_diario_form.is_valid():
             patente = patente_form.save(commit=False)
             mascota = mascota_form.save()
             patente.mascota = mascota
             patente.save()
-            #relacion con el movimiento diario
-            #buscar Servicio
-            servicio = m.Servicio.objects.get(codigo=1)
-            #buscar Detalle movimiento
-            detalle_movimiento_diario = m.DetalleMovimiento()
-            detalle_movimiento_diario.servicio = servicio
-            detalle_movimiento_diario.detalle = "AlTA PATENTE, CHAPA: " + str(patente.mascota.id)
-            detalle_movimiento_diario.save()
-            movimiento_diario = m.MoviemientoDiario()
-            movimiento_diario.nro_ingreso = patente.nro_ingreso_varios
-            movimiento_diario.detalle = detalle_movimiento_diario
-            movimiento_diario.titular = patente.persona
-            movimiento_diario.tipo_pago = patente.tipo_pago
-            movimiento_diario.save()
-
+            #Se crea el movimiento diario
+            mov_diario = mov_diario_form.save()
+            #Se crea el detalle del movimiento
+            detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
+            descrip = "AlTA PATENTE, CHAPA: " + str(patente.mascota.id)            
+            servicio = detalle_mov_diario_form.cleaned_data['servicio']
+            detalle_mov_diario.agregar_detalle(mov_diario, servicio, descrip, patente.persona)
+            detalle_mov_diario.save()
 
             return redirect('patentes:lista_patentes')
     else:
         patente_form = PatenteForm
         mascota_form = MascotaForm
+        mov_diario_form = pd_f.MovimientoDiarioForm
+        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm
         return render(request, "patente/patente_form.html", {'patente_form': patente_form,
-                                                             'mascota_form': mascota_form})
+                                                             'mascota_form': mascota_form,
+                                                             'mov_diario_form': mov_diario_form,
+                                                             'detalle_mov_diario_form': detalle_mov_diario_form})
 
 
 class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
