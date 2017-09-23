@@ -11,7 +11,7 @@ class Analisis(models.Model):
     interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="interesado")
     procedencia = models.ForeignKey(m.Localidad, on_delete=models.CASCADE)
     medico_veterinario = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE,
-                                              related_name="medico_veterinario")
+                                           related_name="medico_veterinario")
     resultado = models.CharField(max_length=15, choices=Resultados)
     categoria = models.CharField(max_length=15, choices=Categorias)
 
@@ -32,7 +32,7 @@ class ControlAntirrabico(models.Model):
     fecha_suceso = models.DateField(default=now)
     mordido = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="mordido")
     responsable = models.ForeignKey(m.PersonaFisica, on_delete=models.SET_NULL, null=True, blank=True,
-                                       related_name="responsable")
+                                    related_name="responsable")
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):

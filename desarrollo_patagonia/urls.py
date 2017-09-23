@@ -17,6 +17,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
+from saneamiento_abasto import views as sa
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -39,4 +40,6 @@ urlpatterns = [
     url(r'^vehiculos/', include('saneamiento_abasto.urls_vehiculo', namespace='vehiculo')),
     url(r'^desinfecciones/', include('saneamiento_abasto.urls_desinfecciones', namespace='desinfecciones')),
     url(r'^controles/plagas/', include('saneamiento_abasto.urls_controlPlaga', namespace='controles_plagas')),
+
+    url(r'^getRubros/(?P<id_categoria>\w+)$', sa.get_rubros, name='get_rubros'),
 ]
