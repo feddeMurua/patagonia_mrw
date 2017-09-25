@@ -7,13 +7,9 @@ from .choices import *
 # Create your models here.
 
 class Servicio(models.Model):
-    codigo = models.IntegerField(primary_key=True)
     descrip = models.CharField(max_length=100)
     importe = models.FloatField()
-    '''
-    ID      DESCRIP     IMPORTE
-    1       PATENTE     $130
-    '''
+
     def __str__(self):
         return "%s" % self.descrip
 
