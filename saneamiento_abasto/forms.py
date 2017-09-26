@@ -10,21 +10,11 @@ DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
-class AbastecedorForm(forms.ModelForm):
-    fecha_nacimiento = forms.DateField(widget=DateInput())
+class AbastecedorForm(forms.ModelForm):    
 
     class Meta:
         model = Abastecedor
-        exclude = ['documentacion_retirada', 'rubro']
         fields = '__all__'
-
-
-class AbastecedorAdicionalForm(forms.ModelForm):
-    rubro_abastecedor = forms.ChoiceField()
-
-    class Meta:
-        model = Abastecedor
-        fields = ['empresa', 'categoria', 'rubro_abastecedor']
 
 
 class ReinspeccionForm(forms.ModelForm):

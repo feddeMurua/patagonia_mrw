@@ -6,8 +6,8 @@ from .models import *
 class AbastecedorListFilter(django_filters.FilterSet):
     class Meta:
         model = Abastecedor
-        fields = ['empresa']
-        order_by = ['empresa']
+        fields = ['responsable']
+        order_by = ['responsable']
 
 
 class ReinspeccionListFilter(django_filters.FilterSet):

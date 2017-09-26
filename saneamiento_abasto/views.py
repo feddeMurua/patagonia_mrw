@@ -59,9 +59,7 @@ def info_adicional_abastecedor(request, pk):
             empresa = form.cleaned_data['empresa']
             categoria = form.cleaned_data['categoria']
             rubro_abastecedor = form.cleaned_data['rubro_abastecedor']
-            abastecedor.empresa = empresa
-            abastecedor.categoria = categoria
-            abastecedor.rubro_abastecedor = rubro_abastecedor
+            abastecedor.empresa = empresa                       
             abastecedor.save_base(raw=True)
             return redirect('abastecedores:lista_abastecedores')
     else:
