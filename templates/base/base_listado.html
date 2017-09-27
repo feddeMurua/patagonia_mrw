@@ -21,7 +21,9 @@
                     </div>
                     <div class="col col-xs-6 text-right">
                         {% block btn-nuevo %}{% endblock %}
-                        <a class="btn btn-sm btn-info" id="buscar">Buscar</a>
+                        {% block no-filter-panel %}
+                            <a class="btn btn-sm btn-info" id="buscar">Buscar</a>
+                        {% endblock %}
                     </div>
                 </div>
             </div>
@@ -45,15 +47,17 @@
                 </form>
             </div>
             <div class="panel-body">
-                {% if filter.qs %}
-                    {% block tabla %}{% endblock %}
-                {% else %}
-                    <div id="table-empty" class="table-empty">
-                        <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
-                            No se encontraron elementos
-                        </h3>
-                    </div>
-                {% endif %}
+                {% block no-filter-table %}
+                    {% if filter.qs %}
+                        {% block tabla %}{% endblock %}
+                    {% else %}
+                        <div id="table-empty" class="table-empty">
+                            <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                                No se encontraron elementos
+                            </h3>
+                        </div>
+                    {% endif %}
+                {% endblock %}
             </div>
             {% block panel-footer %}{% endblock %}
         </div>
@@ -95,9 +99,8 @@
                         type: 'POST',
                         success: function(e) {
                             swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
-                            function(){
-                                location.reload()
-                            });
+                                $('#table-list').parent().load("#table-list")
+                            );
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             swal('Error de operacion', 'Por favor intente nuevamente', 'error');

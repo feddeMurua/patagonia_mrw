@@ -32,7 +32,6 @@
                                     {{ field|add_class:'form-control' }}
                                 </div>
                             {% endfor %}
-                            <a class="btn btn-danger btn-crear-nuevo" data-url="{% url 'domicilios:nueva_localidad' %}">Localidad</a>
                         </div>
                     </div>
                 </div>
@@ -43,65 +42,4 @@
             </div>
         </form>
     </div>
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        $(document).ready(function(){
-            $('.btn-crear-nuevo').click(function crearNuevo(e) {
-                var urlAlta = $(e.target).data('url');
-                swal({
-                    title: "Nuevo domicilio",
-                    html: '{% for field in localidad_form %}                                      ' +
-                          '    <div class="form-group">                                           ' +
-                          '        <label for="{{ field.id_for_label }}">{{ field.label }}</label>' +
-                          '        {{ field|add_class:'form-control' }}                           ' +
-                          '    </div>                                                             ' +
-                          '{% endfor %}',
-                    onOpen: function() {
-                        $.ajax({
-                            url: '/domicilios/getProvincias',
-                            success: function(data){
-                                var $provincias = $('#id_provincia').selectize();
-                                var selector = $provincias[0].selectize;
-                                selector.clearOptions();
-                                selector.addOption({value: 'CHUBUT', text: 'CHUBUT'});
-                                <!--
-                                $.each(data, function(key, opt) {
-                                    $provincias.addOption({value: opt['value'], text: opt['text']});
-                                })
-                                 -->
-                            },
-                            error: function(err){
-                                alert("Fallo Ajax");
-                            }
-                        });
-                    },
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Confirmar",
-                    cancelButtonText: "Cancelar"
-                }).then(function(){
-                    $.ajaxSetup({
-                        headers: {
-                            "X-CSRFToken": Cookies.get('csrftoken')
-                        }
-                    });
-                    $.ajax({
-                        url: urlBaja,
-                        type: 'POST',
-                        success: function(e) {
-                            swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
-                            function(){
-                                location.reload()
-                            });
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            swal('Error de operacion', 'Por favor intente nuevamente', 'error');
-                        }
-                    });
-                });
-            });
-        });
-    </script>
 {% endblock %}

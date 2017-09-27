@@ -16,6 +16,7 @@ from django.views.generic.edit import UpdateView
 from parte_diario_caja import models as m
 from parte_diario_caja import forms as pd_f
 
+
 @login_required(login_url='login')
 def limpiar_sesion(lista, session):
     for item in lista:
@@ -327,29 +328,27 @@ def alta_patente(request):
         mascota_form = MascotaForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-
-        if patente_form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & mov_diario_form.is_valid():
+        if patente_form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & \
+                mov_diario_form.is_valid():
             patente = patente_form.save(commit=False)
             mascota = mascota_form.save()
             patente.mascota = mascota
             patente.save()
-            #Se crea el movimiento diario
+            # Se crea el movimiento diario
             mov_diario = mov_diario_form.save()
-            #Se crea el detalle del movimiento
+            # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
-            descrip = "AlTA PATENTE, CHAPA: " + str(patente.mascota.id)            
-            servicio = detalle_mov_diario_form.cleaned_data['servicio']
-            detalle_mov_diario.agregar_detalle(mov_diario, servicio, descrip, patente.persona)
+            descrip = "Patentamiento - Chapa: " + str(mascota.id)
+            detalle_mov_diario.agregar_detalle(mov_diario, m.Servicio.objects.get(nombre='Patentamiento'), descrip,
+                                               patente.persona)
             detalle_mov_diario.save()
-
             return redirect('patentes:lista_patentes')
     else:
         patente_form = PatenteForm
         mascota_form = MascotaForm
         mov_diario_form = pd_f.MovimientoDiarioForm
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm
-        return render(request, "patente/patente_form.html", {'patente_form': patente_form,
-                                                             'mascota_form': mascota_form,
+        return render(request, "patente/patente_form.html", {'patente_form': patente_form, 'mascota_form': mascota_form,
                                                              'mov_diario_form': mov_diario_form,
                                                              'detalle_mov_diario_form': detalle_mov_diario_form})
 

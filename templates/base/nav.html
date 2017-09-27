@@ -9,6 +9,7 @@
 <body>
     <div id="cssmenu">
         <ul>
+            <li class="has-sub"><a href="{% url 'caja:lista_detalle_movimientos'%}"><span>Parte Diario de Caja</span></a>
             <li class="has-sub"><a href="#"><span>Personas</span></a>
                 <ul>
                     <li><a href="{% url 'personas:lista_personas'%}"><span>Personas Físicas</span></a></li>
@@ -44,7 +45,7 @@
             </li>
             <li class="has-sub"><a href="#"><span>Transporte y Desinfeccion</span></a>
                 <ul>
-                    <li><a href="{% url 'vehiculo:lista_vehiculos'%}"><span>Vehiculos</span></a></li>                    
+                    <li><a href="{% url 'vehiculo:lista_vehiculos'%}"><span>Vehiculos</span></a></li>
                     <li><a href="{% url 'controles_plagas:lista_controles_plagas'%}"><span>Control de Plagas</span></a></li>
                 </ul>
             </li>

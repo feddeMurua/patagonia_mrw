@@ -28,7 +28,6 @@
                     url: '/getRubros/' + id_categoria,
                     dataType: 'json',
                     success: function(data){
-                        console.log(data);
                         var selectize = $('select')[1].selectize;
                         selectize.clearOptions();
                         $.each(data, function(key, opt) {

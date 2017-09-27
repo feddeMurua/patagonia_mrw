@@ -15,19 +15,17 @@
             {% csrf_token %}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class=" panel panel-default col-xs-9 col-md-6" id="container-form-left">
-                      <div class="panel-heading persona-title">Datos de la Persona</div>
+                    <div class=" panel panel-default col-md-6" id="container-form-left">
+                        <div class="panel-heading persona-title">Datos de la Persona</div>
                         <div class="panel-body">
-                          {% for field in patente_form %}
-                              <div class="form-group">
-                                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                  {{ field|add_class:'form-control' }}
-                              </div>
-                          {% endfor %}
+                            {% for field in patente_form %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field|add_class:'form-control' }}
+                            </div>
+                            {% endfor %}
                         </div>
-                    </div>
-                    <div class="panel panel-default col-xs-4 col-md-6" id="container-form-rigth">
-                        <div class="panel-heading movimiento-title">Ingresos Varios</div>
+                        <div class="panel-heading movimiento-title">Datos de facturacion</div>
                         <div class="panel-body">
                             {% for field in mov_diario_form %}
                                 <div class="form-group">
@@ -35,11 +33,6 @@
                                     {{ field|add_class:'form-control' }}
                                 </div>
                             {% endfor %}
-                        </div>
-                    </div>
-                    <div class="panel panel-default col-xs-4 col-md-6" id="container-form-bottom-right">
-                        <div class="panel-heading detalle-movimiento-title">Detalle de Ingresos Varios</div>
-                        <div class="panel-body">
                             {% for field in detalle_mov_diario_form %}
                                 <div class="form-group">
                                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -48,7 +41,7 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="panel panel-default col-xs-2 col-md-6" id="container-form-botom-left">
+                    <div class="panel panel-default col-md-6" id="container-form-botom-left">
                         <div class="panel-heading domicilio-title">Datos de la Mascota</div>
                         <div class="panel-body">
                             {% for field in mascota_form %}
@@ -74,5 +67,18 @@
         $.datepicker.setDefaults({
             maxDate: new Date()
         });
+
+        var tipo_pago = $('#id_tipo_pago'),
+        nro_cheque = $('#id_nro_cheque').parent();
+        tipo_pago.on('change', hideNroCheque);
+        hideNroCheque();
+
+        function hideNroCheque() {
+            if (tipo_pago.val() == 'Cheque') {
+                nro_cheque.removeClass('hidden');
+            } else {
+                nro_cheque.addClass('hidden');
+            }
+        }
     </script>
 {% endblock %}

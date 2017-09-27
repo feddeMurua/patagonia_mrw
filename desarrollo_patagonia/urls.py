@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^vehiculos/', include('saneamiento_abasto.urls_vehiculo', namespace='vehiculo')),
     url(r'^desinfecciones/', include('saneamiento_abasto.urls_desinfecciones', namespace='desinfecciones')),
     url(r'^controles/plagas/', include('saneamiento_abasto.urls_controlPlaga', namespace='controles_plagas')),
+    url(r'^caja/', include('parte_diario_caja.urls_caja', namespace='caja')),
 
     url(r'^getRubros/(?P<id_categoria>\w+)$', sa.get_rubros, name='get_rubros'),
 ]

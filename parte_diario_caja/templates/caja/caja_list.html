@@ -1,0 +1,73 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Caja{% endblock %}
+
+{% block header-title %}Parte Diario de Caja{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Movimientos diarios{% endblock %}
+
+{% block btn-nuevo %}
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ datepicker }}
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span> Buscar
+        </button>
+    </form>
+{% endblock %}
+
+{% block no-filter-panel %}{% endblock %}
+
+{% block no-filter-table %}
+    {% if movimientos %}
+        <table class="table table-striped table-bordered table-list">
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>N° Ingreso</th>
+                <th>Importe</th>
+                <th>Titular</th>
+                <th>Detalle</th>
+                <th>Tipo de Pago</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for detalle in movimientos %}
+                    <tr>
+                        <td>{{ detalle.movimiento.fecha }}</td>
+                        <td>{{ detalle.movimiento.nro_ingreso }}</td>
+                        <td> $ {{ detalle.servicio.importe }}</td>
+                        <td>{{ detalle.titular }}</td>
+                        <td>{{ detalle.descripcion }}</td>
+                        <td>{{ detalle.tipo_pago }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div id="table-empty" class="table-empty">
+            <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                No se encontraron elementos
+            </h3>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        jQuery('#id_fecha').datetimepicker({
+            timepicker: false,
+            format: 'd/m/Y',
+            maxDate: new Date(),
+            disabledWeekDays:[0]
+        });
+
+        $.datetimepicker.setLocale('es');
+    </script>
+{% endblock %}

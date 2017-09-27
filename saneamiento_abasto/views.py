@@ -219,6 +219,15 @@ class BajaVehiculo(LoginRequiredMixin, DeleteView):
     redirect_field_name = 'next'
 
 
+class ModificacionVehiculo(LoginRequiredMixin, UpdateView):
+    model = Vehiculo
+    template_name = 'vehiculo/vehiculo_form.html'
+    success_url = reverse_lazy('vehiculo:lista_vehiculos')
+    form_class = VehiculoForm
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
 def ingresar_disposicion(request, pk, nro_disp):
     vehiculo = Vehiculo.objects.get(pk=pk)
     vehiculo.disposicion_resolucion = int(nro_disp)

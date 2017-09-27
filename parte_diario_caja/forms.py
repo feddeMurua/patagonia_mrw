@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from functools import partial
 from django import forms
 from .models import *
-from .choices import *
+
+
+class DatePickerForm(forms.Form):
+    fecha = forms.DateField()
 
 
 class MovimientoDiarioForm(forms.ModelForm):
 
     class Meta:
         model = MoviemientoDiario
-        exclude = ('fecha',)
+        exclude = ['fecha']
         fields = '__all__'
 
 
 class DetalleMovimientoDiarioForm(forms.ModelForm):
 
-    tipo_pago = forms.ChoiceField(choices=TipoPago, label="Tipo de Pago", initial='', widget=forms.Select())
-
     class Meta:
         model = DetalleMovimiento
-        exclude = ('movimiento','titular','descripcion',)
+        exclude = ['movimiento', 'titular', 'descripcion', 'servicio']
         fields = '__all__'

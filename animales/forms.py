@@ -83,6 +83,9 @@ class PatenteForm(forms.ModelForm):
     class Meta:
         model = Patente
         fields = ['persona', 'observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
+        }
 
 
 class ControlAntirrabicoForm(forms.ModelForm):

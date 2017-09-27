@@ -17,7 +17,6 @@
         var tipo_vehiculo = $('#id_tipo_vehiculo'),
         disp_res = $('.form-group').last();
         tipo_vehiculo.on('change', function() {
-            console.log(disp_res);
             if (tipo_vehiculo.val() == 'TPP') {
                 disp_res.removeClass('hidden');
             } else {
