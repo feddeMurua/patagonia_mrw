@@ -5,6 +5,12 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')  # Para que no de error por los acentos
 
+Tipo_Vehiculo = (
+    ('TSA', _("Transporte de Sustancias Alimenticias")),
+    ('TPP', _("Transporte Público de Pasajeros"))
+)
+
+
 Quincenas = (
     ('Primer quincena', _("Primer quincena")),
     ('Segunda quincena', _("Segunda quincena")),

@@ -1,14 +1,28 @@
 {% extends "base/base_form.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
 
-{% block title %}vehiculo{% endblock %}
+{% block title %}Vehiculos{% endblock %}
 
-{% block header-title %}Alta/Modificacion de vehiculo{% endblock %}
+{% block header-title %}Alta/Modificacion de Vehiculo{% endblock %}
 
 {% block url-volver %}{% url 'vehiculo:lista_vehiculos' %}{% endblock %}
 
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'vehiculo:lista_vehiculos' %}">Cancelar</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var tipo_vehiculo = $('#id_tipo_vehiculo'),
+        disp_res = $('.form-group').last();
+        tipo_vehiculo.on('change', function() {
+            console.log(disp_res);
+            if (tipo_vehiculo.val() == 'TPP') {
+                disp_res.removeClass('hidden');
+            } else {
+                disp_res.addClass('hidden');
+            }
+        });
+    </script>
 {% endblock %}

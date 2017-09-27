@@ -19,7 +19,8 @@
         <thead>
         <tr>
             <th>Titular</th>
-            <th>Vehículo</th>
+            <th>Marca - Patente</th>
+            <th>Tipo de Vehículo</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
         </thead>
@@ -27,12 +28,15 @@
         {% for vehiculo in filter.qs %}
             <tr align="center">
                 <td>{{ vehiculo.titular }}</td>
-                <td>{{ vehiculo.marca }}, {{vehiculo.dominio}}</td>
+                <td>{{ vehiculo.marca }} - {{vehiculo.dominio}}</td>
+                <td>{{ vehiculo.tipo_vehiculo }}</td>
                 <td align="center">
-                  <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'vehiculo:detalle_vehiculo' vehiculo.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                  <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'vehiculo:modificar_vehiculo' vehiculo.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                  <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'vehiculo:borrar_vehiculo' vehiculo.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
-                  <a class="btn btn-success" data-toggle="tooltip" title="Desinfección" href="#"><em class="glyphicon glyphicon-calendar"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'vehiculo:detalle_vehiculo' vehiculo.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'vehiculo:borrar_vehiculo' vehiculo.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    <a class="btn btn-success" data-toggle="tooltip" title="Desinfección" href="#"><em class="glyphicon glyphicon-calendar"></em></a>
+                    {% if vehiculo.tipo_vehiculo == 'TSA' %}
+                        <a class="btn btn-default btn-disp" data-toggle="tooltip" title="Ingresar Resolucion" data-pk="{{ vehiculo.pk }}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
@@ -41,4 +45,36 @@
 {% endblock %}
 
 {% block more-scripts %}
+    <script>
+        $('.btn-disp').click(function ingresarDisp(e) {
+            var pk = $(e.target).data('pk');
+            swal({
+                title: 'Ingrese el número de disposicion a registrar',
+                input: 'text',
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Confirmar",
+                cancelButtonText: "Cancelar"
+            }).then(function(text){
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRFToken": Cookies.get('csrftoken')
+                    }
+                });
+                $.ajax({
+                    url: 'nroDisposicion/' + pk + '/' + text,
+                    type: 'POST',
+                    success: function(e) {
+                        swal('Accion exitosa', 'Se asigno el número de disposicion correctamente', 'success').then(
+                            function(){
+                                location.reload()
+                            });
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        swal('Error de operacion', 'Por favor intente nuevamente', 'error');
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

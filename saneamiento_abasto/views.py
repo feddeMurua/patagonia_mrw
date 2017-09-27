@@ -132,7 +132,7 @@ class ModificacionReinspeccion(LoginRequiredMixin, UpdateView):
     template_name = 'reinspeccion/reinspeccion_form.html'
     success_url = reverse_lazy('reinspecciones:lista_reinspecciones')
     form_class = ReinspeccionForm
-    pk_url_kwarg = 'reinspeccion_pk' #Si se cambia el nombre pk en la url se debe agregar este parámetro.
+    pk_url_kwarg = 'reinspeccion_pk'  # Si se cambia el nombre pk en la url se debe agregar este parámetro.
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
@@ -164,21 +164,23 @@ def borrar_producto(request, pk):
 
 
 def modificar_producto(request, pk, reinspeccion_pk):
-        reinspeccion_producto = ReinspeccionProducto.objects.get(pk=pk)
-        if request.method == 'POST':
-            form = ReinspeccionProductoForm(request.POST, reinspeccion_pk=reinspeccion_pk)
-            if form.is_valid():
-                producto = form.cleaned_data['producto']
-                kilo_producto = form.cleaned_data['kilo_producto']
-                reinspeccion_producto.producto = producto
-                reinspeccion_producto.kilo_producto = kilo_producto
-                reinspeccion_producto.save()
-                return HttpResponseRedirect(reverse('reinspecciones:lista_productos', kwargs={'reinspeccion_pk': reinspeccion_pk}))
-        else:
-            form = ReinspeccionProductoForm(initial={'producto': reinspeccion_producto.producto, 'kilo_producto': reinspeccion_producto.kilo_producto})
-            url_return = 'reinspecciones:lista_productos'
-            return render(request, 'reinspeccion/producto_form.html', {'form': form, 'reinspeccion_pk': reinspeccion_pk,
-                                                                         'url_return': url_return})
+    reinspeccion_producto = ReinspeccionProducto.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ReinspeccionProductoForm(request.POST, reinspeccion_pk=reinspeccion_pk)
+        if form.is_valid():
+            producto = form.cleaned_data['producto']
+            kilo_producto = form.cleaned_data['kilo_producto']
+            reinspeccion_producto.producto = producto
+            reinspeccion_producto.kilo_producto = kilo_producto
+            reinspeccion_producto.save()
+            return HttpResponseRedirect(reverse('reinspecciones:lista_productos',
+                                                kwargs={'reinspeccion_pk': reinspeccion_pk}))
+    else:
+        form = ReinspeccionProductoForm(initial={'producto': reinspeccion_producto.producto,
+                                                 'kilo_producto': reinspeccion_producto.kilo_producto})
+        url_return = 'reinspecciones:lista_productos'
+        return render(request, 'reinspeccion/producto_form.html', {'form': form, 'url_return': url_return,
+                                                                   'reinspeccion_pk': reinspeccion_pk})
 
 
 '''
@@ -217,13 +219,11 @@ class BajaVehiculo(LoginRequiredMixin, DeleteView):
     redirect_field_name = 'next'
 
 
-class ModificacionVehiculo(LoginRequiredMixin, UpdateView):
-    model = Vehiculo
-    template_name = 'vehiculo/vehiculo_form.html'
-    success_url = reverse_lazy('vehiculo:lista_vehiculos')
-    form_class = VehiculoForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def ingresar_disposicion(request, pk, nro_disp):
+    vehiculo = Vehiculo.objects.get(pk=pk)
+    vehiculo.disposicion_resolucion = int(nro_disp)
+    vehiculo.save()
+    return HttpResponse()
 
 
 '''

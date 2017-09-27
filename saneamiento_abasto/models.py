@@ -48,7 +48,8 @@ class Vehiculo(models.Model):
     marca = models.CharField(max_length=50)
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
-    tsa = models.BooleanField()
+    tipo_vehiculo = models.CharField(max_length=3, choices=Tipo_Vehiculo, default='TPP')
+    disposicion_resolucion = models.IntegerField(blank=True, null=True, unique=True)
 
     def __str__(self):
         return "%s - %s" % (self.marca, self.dominio)

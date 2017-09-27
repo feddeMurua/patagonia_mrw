@@ -64,18 +64,6 @@ class VehiculoForm(forms.ModelForm):
         model = Vehiculo
         fields = '__all__'
 
-    '''
-    def clean(self):
-        check = [self.cleaned_data['persona'], self.cleaned_data['abastecedor']]
-        if any(check) and not all(check):
-            cleaned_data = self.cleaned_data
-            vehiculo = cleaned_data.get("vehiculo")
-            if Transporte.objects.filter(vehiculo=vehiculo).exists():
-                raise ValidationError('Atencion! ya existe este vehículo registrado, por favor seleccione otro')
-            return self.cleaned_data
-        raise ValidationError('Por favor, seleccione una opcion (Abastecedor o Persona Particular)')
-    '''
-
 
 class DesinfeccionForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
