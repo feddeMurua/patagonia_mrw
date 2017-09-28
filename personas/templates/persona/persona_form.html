@@ -43,3 +43,11 @@
         </form>
     </div>
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        $.datepicker.setDefaults({
+            maxDate: new Date()
+        });
+    </script>
+{% endblock %}

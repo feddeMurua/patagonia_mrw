@@ -497,7 +497,8 @@ def lista_retiro_entrega(request):
 
 @login_required(login_url='login')
 def alta_tramite(request):
-    limpiar_sesion(["tramite"], request.session)
+    if 'tramite' in request.session:
+        del request.session['tramite']
     if request.method == 'POST':
         retiro_entrega_form = RetiroEntregaForm(request.POST)
         if retiro_entrega_form.is_valid():

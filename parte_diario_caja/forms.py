@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from functools import partial
+from django.utils.translation import ugettext as _
 from django import forms
 from .models import *
 
@@ -15,6 +15,9 @@ class MovimientoDiarioForm(forms.ModelForm):
         model = MoviemientoDiario
         exclude = ['fecha']
         fields = '__all__'
+        labels = {
+            'nro_ingreso': _("N° de ingresos varios")
+        }
 
 
 class DetalleMovimientoDiarioForm(forms.ModelForm):
@@ -23,3 +26,6 @@ class DetalleMovimientoDiarioForm(forms.ModelForm):
         model = DetalleMovimiento
         exclude = ['movimiento', 'titular', 'descripcion', 'servicio']
         fields = '__all__'
+        labels = {
+            'forma_pago': _("Forma de pago")
+        }

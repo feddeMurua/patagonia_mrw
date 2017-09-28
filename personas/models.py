@@ -58,10 +58,7 @@ class PersonaGenerica(PolymorphicModel):
     domicilio = models.ForeignKey('domicilio')
     telefono = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, blank=True)
-    '''
-    class Meta:
-        abstract = True
-    '''
+
     def __str__(self):
         return "%s" % self.nombre
 

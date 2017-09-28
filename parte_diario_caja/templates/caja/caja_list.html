@@ -34,7 +34,7 @@
                 <th>Importe</th>
                 <th>Titular</th>
                 <th>Detalle</th>
-                <th>Tipo de Pago</th>
+                <th>Forma de Pago</th>
             </tr>
             </thead>
             <tbody>
@@ -45,7 +45,7 @@
                         <td> $ {{ detalle.servicio.importe }}</td>
                         <td>{{ detalle.titular }}</td>
                         <td>{{ detalle.descripcion }}</td>
-                        <td>{{ detalle.tipo_pago }}</td>
+                        <td>{{ detalle.forma_pago }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -61,13 +61,12 @@
 
 {% block more-scripts %}
     <script>
-        jQuery('#id_fecha').datetimepicker({
+        $('#id_fecha').datetimepicker({
             timepicker: false,
             format: 'd/m/Y',
             maxDate: new Date(),
             disabledWeekDays:[0]
         });
-
         $.datetimepicker.setLocale('es');
     </script>
 {% endblock %}

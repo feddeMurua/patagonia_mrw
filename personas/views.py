@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import *
 from .filters import *
 from libreta_curso import models as m
+from actstream import action
 
 
 @login_required(login_url='login')
@@ -34,14 +34,13 @@ def alta_persona(request):
             domicilio.save()
             persona.domicilio = domicilio
             persona.save()
+            action.send(request.user, verb='Se creo una persona')
             return redirect('personas:lista_personas')
     else:
         persona_form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
-        localidad_form = LocalidadForm
         return render(request, "persona/persona_form.html", {'persona_form': persona_form,
-                                                             'domicilio_form': domicilio_form,
-                                                             'localidad_form': localidad_form})
+                                                             'domicilio_form': domicilio_form})
 
 
 def baja_persona(request, pk):

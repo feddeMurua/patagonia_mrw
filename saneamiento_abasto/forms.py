@@ -18,6 +18,9 @@ class ReinspeccionForm(forms.ModelForm):
     class Meta:
         model = Reinspeccion
         fields = '__all__'
+        labels = {
+            'num_certificado': _("N° de certificado")
+        }
 
 
 class ReinspeccionProductoForm(forms.ModelForm):
@@ -25,6 +28,9 @@ class ReinspeccionProductoForm(forms.ModelForm):
     class Meta:
         model = ReinspeccionProducto
         fields = ['producto', 'kilo_producto']
+        labels = {
+            'kilo_producto': _("Kg de producto")
+        }
 
     def __init__(self, *args, **kwargs):
         self.id_curso = kwargs.pop('reinspeccion_pk', None)
@@ -48,6 +54,10 @@ class VehiculoForm(forms.ModelForm):
         model = Vehiculo
         exclude = ['rubro_vehiculo']
         fields = '__all__'
+        labels = {
+            'tipo_vehiculo': _("Tipo de vehiculo"),
+            'disposicion_resolucion': _("Resolucion")
+        }
 
 
 class ModificarVehiculoForm(forms.ModelForm):
@@ -56,6 +66,7 @@ class ModificarVehiculoForm(forms.ModelForm):
         model = Vehiculo
         exclude = ['dominio', 'titular', 'tipo_vehiculo', 'rubro_vehiculo']
         fields = '__all__'
+
 
 class DesinfeccionForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
@@ -66,9 +77,12 @@ class DesinfeccionForm(forms.ModelForm):
 
 
 class ControlDePlagaForm(forms.ModelForm):
-    fecha_prox_visita = forms.DateField(widget=DateInput(), required=False)
+    fecha_prox_visita = forms.DateField(widget=DateInput(), label="Fecha de próxima visita")
 
     class Meta:
         model = ControlDePlaga
         exclude = ['fecha_hoy']
         fields = '__all__'
+        labels = {
+            'tipo_plaga': _("Tipo de plaga")
+        }

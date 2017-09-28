@@ -68,13 +68,13 @@
             maxDate: new Date()
         });
 
-        var tipo_pago = $('#id_tipo_pago'),
+        var forma_pago = $('#id_forma_pago'),
         nro_cheque = $('#id_nro_cheque').parent();
-        tipo_pago.on('change', hideNroCheque);
+        forma_pago.on('change', hideNroCheque);
         hideNroCheque();
 
         function hideNroCheque() {
-            if (tipo_pago.val() == 'Cheque') {
+            if (forma_pago.val() == 'Cheque') {
                 nro_cheque.removeClass('hidden');
             } else {
                 nro_cheque.addClass('hidden');

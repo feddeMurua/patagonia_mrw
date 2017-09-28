@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_bootstrap_dynamic_formsets',
     'django_filters',
     'polymorphic',
+    # 'actstream',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +83,16 @@ TEMPLATES = [
         },
     },
 ]
+
+'''
+ACTSTREAM_SETTINGS = {
+    'MANAGER': 'myapp.managers.MyActionManager',
+    'FETCH_RELATIONS': True,
+    'USE_PREFETCH': True,
+    'USE_JSONFIELD': True,
+    'GFK_FETCH_DEPTH': 1,
+}
+'''
 
 WSGI_APPLICATION = 'desarrollo_patagonia.wsgi.application'
 

@@ -12,7 +12,7 @@ TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
 class CursoForm(forms.ModelForm):
-    fecha_inicio = forms.DateField(widget=DateInput())
+    fecha_inicio = forms.DateField(widget=DateInput(), label="Fecha de inicio")
     horario = forms.TimeField(widget=TimeInput())
 
     class Meta:
@@ -21,12 +21,19 @@ class CursoForm(forms.ModelForm):
 
 
 class LibretaForm(forms.ModelForm):
-    fecha_examen_clinico = forms.DateField(widget=DateInput())
+    fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
 
     class Meta:
         model = LibretaSanitaria
-        fields = ['persona', 'curso', 'observaciones', 'fecha_examen_clinico', 'profesional_examen_clinico',
-                  'lugar_examen_clinico', 'foto']
+        exclude = ['fecha', 'foto']
+        fields = '__all__'
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+        labels = {
+            'profesional_examen_clinico': _("Médico clínico"),
+            'lugar_examen_clinico': _("Lugar de realizacion del examen")
+        }
 
 
 class InscripcionForm(forms.ModelForm):
@@ -34,6 +41,9 @@ class InscripcionForm(forms.ModelForm):
     class Meta:
         model = Inscripcion
         fields = ['persona', 'observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
 
     def __init__(self, *args, **kwargs):
         self.id_curso = kwargs.pop('id_curso', None)
@@ -51,12 +61,22 @@ class InscripcionForm(forms.ModelForm):
         return persona
 
 
+class ModificacionInscripcionForm(forms.ModelForm):
+
+    class Meta:
+        model = Inscripcion
+        fields = ['observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+
+
 class CierreInscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
         fields = ['nota_curso', 'porcentaje_asistencia']
-
-
-class ObservacionesForm(forms.Form):
-    observaciones = forms.CharField(widget=forms.Textarea)
+        labels = {
+            'nota_curso': _("Calificacion"),
+            'porcentaje_asistencia': _("Porcentaje de asistencia")
+        }

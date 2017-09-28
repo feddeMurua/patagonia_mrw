@@ -161,14 +161,12 @@ def baja_inscripcion(request, pk):
 def modificacion_inscripcion(request, pk, id_curso):
     inscripcion = Inscripcion.objects.get(pk=pk)
     if request.method == 'POST':
-        observaciones_form = ObservacionesForm(request.POST)
-        if observaciones_form.is_valid():
-            observaciones = observaciones_form.cleaned_data['observaciones']
-            inscripcion.observaciones = observaciones
-            inscripcion.save()
+        inscripcion_form = ModificacionInscripcionForm(request.POST, instance=inscripcion)
+        if inscripcion_form.is_valid():
+            inscripcion_form.save()
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso}))
     else:
-        form = ObservacionesForm(initial={'observaciones': inscripcion.observaciones})
+        form = ModificacionInscripcionForm(instance=inscripcion)
         url_return = 'cursos:inscripciones_curso'
         return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
                                                                      'url_return': url_return})

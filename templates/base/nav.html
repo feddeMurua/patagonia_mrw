@@ -10,46 +10,52 @@
     <ul id="menu-bar">
         <li><a href="#">Personas</a>
             <ul>
-                <li><a href="{% url 'personas:lista_personas'%}"><span>Personas Físicas</span></a></li>
+                <li><a href="{% url 'personas:lista_personas' %}"><span>Personas Físicas</span></a></li>
                 <li><a href="#"><span>Personas Jurídicas</span></a></li>
                 <li><a href="#"><span>Personal Propio</span></a></li>
             </ul>
         </li>
         <li><a href="#">Cursos y Libretas</a>
             <ul>
-                <li><a href="{% url 'cursos:lista_cursos'%}"><span>Curso de Manipulacion de Alimentos</span></a></li>
-                <li><a href="{% url 'libretas:lista_libretas'%}"><span>Libreta Sanitaria</span></a></li>
+                <li><a href="{% url 'cursos:lista_cursos' %}"><span>Curso de Manipulacion de Alimentos</span></a></li>
+                <li><a href="{% url 'libretas:lista_libretas' %}"><span>Libreta Sanitaria</span></a></li>
             </ul>
         </li>
         <li><a href="#">Analisis y Controles</a>
             <ul>
-                <li><a href="{% url 'analisis:lista_analisis'%}"><span>Analisis de Triquinosis</span></a></li>
-                <li><a href="{% url 'solicitud:lista_solicitudes'%}"><span>Habilitacion de Criadero de Cerdos</span></a></li>
-                <li><a href="{% url 'controles:lista_controles'%}"><span>Control Antirrabico</span></a></li>
+                <li><a href="{% url 'analisis:lista_analisis' %}"><span>Analisis de Triquinosis</span></a></li>
+                <li><a href="{% url 'solicitud:lista_solicitudes' %}"><span>Habilitacion de Criadero de Cerdos</span></a></li>
+                <li><a href="{% url 'controles:lista_controles' %}"><span>Control Antirrabico</span></a></li>
             </ul>
         </li>
         <li><a href="#">Mascotas</a>
             <ul>
-                <li><a href="{% url 'patentes:lista_patentes'%}"><span>Patentamiento</span></a></li>
-                <li><a href="{% url 'esterilizacion:lista_esterilizaciones'%}"><span>Esterilizacion</span></a></li>
-                <li><a href="{% url 'retiros_entregas:lista_retiro_entrega'%}"><span>Retiros y Entregas</span></a></li>
+                <li><a href="{% url 'patentes:lista_patentes' %}"><span>Patentamiento</span></a></li>
+                <li><a href="{% url 'esterilizacion:lista_esterilizaciones' %}"><span>Esterilizacion</span></a></li>
+                <li><a href="{% url 'retiros_entregas:lista_retiro_entrega' %}"><span>Retiros y Entregas</span></a></li>
             </ul>
         </li>
         <li><a href="#">Abasto</a>
             <ul>
-                <li><a href="{% url 'abastecedores:lista_abastecedores'%}"><span>Abastecedores</span></a></li>
-                <li><a href="{% url 'reinspecciones:lista_reinspecciones'%}"><span>Reinspecciones</span></a></li>
+                <li><a href="{% url 'abastecedores:lista_abastecedores' %}"><span>Abastecedores</span></a></li>
+                <li><a href="{% url 'reinspecciones:lista_reinspecciones' %}"><span>Reinspecciones</span></a></li>
             </ul>
         </li>
         <li><a href="#">Transporte y Desinfeccion</a>
             <ul>
-                <li><a href="{% url 'vehiculo:lista_vehiculos'%}"><span>Vehiculos</span></a></li>
-                <li><a href="{% url 'controles_plagas:lista_controles_plagas'%}"><span>Control de Plagas</span></a></li>
+                <li><a href="{% url 'vehiculo:lista_vehiculos' %}"><span>Vehiculos</span></a></li>
+                <li><a href="{% url 'controles_plagas:lista_controles_plagas' %}"><span>Control de Plagas</span></a></li>
+            </ul>
+        </li>
+        <li><a href="#">Caja</a>
+            <ul>
+                <li><a href="{% url 'caja:lista_detalle_movimientos' %}"><span>Parte Diario</span></a></li>
+                <li><a href="#"><span>Arqueo Diario de Efectivo</span></a></li>
             </ul>
         </li>
         <li class="pull-right"><a href="#"><span>{{ user.get_username }}</span></a>
             <ul class="submenu-user">
-                <li><a href="{% url 'logout'%}?next={{request.path}}">Salir</a></li>
+                <li><a href="{% url 'logout' %}?next={{request.path}}">Salir</a></li>
             </ul>
         </li>
     </ul>

@@ -99,7 +99,9 @@
                         type: 'POST',
                         success: function(e) {
                             swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
-                                $('#table-list').parent().load("#table-list")
+                                function(){
+                                    location.reload()
+                                }
                             );
                         },
                         error: function (xhr, ajaxOptions, thrownError) {

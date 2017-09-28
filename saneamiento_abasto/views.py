@@ -218,7 +218,7 @@ def modificacion_vehiculo(request, pk):
             return redirect('vehiculo:lista_vehiculos')
     else:
         form = ModificarVehiculoForm(instance=vehiculo)
-    return render(request, 'vehiculo/vehiculo_form.html', {'form': form})
+    return render(request, 'vehiculo/vehiculo_form.html', {'tipo': vehiculo.tipo_vehiculo, 'form': form})
 
 
 '''

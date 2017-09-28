@@ -56,30 +56,6 @@ class Vehiculo(models.Model):
 
 
 '''
-rubro SI Y NO CON LA EMPRESA (EJ. DON LEON)
-CATEGORIA (A,B,C,D)
-ASOCIAR CATEGORIA Y RUBRO:
-
-1 transporte isotérmico con equipo de frio para transportar productos congelados.
-(productos carneos, aves. pescados, mariscos, hielo, helados)
-
-2 transporte isotérmico con equipo de frio para transportar productos refrigerados.
-(productos carneos, aves, fiambres, lacteos, pastas, productos del mar, sandwiches, productos de rotisería)
-
-3 transporte isotérmico de productos envasados que no requieran refrigeración.
-(bebidas, aguas, panificación y afines)
-
-4 transporte con caja abierta y protección mediante lona o toldo.
-(frutas, verduras, huevos, bebidas)
-
-5 otros.
-
-***tener en cuenta qe se puede tener otros agregados
-
-
-EN EMPRESA PARA EL ABASTECEDOR ES QUE SE RELACIONAN
- - ABASTACEDORES ES PARA EL EJIDO
- - TSA DENTRO DE LA CIUDAD O SALE
 TURNO EN RESPINSPECCION:
     MATUTINO, VESPERTINO, SABADO, FERIADO, o EXCPECION: FUERA DE HORARIO (COMPUTA DOBLE) (CHOICE) (son 5)
 '''

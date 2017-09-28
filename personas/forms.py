@@ -2,17 +2,26 @@
 from __future__ import unicode_literals
 from django import forms
 from functools import partial
+from django.utils.translation import ugettext as _
 from .models import *
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 
 class ListaPersonasGenericasForm(forms.Form):
-    persona = forms.ModelChoiceField(queryset=PersonaGenerica.objects.all())
+    persona = forms.ModelChoiceField(queryset=PersonaGenerica.objects.all(), required=True)
+
+
+class ListaPersonasFisicasForm(forms.Form):
+    persona = forms.ModelChoiceField(queryset=PersonaFisica.objects.all(), required=True)
+
+
+class ListaPersonasJuridicasForm(forms.Form):
+    persona = forms.ModelChoiceField(queryset=PersonaJuridica.objects.all(), required=True)
 
 
 class AltaPersonaFisicaForm(forms.ModelForm):
-    fecha_nacimiento = forms.DateField(widget=DateInput())
+    fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
 
     class Meta:
         model = PersonaFisica
@@ -34,15 +43,17 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
         fields = ['telefono', 'email', 'obra_social', 'rubro', 'documentacion_retirada']
 
 
-class ListaPersonasFisicasForm(forms.Form):
-    persona = forms.ModelChoiceField(queryset=PersonaFisica.objects.all(), required=True)
-
-
 class DomicilioForm(forms.ModelForm):
 
     class Meta:
         model = Domicilio
         fields = '__all__'
+        labels = {
+            'calle_entre1': _("Entre"),
+            'calle_entre2': _("Entre"),
+            'nro': _("N°"),
+            'dpto': _("Departamento")
+        }
 
 
 class DomicilioRuralForm(forms.ModelForm):
@@ -57,3 +68,6 @@ class LocalidadForm(forms.ModelForm):
     class Meta:
         model = Localidad
         fields = '__all__'
+        labels = {
+            'cp': _("Código postal")
+        }

@@ -43,4 +43,5 @@ urlpatterns = [
     url(r'^caja/', include('parte_diario_caja.urls_caja', namespace='caja')),
 
     url(r'^getRubros/(?P<id_categoria>\w+)$', sa.get_rubros_json, name='get_rubros'),
+    # url('^activity/', include('actstream.urls')),
 ]

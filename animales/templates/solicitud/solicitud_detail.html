@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
-{% block title %}Solicitud{% endblock %}
+{% block title %}Detalle de solicitud{% endblock %}
 
 {% block header-title %}Detalle de Solicitud{% endblock %}
 
@@ -49,43 +49,41 @@
                     <td>{{ disposicion.fecha_disposicion }}</td>
                 </tr>
             {% endif %}
-            {% if aplazos %}
-                <div class="container-fluid container-list">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel panel-default panel-table">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col col-xs-6">
-                                            <h3 class="panel-title">Aplazos de Solicitud</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <table class="table table-bordered table-hover table-list">
-                                        <thead>
-                                            <tr>
-                                                <th>Fecha de Aplazo</th>
-                                                <th>Motivo de Aplazo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for aplazo in aplazos %}
-                                            <tr align="center">
-                                                <td>{{ aplazo.fecha_aplazo }}</td>
-                                                <td>{{ aplazo.motivo_aplazo }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+        </tbody>
+    </table>
+    {% if aplazos %}
+        <div class="container-fluid container-list col-md-12" id="tbl-aplazos">
+            <div class="row">
+                <div class="panel panel-default panel-table">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col col-xs-6">
+                                <h3 class="panel-title">Aplazos de Solicitud</h3>
                             </div>
                         </div>
                     </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-list">
+                            <thead>
+                                <tr>
+                                    <th>Fecha de Aplazo</th>
+                                    <th>Motivo de Aplazo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for aplazo in aplazos %}
+                                    <tr align="center">
+                                        <td>{{ aplazo.fecha_aplazo }}</td>
+                                        <td>{{ aplazo.motivo_aplazo }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            {% endif %}
-        </tbody>
-    </table>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block btn-footer %}

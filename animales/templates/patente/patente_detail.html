@@ -75,11 +75,15 @@
                 <tbody>
                     <tr>
                         <td>Ultima entrega de Garrapaticida</td>
-                        <td>{{ object.fecha_garrapaticida }}</td>
+                        {% if object.fecha_garrapaticida %}
+                            <td>{{ object.fecha_garrapaticida }}</td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <td>Ultima entrega de Antiparasitario</td>
-                        <td>{{ object.fecha_antiparasitario }}</td>
+                        {% if object.fecha_antiparasitario %}
+                            <td>{{ object.fecha_antiparasitario }}</td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <td>Observaciones:</td>

@@ -11,3 +11,12 @@
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'controles:lista_controles' %}">Cancelar</a>
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        $.datepicker.setDefaults({
+            minDate: "-10d",
+            maxDate: new Date()
+        });
+    </script>
+{% endblock %}
