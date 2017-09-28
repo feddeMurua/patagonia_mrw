@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
+from polymorphic.models import PolymorphicModel
 
 
 class Localidad(models.Model):
@@ -52,7 +53,7 @@ class DomicilioRural(models.Model):
         return "Chacra %s, sobre ruta %s" % (self.chacra, self.ruta)
 
 
-class PersonaGenerica(models.Model):
+class PersonaGenerica(PolymorphicModel):
     nombre = models.CharField(max_length=50)
     domicilio = models.ForeignKey('domicilio')
     telefono = models.CharField(max_length=50)

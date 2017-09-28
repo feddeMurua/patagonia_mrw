@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
-{% block title %}vehiculo{% endblock %}
+{% block title %}Vehiculo{% endblock %}
 
 {% block header-title %}Detalle de vehiculo{% endblock %}
 
@@ -12,20 +12,28 @@
     <table class="table table-information">
         <tbody>
             <tr>
-                <td>Datos del Vehiculo:</td>
-                <td>{{ object.marca }}, dominio: {{ object.dominio }} </td>
+                <td>Apellido y Nombre del responsable:</td>
+                <td>{{ object.titular.apellido }}, {{ object.titular.nombre }}</td>
             </tr>
             <tr>
-                <td>Apellido y Nombre del particular:</td>
-                <td>{{ object.titular.apellido }}, {{ object.titular.nombre }} </td>
-            </tr>
-            <tr>
-                <td>Domicilio del particular:</td>
+                <td>Domicilio del responsable:</td>
                 <td>B° {{ object.titular.domicilio.barrio }}, {{ object.titular.domicilio.calle }}, {{ object.titular.domicilio.nro }}</td>
             </tr>
             <tr>
-                <td>Telefono del particular:</td>
+                <td>Telefono del responsable:</td>
                 <td>{{ object.titular.telefono }}</td>
+            </tr>
+            <tr>
+                <td>Datos del Vehiculo:</td>
+                <td>{{ object.marca }} - Dominio: {{ object.dominio }}</td>
+            </tr>
+            <tr>
+                <td>Categoria del Vehiculo:</td>
+                <td>{{ object.categoria }}</td>
+            </tr>
+            <tr>
+                <td>Rubro del Vehiculo:</td>
+                <td>{{ object.rubro_vehiculo }}</td>
             </tr>
         </tbody>
     </table>

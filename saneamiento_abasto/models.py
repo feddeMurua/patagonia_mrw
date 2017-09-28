@@ -7,7 +7,10 @@ from .choices import *
 
 
 class Abastecedor(models.Model):
-    responsable = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE, blank=True, null=True)
+    responsable = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s" % self.responsable
 
 
 class ReinspeccionProducto(models.Model):
@@ -44,10 +47,9 @@ class Vehiculo(models.Model):
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=Tipo_Vehiculo, default='TPP')
     disposicion_resolucion = models.CharField(max_length=50, blank=True, null=True, unique=True)
-    #SI EL VEHICULO ES TSA
-    categoria = models.CharField(max_length=500, choices=Categoria)
-    rubro_abastecedor = models.CharField(max_length=150)
-
+    # SI EL VEHICULO ES TSA
+    categoria = models.CharField(max_length=50, choices=Categoria, blank=True, null=True)
+    rubro_vehiculo = models.CharField(max_length=25, blank=True, null=True)
 
     def __str__(self):
         return "%s - %s" % (self.marca, self.dominio)

@@ -3,18 +3,12 @@ from __future__ import unicode_literals
 from django import forms
 from functools import partial
 from .models import *
+from .choices import *
 from django.utils.translation import ugettext as _
 
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
-
-
-class AbastecedorForm(forms.ModelForm):    
-
-    class Meta:
-        model = Abastecedor
-        fields = '__all__'
 
 
 class ReinspeccionForm(forms.ModelForm):
@@ -52,8 +46,16 @@ class VehiculoForm(forms.ModelForm):
 
     class Meta:
         model = Vehiculo
+        exclude = ['rubro_vehiculo']
         fields = '__all__'
 
+
+class ModificarVehiculoForm(forms.ModelForm):
+
+    class Meta:
+        model = Vehiculo
+        exclude = ['dominio', 'titular', 'tipo_vehiculo', 'rubro_vehiculo']
+        fields = '__all__'
 
 class DesinfeccionForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())

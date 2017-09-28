@@ -22,7 +22,7 @@ ABASTECEDORES
 
 
 @login_required(login_url='login')
-def get_rubros(request, id_categoria):
+def get_rubros_json(request, id_categoria):
     return JsonResponse({
         'Categoria_A': Categoria_A,
         'Categoria_B': Categoria_B,
@@ -41,40 +41,35 @@ def lista_abastecedor(request):
 
 def alta_abastecedor(request):
     if request.method == 'POST':
-        form = f.ListaPersonasFisicasForm(request.POST)
+        form = f.ListaPersonasGenericasForm(request.POST)
         if form.is_valid():
             persona = form.cleaned_data['persona']
-            return HttpResponseRedirect(reverse('abastecedores:info_adicional_abastecedor', args=[persona.pk]))
+            Abastecedor(responsable=persona).save()
+            return redirect('abastecedores:lista_abastecedores')
     else:
-        form = f.ListaPersonasFisicasForm
+        form = f.ListaPersonasGenericasForm
         return render(request, 'abastecedor/abastecedor_form.html', {'form': form})
 
 
-def info_adicional_abastecedor(request, pk):
+def nuevo_abastecedor_particular(request):
     if request.method == 'POST':
-        form = AbastecedorAdicionalForm(request.POST)
-        if form.is_valid():
-            persona = m.PersonaFisica.objects.get(pk=pk)
-            abastecedor = Abastecedor(personafisica_ptr=persona)
-            empresa = form.cleaned_data['empresa']
-            categoria = form.cleaned_data['categoria']
-            rubro_abastecedor = form.cleaned_data['rubro_abastecedor']
-            abastecedor.empresa = empresa                       
-            abastecedor.save_base(raw=True)
-            return redirect('abastecedores:lista_abastecedores')
-    else:
-        form = AbastecedorAdicionalForm
-    return render(request, 'abastecedor/info_adicional_form.html', {'form': form})
-
-
-def nuevo_abastecedor(request):
-    if request.method == 'POST':
-        form = AbastecedorForm(request.POST)
+        form = f.AltaPersonaFisicaForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('abastecedores:lista_abastecedores')
     else:
-        form = AbastecedorForm
+        form = f.AltaPersonaFisicaForm
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form})
+
+
+def nuevo_abastecedor_empresa(request):
+    if request.method == 'POST':
+        form = f.AltaPersonaJuridicaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('abastecedores:lista_abastecedores')
+    else:
+        form = f.AltaPersonaJuridicaForm
     return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form})
 
 
@@ -82,15 +77,6 @@ class BajaAbastecedor(LoginRequiredMixin, DeleteView):
     model = Abastecedor
     template_name = 'abastecedor/abastecedor_confirm_delete.html'
     success_url = reverse_lazy('abastecedores:lista_abastecedores')
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
-class ModificacionAbastecedor(LoginRequiredMixin, UpdateView):
-    model = Abastecedor
-    template_name = 'abastecedor/abastecedor_form.html'
-    success_url = reverse_lazy('abastecedores:lista_abastecedores')
-    form_class = AbastecedorForm
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
@@ -200,13 +186,17 @@ class DetalleVehiculo(LoginRequiredMixin, DetailView):
     redirect_field_name = 'next'
 
 
-class AltaVehiculo(LoginRequiredMixin, CreateView):
-    model = Vehiculo
-    template_name = 'vehiculo/vehiculo_form.html'
-    success_url = reverse_lazy('vehiculo:lista_vehiculos')
-    form_class = VehiculoForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+def alta_vehiculo(request):
+    if request.method == 'POST':
+        form = VehiculoForm(request.POST)
+        if form.is_valid():
+            vehiculo = form.save(commit=False)
+            vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
+            vehiculo.save()
+            return redirect('vehiculo:lista_vehiculos')
+    else:
+        form = VehiculoForm
+    return render(request, 'vehiculo/vehiculo_form.html', {'form': form})
 
 
 class BajaVehiculo(LoginRequiredMixin, DeleteView):
@@ -217,20 +207,18 @@ class BajaVehiculo(LoginRequiredMixin, DeleteView):
     redirect_field_name = 'next'
 
 
-class ModificacionVehiculo(LoginRequiredMixin, UpdateView):
-    model = Vehiculo
-    template_name = 'vehiculo/vehiculo_form.html'
-    success_url = reverse_lazy('vehiculo:lista_vehiculos')
-    form_class = VehiculoForm
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
-def ingresar_disposicion(request, pk, nro_disp):
+def modificacion_vehiculo(request, pk):
     vehiculo = Vehiculo.objects.get(pk=pk)
-    vehiculo.disposicion_resolucion = int(nro_disp)
-    vehiculo.save()
-    return HttpResponse()
+    if request.method == 'POST':
+        form = ModificarVehiculoForm(request.POST, instance=vehiculo)
+        if form.is_valid():
+            vehiculo = form.save(commit=False)
+            vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
+            vehiculo.save()
+            return redirect('vehiculo:lista_vehiculos')
+    else:
+        form = ModificarVehiculoForm(instance=vehiculo)
+    return render(request, 'vehiculo/vehiculo_form.html', {'form': form})
 
 
 '''

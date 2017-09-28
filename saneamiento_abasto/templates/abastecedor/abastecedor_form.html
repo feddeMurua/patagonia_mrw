@@ -1,7 +1,6 @@
 {% extends "base/base_form.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
 
 {% block title %}Abastecedor{% endblock %}
 
@@ -9,7 +8,12 @@
 
 {% block url-volver %}{% url 'abastecedores:lista_abastecedores' %}{% endblock %}
 
+{% block extra-buttons %}
+    <a class="btn btn-primary" href="{% url 'abastecedores:nuevo_abastecedor_particular' %}">Nuevo abastecedor - Particular</a>
+    <a class="btn btn-primary" href="{% url 'abastecedores:nuevo_abastecedor_empresa' %}">Nuevo abastecedor - Empresa</a>
+{% endblock %}
+
 {% block btn-cancelar %}
-    <a class="btn btn-primary" href="{% url 'abastecedores:nuevo_abastecedor' %}">Registrar nueva Persona</a>
     <a class="btn btn-danger btn-cancelar" href="{% url 'abastecedores:lista_abastecedores' %}">Cancelar</a>
 {% endblock %}
+

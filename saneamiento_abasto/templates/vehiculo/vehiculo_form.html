@@ -8,6 +8,13 @@
 
 {% block url-volver %}{% url 'vehiculo:lista_vehiculos' %}{% endblock %}
 
+{% block extra-buttons %}
+    <div class="form-group">
+        <label>Rubro del vehículo</label>
+        <select name="rubro_vehiculo" class="form-control selectized" id="id_rubro_vehiculo" tabindex="-1" style="display: none;"></select>
+    </div>
+{% endblock %}
+
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'vehiculo:lista_vehiculos' %}">Cancelar</a>
 {% endblock %}
@@ -15,13 +22,52 @@
 {% block scripts %}
     <script>
         var tipo_vehiculo = $('#id_tipo_vehiculo'),
-        disp_res = $('.form-group').last();
-        tipo_vehiculo.on('change', function() {
+        disp_res = $('#id_disposicion_resolucion'),
+        categoria = $('#id_categoria'),
+        rubro = $('#id_rubro_vehiculo');
+
+        tipo_vehiculo.on('change', hideFields);
+        hideFields();
+
+        function hideFields() {
             if (tipo_vehiculo.val() == 'TPP') {
-                disp_res.removeClass('hidden');
+                disp_res.parent().removeClass('hidden');
+                categoria.parent().addClass('hidden');
+                rubro.parent().addClass('hidden');
             } else {
-                disp_res.addClass('hidden');
+                disp_res.parent().addClass('hidden');
+                categoria.parent().removeClass('hidden');
+                rubro.parent().removeClass('hidden');
             }
+        }
+
+
+        var selectRubro = document.getElementById('id_rubro_vehiculo').selectize;
+        categoria.on('change', setOptionsSelect);
+        setOptionsSelect();
+        function setOptionsSelect() {
+            var id_categoria = categoria.val()
+            if (id_categoria) {
+                $.ajax({
+                    url: '/getRubros/' + id_categoria,
+                    dataType: 'json',
+                    success: function(data){
+                        selectRubro.clearOptions();
+                        $.each(data, function(key, opt) {
+                            selectRubro.addOption({value: opt, text: key});
+                            selectRubro.addItem(opt);
+                        })
+                    },
+                    error: function(err){
+                        alert("Fallo Ajax");
+                    }
+                });
+            }
+        }
+
+        rubro.on('change', function() {
+            console.log(tipo_vehiculo);
+            console.log(rubro);
         });
     </script>
 {% endblock %}

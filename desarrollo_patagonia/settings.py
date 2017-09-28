@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'easy_pdf',
     'django_bootstrap_dynamic_formsets',
     'django_filters',
+    'polymorphic',
 ]
 
 MIDDLEWARE = [
