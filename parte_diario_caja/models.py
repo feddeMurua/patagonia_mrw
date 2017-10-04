@@ -26,7 +26,7 @@ class DetalleMovimiento(models.Model):
     movimiento = models.ForeignKey('MovimientoDiario', on_delete=models.CASCADE)
     servicio = models.ForeignKey('Servicio', on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=100)
-    titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
+    titular = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     forma_pago = models.CharField(max_length=50, choices=TipoPago, default='Efectivo')
     nro_cheque = models.CharField(max_length=100, blank=True, null=True)
 

@@ -42,7 +42,7 @@ def alta_abastecedor(request):
     if request.method == 'POST':
         form = AbastecedorForm(request.POST)
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abastecedor')
+        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
         if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
             abastecedor = form.save()
             # Se crea el detalle del movimiento
@@ -57,7 +57,7 @@ def alta_abastecedor(request):
     else:
         form = AbastecedorForm
         mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abastecedor')
+        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
     return render(request, 'abastecedor/abastecedor_form.html', {'form': form, 'mov_diario_form': mov_diario_form,
                                                                  'detalle_mov_diario_form': detalle_mov_diario_form})
 
@@ -67,7 +67,7 @@ def nuevo_abastecedor_particular(request):
         responsable_form = f.AltaPersonaFisicaForm(request.POST)
         domicilio_form = f.DomicilioForm(request.POST)
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abastecedor')
+        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
         if responsable_form.is_valid() & domicilio_form.is_valid() & mov_diario_form.is_valid() & \
                 detalle_mov_diario_form.is_valid():
             responsable = responsable_form.save(commit=False)
@@ -89,7 +89,7 @@ def nuevo_abastecedor_particular(request):
         responsable_form = f.AltaPersonaFisicaForm
         domicilio_form = f.DomicilioForm
         mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abastecedor')
+        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
     return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'responsable_form': responsable_form,
                                                                        'domicilio_form': domicilio_form,
                                                                        'mov_diario_form': mov_diario_form,
