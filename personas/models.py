@@ -39,7 +39,7 @@ class Domicilio(models.Model):
     localidad = models.ForeignKey('Localidad', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s, %s %s" % (self.barrio, self.calle, self.nro)
+        return "%s %s" % (self.calle, self.nro)
 
 
 class DomicilioRural(models.Model):
@@ -97,6 +97,3 @@ class PersonalPropio(PersonaFisica):
 
     def __str__(self):
         return super(PersonalPropio, self).__str__()
-
-
-

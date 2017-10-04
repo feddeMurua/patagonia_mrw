@@ -7,7 +7,7 @@
 
 {% block header-title %}Solicitud de Habiltación de Criadero de Cerdos{% endblock %}
 
-{% block url-volver %}{% url 'solicitud:lista_solicitudes' %}{% endblock %}
+{% block url-volver %}{% url 'criadero:lista_solicitudes' %}{% endblock %}
 
 {% block content %}
     <div class="container container-form">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="panel-footer">
                     <input type="submit" class="btn btn-primary" value="Aceptar">
-                    <a class="btn btn-danger btn-cancelar" href="{% url 'solicitud:lista_solicitudes' %}">Cancelar</a>
+                    <a class="btn btn-danger btn-cancelar" href="{% url 'criadero:lista_solicitudes' %}">Cancelar</a>
                 </div>
             </div>
         </form>

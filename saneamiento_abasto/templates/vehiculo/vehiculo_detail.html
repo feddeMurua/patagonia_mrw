@@ -27,14 +27,35 @@
                 <td>Datos del Vehiculo:</td>
                 <td>{{ object.marca }} - Dominio: {{ object.dominio }}</td>
             </tr>
-            <tr>
-                <td>Categoria del Vehiculo:</td>
-                <td>{{ object.categoria }}</td>
-            </tr>
-            <tr>
-                <td>Rubro del Vehiculo:</td>
-                <td>{{ object.rubro_vehiculo }}</td>
-            </tr>
+            {% if object.tipo_vehiculo == 'TPP' %}
+                <tr>
+                    <td>Tipo de Vehiculo:</td>
+                    <td>Transporte Público de Pasajeros</td>
+                </tr>
+                <tr>
+                    <td>N° de Resolucion:</td>
+                    <td>{{ object.disposicion_resolucion }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>Tipo de Vehiculo:</td>
+                    <td>Transporte de Sustancias Alimenticias</td>
+                </tr>
+                <tr>
+                    <td>Categoria del Vehiculo:</td>
+                    <td>{{ object.categoria }}</td>
+                </tr>
+                <tr>
+                    <td>Rubro del Vehiculo:</td>
+                    <td>{{ object.rubro_vehiculo }}</td>
+                </tr>
+                {% if object.disposicion_resolucion %}
+                    <tr>
+                        <td>N° de Disposicion:</td>
+                        <td>{{ object.disposicion_resolucion }}</td>
+                    </tr>
+                {% endif %}
+            {% endif %}
         </tbody>
     </table>
 {% endblock %}

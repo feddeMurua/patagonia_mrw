@@ -7,8 +7,21 @@
 
 {% block header-title %}Alta/Modificacion de Desinfeccion{% endblock %}
 
-{% block url-volver %}{% url 'desinfecciones:lista_desinfecciones' %}{% endblock %}
+{% block url-volver %}{% url 'desinfecciones:lista_desinfecciones' pk_vehiculo %}{% endblock %}
 
 {% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url 'desinfecciones:lista_desinfecciones' %}">Cancelar</a>
+    <a class="btn btn-danger btn-cancelar" href="{% url 'desinfecciones:lista_desinfecciones' pk_vehiculo %}">Cancelar</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#id_turno').datetimepicker({
+            format:'d/m/Y H:i',
+            step:30,
+            minDate: new Date(),
+            disabledWeekDays:[0]
+        });
+
+        $.datetimepicker.setLocale('es');
+    </script>
 {% endblock %}

@@ -6,7 +6,7 @@
 
 {% block header-title %}Detalle de Solicitud{% endblock %}
 
-{% block url-volver %}{% url 'solicitud:lista_solicitudes' %}{% endblock %}
+{% block url-volver %}{% url 'criadero:lista_solicitudes' %}{% endblock %}
 
 {% block detail %}
     <table class="table table-information">
@@ -87,6 +87,6 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'solicitud:lista_solicitudes' %}" class="btn btn-primary">Regresar</a>
-    <a href="{% url 'solicitud:pdf_solicitud' solicitud.pk%}" class="btn btn-warning">Imprimir</a>
+    <a href="{% url 'criadero:lista_solicitudes' %}" class="btn btn-primary">Regresar</a>
+    <a href="{% url 'criadero:pdf_solicitud' solicitud.pk%}" class="btn btn-warning">Imprimir</a>
 {% endblock %}

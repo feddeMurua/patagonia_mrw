@@ -30,7 +30,6 @@ class Producto(models.Model):
 
 
 class Reinspeccion(models.Model):
-    # FALTA MONTO POR INSPECCION, CUANDO SE DISEÑE EL ARQUEO DE CAJA, AGREGAR.
     turno = models.DateTimeField()
     inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField()
@@ -42,7 +41,7 @@ class Reinspeccion(models.Model):
 
 
 class Vehiculo(models.Model):
-    marca = models.CharField(max_length=50)
+    marca = models.CharField(max_length=15, choices=Marca_vehiculo)
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=Tipo_Vehiculo, default='TPP')
@@ -62,9 +61,10 @@ TURNO EN RESPINSPECCION:
 
 
 class Desinfeccion(models.Model):
-    fecha = models.DateField()
-    quincena = models.CharField(max_length=30, choices=Quincenas)
+    fecha_realizacion = models.DateField(default=now)
+    turno = models.DateTimeField()
     vehiculo = models.ForeignKey('Vehiculo', on_delete=models.CASCADE)
+    quincena = models.CharField(max_length=30)
 
     def __str__(self):
         return "%s - %s - %s" % (self.quincena, self.vehiculo.dominio, self.vehiculo.titular)
@@ -81,4 +81,4 @@ class ControlDePlaga(models.Model):
     fecha_prox_visita = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return "%s - %s - %s" % (self.fecha_hoy, self.responsable.dominio, self.tipo_plaga)
+        return "%s - %s - %s" % (self.fecha_hoy, self.responsable, self.tipo_plaga)

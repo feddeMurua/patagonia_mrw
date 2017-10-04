@@ -23,6 +23,10 @@
             <th>Persona</th>
             <th>Fecha de inscripción</th>
             <th>Observaciones</th>
+            {% if curso.finalizado %}
+                <th>Porcentaje de asistencia</th>
+                <th>Calificación</th>
+            {% endif %}
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
         </thead>
@@ -32,6 +36,10 @@
                 <td>{{ inscripcion.persona }}</td>
                 <td>{{ inscripcion.fecha_inscripcion }}</td>
                 <td>{{ inscripcion.observaciones }}</td>
+                {% if curso.finalizado %}
+                    <td>{{ inscripcion.porcentaje_asistencia }}%</td>
+                    <td>{{ inscripcion.nota_curso }}</td>
+                {% endif %}
                 <td align="center">
                     <a class="btn btn-danger btn-baja" data-url="{% url 'inscripciones:borrar_inscripcion' inscripcion.pk %}" data-toggle="tooltip" title="Eliminar"><em class="glyphicon glyphicon-trash"></em></a>
                     {% if not curso.finalizado %}

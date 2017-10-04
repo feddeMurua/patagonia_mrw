@@ -24,7 +24,7 @@
         <li><a href="#">Analisis y Controles</a>
             <ul>
                 <li><a href="{% url 'analisis:lista_analisis' %}"><span>Analisis de Triquinosis</span></a></li>
-                <li><a href="{% url 'solicitud:lista_solicitudes' %}"><span>Habilitacion de Criadero de Cerdos</span></a></li>
+                <li><a href="{% url 'criadero:lista_solicitudes' %}"><span>Habilitacion de Criadero de Cerdos</span></a></li>
                 <li><a href="{% url 'controles:lista_controles' %}"><span>Control Antirrabico</span></a></li>
             </ul>
         </li>
@@ -56,6 +56,7 @@
         <li class="pull-right"><a href="#"><span>{{ user.get_username }}</span></a>
             <ul class="submenu-user">
                 <li><a href="{% url 'logout' %}?next={{request.path}}">Salir</a></li>
+                <li><a href="{% url 'event_log:lista_eventos' %}">Eventos de Usuario</a></li>
             </ul>
         </li>
     </ul>

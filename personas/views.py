@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from .forms import *
 from .filters import *
 from libreta_curso import models as m
-from actstream import action
+from desarrollo_patagonia.utils import *
 
 
 @login_required(login_url='login')
@@ -30,11 +30,9 @@ def alta_persona(request):
         domicilio_form = DomicilioForm(request.POST)
         if persona_form.is_valid() & domicilio_form.is_valid():
             persona = persona_form.save(commit=False)
-            domicilio = domicilio_form.save(commit=False)
-            domicilio.save()
-            persona.domicilio = domicilio
+            persona.domicilio = domicilio_form.save()
             persona.save()
-            action.send(request.user, verb='Se creo una persona')
+            log_crear(request.user.id, persona, 'Persona Física')
             return redirect('personas:lista_personas')
     else:
         persona_form = AltaPersonaFisicaForm
@@ -45,6 +43,7 @@ def alta_persona(request):
 
 def baja_persona(request, pk):
     persona = PersonaFisica.objects.get(pk=pk)
+    log_eliminar(request.user.id, persona, 'Persona Física')
     persona.delete()
     return HttpResponse()
 
@@ -54,22 +53,10 @@ def modificacion_persona(request, pk):
     if request.method == 'POST':
         persona_form = ModificacionPersonaFisicaForm(request.POST, instance=persona)
         if persona_form.is_valid():
-            persona_form.save()
+            log_modificar(request.user.id, persona_form.save(), 'Persona Física')
             return redirect('personas:lista_personas')
     else:
         persona_form = ModificacionPersonaFisicaForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
         return render(request, "persona/persona_form.html", {'persona_form': persona_form,
                                                              'domicilio_form': domicilio_form})
-
-
-def get_provincias(request):
-    provincias = Provincia.objects.filter()
-    options = []
-    for provincia in provincias:
-        options.append({'text': provincia, 'value': provincia})
-    return HttpResponse(options)
-
-
-def alta_localidad(request):
-    pass

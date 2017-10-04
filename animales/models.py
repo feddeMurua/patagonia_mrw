@@ -48,15 +48,6 @@ class Visita(models.Model):
         return "%s" % self.fecha_visita
 
 
-class DisposicionCriaderoCerdos(models.Model):
-    fecha_disposicion = models.DateField()
-    nro_disposicion = models.BigIntegerField()
-    solicitud = models.OneToOneField('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s - %s" % (self.fecha_disposicion, self.nro_disposicion)
-
-
 class SolicitudCriaderoCerdos(models.Model):
     fecha_solicitud = models.DateField(default=now)
     interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
@@ -67,6 +58,15 @@ class SolicitudCriaderoCerdos(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.fecha_solicitud, self.interesado)
+
+
+class DisposicionCriaderoCerdos(models.Model):
+    fecha_disposicion = models.DateField()
+    nro_disposicion = models.BigIntegerField()
+    solicitud = models.OneToOneField('SolicitudCriaderoCerdos', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s - %s" % (self.fecha_disposicion, self.nro_disposicion)
 
 
 class AplazoSolicitud(models.Model):

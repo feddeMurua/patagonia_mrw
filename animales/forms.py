@@ -13,7 +13,7 @@ TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 class AltaAnalisisForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
-    medico_veterinario = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
+    medico_veterinario = forms.ModelChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Veterinario'))
 
     class Meta:
@@ -22,8 +22,6 @@ class AltaAnalisisForm(forms.ModelForm):
 
 
 class ModificacionAnalisisForm(forms.ModelForm):
-    categoria = forms.ChoiceField(choices=Categorias, label="Categoria", initial='', widget=forms.Select())
-    resultado = forms.ChoiceField(choices=Resultados, label="Resultado", initial='', widget=forms.Select())
 
     class Meta:
         model = Analisis
@@ -96,6 +94,16 @@ class MascotaForm(forms.ModelForm):
 
 
 class PatenteForm(forms.ModelForm):
+
+    class Meta:
+        model = Patente
+        fields = ['persona', 'observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+
+
+class ModificacionPatenteForm(forms.ModelForm):
 
     class Meta:
         model = Patente

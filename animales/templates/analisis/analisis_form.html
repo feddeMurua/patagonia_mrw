@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 {% load staticfiles bootstrap_dynamic_formsets %}
+{% load widget_tweaks %}
 
 {% block title %}Análisis de Triquinósis{% endblock %}
 
@@ -12,6 +13,45 @@
 {% block header-title %}Alta/Modificacion de Análisis{% endblock %}
 
 {% block url-volver %}{% url 'analisis:lista_analisis' %}{% endblock %}
+
+{% block form-left %}
+    <div class=" panel panel-default">
+        <div class="panel-body">
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    {% for error in field.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        {% if not modificacion %}
+            <div class="panel-heading movimiento-title">Datos de facturacion</div>
+            <div class="panel-body">
+                {% for field in mov_diario_form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {% for field in detalle_mov_diario_form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
 
 {% block form-right %}
     <div class="col-xs-12 col-md-5" id="container-form-right">
@@ -27,7 +67,7 @@
 {% block scripts %}
     <script>
         var h = $('#container-form-left').height();
-        $('#container-form-right').css('height', h - 13 + 'px');
+        $('#container-form-right').css('height', h - 20 + 'px');
 
         $.datepicker.setDefaults({
             maxDate: new Date()
@@ -42,5 +82,18 @@
         $(document).ready(function(){
             $('.well').find('.delete-form-form').first().prop('disabled', true);
         });
+
+        var forma_pago = $('#id_forma_pago'),
+        nro_cheque = $('#id_nro_cheque').parent();
+        forma_pago.on('change', hideNroCheque);
+        hideNroCheque();
+
+        function hideNroCheque() {
+            if (forma_pago.val() == 'Cheque') {
+                nro_cheque.removeClass('hidden');
+            } else {
+                nro_cheque.addClass('hidden');
+            }
+        }
     </script>
 {% endblock %}

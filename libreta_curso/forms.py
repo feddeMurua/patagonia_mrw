@@ -36,13 +36,29 @@ class LibretaForm(forms.ModelForm):
         }
 
 
+class ModificacionLibretaForm(forms.ModelForm):
+    fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
+
+    class Meta:
+        model = LibretaSanitaria
+        exclude = ['persona', 'curso', 'fecha', 'foto']
+        fields = '__all__'
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+        labels = {
+            'profesional_examen_clinico': _("Médico clínico"),
+            'lugar_examen_clinico': _("Lugar de realizacion del examen")
+        }
+
+
 class InscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
         fields = ['persona', 'observaciones']
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+            'observaciones': forms.Textarea(attrs={'rows': 13, 'cols': 20})
         }
 
     def __init__(self, *args, **kwargs):

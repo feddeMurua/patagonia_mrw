@@ -49,7 +49,7 @@
             var id_categoria = categoria.val()
             if (id_categoria) {
                 $.ajax({
-                    url: '/getRubros/' + id_categoria,
+                    url: '/vehiculos/getRubros/' + id_categoria,
                     dataType: 'json',
                     success: function(data){
                         selectRubro.clearOptions();
@@ -64,10 +64,5 @@
                 });
             }
         }
-
-        rubro.on('change', function() {
-            console.log(tipo_vehiculo);
-            console.log(rubro);
-        });
     </script>
 {% endblock %}

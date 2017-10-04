@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'personas',
     'saneamiento_abasto',
     'parte_diario_caja',
+    'event_log',
 
     # Librerias
     'bootstrap3',
@@ -53,7 +54,6 @@ INSTALLED_APPS = [
     'django_bootstrap_dynamic_formsets',
     'django_filters',
     'polymorphic',
-    # 'actstream',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'desarrollo_patagonia.urls'
@@ -83,16 +83,6 @@ TEMPLATES = [
         },
     },
 ]
-
-'''
-ACTSTREAM_SETTINGS = {
-    'MANAGER': 'myapp.managers.MyActionManager',
-    'FETCH_RELATIONS': True,
-    'USE_PREFETCH': True,
-    'USE_JSONFIELD': True,
-    'GFK_FETCH_DEPTH': 1,
-}
-'''
 
 WSGI_APPLICATION = 'desarrollo_patagonia.wsgi.application'
 

@@ -11,6 +11,13 @@ DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
+class AbastecedorForm(forms.ModelForm):
+
+    class Meta:
+        model = Abastecedor
+        fields = '__all__'
+
+
 class ReinspeccionForm(forms.ModelForm):
     inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Inspector'))
@@ -23,6 +30,14 @@ class ReinspeccionForm(forms.ModelForm):
         }
 
 
+class ModificacionReinspeccionForm(forms.ModelForm):
+
+    class Meta:
+        model = Reinspeccion
+        exclude = ['abastecedor']
+        fields = '__all__'
+
+
 class ReinspeccionProductoForm(forms.ModelForm):
 
     class Meta:
@@ -33,12 +48,12 @@ class ReinspeccionProductoForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        self.id_curso = kwargs.pop('reinspeccion_pk', None)
+        self.reinspeccion_pk = kwargs.pop('reinspeccion_pk', None)
         super(ReinspeccionProductoForm, self).__init__(*args, **kwargs)
 
     def clean_producto(self):
         producto = self.cleaned_data['producto']
-        reinspecciones = ReinspeccionProductoForm.objects.filter(producto__pk=producto.pk)
+        reinspecciones = ReinspeccionProducto.objects.filter(producto__pk=producto.pk)
         if reinspecciones:
             reinspeccion_pk = int(self.reinspeccion_pk)
             for reinspeccion in reinspecciones:
@@ -46,6 +61,16 @@ class ReinspeccionProductoForm(forms.ModelForm):
                     raise forms.ValidationError(_('Este producto ya se encuentra cargado en la reinspeccion'),
                                                 code='invalid')
         return producto
+
+
+class ModificacionReinspeccionProductoForm(forms.ModelForm):
+
+    class Meta:
+        model = ReinspeccionProducto
+        fields = ['kilo_producto']
+        labels = {
+            'kilo_producto': _("Kg de producto")
+        }
 
 
 class VehiculoForm(forms.ModelForm):
@@ -69,11 +94,11 @@ class ModificarVehiculoForm(forms.ModelForm):
 
 
 class DesinfeccionForm(forms.ModelForm):
-    fecha = forms.DateField(widget=DateInput())
 
     class Meta:
         model = Desinfeccion
-        fields = ['fecha', 'quincena', 'vehiculo']
+        exclude = ['fecha_realizacion', 'vehiculo']
+        fields = '__all__'
 
 
 class ControlDePlagaForm(forms.ModelForm):

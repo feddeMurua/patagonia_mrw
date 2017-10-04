@@ -12,7 +12,7 @@ class DatePickerForm(forms.Form):
 class MovimientoDiarioForm(forms.ModelForm):
 
     class Meta:
-        model = MoviemientoDiario
+        model = MovimientoDiario
         exclude = ['fecha']
         fields = '__all__'
         labels = {
@@ -24,8 +24,14 @@ class DetalleMovimientoDiarioForm(forms.ModelForm):
 
     class Meta:
         model = DetalleMovimiento
-        exclude = ['movimiento', 'titular', 'descripcion', 'servicio']
+        exclude = ['movimiento', 'titular', 'descripcion']
         fields = '__all__'
         labels = {
             'forma_pago': _("Forma de pago")
         }
+
+    def __init__(self, *args, **kwargs):
+        tipo = kwargs.pop('tipo')
+        super(DetalleMovimientoDiarioForm, self).__init__(*args, **kwargs)
+
+        self.fields['servicio'] = forms.ModelChoiceField(queryset=Servicio.objects.filter(tipo__nombre=tipo))

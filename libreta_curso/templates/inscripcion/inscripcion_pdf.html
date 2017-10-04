@@ -24,6 +24,16 @@
                     <td>Observaciones:</td>
                     <td>{{ inscripcion.observaciones }}</td>
                 </tr>
+                {% if inscripcion.curso.finalizado %}
+                    <tr>
+                        <td>Porcentaje de asistencia</td>
+                        <td>{{ inscripcion.porcentaje_asistencia }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Calificación</td>
+                        <td>{{ inscripcion.nota_curso }}</td>
+                    </tr>
+                {% endif %}
             </table>
         </div>
     </div>

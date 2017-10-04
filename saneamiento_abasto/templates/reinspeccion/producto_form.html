@@ -11,16 +11,3 @@
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'reinspecciones:lista_productos' reinspeccion_pk %}">Cancelar</a>
 {% endblock %}
-
-{% block scripts %}
-    <script>
-        $('.select').selectize({
-            create: true,
-            sortField: {
-                field: 'text',
-                direction: 'asc'
-            },
-            dropdownParent: 'body'
-        });
-    </script>
-{% endblock %}

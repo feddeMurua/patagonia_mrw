@@ -9,57 +9,59 @@
 
 {% block url-volver %}{% url 'patentes:lista_patentes' %}{% endblock %}
 
-{% block content %}
-    <div class="container container-form">
-        <form method="post">
-            {% csrf_token %}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class=" panel panel-default col-md-6" id="container-form-left">
-                        <div class="panel-heading persona-title">Datos de la Persona</div>
-                        <div class="panel-body">
-                            {% for field in patente_form %}
-                            <div class="form-group">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field|add_class:'form-control' }}
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="panel-heading movimiento-title">Datos de facturacion</div>
-                        <div class="panel-body">
-                            {% for field in mov_diario_form %}
-                                <div class="form-group">
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    {{ field|add_class:'form-control' }}
-                                </div>
-                            {% endfor %}
-                            {% for field in detalle_mov_diario_form %}
-                                <div class="form-group">
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    {{ field|add_class:'form-control' }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="panel panel-default col-md-6" id="container-form-botom-left">
-                        <div class="panel-heading domicilio-title">Datos de la Mascota</div>
-                        <div class="panel-body">
-                            {% for field in mascota_form %}
-                                <div class="form-group">
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    {{ field|add_class:'form-control' }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <input type="submit" class="btn btn-primary" value="Aceptar">
-                    <a class="btn btn-danger btn-cancelar" href="{% url 'patentes:lista_patentes' %}">Cancelar</a>
-                </div>
+{% block form-left %}
+    <div class=" panel panel-default">
+        <div class="panel-body">
+            {% for field in patente_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field|add_class:'form-control' }}
             </div>
-        </form>
+            {% endfor %}
+        </div>
+        {% if not modificacion %}
+            <div class="panel-heading movimiento-title">Datos de facturacion</div>
+            <div class="panel-body">
+                {% for field in mov_diario_form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                    </div>
+                {% endfor %}
+                {% for field in detalle_mov_diario_form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
+{% endblock %}
+
+
+{% block form-right %}
+    {% if not modificacion %}
+        <div class="panel panel-default col-xs-12 col-md-5" id="container-form-botom-right">
+            <div class="panel-heading domicilio-title">Datos de la Mascota</div>
+            <div class="panel-body">
+                {% for field in mascota_form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'patentes:lista_patentes' %}">Cancelar</a>
 {% endblock %}
 
 {% block scripts %}

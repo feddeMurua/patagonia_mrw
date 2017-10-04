@@ -17,7 +17,6 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
-from saneamiento_abasto import views as sa
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,10 +26,8 @@ urlpatterns = [
     url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),
     url(r'^inscripciones/', include('libreta_curso.urls_inscripcion', namespace='inscripciones')),
     url(r'^personas/', include('personas.urls_persona', namespace='personas')),
-    url(r'^domicilios/', include('personas.urls_domicilio', namespace='domicilios')),
     url(r'^analisis/', include('animales.urls_analisis', namespace='analisis')),
-    url(r'^solicitudes/', include('animales.urls_solicitudCriadero', namespace='solicitud')),
-    url(r'^disposiciones/', include('animales.urls_disposicionCriadero', namespace='disposicion')),
+    url(r'^criadero/', include('animales.urls_criadero', namespace='criadero')),
     url(r'^esterilizaciones/', include('animales.urls_esterilizacion', namespace='esterilizacion')),
     url(r'^patentes/', include('animales.urls_patentes', namespace='patentes')),
     url(r'^controles/', include('animales.urls_controlAntirrabico', namespace='controles')),
@@ -41,7 +38,5 @@ urlpatterns = [
     url(r'^desinfecciones/', include('saneamiento_abasto.urls_desinfecciones', namespace='desinfecciones')),
     url(r'^controles/plagas/', include('saneamiento_abasto.urls_controlPlaga', namespace='controles_plagas')),
     url(r'^caja/', include('parte_diario_caja.urls_caja', namespace='caja')),
-
-    url(r'^getRubros/(?P<id_categoria>\w+)$', sa.get_rubros_json, name='get_rubros'),
-    # url('^activity/', include('actstream.urls')),
+    url(r'^eventos/', include('event_log.urls_event_log', namespace='event_log')),
 ]

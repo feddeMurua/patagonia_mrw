@@ -10,10 +10,31 @@ Tipo_Vehiculo = (
     ('TPP', _("Transporte Público de Pasajeros"))
 )
 
-
-Quincenas = (
-    ('Primer quincena', _("Primer quincena")),
-    ('Segunda quincena', _("Segunda quincena")),
+Marca_vehiculo = (
+    ('Alfa Romeo', _("Alfa Romeo")),
+    ('Audi', _("Audi")),
+    ('BMW', _("BMW")),
+    ('Chery', _("Chery")),
+    ('Chevrolet', _("Chevrolet")),
+    ('Chrysler', _("Chrysler")),
+    ('Citroen', _("Citroën")),
+    ('Dodge', _("Dodge")),
+    ('DS', _("DS")),
+    ('Fiat', _("Fiat")),
+    ('Ford', _("Ford")),
+    ('Honda', _("Honda")),
+    ('Hyundai', _("Hyundai")),
+    ('Iveco', _("Iveco")),
+    ('KIA', _("KIA")),
+    ('Land Rover', _("Land Rover")),
+    ('Mercedes Benz', _("Mercedes Benz")),
+    ('Mini', _("Mini")),
+    ('Peugeot', _("Peugeot")),
+    ('RAM', _("RAM")),
+    ('Renault', _("Renault")),
+    ('Suzuki', _("Suzuki")),
+    ('Toyota', _("Toyota")),
+    ('Volkswagen', _("Volkswagen")),
 )
 
 Categoria = (
