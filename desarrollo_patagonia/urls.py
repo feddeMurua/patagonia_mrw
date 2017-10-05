@@ -3,6 +3,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import *
 from .views import *
+from usuarios.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -13,6 +14,7 @@ urlpatterns = [
     url(r'^usuario/cambio_password_hecho$',
         PasswordChangeDoneView.as_view(template_name='usuarios/confirm_cambio_contraseña.html'),
         name='cambio_password_hecho'),
+    url(r'^usuario/alta$', alta_usuario, name='alta_usuario'),
     url(r'^$', inicio, name="inicio"),
     url(r'^cursos/', include('libreta_curso.urls_curso', namespace='cursos')),
     url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),

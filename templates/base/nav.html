@@ -56,7 +56,7 @@
         <li><a href="#">Usuario: {{ user.get_username }}</a>
             <ul>
                 {% if user.is_staff %}
-                    <li><a href="#">Crear usuario</a></li>
+                    <li><a href="{% url 'alta_usuario' %}">Crear usuario</a></li>
                     <li><a href="{% url 'event_log:lista_eventos' %}">Seguimiento de Eventos de Usuarios</a></li>
                 {% endif %}
                 <li><a href="{% url 'cambio_password' %}">Cambiar Contraseña</a></li>
