@@ -23,7 +23,7 @@ CURSOS
 def lista_curso(request):
     lista_cursos = Curso.objects.all()
     filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
-    return render(request, 'curso/curso_list.html', {'fecha_hoy': datetime.date.today(), 'filter': filtro_cursos})
+    return render(request, 'curso/curso_list.html', {'fecha_hoy': now, 'filter': filtro_cursos})
 
 
 @login_required(login_url='login')
@@ -90,7 +90,7 @@ def lista_inscripciones_curso(request, id_curso):
     filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
     curso = Curso.objects.get(pk=id_curso)
     cupo_restante = curso.cupo - len(lista_inscripciones)
-    return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'fecha_hoy': datetime.date.today(),
+    return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'fecha_hoy': now,
                                                               'curso': curso, 'cupo_restante': cupo_restante,
                                                               'filter': filtro_inscripciones})
 

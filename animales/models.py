@@ -80,7 +80,7 @@ class AplazoSolicitud(models.Model):
 
 class Esterilizacion(models.Model):
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-    mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True, blank=True)
+    mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True)
     turno = models.DateTimeField()
 
     def __str__(self):

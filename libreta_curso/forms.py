@@ -12,12 +12,14 @@ TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
 class CursoForm(forms.ModelForm):
-    fecha_inicio = forms.DateField(widget=DateInput(), label="Fecha de inicio")
-    horario = forms.TimeField(widget=TimeInput())
 
     class Meta:
         model = Curso
-        fields = ['fecha_inicio', 'cupo', 'lugar', 'horario']
+        fields = '__all__'
+        exclude = ['finalizado']
+        labels = {
+            'fecha_inicio': _("Fecha y hora")
+        }
 
 
 class LibretaForm(forms.ModelForm):

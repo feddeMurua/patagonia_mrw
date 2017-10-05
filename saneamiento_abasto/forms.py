@@ -103,10 +103,24 @@ class DesinfeccionForm(forms.ModelForm):
 
 class ControlDePlagaForm(forms.ModelForm):
     fecha_prox_visita = forms.DateField(widget=DateInput(), label="Fecha de próxima visita")
+    funcionario_actuante = forms.ModelChoiceField(queryset=m.PersonalPropio.objects.filter(
+        rol_actuante__nombre='Inspector'))
 
     class Meta:
         model = ControlDePlaga
         exclude = ['fecha_hoy']
+        fields = '__all__'
+        labels = {
+            'tipo_plaga': _("Tipo de plaga")
+        }
+
+
+class ModificacionControlDePlagaForm(forms.ModelForm):
+    fecha_prox_visita = forms.DateField(widget=DateInput(), label="Fecha de próxima visita")
+
+    class Meta:
+        model = ControlDePlaga
+        exclude = ['fecha_hoy', 'responsable', 'funcionario_actuante']
         fields = '__all__'
         labels = {
             'tipo_plaga': _("Tipo de plaga")

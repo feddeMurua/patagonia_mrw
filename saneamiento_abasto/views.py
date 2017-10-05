@@ -64,13 +64,13 @@ def alta_abastecedor(request):
 
 def nuevo_abastecedor_particular(request):
     if request.method == 'POST':
-        responsable_form = f.AltaPersonaFisicaForm(request.POST)
+        form = f.AltaPersonaFisicaForm(request.POST)
         domicilio_form = f.DomicilioForm(request.POST)
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if responsable_form.is_valid() & domicilio_form.is_valid() & mov_diario_form.is_valid() & \
+        if form.is_valid() & domicilio_form.is_valid() & mov_diario_form.is_valid() & \
                 detalle_mov_diario_form.is_valid():
-            responsable = responsable_form.save(commit=False)
+            responsable = form.save(commit=False)
             responsable.domicilio = domicilio_form.save()
             responsable.save()
             abastecedor = Abastecedor(responsable=responsable)
@@ -86,11 +86,11 @@ def nuevo_abastecedor_particular(request):
             log_crear(request.user.id, abastecedor, 'Abastecedor - Particular')
             return redirect('abastecedores:lista_abastecedores')
     else:
-        responsable_form = f.AltaPersonaFisicaForm
+        form = f.AltaPersonaFisicaForm
         domicilio_form = f.DomicilioForm
         mov_diario_form = pd_f.MovimientoDiarioForm
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'responsable_form': responsable_form,
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form,
                                                                        'domicilio_form': domicilio_form,
                                                                        'mov_diario_form': mov_diario_form,
                                                                        'detalle_mov_diario_form': detalle_mov_diario_form
@@ -99,13 +99,13 @@ def nuevo_abastecedor_particular(request):
 
 def nuevo_abastecedor_empresa(request):
     if request.method == 'POST':
-        responsable_form = f.AltaPersonaJuridicaForm(request.POST)
+        form = f.AltaPersonaJuridicaForm(request.POST)
         domicilio_form = f.DomicilioForm(request.POST)
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if responsable_form.is_valid() & domicilio_form.is_valid() & mov_diario_form.is_valid() & \
+        if form.is_valid() & domicilio_form.is_valid() & mov_diario_form.is_valid() & \
                 detalle_mov_diario_form.is_valid():
-            responsable = responsable_form.save(commit=False)
+            responsable = form.save(commit=False)
             responsable.domicilio = domicilio_form.save()
             responsable.save()
             abastecedor = Abastecedor(responsable=responsable)
@@ -120,11 +120,11 @@ def nuevo_abastecedor_empresa(request):
             log_crear(request.user.id, abastecedor, 'Abastecedor - Empresa')
             return redirect('abastecedores:lista_abastecedores')
     else:
-        responsable_form = f.AltaPersonaJuridicaForm
+        form = f.AltaPersonaJuridicaForm
         domicilio_form = f.DomicilioForm
         mov_diario_form = pd_f.MovimientoDiarioForm
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'responsable_form': responsable_form,
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form,
                                                                        'domicilio_form': domicilio_form,
                                                                        'mov_diario_form': mov_diario_form,
                                                                        'detalle_mov_diario_form': detalle_mov_diario_form
@@ -375,12 +375,13 @@ def baja_control_plaga(request, pk):
 
 
 @login_required(login_url='login')
-def modificacion_control_plaga(request):
+def modificacion_control_plaga(request, pk):
+    control_plaga = ControlDePlaga.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ControlDePlagaForm(request.POST)
+        form = ModificacionControlDePlagaForm(request.POST, instance=control_plaga)
         if form.is_valid():
             log_crear(request.user.id, form.save(), 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')
     else:
-        form = ControlDePlagaForm
-    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form})
+        form = ModificacionControlDePlagaForm(instance=control_plaga)
+    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'modificacion': True})

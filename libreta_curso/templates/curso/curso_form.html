@@ -14,8 +14,13 @@
 
 {% block scripts %}
     <script>
-        $.datepicker.setDefaults({
-            minDate: new Date()
+        $('#id_fecha_inicio').datetimepicker({
+            format:'d/m/Y H:i',
+            step:30,
+            minDate: new Date(),
+            disabledWeekDays:[0,6]
         });
+
+        $.datetimepicker.setLocale('es');
     </script>
 {% endblock %}

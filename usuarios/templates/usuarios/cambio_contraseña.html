@@ -1,0 +1,39 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block no-particles %}{% endblock %}
+
+{% block title %}Cambio de Contraseña{% endblock %}
+
+{% block header-title %}Cambio de Contraseña{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block content %}
+    <div class="container container-form">
+        <form method="post">
+            {% csrf_token %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-xs-12 col-md-7" id="container-form-left">
+                        {{ form.as_p }}
+                        {% if form.non_field_errors%}
+                            <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="submit" class="btn btn-primary" value="Guardar cambios">
+                    <a class="btn btn-danger btn-cancelar" href="{% url 'inicio' %}">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#container-form-left').find('input').addClass('form-control');
+    </script>
+{% endblock %}

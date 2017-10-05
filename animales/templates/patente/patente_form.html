@@ -9,36 +9,29 @@
 
 {% block url-volver %}{% url 'patentes:lista_patentes' %}{% endblock %}
 
-{% block form-left %}
-    <div class=" panel panel-default">
-        <div class="panel-body">
-            {% for field in patente_form %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field|add_class:'form-control' }}
-            </div>
-            {% endfor %}
-        </div>
-        {% if not modificacion %}
+{% block extra-form %}
+    {% if not modificacion %}
+        <div class=" panel panel-default">
             <div class="panel-heading movimiento-title">Datos de facturacion</div>
             <div class="panel-body">
-                {% for field in mov_diario_form %}
-                    <div class="form-group">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {{ field|add_class:'form-control' }}
-                    </div>
+                <label>{{ mov_diario_form.nro_ingreso.label }}</label>
+                {{ mov_diario_form.nro_ingreso|add_class:'form-control' }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
                 {% endfor %}
                 {% for field in detalle_mov_diario_form %}
                     <div class="form-group">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <label>{{ field.label }}</label>
                         {{ field|add_class:'form-control' }}
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
                     </div>
                 {% endfor %}
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}
-
 
 {% block form-right %}
     {% if not modificacion %}
@@ -47,7 +40,7 @@
             <div class="panel-body">
                 {% for field in mascota_form %}
                     <div class="form-group">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <label>{{ field.label }}</label>
                         {{ field|add_class:'form-control' }}
                         {% for error in field.errors %}
                             <span class="help-block">{{ error }}</span>

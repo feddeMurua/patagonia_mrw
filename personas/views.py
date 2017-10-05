@@ -24,23 +24,24 @@ def lista_detalles_persona(request, id_persona):
                                                            'inscripciones': lista_cursos_inscripciones})
 
 
+@login_required(login_url='login')
 def alta_persona(request):
     if request.method == 'POST':
-        persona_form = AltaPersonaFisicaForm(request.POST)
+        form = AltaPersonaFisicaForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
-        if persona_form.is_valid() & domicilio_form.is_valid():
-            persona = persona_form.save(commit=False)
+        if form.is_valid() & domicilio_form.is_valid():
+            persona = form.save(commit=False)
             persona.domicilio = domicilio_form.save()
             persona.save()
             log_crear(request.user.id, persona, 'Persona Física')
             return redirect('personas:lista_personas')
     else:
-        persona_form = AltaPersonaFisicaForm
+        form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
-        return render(request, "persona/persona_form.html", {'persona_form': persona_form,
-                                                             'domicilio_form': domicilio_form})
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form})
 
 
+@login_required(login_url='login')
 def baja_persona(request, pk):
     persona = PersonaFisica.objects.get(pk=pk)
     log_eliminar(request.user.id, persona, 'Persona Física')
@@ -48,15 +49,15 @@ def baja_persona(request, pk):
     return HttpResponse()
 
 
+@login_required(login_url='login')
 def modificacion_persona(request, pk):
     persona = PersonaFisica.objects.get(pk=pk)
     if request.method == 'POST':
-        persona_form = ModificacionPersonaFisicaForm(request.POST, instance=persona)
-        if persona_form.is_valid():
-            log_modificar(request.user.id, persona_form.save(), 'Persona Física')
+        form = ModificacionPersonaFisicaForm(request.POST, instance=persona)
+        if form.is_valid():
+            log_modificar(request.user.id, form.save(), 'Persona Física')
             return redirect('personas:lista_personas')
     else:
-        persona_form = ModificacionPersonaFisicaForm(instance=persona)
+        form = ModificacionPersonaFisicaForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
-        return render(request, "persona/persona_form.html", {'persona_form': persona_form,
-                                                             'domicilio_form': domicilio_form})
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form})

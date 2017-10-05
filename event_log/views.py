@@ -5,10 +5,11 @@ from django.shortcuts import render
 from .forms import *
 from personas import forms as pf
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 @login_required(login_url='login')
+@staff_member_required
 def lista_eventos(request):
     eventos = LogEntry.objects.all()
     rango_form = RangoEventosForm

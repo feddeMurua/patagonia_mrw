@@ -1,6 +1,5 @@
 {% extends "base/base.html" %}
 {% load staticfiles %}
-{% load staticfiles bootstrap3 %}
 {% load widget_tweaks %}
 
 {% block stylesheets %}
@@ -21,7 +20,7 @@
                     <h4 align="center">Bienvenido</h4>
                     <div id="my-tab-content" class="tab-content">
                         <div class="tab-pane active" id="login">
-                            <form class="form-signin" method="post" action="{% url 'login' %}">
+                            <form class="form-signin" method="post" action="">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     {{ form.username|add_class:'form-control'|attr:"placeholder:Usuario" }}
@@ -30,7 +29,7 @@
                                     {{ form.password|add_class:'form-control'|attr:"placeholder:Contraseña" }}
                                 </div>
                                 <input type="submit" class="btn btn-lg btn-default btn-block" value="Ingresar"/>
-                                <input type="hidden" name="next" value="{{ next }}"/>
+                                <br>
                                 <div class="msg-error" align="center">
                                     {% if form.errors %}
                                         <p>El nombre de usuario y la contraseña no coinciden. Intente nuevamente.</p>

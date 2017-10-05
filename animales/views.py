@@ -116,18 +116,18 @@ def lista_solicitudes(request):
 @login_required(login_url='login')
 def alta_solicitud(request):
     if request.method == 'POST':
-        solicitud_form = SolicitudForm(request.POST)
+        form = SolicitudForm(request.POST)
         domicilio_form = f.DomicilioRuralForm(request.POST)
-        if solicitud_form.is_valid() & domicilio_form.is_valid():
-            solicitud = solicitud_form.save(commit=False)
+        if form.is_valid() & domicilio_form.is_valid():
+            solicitud = form.save(commit=False)
             solicitud.domicilio_criadero = domicilio_form.save()
             solicitud.save()
             log_crear(request.user.id, solicitud, 'Solicitud de Habilitacion')
             return redirect('criadero:lista_solicitudes')
     else:
-        solicitud_form = SolicitudForm
+        form = SolicitudForm
         domicilio_form = f.DomicilioRuralForm
-        return render(request, "criadero/solicitud_form.html", {'solicitud_form': solicitud_form,
+        return render(request, "criadero/solicitud_form.html", {'form': form,
                                                                 'domicilio_form': domicilio_form})
 
 
@@ -238,41 +238,37 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
 @login_required(login_url='login')
 def alta_esterilizacion(request):
     if request.method == 'POST':
-        turno_form = TurnoForm(request.POST)
-        patente_form = ListaPatentesForm(request.POST)
-        if turno_form.is_valid() and patente_form.is_valid():
-            patente = patente_form.cleaned_data['patente']
-            esterilizacion = Esterilizacion(turno=turno_form.cleaned_data['turno'], interesado=patente.persona,
+        form = EsterilizacionPatenteForm(request.POST)
+        if form.is_valid():
+            patente = form.cleaned_data['patente']
+            esterilizacion = Esterilizacion(turno=form.cleaned_data['turno'], interesado=patente.persona,
                                             mascota=patente.mascota)
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Esterilizacion de Animal Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
-        turno_form = TurnoForm
-        patente_form = ListaPatentesForm
-        return render(request, 'esterilizacion/esterilizacion_turno.html', {'turno_form': turno_form,
-                                                                            'patente_form': patente_form})
+        form = EsterilizacionPatenteForm
+        return render(request, 'esterilizacion/esterilizacion_turno.html', {'form': form})
 
 
 @login_required(login_url='login')
 def alta_esterilizacion_nopatentado(request):
     if request.method == 'POST':
-        interesado_form = f.ListaPersonasGenericasForm(request.POST)
-        mascota_form = MascotaForm(request.POST)
+        form = f.AltaPersonaFisicaForm(request.POST)
         turno_form = TurnoForm(request.POST)
-        if interesado_form.is_valid() and mascota_form.is_valid() and turno_form.is_valid():
-            esterilizacion = Esterilizacion(interesado=interesado_form.cleaned_data['persona'],
+        mascota_form = MascotaForm(request.POST)
+        if form.is_valid() and turno_form.is_valid() and mascota_form.is_valid():
+            esterilizacion = Esterilizacion(interesado=form.cleaned_data['persona'],
                                             mascota=mascota_form.save(), turno=turno_form.cleaned_data['turno'])
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Esterilizacion de Animal no Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
-        interesado_form = f.ListaPersonasGenericasForm
-        mascota_form = MascotaForm
+        form = f.AltaPersonaFisicaForm
         turno_form = TurnoForm
-        return render(request, 'esterilizacion/esterilizacion_form.html', {'interesado_form': interesado_form,
-                                                                           'mascota_form': mascota_form,
-                                                                           'turno_form': turno_form})
+        mascota_form = MascotaForm
+        return render(request, 'esterilizacion/esterilizacion_form.html', {'form': form, 'turno_form': turno_form,
+                                                                       'mascota_form': mascota_form})
 
 
 '''
@@ -314,13 +310,13 @@ def retiro_antiparasitario(request, pk):
 @login_required(login_url='login')
 def alta_patente(request):
     if request.method == 'POST':
-        patente_form = PatenteForm(request.POST)
+        form = PatenteForm(request.POST)
         mascota_form = MascotaForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Patentamiento')
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        if patente_form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & \
+        if form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & \
                 mov_diario_form.is_valid():
-            patente = patente_form.save(commit=False)
+            patente = form.save(commit=False)
             mascota = mascota_form.save()
             patente.mascota = mascota
             patente.save()
@@ -334,11 +330,11 @@ def alta_patente(request):
             log_crear(request.user.id, patente, 'Patente')
             return redirect('patentes:lista_patentes')
     else:
-        patente_form = PatenteForm
+        form = PatenteForm
         mascota_form = MascotaForm
         mov_diario_form = pd_f.MovimientoDiarioForm
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Patentamiento')
-        return render(request, "patente/patente_form.html", {'patente_form': patente_form, 'mascota_form': mascota_form,
+        return render(request, "patente/patente_form.html", {'form': form, 'mascota_form': mascota_form,
                                                              'mov_diario_form': mov_diario_form,
                                                              'detalle_mov_diario_form': detalle_mov_diario_form})
 
@@ -369,13 +365,13 @@ def baja_patente(request, pk):
 def modificacion_patente(request, pk):
     patente = Patente.objects.get(pk=pk)
     if request.method == 'POST':
-        patente_form = ModificacionPatenteForm(request.POST, instance=patente)
-        if patente_form.is_valid():
-            log_crear(request.user.id, patente_form.save(), 'Patente')
+        form = ModificacionPatenteForm(request.POST, instance=patente)
+        if form.is_valid():
+            log_crear(request.user.id, form.save(), 'Patente')
             return redirect('patentes:lista_patentes')
     else:
-        patente_form = ModificacionPatenteForm(instance=patente)
-    return render(request, 'patente/patente_form.html', {'patente_form': patente_form, 'modificacion': True})
+        form = ModificacionPatenteForm(instance=patente)
+    return render(request, 'patente/patente_form.html', {'form': form, 'modificacion': True})
 
 
 class DetallePatente(LoginRequiredMixin, DetailView):
@@ -536,21 +532,21 @@ def alta_tramite_patentado(request):
 @login_required(login_url='login')
 def alta_tramite_nopatentado(request):
     if request.method == 'POST':
-        interesado_form = f.ListaPersonasGenericasForm(request.POST)
+        form = f.ListaPersonasGenericasForm(request.POST)
         mascota_form = MascotaForm(request.POST)
-        if interesado_form.is_valid() and mascota_form.is_valid():
+        if form.is_valid() and mascota_form.is_valid():
             mascota = mascota_form.save()
             tramite = request.session['tramite']
             retiro_entrega = RetiroEntregaAnimal(tramite=tramite['tramite'], observaciones=tramite['observaciones'],
                                                  patentado=tramite['patentado'], mascota=mascota,
-                                                 interesado=interesado_form.cleaned_data['persona'])
+                                                 interesado=form.cleaned_data['persona'])
             if retiro_entrega.tramite == 'RETIRO':
                 mascota.baja = True
                 mascota.save()
             log_crear(request.user.id, retiro_entrega, 'Nuevo Retiro/Entrega de Animal no Patentado')
             return redirect('retiros_entregas:lista_retiro_entrega')
     else:
-        interesado_form = f.ListaPersonasGenericasForm
+        form = f.ListaPersonasGenericasForm
         mascota_form = MascotaForm
-        return render(request, 'retiroEntrega/retiroEntrega_noPatentado.html', {'interesado_form': interesado_form,
+        return render(request, 'retiroEntrega/retiroEntrega_noPatentado.html', {'form': form,
                                                                                 'mascota_form': mascota_form})

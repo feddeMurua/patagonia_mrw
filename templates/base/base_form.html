@@ -16,11 +16,11 @@
             {% csrf_token %}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="col-xs-12 col-md-7" id="container-form-left">
+                    <div class="col-md-7" id="container-form-left">
                         {% block form-left %}
                             {% for field in form %}
                                 <div class="form-group">
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    <label>{{ field.label }}</label>
                                     {% if field.label != 'Foto' %} <!-- para que no se rompa el boton browse file -->
                                         {{ field|add_class:'form-control' }}
                                     {% else %}
@@ -32,6 +32,7 @@
                                 </div>
                             {% endfor %}
                         {% endblock %}
+                        {% block extra-form %}{% endblock %}
                         {% block extra-buttons %}{% endblock %}
                         {% if form.non_field_errors%}
                             <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>

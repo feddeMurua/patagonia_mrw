@@ -1,0 +1,33 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block stylesheets %}
+    <style>
+        .container-panel {
+            margin: 35px auto 35px auto;
+        }
+    </style>
+{% endblock %}
+
+{% block no-particles %}{% endblock %}
+
+{% block title %}Cambio de Contraseña{% endblock %}
+
+{% block header-title %}Cambio de Contraseña{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block content %}
+    <div class="container container-panel">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h2>Cambio de contraseña exitoso</h2>
+                <h3>Su contraseña ha sido cambiada</h3>
+            </div>
+            <div class="panel-footer">
+                <a class="btn btn-primary" href="{% url 'inicio' %}">Aceptar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

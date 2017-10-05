@@ -53,10 +53,14 @@
                 <li><a href="#"><span>Arqueo Diario de Efectivo</span></a></li>
             </ul>
         </li>
-        <li class="pull-right"><a href="#"><span>{{ user.get_username }}</span></a>
-            <ul class="submenu-user">
-                <li><a href="{% url 'logout' %}?next={{request.path}}">Salir</a></li>
-                <li><a href="{% url 'event_log:lista_eventos' %}">Eventos de Usuario</a></li>
+        <li><a href="#">Usuario: {{ user.get_username }}</a>
+            <ul>
+                {% if user.is_staff %}
+                    <li><a href="#">Crear usuario</a></li>
+                    <li><a href="{% url 'event_log:lista_eventos' %}">Seguimiento de Eventos de Usuarios</a></li>
+                {% endif %}
+                <li><a href="{% url 'cambio_password' %}">Cambiar Contraseña</a></li>
+                <li><a href="{% url 'logout' %}">Salir</a></li>
             </ul>
         </li>
     </ul>

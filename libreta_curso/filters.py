@@ -14,7 +14,7 @@ class LibretaListFilter(django_filters.FilterSet):
 class CursoListFilter(django_filters.FilterSet):
     class Meta:
         model = Curso
-        fields = ['cupo', 'horario', 'fecha_inicio']
+        fields = ['cupo', 'fecha_inicio']
         order_by = ['cupo']
 
 

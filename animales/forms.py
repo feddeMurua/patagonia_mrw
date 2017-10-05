@@ -6,6 +6,7 @@ from django.utils.translation import ugettext as _
 from functools import partial
 from .models import *
 from .choices import *
+from personas import forms as pf
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
@@ -146,3 +147,8 @@ class RetiroEntregaForm(forms.ModelForm):
 
 class ListaPatentesForm(forms.Form):
     patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)
+
+
+class EsterilizacionPatenteForm(forms.Form):
+    patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)
+    turno = forms.DateTimeField(required=True)
