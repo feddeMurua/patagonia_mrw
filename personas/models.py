@@ -34,7 +34,7 @@ class Domicilio(models.Model):
     calle_entre1 = models.CharField(max_length=50, null=True, blank=True)
     calle_entre2 = models.CharField(max_length=50, null=True, blank=True)
     nro = models.IntegerField()
-    dpto = models.CharField(max_length=2, null=True, blank=True)
+    dpto = models.CharField(max_length=50, null=True, blank=True)
     piso = models.IntegerField(null=True, blank=True)
     localidad = models.ForeignKey('Localidad', on_delete=models.CASCADE)
 

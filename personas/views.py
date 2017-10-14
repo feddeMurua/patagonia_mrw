@@ -35,6 +35,8 @@ def alta_persona(request):
             persona.save()
             log_crear(request.user.id, persona, 'Persona Física')
             return redirect('personas:lista_personas')
+        else: # no se verifica que alguno (o los dos) de los dos form sea valido
+            return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form})
     else:
         form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
