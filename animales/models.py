@@ -115,7 +115,7 @@ class Mascota(models.Model):
     pelaje = models.CharField(max_length=50)
     categoria_mascota = models.CharField(max_length=6, choices=Categoria_Mascota)
     raza = models.CharField(max_length=50)
-    sexo = models.CharField(max_length=15, choices=Sexo, blank=True)
+    sexo = models.CharField(max_length=15, choices=Sexo)
     fecha_nacimiento = models.DateField(blank=True, null=True)
     baja = models.BooleanField(default=False)
 
@@ -124,7 +124,7 @@ class Mascota(models.Model):
 
 
 class Patente(models.Model):
-    fecha = models.DateField(default=now)    
+    fecha = models.DateField(default=now)
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)
     fecha_garrapaticida = models.DateField(null=True)

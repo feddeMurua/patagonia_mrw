@@ -8,7 +8,7 @@ from django.test import TestCase
 TEST:
 LIBRETAS:
 condiciones a verificar:
--curso debe estar cerrado
+-validar que la persona exista en el curso y haya aprobado
 -verificar que no se repita el n° de ingresos varios
 -mostrar formato de curso solo fecha
 '''

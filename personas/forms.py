@@ -29,19 +29,30 @@ class ListaPersonasJuridicasForm(forms.Form):
     persona = forms.ModelChoiceField(queryset=PersonaJuridica.objects.all(), required=True)
 
 
-class AltaPersonaFisicaForm(forms.ModelForm):
-    fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
+class PersonaGenericaForm(forms.ModelForm):
 
     class Meta:
-        model = PersonaFisica
-        exclude = ['documentacion_retirada', 'domicilio']
-        fields = '__all__'
+        abstract = True
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
         if not regex_alfabetico.match(nombre):
             raise forms.ValidationError('El nombre de la persona, solo puede contener letras y/o espacios')
         return nombre
+
+    def clean_telefono(self):
+        telefono = self.cleaned_data['telefono']
+        if not re.match(r"^[0-9]{2,}-[0-9]{6,}$", telefono):
+            raise forms.ValidationError('Teléfono inválido, por favor siga este formato PREFIJO-NUMERO (yyyy-nnnnnnnn)')
+        return telefono
+
+class AltaPersonaFisicaForm(PersonaGenericaForm):
+    fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
+
+    class Meta:
+        model = PersonaFisica
+        exclude = ['documentacion_retirada', 'domicilio']
+        fields = '__all__'
 
     def clean_apellido(self):
         apellido = self.cleaned_data['apellido']
@@ -71,12 +82,6 @@ class AltaPersonaFisicaForm(forms.ModelForm):
                 raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
         return obra_social
 
-    def clean_telefono(self):
-        telefono = self.cleaned_data['telefono']
-        if not re.match(r"^[0-9]{2,}-[0-9]{6,}$", telefono):
-            raise forms.ValidationError('Teléfono inválido, por favor siga este formato PREFIJO-NUMERO (yyyy-nnnnnnnn)')
-        return telefono
-
     def clean_rubro(self):
         rubro = self.cleaned_data['rubro']
         if not regex_alfabetico.match(rubro):
@@ -98,6 +103,23 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
         model = PersonaFisica
         fields = ['telefono', 'email', 'obra_social', 'rubro', 'documentacion_retirada']
 
+    def clean_telefono(self):
+        telefono = self.cleaned_data['telefono']
+        if not re.match(r"^[0-9]{2,}-[0-9]{6,}$", telefono):
+            raise forms.ValidationError('Teléfono inválido, por favor siga este formato PREFIJO-NUMERO (yyyy-nnnnnnnn)')
+        return telefono
+
+    def clean_obra_social(self):
+        obra_social = self.cleaned_data['obra_social']
+        if not regex_alfanumerico.match(obra_social):
+                raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
+        return obra_social
+
+    def clean_rubro(self):
+        rubro = self.cleaned_data['rubro']
+        if not regex_alfabetico.match(rubro):
+            raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
+        return rubro
 
 class DomicilioForm(forms.ModelForm):
 
@@ -140,10 +162,11 @@ class DomicilioForm(forms.ModelForm):
 
     def clean_dpto(self):
         dpto = self.cleaned_data['dpto']
-        if not regex_alfanumerico.match(dpto):
-            raise forms.ValidationError('El Departamento, solo puede contener letras/números y/o espacios')
+        if dpto is not None:
+            if not regex_alfanumerico.match(dpto):
+                raise forms.ValidationError('El Departamento, solo puede contener letras/números y/o espacios')
         return dpto
-        
+
 
 class DomicilioRuralForm(forms.ModelForm):
 

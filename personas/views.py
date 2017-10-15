@@ -56,9 +56,13 @@ def modificacion_persona(request, pk):
     persona = PersonaFisica.objects.get(pk=pk)
     if request.method == 'POST':
         form = ModificacionPersonaFisicaForm(request.POST, instance=persona)
-        if form.is_valid():
+        domicilio_form = DomicilioForm(request.POST,instance=persona.domicilio)
+        if form.is_valid() & domicilio_form.is_valid():
+            domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Persona Física')
             return redirect('personas:lista_personas')
+        else: # no se verifica que alguno (o los dos) de los dos form sea valido
+            return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form})
     else:
         form = ModificacionPersonaFisicaForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)

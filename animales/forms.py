@@ -7,10 +7,13 @@ from functools import partial
 from .models import *
 from .choices import *
 from personas import forms as pf
+import re
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
+regex_alfabetico = re.compile(r"^[a-zñA-ZÑ]+((\s[a-zñA-ZÑ]+)+)?$")
+regex_alfanumerico = re.compile(r"^[a-zñA-ZÑ0-9]+((\s[a-zñA-ZÑ0-9]+)+)?$")
 
 class AltaAnalisisForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
@@ -92,6 +95,24 @@ class MascotaForm(forms.ModelForm):
             'categoria_mascota': _("Categoria de la mascota"),
 
         }
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if not regex_alfabetico.match(nombre):
+            raise forms.ValidationError('El nombre de la mascota, solo puede contener letras/numeros y/o espacios')
+        return nombre
+
+    def clean_pelaje(self):
+        pelaje = self.cleaned_data['pelaje']
+        if not regex_alfabetico.match(pelaje):
+            raise forms.ValidationError('El pelaje de la mascota, solo puede contener letras/numeros y/o espacios')
+        return pelaje
+
+    def clean_raza(self):
+        raza = self.cleaned_data['raza']
+        if not regex_alfabetico.match(raza):
+            raise forms.ValidationError('La raza de la mascota, solo puede contener letras/numeros y/o espacios')
+        return raza
 
 
 class PatenteForm(forms.ModelForm):

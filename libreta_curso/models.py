@@ -32,7 +32,7 @@ class Curso(models.Model):
     lugar = models.CharField(max_length=50)
     finalizado = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self):        
         return "Curso Nro: %s - %s" % (self.pk, self.fecha_inicio)
 
 

@@ -314,8 +314,7 @@ def alta_patente(request):
         mascota_form = MascotaForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Patentamiento')
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        if form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & \
-                mov_diario_form.is_valid():
+        if form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & mov_diario_form.is_valid():
             patente = form.save(commit=False)
             mascota = mascota_form.save()
             patente.mascota = mascota
@@ -324,11 +323,14 @@ def alta_patente(request):
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
             descrip = str(servicio) + " - Chapa: " + str(mascota.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               patente.persona)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip, patente.persona)
             detalle_mov_diario.save()
             log_crear(request.user.id, patente, 'Patente')
             return redirect('patentes:lista_patentes')
+        else: # no se verifica que alguno de los tres form sea valido
+            return render(request, "patente/patente_form.html", {'form': form, 'mascota_form': mascota_form,
+                                                                 'mov_diario_form': mov_diario_form,
+                                                                 'detalle_mov_diario_form': detalle_mov_diario_form})
     else:
         form = PatenteForm
         mascota_form = MascotaForm

@@ -41,7 +41,7 @@ class CursoForm(forms.ModelForm):
 
 class LibretaForm(forms.ModelForm):
     fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
-
+    
     class Meta:
         model = LibretaSanitaria
         exclude = ['fecha', 'foto']
@@ -93,7 +93,7 @@ class ModificacionLibretaForm(forms.ModelForm):
         if not regex_alfanumerico.match(lugar_examen_clinico):
             raise forms.ValidationError('El nombre del lugar del examen clínico, solo puede contener letras/numeros y/o espacios')
         return lugar_examen_clinico
-        
+
 
 class InscripcionForm(forms.ModelForm):
 
