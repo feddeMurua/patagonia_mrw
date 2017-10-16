@@ -91,6 +91,17 @@ Categoria_E = {
     'Otros': "Otros"
 }
 
+Quincena = (
+    ('Primera', _("Primera")),
+    ('Segunda', _("Segunda")),
+)
+
+Estado_Desinfeccion = (
+    ('Realizada', _("Realizada")),
+    ('No realizada', _("No realizada")),
+    ('Vencida', _("Vencida"))
+)
+
 Plagas = (
     ('Palomas', _("Palomas")),
     ('Ratas', _("Ratas")),

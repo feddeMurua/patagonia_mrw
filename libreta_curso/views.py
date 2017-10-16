@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
@@ -65,7 +65,7 @@ def cierre_de_curso(request, id_curso):
         curso = Curso.objects.get(pk=id_curso)
         curso.finalizado = True
         curso.save()
-        log_eliminar(request.user.id, curso, 'Cierre de Curso')
+        log_modificar(request.user.id, curso, 'Cierre de Curso')
         return redirect('cursos:lista_cursos')
     else:
         lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
@@ -157,7 +157,7 @@ def cierre_inscripcion(request, pk, id_curso):
             inscripcion_form.save()
             inscripcion.modificado = True
             inscripcion.save()
-            log_crear(request.user.id, inscripcion, 'Calificacion de Inscripcion en Curso')
+            log_modificar(request.user.id, inscripcion, 'Calificacion de Inscripcion en Curso')
             return HttpResponseRedirect(reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso}))
     else:
         form = CierreInscripcionForm
@@ -183,6 +183,16 @@ class PdfInscripcion(LoginRequiredMixin, PDFTemplateView):
 '''
 LIBRETRAS SANITARIAS
 '''
+
+
+@login_required(login_url='login')
+def get_curso(request, pk_persona):
+    inscripciones = Inscripcion.objects.filter(persona__pk=pk_persona)
+    cursos = {}
+    for inscripcion in inscripciones:
+        if inscripcion.nota_curso == 'Aprobado':
+            cursos[str(inscripcion.curso)] = inscripcion.curso.pk
+    return JsonResponse(cursos)
 
 
 @login_required(login_url='login')
@@ -238,7 +248,7 @@ def modificacion_libreta(request, pk):
     if request.method == 'POST':
         form = ModificacionLibretaForm(request.POST, instance=libreta)
         if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Libreta Sanitaria')
+            log_modificar(request.user.id, form.save(), 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = ModificacionLibretaForm(instance=libreta)

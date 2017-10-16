@@ -33,7 +33,7 @@ class Curso(models.Model):
     finalizado = models.BooleanField(default=False)
 
     def __str__(self):
-        return "Curso Nro: %s - %s" % (self.pk, self.fecha_inicio)
+        return "Curso Nro: %s - %s" % (self.pk, self.fecha_inicio.date())
 
 
 class Inscripcion(models.Model):

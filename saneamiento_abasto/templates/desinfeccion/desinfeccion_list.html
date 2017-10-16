@@ -11,29 +11,51 @@
 {% block panel-title %}Desinfeccion{% endblock %}
 
 {% block btn-nuevo %}
-    <a href="{% url 'desinfecciones:nueva_desinfeccion' pk_vehiculo %}" class="btn btn-sm btn-primary btn-create">Nueva Desinfeccion</a>
+    <a href="{% url 'desinfecciones:nueva_desinfeccion' pk_vehiculo %}" class="btn btn-sm btn-primary btn-create">Realizar desinfeccion</a>
 {% endblock %}
 
-{% block tabla %}
-    <table class="table table-striped table-bordered table-hover table-list">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Quincena</th>
-                <th><em class="glyphicon glyphicon-cog"></em></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for desinfeccion in filter.qs %}
-                <tr align="center">
-                    <td>{{ desinfeccion.fecha }}</td>
-                    <td>{{ desinfeccion.quincena }}</td>
-                    <td align="center">
-                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'desinfecciones:modificar_desinfeccion' pk_vehiculo desinfeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                        <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'desinfecciones:borrar_desinfeccion' desinfeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
-                    </td>
+{% block no-filter-panel %}{% endblock %}
+
+{% block no-filter-table %}
+    {% if desinfecciones %}
+        <table class="table table-striped table-bordered table-hover table-list">
+            <thead>
+                <tr>
+                    <th>Fecha de realizacion</th>
+                    <th>Quincena</th>
+                    <th>Proximo vencimiento</th>
+                    <th><em class="glyphicon glyphicon-cog"></em></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for desinfeccion in desinfecciones %}
+                    <tr align="center">
+                        <td>{{ desinfeccion.fecha_realizacion }}</td>
+                        <td>{{ desinfeccion.quincena }}</td>
+                        <td>{{ desinfeccion.proximo_vencimiento }}</td>
+                        <td align="center">
+                            {% if desinfeccion.infraccion %}
+                                <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'desinfecciones:modificar_desinfeccion' pk_vehiculo desinfeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                            {% endif %}
+                            <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'desinfecciones:borrar_desinfeccion' desinfeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div id="table-empty" class="table-empty">
+            <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                No se encontraron elementos
+            </h3>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block panel-footer %}
+    {% if desinfecciones %}
+        <div class="panel-footer" align="right">
+            <b>Estado: {{ estado }}</b>
+        </div>
+    {% endif %}
 {% endblock %}

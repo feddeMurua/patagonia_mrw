@@ -1,8 +1,2 @@
-ABASTECEDOR:
-abastecedor : pfisica o juridica
-
 RESPINSPCCION:
 si no existe precinto, 000 (puede ser null)
-
-MOVIMIENTO DIARIO:
-* Controlar forma pago por cheque en patente

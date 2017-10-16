@@ -46,7 +46,9 @@
         });
 
         var forma_pago = $('#id_forma_pago'),
-        nro_cheque = $('#id_nro_cheque').parent();
+        nro_cheque = $('#id_nro_cheque').parent(),
+        persona = $('#id_persona'),
+        selectCurso = document.getElementById('id_curso').selectize;
         forma_pago.on('change', hideNroCheque);
         hideNroCheque();
 
@@ -55,6 +57,28 @@
                 nro_cheque.removeClass('hidden');
             } else {
                 nro_cheque.addClass('hidden');
+            }
+        }
+
+        persona.on('change', setOptionsSelect);
+        setOptionsSelect();
+        function setOptionsSelect() {
+            var id_persona = persona.val()
+            if (id_persona) {
+                $.ajax({
+                    url: '/libretas/getCurso/' + id_persona,
+                    dataType: 'json',
+                    success: function(data){
+                        selectCurso.clearOptions();
+                        $.each(data, function(key, opt) {
+                            selectCurso.addOption({value: opt, text: key});
+                            selectCurso.addItem(opt);
+                        })
+                    },
+                    error: function(err){
+                        alert("Fallo Ajax");
+                    }
+                });
             }
         }
     </script>

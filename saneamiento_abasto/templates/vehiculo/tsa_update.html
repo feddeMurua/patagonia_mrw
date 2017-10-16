@@ -1,0 +1,48 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Vehiculos{% endblock %}
+
+{% block header-title %}Alta/Modificacion de Vehiculo{% endblock %}
+
+{% block url-volver %}{% url 'vehiculo:lista_vehiculos' %}{% endblock %}
+
+{% block extra-buttons %}
+    <div class="form-group">
+        <label>Rubro del vehículo</label>
+        <select name="rubro_vehiculo" class="form-control selectized" id="id_rubro_vehiculo" tabindex="-1" style="display: none;"></select>
+    </div>
+{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'vehiculo:lista_vehiculos' %}">Cancelar</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var selectRubro = document.getElementById('id_rubro_vehiculo').selectize,
+        categoria = $('#id_categoria');
+        categoria.on('change', setOptionsSelect);
+        setOptionsSelect();
+        function setOptionsSelect() {
+            var id_categoria = categoria.val()
+            if (id_categoria) {
+                $.ajax({
+                    url: '/vehiculos/getRubros/' + id_categoria,
+                    dataType: 'json',
+                    success: function(data){
+                        selectRubro.clearOptions();
+                        $.each(data, function(key, opt) {
+                            selectRubro.addOption({value: opt, text: key});
+                            selectRubro.addItem(opt);
+                        })
+                    },
+                    error: function(err){
+                        alert("Fallo Ajax");
+                    }
+                });
+            }
+        }
+    </script>
+{% endblock %}

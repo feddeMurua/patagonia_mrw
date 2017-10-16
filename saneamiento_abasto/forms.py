@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django import forms
 from functools import partial
 from .models import *
-from .choices import *
 from django.utils.translation import ugettext as _
 
 
@@ -85,20 +84,33 @@ class VehiculoForm(forms.ModelForm):
         }
 
 
-class ModificarVehiculoForm(forms.ModelForm):
+class ModificarTSAForm(forms.ModelForm):
 
     class Meta:
         model = Vehiculo
-        exclude = ['dominio', 'titular', 'tipo_vehiculo', 'rubro_vehiculo']
+        exclude = ['titular', 'tipo_vehiculo', 'rubro_vehiculo']
         fields = '__all__'
+        labels = {
+            'disposicion_resolucion': _("Disposicion")
+        }
+
+
+class ModificarTPPForm(forms.ModelForm):
+
+    class Meta:
+        model = Vehiculo
+        exclude = ['titular', 'tipo_vehiculo', 'categoria', 'rubro_vehiculo']
+        fields = '__all__'
+        labels = {
+            'disposicion_resolucion': _("Resolucion")
+        }
 
 
 class DesinfeccionForm(forms.ModelForm):
 
     class Meta:
         model = Desinfeccion
-        exclude = ['fecha_realizacion', 'vehiculo']
-        fields = '__all__'
+        fields = ['justificativo']
 
 
 class ControlDePlagaForm(forms.ModelForm):

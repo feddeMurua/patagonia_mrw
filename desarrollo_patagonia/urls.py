@@ -7,6 +7,7 @@ from usuarios.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+
     url(r'^login$', LoginView.as_view(template_name='usuarios/login.html'), name='login'),
     url(r'^logout$', LogoutView.as_view(next_page=reverse_lazy('inicio')), name='logout'),
     url(r'^usuario/cambio_password$',
@@ -14,7 +15,11 @@ urlpatterns = [
     url(r'^usuario/cambio_password_hecho$',
         PasswordChangeDoneView.as_view(template_name='usuarios/confirm_cambio_contraseña.html'),
         name='cambio_password_hecho'),
+    url(r'^usuario/lista', lista_usuarios, name='lista_usuarios'),
     url(r'^usuario/alta$', alta_usuario, name='alta_usuario'),
+    url(r'^usuario/baja/(?P<pk>\d+)$', baja_usuario, name='baja_usuario'),
+    url(r'^usuario/modificacion/(?P<pk>\d+)$', modificar_usuario, name='modificar_usuario'),
+
     url(r'^$', inicio, name="inicio"),
     url(r'^cursos/', include('libreta_curso.urls_curso', namespace='cursos')),
     url(r'^libretas/', include('libreta_curso.urls_libreta', namespace='libretas')),

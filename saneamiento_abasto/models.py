@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
@@ -62,12 +63,14 @@ TURNO EN RESPINSPECCION:
 
 class Desinfeccion(models.Model):
     fecha_realizacion = models.DateField(default=now)
-    turno = models.DateTimeField()
+    proximo_vencimiento = models.DateField()
     vehiculo = models.ForeignKey('Vehiculo', on_delete=models.CASCADE)
-    quincena = models.CharField(max_length=30)
+    quincena = models.CharField(max_length=30, choices=Quincena)
+    infraccion = models.BooleanField(default=False)
+    justificativo = models.TextField(max_length=250, blank=True, null=True)
 
     def __str__(self):
-        return "%s - %s - %s" % (self.quincena, self.vehiculo.dominio, self.vehiculo.titular)
+        return "%s - %s - %s" % (self.fecha_realizacion, self.vehiculo, self.vehiculo.titular)
 
 
 class ControlDePlaga(models.Model):
