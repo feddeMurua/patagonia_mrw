@@ -42,11 +42,35 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
         fields = '__all__'
 
 
+class AltaPersonalPropioForm(forms.ModelForm):
+    fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
+
+    class Meta:
+        model = PersonaFisica
+        exclude = ['documentacion_retirada', 'domicilio']
+        fields = '__all__'
+
+
 class ModificacionPersonaFisicaForm(forms.ModelForm):
 
     class Meta:
         model = PersonaFisica
         fields = ['telefono', 'email', 'obra_social', 'rubro', 'documentacion_retirada']
+
+
+class ModificacionPersonaJuridicaForm(forms.ModelForm):
+
+    class Meta:
+        model = PersonaJuridica
+        exclude = ['nombre', 'cuit']
+        fields = '__all__'
+
+
+class ModificacionPersonalPropioForm(forms.ModelForm):
+
+    class Meta:
+        model = PersonalPropio
+        fields = ['telefono', 'email', 'obra_social', 'rubro', 'documentacion_retirada', 'rol_actuante']
 
 
 class DomicilioForm(forms.ModelForm):

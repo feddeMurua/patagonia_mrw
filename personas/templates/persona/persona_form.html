@@ -7,7 +7,7 @@
 
 {% block header-title %}Alta/Modificacion de Persona{% endblock %}
 
-{% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}
+{% block url-volver %}{% url url_return %}{% endblock %}
 
 {% block form-right %}
     {% if not modificacion %}
@@ -29,7 +29,7 @@
 {% endblock %}
 
 {% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url 'personas:lista_personas' %}">Cancelar</a>
+    <a class="btn btn-danger btn-cancelar" href="{% url url_return %}">Cancelar</a>
 {% endblock %}
 
 {% block scripts %}

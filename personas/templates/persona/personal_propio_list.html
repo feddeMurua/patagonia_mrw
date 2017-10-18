@@ -1,0 +1,44 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Personas Físicas{% endblock %}
+
+{% block header-title %}Personas Físicas{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Personas Físicas{% endblock %}
+
+{% block btn-nuevo %}
+    <a href="{% url 'personas:nuevo_personal_propio' %}" class="btn btn-sm btn-primary btn-create">Nueva Persona</a>
+{% endblock %}
+
+{% block tabla %}
+    <table class="table table-striped table-bordered table-hover table-list">
+        <thead>
+        <tr>
+            <th>Apellido y Nombre</th>
+            <th>Dni</th>
+            <th>Domicilio</th>
+            <th>Telefono</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for persona in filter.qs %}
+                <tr align="center">
+                    <td>{{ persona.apellido }}, {{ persona.nombre }}</td>
+                    <td>{{ persona.dni }}</td>
+                    <td>{{ persona.domicilio }}</td>
+                    <td>{{ persona.telefono }}</td>
+                    <td align="center">
+                        <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'personas:detalle_personal_propio' persona.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'personas:modificar_personal_propio' persona.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                        <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'personas:borrar_personal_propio' persona.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

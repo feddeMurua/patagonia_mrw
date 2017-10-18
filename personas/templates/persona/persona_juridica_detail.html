@@ -1,0 +1,59 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_detail.css' %}"/>
+{% endblock %}
+
+{% block title %}Detalles de Personas Jurídica{% endblock %}
+
+{% block header-title %}Detalle de Persona Jurídica{% endblock %}
+
+{% block url-volver %}{% url 'personas:lista_personas_juridicas' %}{% endblock %}
+
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>Nombre:</td>
+                <td>{{ object.nombre }}</td>
+            </tr>
+            <tr>
+                <td>CUIT:</td>
+                <td>{{ object.cuit }}</td>
+            </tr>
+            <tr>
+                <td>Domicilio:</td>
+                <td>{{ object.domicilio }}</td>
+            </tr>
+            <tr>
+                <td>Teléfono:</td>
+                <td>{{ object.telefono }}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>{{ object.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'personas:lista_personas_juridicas' %}" class="btn btn-primary">Regresar</a>
+{% endblock %}
+
+{% block more-scripts %}
+    <script src="{% static 'js/paging.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#hidden-panel").hide();
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $("#buscar").click(function(){
+                $("#hidden-panel").slideToggle("slow");
+            });
+        });
+    </script>
+{% endblock %}

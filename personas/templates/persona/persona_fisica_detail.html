@@ -6,11 +6,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_detail.css' %}"/>
 {% endblock %}
 
-{% block title %}Personas{% endblock %}
+{% block title %}Detalle de Persona Fisica{% endblock %}
 
-{% block header-title %}Detalle de Persona{% endblock %}
+{% block header-title %}Detalle de Persona Fisica{% endblock %}
 
-{% block url-volver %}{% url 'personas:lista_personas' %}{% endblock %}
+{% block url-volver %}{% url 'personas:lista_personas_fisicas' %}{% endblock %}
 
 {% block detail %}
     <table class="table table-information">
@@ -115,7 +115,7 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'personas:lista_personas' %}" class="btn btn-primary">Regresar</a>
+    <a href="{% url 'personas:lista_personas_fisicas' %}" class="btn btn-primary">Regresar</a>
 {% endblock %}
 
 {% block more-scripts %}

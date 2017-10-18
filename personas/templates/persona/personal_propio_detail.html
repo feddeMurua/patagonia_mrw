@@ -1,0 +1,56 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_detail.css' %}"/>
+{% endblock %}
+
+{% block title %}Detalle de Personal Propio{% endblock %}
+
+{% block header-title %}Detalle de Personal Propio{% endblock %}
+
+{% block url-volver %}{% url 'personas:lista_personal_propio' %}{% endblock %}
+
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>Apellido y Nombre:</td>
+                <td>{{ object.apellido }}, {{ object.nombre }}</td>
+            </tr>
+            <tr>
+                <td>DNI:</td>
+                <td>{{ object.dni }}</td>
+            </tr>
+            <tr>
+                <td>Rol Actuante:</td>
+                <td>
+                    {% for rol in object.rol_actuante.all %}
+                        <button type="button" class="btn btn-default">{{ rol }}</button>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Nacionalidad:</td>
+                <td>{{ object.nacionalidad }}</td>
+            </tr>
+            <tr>
+                <td>Domicilio:</td>
+                <td>{{ object.domicilio }}</td>
+            </tr>
+            <tr>
+                <td>Teléfono:</td>
+                <td>{{ object.telefono }}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>{{ object.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'personas:lista_personal_propio' %}" class="btn btn-primary">Regresar</a>
+{% endblock %}

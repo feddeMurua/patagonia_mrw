@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from easy_pdf.views import PDFTemplateView
@@ -12,6 +11,7 @@ from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
 from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 '''
@@ -137,33 +137,33 @@ def baja_inscripcion(request, pk):
 def modificacion_inscripcion(request, pk, id_curso):
     inscripcion = Inscripcion.objects.get(pk=pk)
     if request.method == 'POST':
-        inscripcion_form = ModificacionInscripcionForm(request.POST, instance=inscripcion)
-        if inscripcion_form.is_valid():
-            log_modificar(request.user.id, inscripcion_form.save(), 'Inscripcion a Curso')
+        form = ModificacionInscripcionForm(request.POST, instance=inscripcion)
+        if form.is_valid():
+            log_modificar(request.user.id, form.save(), 'Inscripcion a Curso')
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso}))
     else:
         form = ModificacionInscripcionForm(instance=inscripcion)
-        url_return = 'cursos:inscripciones_curso'
-        return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
-                                                                     'url_return': url_return, 'modificacion': True})
+    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
+                                                                 'url_return': 'cursos:inscripciones_curso',
+                                                                 'modificacion': True})
 
 
 @login_required(login_url='login')
 def cierre_inscripcion(request, pk, id_curso):
+    inscripcion = Inscripcion.objects.get(pk=pk)
     if request.method == 'POST':
-        inscripcion = Inscripcion.objects.get(pk=pk)
-        inscripcion_form = CierreInscripcionForm(request.POST, instance=inscripcion)
-        if inscripcion_form.is_valid():
-            inscripcion_form.save()
+        form = CierreInscripcionForm(request.POST, instance=inscripcion)
+        if form.is_valid():
+            form.save()
             inscripcion.modificado = True
             inscripcion.save()
             log_modificar(request.user.id, inscripcion, 'Calificacion de Inscripcion en Curso')
             return HttpResponseRedirect(reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso}))
     else:
-        form = CierreInscripcionForm
-        url_return = 'cursos:cierre_curso'
-        return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
-                                                                     'url_return': url_return, 'modificacion': True})
+        form = CierreInscripcionForm(instance=inscripcion)
+    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
+                                                                 'url_return': 'cursos:cierre_curso',
+                                                                 'modificacion': True})
 
 
 class PdfInscripcion(LoginRequiredMixin, PDFTemplateView):
