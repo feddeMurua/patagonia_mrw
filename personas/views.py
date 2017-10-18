@@ -51,10 +51,8 @@ def modificacion_persona_fisica(request, pk):
         form = ModificacionPersonaFisicaForm(request.POST, instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
         if form.is_valid() & domicilio_form.is_valid():
-            persona = form.save(commit=False)
-            persona.domicilio = domicilio_form.save()
-            persona.save()
-            log_modificar(request.user.id, persona, 'Persona Física')
+            domicilio_form.save()
+            log_modificar(request.user.id, form.save(), 'Persona Física')
             return redirect('personas:lista_personas_fisicas')
     else:
         form = ModificacionPersonaFisicaForm(instance=persona)
@@ -118,10 +116,8 @@ def modificacion_persona_juridica(request, pk):
         form = ModificacionPersonaJuridicaForm(request.POST, instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
         if form.is_valid() & domicilio_form.is_valid():
-            persona = form.save(commit=False)
-            persona.domicilio = domicilio_form.save()
-            persona.save()
-            log_modificar(request.user.id, persona, 'Persona Jurídica')
+            domicilio_form.save()
+            log_modificar(request.user.id, form.save(), 'Persona Jurídica')
             return redirect('personas:lista_personas_juridicas')
     else:
         form = ModificacionPersonaJuridicaForm(instance=persona)
@@ -170,10 +166,8 @@ def modificacion_personal_propio(request, pk):
         form = ModificacionPersonalPropioForm(request.POST, instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
         if form.is_valid() & domicilio_form.is_valid():
-            persona = form.save(commit=False)
-            persona.domicilio = domicilio_form.save()
-            persona.save()
-            log_modificar(request.user.id, persona, 'Personal Propio')
+            domicilio_form.save()
+            log_modificar(request.user.id, form.save(), 'Personal Propio')
             return redirect('personas:lista_personal_propio')
     else:
         form = ModificacionPersonalPropioForm(instance=persona)
