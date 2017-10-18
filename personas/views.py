@@ -49,7 +49,7 @@ def modificacion_persona_fisica(request, pk):
     persona = PersonaFisica.objects.get(pk=pk)
     if request.method == 'POST':
         form = ModificacionPersonaFisicaForm(request.POST, instance=persona)
-        domicilio_form = DomicilioForm(instance=persona.domicilio)
+        domicilio_form = DomicilioForm(request.POST, instance=persona.domicilio)
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Persona Física')
@@ -81,7 +81,7 @@ def alta_persona_juridica(request):
     if request.method == 'POST':
         form = AltaPersonaJuridicaForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
-        if form.is_valid() & domicilio_form.is_valid():
+        if form.is_valid() and domicilio_form.is_valid():
             persona = form.save(commit=False)
             persona.domicilio = domicilio_form.save()
             persona.save()
@@ -114,7 +114,7 @@ def modificacion_persona_juridica(request, pk):
     persona = PersonaJuridica.objects.get(pk=pk)
     if request.method == 'POST':
         form = ModificacionPersonaJuridicaForm(request.POST, instance=persona)
-        domicilio_form = DomicilioForm(instance=persona.domicilio)
+        domicilio_form = DomicilioForm(request.POST, instance=persona.domicilio)
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Persona Jurídica')
@@ -164,7 +164,7 @@ def modificacion_personal_propio(request, pk):
     persona = PersonalPropio.objects.get(pk=pk)
     if request.method == 'POST':
         form = ModificacionPersonalPropioForm(request.POST, instance=persona)
-        domicilio_form = DomicilioForm(instance=persona.domicilio)
+        domicilio_form = DomicilioForm(request.POST, instance=persona.domicilio)
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Personal Propio')

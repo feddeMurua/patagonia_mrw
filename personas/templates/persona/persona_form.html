@@ -10,22 +10,20 @@
 {% block url-volver %}{% url url_return %}{% endblock %}
 
 {% block form-right %}
-    {% if not modificacion %}
-        <div class="panel panel-default col-xs-12 col-md-5" id="container-form-botom-right">
-            <div class="panel-heading domicilio-title">Domicilio</div>
-            <div class="panel-body">
-                {% for field in domicilio_form %}
-                    <div class="form-group">
-                        <label>{{ field.label }}</label>
-                        {{ field|add_class:'form-control' }}
-                        {% for error in field.errors %}
-                            <span class="help-block">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
+    <div class="panel panel-default col-xs-12 col-md-5" id="container-form-botom-right">
+        <div class="panel-heading domicilio-title">Domicilio</div>
+        <div class="panel-body">
+            {% for field in domicilio_form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    {% for error in field.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
         </div>
-    {% endif %}
+    </div>
 {% endblock %}
 
 {% block btn-cancelar %}
