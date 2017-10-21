@@ -15,8 +15,7 @@
 {% endblock %}
 
 {% block tabla %}
-    <table class="table table-striped table-bordered table-hover table-list">
-        <thead>
+    <thead>
         <tr>
             <th>Fecha</th>
             <th>Responsable</th>
@@ -24,24 +23,20 @@
             <th>Tipo de Plaga</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
-        </thead>
-        <tbody>
-        {% for control in filter.qs %}
-            <tr align="center">
+    </thead>
+    <tbody>
+        {% for control in listado %}
+            <tr>
                 <td>{{ control.fecha_hoy }}</td>
                 <td>{{ control.responsable }}</td>
                 <td>{{ control.funcionario_actuante }}</td>
-                <td>{{ control.tipo_plaga }}</td>                
-                <td align="center">
+                <td>{{ control.tipo_plaga }}</td>
+                <td>
                   <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'controles_plagas:detalle_control_plaga' control.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                   <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'controles_plagas:modificar_control_plaga' control.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                   <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'controles_plagas:borrar_control_plaga' control.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
-
-{% block more-scripts %}
+    </tbody>
 {% endblock %}

@@ -22,41 +22,29 @@
     </form>
 {% endblock %}
 
-{% block no-filter-panel %}{% endblock %}
-
-{% block no-filter-table %}
-    {% if movimientos %}
-        <table class="table table-striped table-bordered table-list">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>N° Ingreso</th>
-                    <th>Importe</th>
-                    <th>Titular</th>
-                    <th>Detalle</th>
-                    <th>Forma de Pago</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for detalle in movimientos %}
-                    <tr>
-                        <td>{{ detalle.movimiento.fecha }}</td>
-                        <td>{{ detalle.movimiento.nro_ingreso }}</td>
-                        <td> $ {{ detalle.servicio.importe }}</td>
-                        <td>{{ detalle.titular }}</td>
-                        <td>{{ detalle.descripcion }}</td>
-                        <td>{{ detalle.forma_pago }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div id="table-empty" class="table-empty">
-            <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
-                No se encontraron elementos
-            </h3>
-        </div>
-    {% endif %}
+{% block tabla %}
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>N° Ingreso</th>
+            <th>Importe</th>
+            <th>Titular</th>
+            <th>Detalle</th>
+            <th>Forma de Pago</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in listado %}
+            <tr>
+                <td>{{ detalle.movimiento.fecha }}</td>
+                <td>{{ detalle.movimiento.nro_ingreso }}</td>
+                <td> $ {{ detalle.servicio.importe }}</td>
+                <td>{{ detalle.movimiento.titular }}</td>
+                <td>{{ detalle.descripcion }}</td>
+                <td>{{ detalle.forma_pago }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 {% endblock %}
 
 {% block more-scripts %}

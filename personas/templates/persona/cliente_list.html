@@ -1,0 +1,54 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Clientes{% endblock %}
+
+{% block header-title %}Clientes{% endblock %}
+
+{% block url-volver %}{% url 'inicio' %}{% endblock %}
+
+{% block panel-title %}Clientes{% endblock %}
+
+{% block btn-nuevo %}
+    <a href="{% url 'personas:nueva_persona_fisica' %}" class="btn btn-sm btn-primary btn-create">Nueva Persona Física</a>
+    <a href="{% url 'personas:nueva_persona_juridica' %}" class="btn btn-sm btn-primary btn-create">Nueva Persona Jurídica</a>
+{% endblock %}
+
+{% block tabla %}
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>CUIT o DNI</th>
+            <th>Domicilio</th>
+            <th>Telefono</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in listado %}
+            <tr>
+                <td>
+                    {% if cliente.apellido %}
+                        {{ cliente.apellido }},
+                    {% endif %}
+                    {{ cliente.nombre }}
+                </td>
+                <td>{{ cliente.dni }}{{ cliente.cuit }}</td>
+                <td>{{ cliente.domicilio }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>
+                    {% if cliente.dni %}
+                        <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'personas:detalle_persona_fisica' cliente.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'personas:modificar_persona_fisica' cliente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                        <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'personas:borrar_persona_fisica' cliente.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    {% else %}
+                        <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'personas:detalle_persona_juridica' cliente.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'personas:modificar_persona_juridica' cliente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                        <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'personas:borrar_persona_juridica' cliente.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}

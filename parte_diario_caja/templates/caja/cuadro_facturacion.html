@@ -1,0 +1,25 @@
+{% load widget_tweaks %}
+
+<div class=" panel panel-default">
+    <div class="panel-heading movimiento-title">Datos de facturacion</div>
+    <div class="panel-body">
+        {% for field in mov_diario_form %}
+            <div class="form-group">
+                <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        {% for field in detalle_mov_diario_form %}
+            <div class="form-group">
+                <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

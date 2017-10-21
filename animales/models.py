@@ -16,7 +16,7 @@ class Analisis(models.Model):
     categoria = models.CharField(max_length=15, choices=Categorias)
 
     def __str__(self):
-        return "%s" % self.fecha
+        return "Analisis n°: %s - %s" % (self.pk, self.fecha)
 
 
 class Porcino(models.Model):
@@ -25,7 +25,7 @@ class Porcino(models.Model):
     analisis = models.ForeignKey('Analisis', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s" % (self.precinto, self.categoria_porcino)
+        return "%s - %s" % (self.categoria_porcino, self.precinto)
 
 
 class ControlAntirrabico(models.Model):
@@ -115,7 +115,7 @@ class Mascota(models.Model):
     pelaje = models.CharField(max_length=50)
     categoria_mascota = models.CharField(max_length=6, choices=Categoria_Mascota)
     raza = models.CharField(max_length=50)
-    sexo = models.CharField(max_length=15, choices=Sexo, blank=True)
+    sexo = models.CharField(max_length=15, choices=Sexo)
     fecha_nacimiento = models.DateField(blank=True, null=True)
     baja = models.BooleanField(default=False)
 
@@ -124,7 +124,7 @@ class Mascota(models.Model):
 
 
 class Patente(models.Model):
-    fecha = models.DateField(default=now)    
+    fecha = models.DateField(default=now)
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)
     fecha_garrapaticida = models.DateField(null=True)

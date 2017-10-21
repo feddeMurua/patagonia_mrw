@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from easy_pdf.views import PDFTemplateView
 from .forms import *
-from .filters import *
 from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 '''
@@ -21,9 +21,7 @@ CURSOS
 
 @login_required(login_url='login')
 def lista_curso(request):
-    lista_cursos = Curso.objects.all()
-    filtro_cursos = CursoListFilter(request.GET, queryset=lista_cursos)
-    return render(request, 'curso/curso_list.html', {'fecha_hoy': now, 'filter': filtro_cursos})
+    return render(request, 'curso/curso_list.html', {'fecha_hoy': now, 'listado': Curso.objects.all()})
 
 
 @login_required(login_url='login')
@@ -38,6 +36,7 @@ def alta_curso(request):
     return render(request, 'curso/curso_form.html', {'form': form})
 
 
+@staff_member_required
 @login_required(login_url='login')
 def baja_curso(request, pk):
     curso = Curso.objects.get(pk=pk)
@@ -69,13 +68,12 @@ def cierre_de_curso(request, id_curso):
         return redirect('cursos:lista_cursos')
     else:
         lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
-        filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
         apto_cierre = True
         for inscripcion in lista_inscripciones:
             if not inscripcion.modificado:
                 apto_cierre = False
                 break
-        return render(request, "curso/curso_cierre.html", {'id_curso': id_curso, 'filter': filtro_inscripciones,
+        return render(request, "curso/curso_cierre.html", {'id_curso': id_curso, 'listado': lista_inscripciones,
                                                            'apto_cierre': apto_cierre})
 
 
@@ -87,12 +85,10 @@ INSCRIPCIONES
 @login_required(login_url='login')
 def lista_inscripciones_curso(request, id_curso):
     lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
-    filtro_inscripciones = InscripcionListFilter(request.GET, queryset=lista_inscripciones)
     curso = Curso.objects.get(pk=id_curso)
     cupo_restante = curso.cupo - len(lista_inscripciones)
-    return render(request, "curso/curso_inscripciones.html", {'id_curso': id_curso, 'fecha_hoy': now,
-                                                              'curso': curso, 'cupo_restante': cupo_restante,
-                                                              'filter': filtro_inscripciones})
+    return render(request, "curso/curso_inscripciones.html", {'fecha_hoy': now, 'cupo_restante': cupo_restante,
+                                                              'listado': lista_inscripciones, 'curso': curso})
 
 
 @login_required(login_url='login')
@@ -109,9 +105,8 @@ def alta_inscripcion(request, id_curso):
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " - " + str(inscripcion.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               inscripcion.persona)
+            descrip = str(servicio) + " N° " + str(inscripcion.id)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, inscripcion, 'Inscripcion a Curso')
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', args=id_curso))
@@ -185,21 +180,18 @@ LIBRETRAS SANITARIAS
 '''
 
 
-@login_required(login_url='login')
-def get_curso(request, pk_persona):
+def get_cursos(pk_persona):
     inscripciones = Inscripcion.objects.filter(persona__pk=pk_persona)
-    cursos = {}
+    cursos = []
     for inscripcion in inscripciones:
         if inscripcion.nota_curso == 'Aprobado':
-            cursos[str(inscripcion.curso)] = inscripcion.curso.pk
-    return JsonResponse(cursos)
+            cursos.append(inscripcion.curso)
+    return cursos
 
 
 @login_required(login_url='login')
 def lista_libreta(request):
-    lista_libretas = LibretaSanitaria.objects.all()
-    filtro_libretas = LibretaListFilter(request.GET, queryset=lista_libretas)
-    return render(request, 'libreta/libreta_list.html', {'filter': filtro_libretas})
+    return render(request, 'libreta/libreta_list.html', {'listado': LibretaSanitaria.objects.all()})
 
 
 @login_required(login_url='login')
@@ -209,13 +201,16 @@ def alta_libreta(request):
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Libreta Sanitaria')
         if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
-            libreta = form.save()
+            libreta = form.save(commit=False)
+            cursos = get_cursos(libreta.persona.pk)
+            if cursos:
+                libreta.curso = cursos[-1]
+            libreta.save()
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " - " + str(libreta.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               libreta.persona)
+            descrip = str(servicio) + " N° " + str(libreta.id)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
@@ -234,6 +229,7 @@ class DetalleLibreta(LoginRequiredMixin, DetailView):
     redirect_field_name = 'next'
 
 
+@staff_member_required
 @login_required(login_url='login')
 def baja_libreta(request, pk):
     libreta = LibretaSanitaria.objects.get(pk=pk)

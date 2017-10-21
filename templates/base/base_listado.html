@@ -1,11 +1,11 @@
 {% extends "base/base.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_listado.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert2.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.css' %}"/>
     {% block more-stylesheets %}{% endblock %}
 {% endblock %}
 
@@ -16,48 +16,30 @@
         <div class="panel panel-default panel-table">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col col-xs-6 col-md-6">
-                        <h3 class="panel-title">{% block panel-title %}{% endblock %}</h3>
-                    </div>
-                    <div class="col col-xs-6 col-md-6 text-right">
-                        {% block btn-nuevo %}{% endblock %}
-                        {% block no-filter-panel %}
-                            <a class="btn btn-sm btn-info" id="buscar">Buscar</a>
-                        {% endblock %}
-                    </div>
+                    {% block panel-header %}
+                        <div class="col col-xs-6 col-md-6">
+                            <h3 class="panel-title">{% block panel-title %}{% endblock %}</h3>
+                        </div>
+                        <div class="col col-xs-6 col-md-6 text-right">
+                            {% block btn-nuevo %}{% endblock %}
+                        </div>
+                    {% endblock %}
                 </div>
             </div>
-            <div class="panel-body" id="hidden-panel">
-                <form method="get">
-                    <div class="well">
-                        {% csrf_token %}
-                        {% for field in filter.form.visible_fields %}
-                            <div class="form-group">
-                                <label>{{ field.label }}</label>
-                                {{ field|add_class:'form-control' }}
-                                {% for error in field.errors %}
-                                    <span class="help-block">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endfor %}
-                        <button type="submit" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-search"></span> Buscar
-                        </button>
-                    </div>
-                </form>
-            </div>
             <div class="panel-body">
-                {% block no-filter-table %}
-                    {% if filter.qs %}
-                        {% block tabla %}{% endblock %}
-                    {% else %}
-                        <div id="table-empty" class="table-empty">
-                            <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
-                                No se encontraron elementos
-                            </h3>
-                        </div>
-                    {% endif %}
-                {% endblock %}
+                {% if listado %}
+                    <div class="container-fluid container-table">
+                        <table class="table table-list table-bordered table-striped">
+                            {% block tabla %}{% endblock %}
+                        </table>
+                    </div>
+                {% else %}
+                    <div id="table-empty" class="table-empty">
+                        <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                            No se encontraron elementos
+                        </h3>
+                    </div>
+                {% endif %}
             </div>
             {% block panel-footer %}{% endblock %}
         </div>
@@ -66,17 +48,38 @@
 
 {% block scripts %}
     <script src="{% static 'js/sweetalert2.js' %}"></script>
-    <script src="{% static 'js/paging.js' %}"></script>
     <script src="{% static 'js/js.cookie.js' %}"></script>
+    <script src="{% static 'js/datatables.js' %}"></script>
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $("#buscar").click(function(){
-                $("#hidden-panel").slideToggle("slow");
+            $('.table-list').DataTable({
+                language: {
+                            "sProcessing":     "Procesando...",
+                            "sLengthMenu":     "Mostrar _MENU_ registros",
+                            "sZeroRecords":    "No se encontraron resultados",
+                            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                            "sInfoPostFix":    "",
+                            "sSearch":         "Buscar:",
+                            "sUrl":            "",
+                            "sInfoThousands":  ",",
+                            "sLoadingRecords": "Cargando...",
+                            "oPaginate": {
+                                "sFirst":    "Primero",
+                                "sLast":     "Último",
+                                "sNext":     "Siguiente",
+                                "sPrevious": "Anterior"
+                            },
+                            "oAria": {
+                                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                            }
+                        }
             });
 
-            $('.table-list').paging({limit:8});
+            $('[data-toggle="tooltip"]').tooltip();
 
             $('.btn-baja').click(function confirmarBaja(e) {
                 var urlBaja = $(e.target).data('url');

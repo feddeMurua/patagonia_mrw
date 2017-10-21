@@ -2,13 +2,13 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
-    url(r'^fisicas$', lista_personas_fisicas, name='lista_personas_fisicas'),
+    url(r'^clientes', lista_clientes, name='lista_clientes'),
+
     url(r'^fisicas/nueva$', alta_persona_fisica, name='nueva_persona_fisica'),
-    url(r'^fisicas/(?P<id_persona>\d+)$', detalle_persona_fisica, name='detalle_persona_fisica'),
+    url(r'^fisicas/(?P<pk>\d+)$', DetallePersonaFisica.as_view(), name='detalle_persona_fisica'),
     url(r'^fisicas/borrar/(?P<pk>\d+)$', baja_persona_fisica, name='borrar_persona_fisica'),
     url(r'^fisicas/editar/(?P<pk>\d+)$', modificacion_persona_fisica, name='modificar_persona_fisica'),
 
-    url(r'^juridicas$', lista_personas_juridicas, name='lista_personas_juridicas'),
     url(r'^juridicas/nueva$', alta_persona_juridica, name='nueva_persona_juridica'),
     url(r'^juridicas/(?P<pk>\d+)$', DetallePersonaJuridica.as_view(), name='detalle_persona_juridica'),
     url(r'^juridicas/borrar/(?P<pk>\d+)$', baja_persona_juridica, name='borrar_persona_juridica'),

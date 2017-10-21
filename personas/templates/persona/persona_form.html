@@ -1,7 +1,6 @@
 {% extends "base/base_form.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
 
 {% block title %}Persona{% endblock %}
 
@@ -10,20 +9,7 @@
 {% block url-volver %}{% url url_return %}{% endblock %}
 
 {% block form-right %}
-    <div class="panel panel-default col-xs-12 col-md-5" id="container-form-botom-right">
-        <div class="panel-heading domicilio-title">Domicilio</div>
-        <div class="panel-body">
-            {% for field in domicilio_form %}
-                <div class="form-group">
-                    <label>{{ field.label }}</label>
-                    {{ field|add_class:'form-control' }}
-                    {% for error in field.errors %}
-                        <span class="help-block">{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% include 'domicilio/cuadro_domicilio.html' %}
 {% endblock %}
 
 {% block btn-cancelar %}

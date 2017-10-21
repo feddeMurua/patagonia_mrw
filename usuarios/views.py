@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
-from django.views.generic.detail import DetailView
 from django.http import HttpResponse
 from desarrollo_patagonia.utils import *
 from .forms import *

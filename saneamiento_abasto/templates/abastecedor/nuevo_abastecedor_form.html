@@ -1,7 +1,6 @@
 {% extends "base/base_form.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
 
 {% block title %}Abastecedor{% endblock %}
 
@@ -11,43 +10,12 @@
 
 {% block extra-form %}
     {% if not modificacion %}
-        <div class=" panel panel-default">
-            <div class="panel-heading movimiento-title">Datos de facturacion</div>
-            <div class="panel-body">
-                <label>{{ mov_diario_form.nro_ingreso.label }}</label>
-                {{ mov_diario_form.nro_ingreso|add_class:'form-control' }}
-                {% for error in field.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-                {% for field in detalle_mov_diario_form %}
-                    <div class="form-group">
-                        <label>{{ field.label }}</label>
-                        {{ field|add_class:'form-control' }}
-                        {% for error in field.errors %}
-                            <span class="help-block">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+        {% include 'caja/cuadro_facturacion.html' %}
     {% endif %}
 {% endblock %}
 
 {% block form-right %}
-    <div class="panel panel-default col-xs-12 col-md-5" id="container-form-right">
-        <div class="panel-heading domicilio-title">Domicilio</div>
-        <div class="panel-body">
-            {% for field in domicilio_form %}
-                <div class="form-group">
-                    <label>{{ field.label }}</label>
-                    {{ field|add_class:'form-control' }}
-                    {% for error in field.errors %}
-                        <span class="help-block">{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% include 'domicilio/cuadro_domicilio.html' %}
 {% endblock %}
 
 {% block btn-cancelar %}

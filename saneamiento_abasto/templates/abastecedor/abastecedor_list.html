@@ -15,18 +15,17 @@
 {% endblock %}
 
 {% block tabla %}
-    <table class="table table-striped table-bordered table-hover table-list">
-        <thead>
+    <thead>
         <tr>
             <th>Nombre</th>
             <th>CUIT o DNI</th>
             <th>Domicilio</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
-        </thead>
-        <tbody>
-        {% for abastecedor in filter.qs %}
-            <tr align="center">
+    </thead>
+    <tbody>
+        {% for abastecedor in listado %}
+            <tr>
                 <td>
                     {% if abastecedor.responsable.apellido %}
                         {{ abastecedor.responsable.apellido }},
@@ -35,11 +34,10 @@
                 </td>
                 <td>{{ abastecedor.responsable.dni }}{{ abastecedor.responsable.cuit }}</td>
                 <td>{{ abastecedor.responsable.domicilio }}</td>
-                <td align="center">
+                <td>
                     <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'abastecedores:borrar_abastecedor' abastecedor.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
 {% endblock %}

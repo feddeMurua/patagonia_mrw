@@ -14,36 +14,34 @@
 {% endblock %}
 
 {% block tabla %}
-    <table class="table table-striped table-bordered table-list">
-        <thead>
+    <thead>
         <tr>
             <th>Persona</th>
             <th>Porcentaje de asistencia</th>
             <th>Calificación</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
-        </thead>
-        <tbody>
-            {% for inscripcion in filter.qs %}
-                <tr>
-                    <td>{{ inscripcion.persona }}</td>
-                    {% if inscripcion.porcentaje_asistencia %}
-                        <td>{{ inscripcion.porcentaje_asistencia }}%</td>
-                    {% else %}
-                        <td></td>
-                    {% endif %}
-                    <td>{{ inscripcion.nota_curso }}</td>
-                    {% if inscripcion.modificado %}
-                        <td></td>
-                    {% else %}
-                        <td align="center">
-                            <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'inscripciones:cierre_inscripcion' inscripcion.pk id_curso %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                        </td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    </thead>
+    <tbody>
+        {% for inscripcion in listado %}
+            <tr>
+                <td>{{ inscripcion.persona }}</td>
+                {% if inscripcion.porcentaje_asistencia %}
+                    <td>{{ inscripcion.porcentaje_asistencia }}%</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                <td>{{ inscripcion.nota_curso }}</td>
+                {% if inscripcion.modificado %}
+                    <td></td>
+                {% else %}
+                    <td>
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'inscripciones:cierre_inscripcion' inscripcion.pk id_curso %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
 {% endblock %}
 
 {% block panel-footer %}

@@ -4,18 +4,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import *
-from .filters import *
-from libreta_curso import models as m
 from desarrollo_patagonia.utils import *
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 @login_required(login_url='login')
-def lista_personas_fisicas(request):
-    lista_personas = PersonaFisica.objects.all()
-    filtro_personas = PersonaListFilter(request.GET, queryset=lista_personas)
-    return render(request, 'persona/persona_fisica_list.html', {'filter': filtro_personas})
+def lista_clientes(request):
+    return render(request, 'persona/cliente_list.html', {'listado': PersonaGenerica.objects.all()})
 
 
 @login_required(login_url='login')
@@ -28,12 +24,12 @@ def alta_persona_fisica(request):
             persona.domicilio = domicilio_form.save()
             persona.save()
             log_crear(request.user.id, persona, 'Persona Física')
-            return redirect('personas:lista_personas_fisicas')
+            return redirect('personas:lista_clientes')
     else:
         form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_personas_fisicas'})
+                                                         'url_return': 'personas:lista_clientes'})
 
 
 @login_required(login_url='login')
@@ -53,27 +49,19 @@ def modificacion_persona_fisica(request, pk):
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Persona Física')
-            return redirect('personas:lista_personas_fisicas')
+            return redirect('personas:lista_clientes')
     else:
         form = ModificacionPersonaFisicaForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_personas_fisicas'})
+                                                         'url_return': 'personas:lista_clientes'})
 
 
-@login_required(login_url='login')
-def detalle_persona_fisica(request, id_persona):
-    persona = PersonaFisica.objects.get(id=id_persona)
-    lista_cursos_inscripciones = m.Inscripcion.objects.filter(persona__id=id_persona)
-    return render(request, "persona/persona_fisica_detail.html", {'persona': persona,
-                                                                  'inscripciones': lista_cursos_inscripciones})
-
-
-@login_required(login_url='login')
-def lista_personas_juridicas(request):
-    lista_personas = PersonaJuridica.objects.all()
-    filtro_personas = PersonaJuridicaListFilter(request.GET, queryset=lista_personas)
-    return render(request, 'persona/persona_juridica_list.html', {'filter': filtro_personas})
+class DetallePersonaFisica(LoginRequiredMixin, DetailView):
+    model = PersonaFisica
+    template_name = "persona/persona_fisica_detail.html"
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
 
 
 @login_required(login_url='login')
@@ -86,12 +74,12 @@ def alta_persona_juridica(request):
             persona.domicilio = domicilio_form.save()
             persona.save()
             log_crear(request.user.id, persona, 'Persona Jurídica')
-            return redirect('personas:lista_personas_juridicas')
+            return redirect('personas:lista_clientes')
     else:
         form = AltaPersonaJuridicaForm
         domicilio_form = DomicilioForm
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_personas_juridicas'})
+                                                         'url_return': 'personas:lista_clientes'})
 
 
 class DetallePersonaJuridica(LoginRequiredMixin, DetailView):
@@ -118,19 +106,17 @@ def modificacion_persona_juridica(request, pk):
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Persona Jurídica')
-            return redirect('personas:lista_personas_juridicas')
+            return redirect('personas:lista_clientes')
     else:
         form = ModificacionPersonaJuridicaForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_personas_juridicas'})
+                                                         'url_return': 'personas:lista_clientes'})
 
 
 @login_required(login_url='login')
 def lista_personal_propio(request):
-    lista_personas = PersonalPropio.objects.all()
-    filtro_personas = PersonalPropioListFilter(request.GET, queryset=lista_personas)
-    return render(request, 'persona/personal_propio_list.html', {'filter': filtro_personas})
+    return render(request, 'persona/personal_propio_list.html', {'listado': PersonalPropio.objects.all()})
 
 
 @login_required(login_url='login')

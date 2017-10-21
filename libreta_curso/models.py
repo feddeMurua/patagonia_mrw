@@ -23,7 +23,7 @@ class LibretaSanitaria(models.Model):
     foto = models.ImageField(upload_to='', blank=True)
 
     def __str__(self):
-        return "%s %s" % (self.pk, self.persona)
+        return "Libreta Sanitaria N°: %s - %s" % (self.pk, self.persona)
 
 
 class Curso(models.Model):

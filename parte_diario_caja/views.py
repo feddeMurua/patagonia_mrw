@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .forms import *
-from .filters import *
 from datetime import datetime
 
 '''
@@ -20,4 +19,4 @@ def lista_detalle_movimientos(request):
             fecha_busqueda = fecha_form.cleaned_data['fecha']
     movimientos = DetalleMovimiento.objects.filter(movimiento__fecha=fecha_busqueda).order_by('movimiento__nro_ingreso')
     datepicker = DatePickerForm
-    return render(request, 'caja/caja_list.html', {'movimientos': movimientos, 'datepicker': datepicker})
+    return render(request, 'caja/caja_list.html', {'listado': movimientos, 'datepicker': datepicker})

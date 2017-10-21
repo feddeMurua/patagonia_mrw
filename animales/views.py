@@ -8,7 +8,6 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import *
-from .filters import *
 from .models import *
 from personas import forms as f
 from django.views.generic.detail import DetailView
@@ -23,9 +22,7 @@ ANALISIS
 
 @login_required(login_url='login')
 def lista_analisis(request):
-    listado_analisis = Analisis.objects.all()
-    filtro_analisis = AnalisisListFilter(request.GET, queryset=listado_analisis)
-    return render(request, 'analisis/analisis_list.html', {'filter': filtro_analisis})
+    return render(request, 'analisis/analisis_list.html', {'listado': Analisis.objects.all()})
 
 
 @login_required(login_url='login')
@@ -48,9 +45,8 @@ def alta_analisis(request):
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " - " + str(analisis.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               analisis.interesado)
+            descrip = str(servicio) + " N° " + str(analisis.id)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, analisis, 'Analisis de Triquinosis')
             return redirect('analisis:lista_analisis')
@@ -59,7 +55,7 @@ def alta_analisis(request):
         formset = AltaPorcinoFormSet()
         mov_diario_form = pd_f.MovimientoDiarioForm
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Analisis de Triquinosis')
-    return render(request, 'analisis/analisis_form.html', {"form": form, "formset": formset, 'can_delete': True,
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'can_delete': True,
                                                            'mov_diario_form': mov_diario_form,
                                                            'detalle_mov_diario_form': detalle_mov_diario_form
                                                            })
@@ -108,9 +104,7 @@ SOLICITUD/HABILITACION CRIADERO DE CERDOS
 
 @login_required(login_url='login')
 def lista_solicitudes(request):
-    solicitudes = SolicitudCriaderoCerdos.objects.all()
-    filtro_solicitudes = SolicitudListFilter(request.GET, queryset=solicitudes)
-    return render(request, 'criadero/solicitud_list.html', {'filter': filtro_solicitudes})
+    return render(request, 'criadero/solicitud_list.html', {'listado': SolicitudCriaderoCerdos.objects.all()})
 
 
 @login_required(login_url='login')
@@ -206,9 +200,7 @@ ESTERILIZACION
 
 @login_required(login_url='login')
 def lista_esterilizaciones(request):
-    listado_esterilizaciones = Esterilizacion.objects.all()
-    filtro_esterilizaciones = EsterilizacionListFilter(request.GET, queryset=listado_esterilizaciones)
-    return render(request, 'esterilizacion/esterilizacion_list.html', {'filter': filtro_esterilizaciones})
+    return render(request, 'esterilizacion/esterilizacion_list.html', {'listado': Esterilizacion.objects.all()})
 
 
 class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
@@ -278,9 +270,7 @@ PATENTES
 
 @login_required(login_url='login')
 def lista_patente(request):
-    lista_patentes = Patente.objects.all()
-    filtro_patentes = PatenteListFilter(request.GET, queryset=lista_patentes)
-    return render(request, 'patente/patente_list.html', {'filter': filtro_patentes})
+    return render(request, 'patente/patente_list.html', {'listado': Patente.objects.all()})
 
 
 @login_required(login_url='login')
@@ -314,8 +304,7 @@ def alta_patente(request):
         mascota_form = MascotaForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Patentamiento')
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        if form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & \
-                mov_diario_form.is_valid():
+        if form.is_valid() & mascota_form.is_valid() & detalle_mov_diario_form.is_valid() & mov_diario_form.is_valid():
             patente = form.save(commit=False)
             mascota = mascota_form.save()
             patente.mascota = mascota
@@ -324,11 +313,14 @@ def alta_patente(request):
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
             descrip = str(servicio) + " - Chapa: " + str(mascota.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               patente.persona)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, patente, 'Patente')
             return redirect('patentes:lista_patentes')
+        else: # no se verifica que alguno de los tres form sea valido
+            return render(request, "patente/patente_form.html", {'form': form, 'mascota_form': mascota_form,
+                                                                 'mov_diario_form': mov_diario_form,
+                                                                 'detalle_mov_diario_form': detalle_mov_diario_form})
     else:
         form = PatenteForm
         mascota_form = MascotaForm
@@ -388,9 +380,7 @@ CONTROL ANTIRRABICO
 
 @login_required(login_url='login')
 def lista_controles(request):
-    listado_controles = ControlAntirrabico.objects.all()
-    filtro_controles = ControlListFilter(request.GET, queryset=listado_controles)
-    return render(request, 'control/control_list.html', {'filter': filtro_controles})
+    return render(request, 'control/control_list.html', {'listado': ControlAntirrabico.objects.all()})
 
 
 @login_required(login_url='login')
@@ -430,14 +420,13 @@ class PdfInfraccion(LoginRequiredMixin, PDFTemplateView):
 @login_required(login_url='login')
 def lista_visitas_control(request, pk_control):
     lista_visitas = Visita.objects.filter(control__pk=pk_control)
-    filtro_visitas = VisitaListFilter(request.GET, queryset=lista_visitas)
     control = ControlAntirrabico.objects.get(pk=pk_control)
     dias_suceso = (now().date() - control.fecha_suceso).days
     ultima_visita = lista_visitas.last()
     apto_visita = True
     if dias_suceso > 10 or (ultima_visita and ultima_visita.fecha_visita == now().date()):
         apto_visita = False
-    return render(request, 'control/visita_list.html', {'pk_control': pk_control, 'filter': filtro_visitas,
+    return render(request, 'control/visita_list.html', {'pk_control': pk_control, 'listado': lista_visitas,
                                                         'apto_visita': apto_visita})
 
 
@@ -484,9 +473,7 @@ RETIRO/ENTREGA ANIMALES
 
 @login_required(login_url='login')
 def lista_retiro_entrega(request):
-    listado_retiro_entrega = RetiroEntregaAnimal.objects.all()
-    filtro_retiro_entrega = RetiroEntregaListFilter(request.GET, queryset=listado_retiro_entrega)
-    return render(request, 'retiroEntrega/retiroEntrega_list.html', {'filter': filtro_retiro_entrega})
+    return render(request, 'retiroEntrega/retiroEntrega_list.html', {'listado': RetiroEntregaAnimal.objects.all()})
 
 
 @login_required(login_url='login')

@@ -1,0 +1,16 @@
+{% load widget_tweaks %}
+
+<div class="panel panel-default col-md-5">
+    <div class="panel-heading domicilio-title">Domicilio</div>
+    <div class="panel-body">
+        {% for field in domicilio_form %}
+            <div class="form-group">
+                <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

@@ -10,28 +10,27 @@
 
 {% block panel-title %}Retiros/Entregas{% endblock %}
 
-
 {% block btn-nuevo %}
     <a href=" {% url 'retiros_entregas:nuevo_tramite' %}" class="btn btn-sm btn-primary btn-create">Nuevo Retiro/Entrega</a>
 {% endblock %}
 
 {% block tabla %}
-    <table class="table table-striped table-bordered table-list">
-        <thead>
+    <thead>
         <tr>
             <th>Interesado</th>
             <th>Mascota</th>
+            <th>Trámite</th>
             <th>Observaciones</th>
         </tr>
-        </thead>
-        <tbody>
-        {% for control in filter.qs %}
+    </thead>
+    <tbody>
+        {% for tramite in listado %}
             <tr>
-                <td>{{ control.interesado }}</td>
-                <td>{{ control.mascota }}</td>
-                <td>{{ control.observaciones }}</td>
+                <td>{{ tramite.interesado }}</td>
+                <td>{{ tramite.mascota }}</td>
+                <td>{{ tramite.tramite }}</td>
+                <td>{{ tramite.observaciones }}</td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
 {% endblock %}

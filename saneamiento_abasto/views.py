@@ -9,7 +9,6 @@ from calendar import monthrange
 import datetime
 from personas import forms as f
 from .forms import *
-from .filters import *
 from .choices import *
 from parte_diario_caja import forms as pd_f
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
@@ -24,9 +23,7 @@ ABASTECEDORES
 
 @login_required(login_url='login')
 def lista_abastecedor(request):
-    lista_abastecedores = Abastecedor.objects.all()
-    filtro_abastecedores = AbastecedorListFilter(request.GET, queryset=lista_abastecedores)
-    return render(request, 'abastecedor/abastecedor_list.html', {'filter': filtro_abastecedores})
+    return render(request, 'abastecedor/abastecedor_list.html', {'listado': Abastecedor.objects.all()})
 
 
 @login_required(login_url='login')
@@ -40,9 +37,8 @@ def alta_abastecedor(request):
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " - " + str(abastecedor.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               abastecedor.responsable)
+            descrip = str(servicio) + " N° " + str(abastecedor.id)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor')
             return redirect('abastecedores:lista_abastecedores')
@@ -72,9 +68,8 @@ def nuevo_abastecedor_particular(request):
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " - " + str(abastecedor.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               abastecedor.responsable)
+            descrip = str(servicio) + " N° " + str(abastecedor.id)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Particular')
             return redirect('abastecedores:lista_abastecedores')
@@ -107,9 +102,8 @@ def nuevo_abastecedor_empresa(request):
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " - " + str(abastecedor.pk)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               abastecedor.responsable)
+            descrip = str(servicio) + " N° " + str(abastecedor.pk)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Empresa')
             return redirect('abastecedores:lista_abastecedores')
@@ -140,9 +134,7 @@ REINSPECCIONES
 
 @login_required(login_url='login')
 def lista_reinspeccion(request):
-    lista_reinspecciones = Reinspeccion.objects.all()
-    filtro_reinspecciones = ReinspeccionListFilter(request.GET, queryset=lista_reinspecciones)
-    return render(request, 'reinspeccion/reinspeccion_list.html', {'filter': filtro_reinspecciones})
+    return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
 
 
 @login_required(login_url='login')
@@ -180,10 +172,9 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
 
 @login_required(login_url='login')
 def lista_productos(request, reinspeccion_pk):
-    listado_productos = ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk)
-    filtro_productos = ReinspeccionProductoListFilter(request.GET, queryset=listado_productos)
     return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
-                                                               'filter': filtro_productos})
+                                                               'listado': ReinspeccionProducto.objects.filter(
+                                                                   reinspeccion__pk=reinspeccion_pk)})
 
 
 @login_required(login_url='login')
@@ -242,9 +233,7 @@ def get_rubros_json(request, id_categoria):
 
 @login_required(login_url='login')
 def lista_vehiculo(request):
-    listado_vehiculo = Vehiculo.objects.all()
-    filtro_vehiculo = VehiculoListFilter(request.GET, queryset=listado_vehiculo)
-    return render(request, 'vehiculo/vehiculo_list.html', {'filter': filtro_vehiculo})
+    return render(request, 'vehiculo/vehiculo_list.html', {'listado': Vehiculo.objects.all()})
 
 
 class DetalleVehiculo(LoginRequiredMixin, DetailView):
@@ -303,7 +292,6 @@ DESINFECCIONES
 '''
 
 
-@login_required(login_url='login')
 def get_vencimiento(fecha_realizacion):
     if fecha_realizacion.day <= 15:
         proximo_vencimiento = fecha_realizacion.replace(day=monthrange(now().year, now().month)[1])
@@ -313,7 +301,6 @@ def get_vencimiento(fecha_realizacion):
     return proximo_vencimiento
 
 
-@login_required(login_url='login')
 def get_estado(desinfecciones):
     estado = 'Al dia'
     if desinfecciones:
@@ -326,7 +313,7 @@ def get_estado(desinfecciones):
 def lista_desinfecciones(request, pk_vehiculo):
     listado_desinfecciones = Desinfeccion.objects.filter(vehiculo__pk=pk_vehiculo).order_by('-fecha_realizacion')
     estado = get_estado(listado_desinfecciones)
-    return render(request, 'desinfeccion/desinfeccion_list.html', {'desinfecciones': listado_desinfecciones,
+    return render(request, 'desinfeccion/desinfeccion_list.html', {'listado': listado_desinfecciones,
                                                                    'estado': estado, 'pk_vehiculo': pk_vehiculo})
 
 
@@ -382,9 +369,7 @@ CONTROLES DE PLAGAS
 
 @login_required(login_url='login')
 def lista_controles_plaga(request):
-    listado_controles_plaga = ControlDePlaga.objects.all()
-    filtro_controles = ControlDePlagaListFilter(request.GET, queryset=listado_controles_plaga)
-    return render(request, 'controlPlaga/control_plaga_list.html', {'filter': filtro_controles})
+    return render(request, 'controlPlaga/control_plaga_list.html', {'listado': ControlDePlaga.objects.all()})
 
 
 @login_required(login_url='login')
@@ -398,9 +383,8 @@ def alta_control_plaga(request):
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " - " + str(control_plaga.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip,
-                                               control_plaga.responsable)
+            descrip = str(servicio) + " N° " + str(control_plaga.id)
+            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, control_plaga, 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')

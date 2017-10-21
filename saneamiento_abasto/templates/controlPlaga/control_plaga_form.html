@@ -12,25 +12,7 @@
 {% block form-right %}
     {% if not modificacion %}
         <div class="col-xs-12 col-md-5" id="container-form-right">
-            <div class=" panel panel-default">
-                <div class="panel-heading movimiento-title">Datos de facturacion</div>
-                <div class="panel-body">
-                    <label>{{ mov_diario_form.nro_ingreso.label }}</label>
-                    {{ mov_diario_form.nro_ingreso|add_class:'form-control' }}
-                    {% for error in field.errors %}
-                        <span class="help-block">{{ error }}</span>
-                    {% endfor %}
-                    {% for field in detalle_mov_diario_form %}
-                        <div class="form-group">
-                            <label>{{ field.label }}</label>
-                            {{ field|add_class:'form-control' }}
-                            {% for error in field.errors %}
-                                <span class="help-block">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
+            {% include 'caja/cuadro_facturacion.html' %}
         </div>
     {% endif %}
 {% endblock %}

@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django import forms
-import re
 from functools import partial
+import re
 from django.utils.translation import ugettext as _
 from .models import *
 
@@ -79,14 +79,16 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
 
     def clean_obra_social(self):
         obra_social = self.cleaned_data['obra_social']
-        if not regex_alfanumerico.match(obra_social):
-            raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
+        if obra_social:
+            if not regex_alfanumerico.match(obra_social):
+                raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
         return obra_social
 
     def clean_rubro(self):
         rubro = self.cleaned_data['rubro']
-        if not regex_alfabetico.match(rubro):
-            raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
+        if rubro:
+            if not regex_alfabetico.match(rubro):
+                raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
         return rubro
 
 
@@ -104,14 +106,16 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
 
     def clean_obra_social(self):
         obra_social = self.cleaned_data['obra_social']
-        if not regex_alfanumerico.match(obra_social):
-            raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
+        if obra_social:
+            if not regex_alfanumerico.match(obra_social):
+                raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
         return obra_social
 
     def clean_rubro(self):
         rubro = self.cleaned_data['rubro']
-        if not regex_alfabetico.match(rubro):
-            raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
+        if rubro:
+            if not regex_alfabetico.match(rubro):
+                raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
         return rubro
 
 
@@ -161,8 +165,9 @@ class DomicilioForm(forms.ModelForm):
 
     def clean_barrio(self):
         barrio = self.cleaned_data['barrio']
-        if not regex_alfanumerico.match(barrio):
-            raise forms.ValidationError('El nombre del barrio, solo puede contener letras/números y/o espacios')
+        if barrio:
+            if not regex_alfanumerico.match(barrio):
+                raise forms.ValidationError('El nombre del barrio, solo puede contener letras/números y/o espacios')
         return barrio
 
     def clean_calle(self):
@@ -173,7 +178,7 @@ class DomicilioForm(forms.ModelForm):
 
     def clean_calle_entre1(self):
         calle_entre1 = self.cleaned_data['calle_entre1']
-        if calle_entre1 is not None:
+        if calle_entre1:
             if not regex_alfanumerico.match(calle_entre1):
                 raise forms.ValidationError('El nombre de la calle, solo puede contener letras/números y/o espacios')
 
@@ -181,14 +186,14 @@ class DomicilioForm(forms.ModelForm):
 
     def clean_calle_entre2(self):
         calle_entre2 = self.cleaned_data['calle_entre2']
-        if calle_entre2 is not None:
+        if calle_entre2:
             if not regex_alfanumerico.match(calle_entre2):
                 raise forms.ValidationError('El nombre de la calle, solo puede contener letras/números y/o espacios')
         return calle_entre2
 
     def clean_dpto(self):
         dpto = self.cleaned_data['dpto']
-        if dpto is not None:
+        if dpto:
             if not regex_alfanumerico.match(dpto):
                 raise forms.ValidationError('El Departamento, solo puede contener letras/números y/o espacios')
         return dpto

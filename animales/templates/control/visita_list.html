@@ -10,7 +10,6 @@
 
 {% block panel-title %}Visitas{% endblock %}
 
-
 {% block btn-nuevo %}
     {% if apto_visita %}
         <a href=" {% url 'controles:nueva_visita' pk_control %}" class="btn btn-sm btn-primary btn-create">Nueva Visita</a>
@@ -18,16 +17,15 @@
 {% endblock %}
 
 {% block tabla %}
-    <table class="table table-striped table-bordered table-list">
-        <thead>
+    <thead>
         <tr>
             <th>Fecha de Visita</th>
             <th>Observaciones</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
-        </thead>
-        <tbody>
-        {% for visita in filter.qs %}
+    </thead>
+    <tbody>
+        {% for visita in listado %}
             <tr>
                 <td>{{ visita.fecha_visita }}</td>
                 <td>{{ visita.observaciones }}</td>
@@ -37,6 +35,5 @@
                 </td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
 {% endblock %}

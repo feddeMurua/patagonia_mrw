@@ -465,7 +465,7 @@
   "model": "personas.rolactuante",
   "pk": 2,
   "fields": {
-    "nombre": "M\u00e9dico"
+    "nombre": "Medico"
   }
 },
 {
