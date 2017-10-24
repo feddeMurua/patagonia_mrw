@@ -48,8 +48,8 @@
 {% block more-scripts %}
     <script>
         $(document).ready(function(){
-            $('.btn-beneficio').click(function confirmarRetiro(e) {
-                var urlBeneficio = $(e.target).data('url');
+            $('.btn-beneficio').click(function confirmarRetiro() {
+                var urlBeneficio = $(this).data('url');
                 swal({
                     title: "¿Esta seguro?",
                     text: "¿Desea confirmar el retiro de este beneficio?",

@@ -48,7 +48,6 @@
 
 {% block scripts %}
     <script src="{% static 'js/sweetalert2.js' %}"></script>
-    <script src="{% static 'js/js.cookie.js' %}"></script>
     <script src="{% static 'js/datatables.js' %}"></script>
     <script>
         $(document).ready(function(){
@@ -81,8 +80,9 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('.btn-baja').click(function confirmarBaja(e) {
-                var urlBaja = $(e.target).data('url');
+            $('.btn-baja').click(function confirmarBaja() {
+                var urlBaja = $(this).data('url');
+                console.log(urlBaja);
                 swal({
                     title: "¿Esta seguro?",
                     text: "¿Desea eliminar este elemento?",
@@ -92,14 +92,12 @@
                     confirmButtonText: "Confirmar",
                     cancelButtonText: "Cancelar"
                 }).then(function(){
-                    $.ajaxSetup({
-                        headers: {
-                            "X-CSRFToken": Cookies.get('csrftoken')
-                        }
-                    });
                     $.ajax({
                         url: urlBaja,
                         type: 'POST',
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
                         success: function(e) {
                             swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
                                 function(){
