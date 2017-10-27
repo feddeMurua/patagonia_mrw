@@ -1,9 +1,13 @@
 {% extends "easy_pdf/base.html" %}
 
+{% block extra_style%}
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"
+{% endblock %}
+
 {%block page_header%}
     <div id="page-header">
         <div class="header">
-            <p>Detalle de Inscripcion</p>
+            <p>Detalle de Inscripción</p>
         </div>
     </div>
 {% endblock %}

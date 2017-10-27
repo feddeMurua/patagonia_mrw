@@ -42,7 +42,7 @@ class CursoForm(forms.ModelForm):
 
 class LibretaForm(forms.ModelForm):
     fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
-    
+
     class Meta:
         model = LibretaSanitaria
         exclude = ['fecha', 'foto', 'curso']
@@ -137,8 +137,8 @@ class CierreInscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
-        fields = ['nota_curso', 'porcentaje_asistencia']
+        fields = ['calificacion', 'porcentaje_asistencia']
         labels = {
-            'nota_curso': _("Calificacion"),
+            'calificacion': _("Calificacion"),
             'porcentaje_asistencia': _("Porcentaje de asistencia")
         }

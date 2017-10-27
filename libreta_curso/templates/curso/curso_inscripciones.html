@@ -40,10 +40,10 @@
                     <td>{{ inscripcion.nota_curso }}</td>
                 {% endif %}
                 <td>
+                  {% if not curso.finalizado %}
                     <a class="btn btn-danger btn-baja" data-url="{% url 'inscripciones:borrar_inscripcion' inscripcion.pk %}" data-toggle="tooltip" title="Eliminar"><em class="glyphicon glyphicon-trash"></em></a>
-                    {% if not curso.finalizado %}
-                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'inscripciones:modificar_inscripcion' inscripcion.pk curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    {% endif %}
+                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'inscripciones:modificar_inscripcion' inscripcion.pk curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                  {% endif %}
                     <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir Comprobante" href="{% url 'inscripciones:pdf_inscripcion' inscripcion.pk%}"><em class="glyphicon glyphicon-print"></em></a>
                 </td>
             </tr>
