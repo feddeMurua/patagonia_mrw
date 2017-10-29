@@ -8,10 +8,6 @@ from personas import models as m
 import os
 
 
-def get_image_path(instance, filename):
-    return os.path.join('images/', str(instance.pk), filename)
-
-
 class LibretaSanitaria(models.Model):
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
@@ -20,7 +16,9 @@ class LibretaSanitaria(models.Model):
     profesional_examen_clinico = models.CharField(max_length=200, default='')
     lugar_examen_clinico = models.CharField(max_length=200, default='')
     fecha = models.DateField(default=now)
-    foto = models.ImageField(upload_to='', blank=True)
+    tipo_libreta = models.CharField(max_length=10, choices=Tipo_Libreta)
+    fecha_vencimiento = models.DateField()
+    foto = models.ImageField(upload_to='libreta_curso/foto/', blank=True)
 
     def __str__(self):
         return "Libreta Sanitaria N°: %s - %s" % (self.pk, self.persona)

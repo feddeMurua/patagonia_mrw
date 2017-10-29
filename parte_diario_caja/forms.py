@@ -40,7 +40,8 @@ class DetalleMovimientoDiarioForm(forms.ModelForm):
         exclude = ['movimiento', 'descripcion']
         fields = '__all__'
         labels = {
-            'forma_pago': _("Forma de pago")
+            'forma_pago': _("Forma de pago"),
+            'nro_cheque': _("N° de cheque")
         }
 
     def __init__(self, *args, **kwargs):

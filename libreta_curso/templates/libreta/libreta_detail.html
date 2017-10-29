@@ -39,10 +39,23 @@
                 <td>Fecha de Examen Clínico:</td>
                 <td>{{ object.fecha_examen_clinico }}</td>
             </tr>
+            <tr>
+                <td>Tipo de Libreta:</td>
+                <td>{{ object.tipo_libreta }}</td>
+            </tr>
+            <tr>
+                <td>Fecha de Vencimiento:</td>
+                <td>{{ object.fecha_vencimiento }}</td>
+            </tr>
+            <tr>
+                <td>Foto:</td>
+                <td><img src="{{ object.foto.url }}" height="128" width="128"></td>
+            </tr>
         </tbody>
     </table>
 {% endblock %}
 
 {% block btn-footer %}
+    <a href="{% url 'libretas:pdf_libreta' object.pk %}" class="btn btn-warning" role="button">Imprimir Tarjeta</a>
     <a href="{% url 'libretas:lista_libretas' %}" class="btn btn-primary" role="button">Regresar</a>
 {% endblock %}

@@ -79,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -143,14 +144,5 @@ STATICFILES_DIRS = (
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = 'inicio/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'estaticos/images/upload')
-
-
-def filters_verbose_lookups():
-    from django_filters.conf import DEFAULTS
-
-    verbose_lookups = DEFAULTS['VERBOSE_LOOKUPS'].copy()
-    verbose_lookups.update({
-        'contains': 'contiene',
-    })
-    return verbose_lookups
+MEDIA_URL = '/fotos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'fotos')

@@ -170,8 +170,7 @@ class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
         solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
         return super(PdfSolicitud, self).get_context_data(
             pagesize="A4",
-            solicitud=solicitud,
-            title="Solicitud de Habilitacion"
+            solicitud=solicitud
         )
 
 
@@ -222,8 +221,7 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
             pagesize="A4",
             esterilizacion=esterilizacion,
             tiempo_edad=tiempo_edad,
-            edad_mascota=edad_mascota,
-            title="Consentimiento de Esterilizacion"
+            edad_mascota=edad_mascota
         )
 
 
@@ -340,8 +338,7 @@ class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
         patente = Patente.objects.get(pk=pk)
         return super(PdfCarnet, self).get_context_data(
             pagesize="A4",
-            patente=patente,
-            title="Impresion de Carnet"
+            patente=patente
         )
 
 
@@ -412,8 +409,7 @@ class PdfInfraccion(LoginRequiredMixin, PDFTemplateView):
         control = ControlAntirrabico.objects.get(pk=pk_control)
         return super(PdfInfraccion, self).get_context_data(
             pagesize="A4",
-            control=control,
-            title="Acta de Infraccion"
+            control=control
         )
 
 

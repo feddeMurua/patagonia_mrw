@@ -10,7 +10,6 @@
 
 {% block panel-title %}Libretas{% endblock %}
 
-
 {% block btn-nuevo %}
     <a href="{% url 'libretas:nueva_libreta' %}" class="btn btn-sm btn-primary btn-create">Nueva Libreta</a>
 {% endblock %}
@@ -19,8 +18,9 @@
     <thead>
         <tr>
             <th>Persona</th>
-            <th>Curso</th>
-            <th>Observaciones</th>
+            <th>Tipo de Libreta</th>
+            <th>Fecha de Vencimiento</th>
+            <th>Estado</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
@@ -28,12 +28,13 @@
         {% for libreta in listado %}
             <tr>
                 <td>{{ libreta.persona }}</td>
-                {% if persona.curso %}
-                    <td>{{ libreta.curso }}</td>
+                <td>{{ libreta.tipo_libreta }}</td>
+                <td>{{ libreta.fecha_vencimiento }}</td>
+                {% if libreta.fecha_vencimiento < fecha_hoy %}
+                    <td>Vencida</td>
                 {% else %}
-                    <td></td>
+                    <td>Al dia</td>
                 {% endif %}
-                <td>{{ libreta.observaciones }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'libretas:detalle_libreta' libreta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'libretas:modificar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>

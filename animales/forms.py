@@ -7,6 +7,7 @@ from functools import partial
 from .models import *
 from .choices import *
 import re
+import datetime
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
@@ -82,6 +83,12 @@ class DisposicionForm(forms.ModelForm):
 
 class TurnoForm(forms.Form):
     turno = forms.DateTimeField(required=True)
+
+    def clean_turno(self):
+        turno = self.cleaned_data['turno']
+        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(12, 0):
+            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 12:00 hs.')
+        return turno
 
 
 class MascotaForm(forms.ModelForm):

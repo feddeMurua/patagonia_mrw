@@ -41,7 +41,9 @@
                     {% if cliente.dni %}
                         <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'personas:detalle_persona_fisica' cliente.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                         <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'personas:modificar_persona_fisica' cliente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                        <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'personas:borrar_persona_fisica' cliente.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                        {% if not cliente.rol_actuante %}
+                            <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'personas:borrar_persona_fisica' cliente.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                        {% endif %}
                     {% else %}
                         <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'personas:detalle_persona_juridica' cliente.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                         <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'personas:modificar_persona_juridica' cliente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>

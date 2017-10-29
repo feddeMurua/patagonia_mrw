@@ -29,7 +29,7 @@
             <div class="panel-body">
                 {% if listado %}
                     <div class="container-fluid container-table">
-                        <table class="table table-list table-bordered table-striped">
+                        <table class="table table-list table-bordered table-striped" id="table-list">
                             {% block tabla %}{% endblock %}
                         </table>
                     </div>
@@ -51,7 +51,7 @@
     <script src="{% static 'js/datatables.js' %}"></script>
     <script>
         $(document).ready(function(){
-            $('.table-list').DataTable({
+            $('#table-list').DataTable({
                 language: {
                             "sProcessing":     "Procesando...",
                             "sLengthMenu":     "Mostrar _MENU_ registros",
@@ -82,7 +82,6 @@
 
             $('.btn-baja').click(function confirmarBaja() {
                 var urlBaja = $(this).data('url');
-                console.log(urlBaja);
                 swal({
                     title: "¿Esta seguro?",
                     text: "¿Desea eliminar este elemento?",
@@ -98,7 +97,7 @@
                         beforeSend: function(xhr) {
                             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                         },
-                        success: function(e) {
+                        success: function(response) {
                             swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
                                 function(){
                                     location.reload()

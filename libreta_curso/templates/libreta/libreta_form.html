@@ -9,6 +9,13 @@
 
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
 
+{% block extra-buttons %}
+    <div class="form-group meses-group">
+        <label>Meses de validez *</label>
+        <input type="number" name="meses" class="form-control" id="meses_validez" min="1" max="6">
+    </div>
+{% endblock %}
+
 {% block form-right %}
     {% if not modificacion %}
         <div class="col-xs-12 col-md-5" id="container-form-right">
@@ -22,21 +29,24 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'js/mov_config.js' %}"></script>
     <script>
         $.datepicker.setDefaults({
             maxDate: new Date()
         });
 
-        var forma_pago = $('#id_forma_pago'),
-        nro_cheque = $('#id_nro_cheque').parent();
-        forma_pago.on('change', hideNroCheque);
-        hideNroCheque();
+        var tipo_libreta = $('#id_tipo_libreta'),
+        meses_validez = $('#meses_validez');
+        tipo_libreta.on('change', hideMeses);
+        hideMeses();
 
-        function hideNroCheque() {
-            if (forma_pago.val() == 'Cheque') {
-                nro_cheque.removeClass('hidden');
+        function hideMeses() {
+            if (tipo_libreta.val() == 'Celeste') {
+                meses_validez.parent().removeClass('hidden');
+                meses_validez.prop('required', true);
             } else {
-                nro_cheque.addClass('hidden');
+                meses_validez.parent().addClass('hidden');
+                meses_validez.prop('required', false);
             }
         }
     </script>

@@ -32,6 +32,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'js/mov_config.js' %}"></script>
     <script>
         var h = $('#container-form-left').height();
         $('#container-form-right').css('height', h - 20 + 'px');
@@ -49,18 +50,5 @@
         $(document).ready(function(){
             $('.well').find('.delete-form-form').first().prop('disabled', true);
         });
-
-        var forma_pago = $('#id_forma_pago'),
-        nro_cheque = $('#id_nro_cheque').parent();
-        forma_pago.on('change', hideNroCheque);
-        hideNroCheque();
-
-        function hideNroCheque() {
-            if (forma_pago.val() == 'Cheque') {
-                nro_cheque.removeClass('hidden');
-            } else {
-                nro_cheque.addClass('hidden');
-            }
-        }
     </script>
 {% endblock %}

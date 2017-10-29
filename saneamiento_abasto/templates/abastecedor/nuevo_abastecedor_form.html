@@ -23,22 +23,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        $.datepicker.setDefaults({
-            maxDate: new Date()
-        });
-
-        var forma_pago = $('#id_forma_pago'),
-        nro_cheque = $('#id_nro_cheque').parent();
-        forma_pago.on('change', hideNroCheque);
-        hideNroCheque();
-
-        function hideNroCheque() {
-            if (forma_pago.val() == 'Cheque') {
-                nro_cheque.removeClass('hidden');
-            } else {
-                nro_cheque.addClass('hidden');
-            }
-        }
-    </script>
+    <script src="{% static 'js/mov_config.js' %}"></script>
 {% endblock %}

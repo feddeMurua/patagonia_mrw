@@ -12,6 +12,8 @@ from parte_diario_caja import forms as pd_f
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
+from dateutil.relativedelta import *
+from datetime import date
 
 
 '''
@@ -170,8 +172,7 @@ class PdfInscripcion(LoginRequiredMixin, PDFTemplateView):
         inscripcion = Inscripcion.objects.get(pk=pk)
         return super(PdfInscripcion, self).get_context_data(
             pagesize="A4",
-            inscripcion=inscripcion,
-            title="Detalle de Inscripcion"
+            inscripcion=inscripcion
         )
 
 
@@ -191,17 +192,22 @@ def get_cursos(pk_persona):
 
 @login_required(login_url='login')
 def lista_libreta(request):
-    return render(request, 'libreta/libreta_list.html', {'listado': LibretaSanitaria.objects.all()})
+    return render(request, 'libreta/libreta_list.html', {'listado': LibretaSanitaria.objects.all(),
+                                                         'fecha_hoy': date.today()})
 
 
 @login_required(login_url='login')
 def alta_libreta(request):
     if request.method == 'POST':
-        form = LibretaForm(request.POST)
+        form = LibretaForm(request.POST, request.FILES)
         mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
         detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Libreta Sanitaria')
         if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
             libreta = form.save(commit=False)
+            if libreta.tipo_libreta != 'Celeste':
+                libreta.fecha_vencimiento = date.today() + relativedelta(years=1)
+            else:
+                libreta.fecha_vencimiento = date.today() + relativedelta(months=int(request.POST['meses']))
             cursos = get_cursos(libreta.persona.pk)
             if cursos:
                 libreta.curso = cursos[-1]
@@ -244,8 +250,27 @@ def modificacion_libreta(request, pk):
     if request.method == 'POST':
         form = ModificacionLibretaForm(request.POST, instance=libreta)
         if form.is_valid():
-            log_modificar(request.user.id, form.save(), 'Libreta Sanitaria')
+            libreta = form.save(commit=False)
+            if libreta.tipo_libreta != 'Celeste':
+                libreta.fecha_vencimiento = date.today() + relativedelta(years=1)
+            else:
+                libreta.fecha_vencimiento = date.today() + relativedelta(months=int(request.POST['meses']))
+                libreta.save()
+            log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = ModificacionLibretaForm(instance=libreta)
     return render(request, 'libreta/libreta_form.html', {'form': form, 'modificacion': True})
+
+
+class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'libreta/libreta_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk):
+        libreta = LibretaSanitaria.objects.get(pk=pk)
+        return super(PdfLibreta, self).get_context_data(
+            pagesize="A4",
+            libreta=libreta
+        )

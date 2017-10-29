@@ -14,10 +14,13 @@
 
 {% block scripts %}
     <script>
+        var fecha = new Date();
+
         $('#id_fecha_inicio').datetimepicker({
             format:'d/m/Y H:i',
             step:30,
-            minDate: new Date(),            
+            minDate: fecha.addDays(7),
+            defaultDate: fecha.addDays(7)
         });
 
         $.datetimepicker.setLocale('es');

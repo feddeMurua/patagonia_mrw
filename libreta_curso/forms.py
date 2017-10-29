@@ -4,7 +4,6 @@ from django import forms
 from functools import partial
 import re
 import datetime
-from django.utils.timezone import now
 from .models import *
 from django.utils.translation import ugettext as _
 
@@ -33,69 +32,9 @@ class CursoForm(forms.ModelForm):
 
     def clean_fecha_inicio(self):
         fecha_inicio = self.cleaned_data['fecha_inicio']
-        hoy = now()
-        hoy.replace(tzinfo=None)  # elimina campos de mas para restar
-        if (fecha_inicio-hoy).days < 7:  # se requiere crear curso con fecha una semana anticipacion
-            raise forms.ValidationError('El curso se debe crear con una semana de anticipación!')
+        if fecha_inicio.time() < datetime.time(8, 0) or fecha_inicio.time() > datetime.time(22, 0):
+            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 22:00 hs.')
         return fecha_inicio
-
-
-class LibretaForm(forms.ModelForm):
-    fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
-    
-    class Meta:
-        model = LibretaSanitaria
-        exclude = ['fecha', 'foto', 'curso']
-        fields = '__all__'
-        widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
-        }
-        labels = {
-            'profesional_examen_clinico': _("Médico clínico"),
-            'lugar_examen_clinico': _("Lugar de realizacion del examen")
-        }
-
-    def clean_profesional_examen_clinico(self):
-        profesional_examen_clinico = self.cleaned_data['profesional_examen_clinico']
-        if not regex_alfabetico.match(profesional_examen_clinico):
-            raise forms.ValidationError('El nombre del médico clínico solo puede contener letras y/o espacios')
-        return profesional_examen_clinico
-
-    def clean_lugar_examen_clinico(self):
-        lugar_examen_clinico = self.cleaned_data['lugar_examen_clinico']
-        if not regex_alfanumerico.match(lugar_examen_clinico):
-            raise forms.ValidationError('El nombre del lugar del examen clínico solo puede contener letras/numeros'
-                                        'y/o espacios')
-        return lugar_examen_clinico
-
-
-class ModificacionLibretaForm(forms.ModelForm):
-    fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
-
-    class Meta:
-        model = LibretaSanitaria
-        exclude = ['persona', 'curso', 'fecha', 'foto']
-        fields = '__all__'
-        widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
-        }
-        labels = {
-            'profesional_examen_clinico': _("Médico clínico"),
-            'lugar_examen_clinico': _("Lugar de realizacion del examen")
-        }
-
-    def clean_profesional_examen_clinico(self):
-        profesional_examen_clinico = self.cleaned_data['profesional_examen_clinico']
-        if not regex_alfabetico.match(profesional_examen_clinico):
-            raise forms.ValidationError('El nombre del médico clínico solo puede contener letras y/o espacios')
-        return profesional_examen_clinico
-
-    def clean_lugar_examen_clinico(self):
-        lugar_examen_clinico = self.cleaned_data['lugar_examen_clinico']
-        if not regex_alfanumerico.match(lugar_examen_clinico):
-            raise forms.ValidationError('El nombre del lugar del examen clínico solo puede contener letras/numeros'
-                                        'y/o espacios')
-        return lugar_examen_clinico
 
 
 class InscripcionForm(forms.ModelForm):
@@ -142,3 +81,63 @@ class CierreInscripcionForm(forms.ModelForm):
             'nota_curso': _("Calificacion"),
             'porcentaje_asistencia': _("Porcentaje de asistencia")
         }
+
+
+class LibretaForm(forms.ModelForm):
+    fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
+
+    class Meta:
+        model = LibretaSanitaria
+        exclude = ['fecha', 'curso', 'fecha_vencimiento']
+        fields = '__all__'
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+        labels = {
+            'profesional_examen_clinico': _("Médico clínico"),
+            'lugar_examen_clinico': _("Lugar de realizacion del examen"),
+            'tipo_libreta': _("Tipo de libreta"),
+            'meses_validez': _("Meses de validez")
+        }
+
+    def clean_profesional_examen_clinico(self):
+        profesional_examen_clinico = self.cleaned_data['profesional_examen_clinico']
+        if not regex_alfabetico.match(profesional_examen_clinico):
+            raise forms.ValidationError('El nombre del médico clínico solo puede contener letras y/o espacios')
+        return profesional_examen_clinico
+
+    def clean_lugar_examen_clinico(self):
+        lugar_examen_clinico = self.cleaned_data['lugar_examen_clinico']
+        if not regex_alfanumerico.match(lugar_examen_clinico):
+            raise forms.ValidationError('El nombre del lugar del examen clínico solo puede contener letras/numeros'
+                                        'y/o espacios')
+        return lugar_examen_clinico
+
+
+class ModificacionLibretaForm(forms.ModelForm):
+    fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
+
+    class Meta:
+        model = LibretaSanitaria
+        exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento']
+        fields = '__all__'
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+        labels = {
+            'profesional_examen_clinico': _("Médico clínico"),
+            'lugar_examen_clinico': _("Lugar de realizacion del examen")
+        }
+
+    def clean_profesional_examen_clinico(self):
+        profesional_examen_clinico = self.cleaned_data['profesional_examen_clinico']
+        if not regex_alfabetico.match(profesional_examen_clinico):
+            raise forms.ValidationError('El nombre del médico clínico solo puede contener letras y/o espacios')
+        return profesional_examen_clinico
+
+    def clean_lugar_examen_clinico(self):
+        lugar_examen_clinico = self.cleaned_data['lugar_examen_clinico']
+        if not regex_alfanumerico.match(lugar_examen_clinico):
+            raise forms.ValidationError('El nombre del lugar del examen clínico solo puede contener letras/numeros'
+                                        'y/o espacios')
+        return lugar_examen_clinico
