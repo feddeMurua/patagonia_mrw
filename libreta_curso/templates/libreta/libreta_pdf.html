@@ -17,8 +17,8 @@
                 <table class="tarjeta">
                     <tr>
                         <td>
-                            <p><strong>Municipalidad de Rawson</strong></p>
-                            <p>Capital de la Provincia del Chubut</p>
+                            <p align="center"><strong>Municipalidad de Rawson</strong></p>
+                            <p align="center">Capital de la Provincia del Chubut</p>
                             <table>
                                 <tr>
                                     <td>
@@ -65,7 +65,14 @@
                             </table>
                         </td>
                         <td>
-                            <p><strong>Tarjeta de Sanidad N°: {{ libreta.persona.dni }}</strong></p>
+                            <p align="center"><strong>Tarjeta de Sanidad N°: {{ libreta.persona.dni }}</strong></p>
+                            <br>
+                            <p>En la Direccion de Veterinaria, Saneamiento y Abasto consta que el interesado hallase
+                            exento de enfermedades contagiosas, segun CERTIFICADO, expedido por el/la Dr./Dra.
+                            {{ libreta.profesional_examen_clinico }}.<br>
+                            La presente vence el {{ libreta.fecha_vencimiento }}<br>
+                            Rawson, Chubut - {% now "jS F Y H:i" %}</p>
+                            <img src="{% static 'images/rawson.png' %}" height="96" width="96">
                         </td>
                     </tr>
                 </table>

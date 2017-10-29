@@ -6,6 +6,8 @@ import re
 import datetime
 from .models import *
 from django.utils.translation import ugettext as _
+from django_addanother.widgets import AddAnotherWidgetWrapper
+from django.core.urlresolvers import reverse_lazy
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
@@ -43,7 +45,11 @@ class InscripcionForm(forms.ModelForm):
         model = Inscripcion
         fields = ['persona', 'observaciones']
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 13, 'cols': 20})
+            'observaciones': forms.Textarea(attrs={'rows': 13, 'cols': 20}),
+            'persona': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            )
         }
 
     def __init__(self, *args, **kwargs):
@@ -90,7 +96,11 @@ class LibretaForm(forms.ModelForm):
         exclude = ['fecha', 'curso', 'fecha_vencimiento']
         fields = '__all__'
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
+            'persona': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            )
         }
         labels = {
             'profesional_examen_clinico': _("Médico clínico"),

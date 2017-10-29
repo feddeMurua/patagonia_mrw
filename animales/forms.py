@@ -8,6 +8,8 @@ from .models import *
 from .choices import *
 import re
 import datetime
+from django_addanother.widgets import AddAnotherWidgetWrapper
+from django.core.urlresolvers import reverse_lazy
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
@@ -24,6 +26,16 @@ class AltaAnalisisForm(forms.ModelForm):
     class Meta:
         model = Analisis
         fields = '__all__'
+        widgets = {
+            'interesado': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            ),
+            'procedencia': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_localidad'),
+            )
+        }
 
 
 class ModificacionAnalisisForm(forms.ModelForm):
@@ -31,6 +43,12 @@ class ModificacionAnalisisForm(forms.ModelForm):
     class Meta:
         model = Analisis
         fields = ['procedencia', 'resultado', 'categoria']
+        widgets = {
+            'procedencia': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_localidad'),
+            )
+        }
 
 
 class PorcinoForm(forms.ModelForm):
@@ -55,6 +73,12 @@ class SolicitudForm(forms.ModelForm):
     class Meta:
         model = SolicitudCriaderoCerdos
         fields = ['interesado', 'categoria_criadero']
+        widgets = {
+            'interesado': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            )
+        }
 
 
 class AplazoSolicitudForm(forms.ModelForm):
@@ -128,7 +152,11 @@ class PatenteForm(forms.ModelForm):
         model = Patente
         fields = ['persona', 'observaciones']
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
+            'persona': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            )
         }
 
 
@@ -138,7 +166,11 @@ class ModificacionPatenteForm(forms.ModelForm):
         model = Patente
         fields = ['persona', 'observaciones']
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
+            'persona': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            )
         }
 
 
@@ -149,7 +181,15 @@ class ControlAntirrabicoForm(forms.ModelForm):
         model = ControlAntirrabico
         fields = '__all__'
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
+            'mordido': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            ),
+            'responsable': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica'),
+            )
         }
 
 
