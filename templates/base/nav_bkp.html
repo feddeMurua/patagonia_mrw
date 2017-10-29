@@ -22,33 +22,33 @@
         </li>
         <li><a href="#">Analisis/Controles</a>
             <ul>
-                <li><a href="#"><span>Analisis de Triquinosis</span></a></li>
-                <li><a href="#"><span>Habilitacion de Criadero de Cerdos</span></a></li>
-                <li><a href="#"><span>Control Antirrabico</span></a></li>
+                <li><a href="{% url 'analisis:lista_analisis' %}"><span>Analisis de Triquinosis</span></a></li>
+                <li><a href="{% url 'criadero:lista_solicitudes' %}"><span>Habilitacion de Criadero de Cerdos</span></a></li>
+                <li><a href="{% url 'controles:lista_controles' %}"><span>Control Antirrabico</span></a></li>
             </ul>
         </li>
         <li><a href="#">Mascotas</a>
             <ul>
-                <li><a href="#"><span>Patentamiento</span></a></li>
-                <li><a href="#"><span>Esterilizacion</span></a></li>
-                <li><a href="#"><span>Retiros y Entregas</span></a></li>
+                <li><a href="{% url 'patentes:lista_patentes' %}"><span>Patentamiento</span></a></li>
+                <li><a href="{% url 'esterilizacion:lista_esterilizaciones' %}"><span>Esterilizacion</span></a></li>
+                <li><a href="{% url 'retiros_entregas:lista_retiro_entrega' %}"><span>Retiros y Entregas</span></a></li>
             </ul>
         </li>
         <li><a href="#">Abasto</a>
             <ul>
-                <li><a href="#"><span>Abastecedores</span></a></li>
-                <li><a href="#"><span>Reinspecciones</span></a></li>
+                <li><a href="{% url 'abastecedores:lista_abastecedores' %}"><span>Abastecedores</span></a></li>
+                <li><a href="{% url 'reinspecciones:lista_reinspecciones' %}"><span>Reinspecciones</span></a></li>
             </ul>
         </li>
         <li><a href="#">Transportes/Desinfecciones</a>
             <ul>
-                <li><a href="#"><span>Vehiculos</span></a></li>
-                <li><a href="#"><span>Control de Plagas</span></a></li>
+                <li><a href="{% url 'vehiculo:lista_vehiculos' %}"><span>Vehiculos</span></a></li>
+                <li><a href="{% url 'controles_plagas:lista_controles_plagas' %}"><span>Control de Plagas</span></a></li>
             </ul>
         </li>
         <li><a href="#">Caja</a>
             <ul>
-                <li><a href="#"><span>Parte Diario</span></a></li>
+                <li><a href="{% url 'caja:lista_detalle_movimientos' %}"><span>Parte Diario</span></a></li>
                 <li><a href="#"><span>Arqueo Diario de Efectivo</span></a></li>
                 <li><a href="#"><span>Cuentas Corrientes</span></a></li>
             </ul>
