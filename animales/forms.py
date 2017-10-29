@@ -85,7 +85,7 @@ class TurnoForm(forms.Form):
 
 
 class MascotaForm(forms.ModelForm):
-    fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
+    fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento", required=False)
 
     class Meta:
         model = Mascota

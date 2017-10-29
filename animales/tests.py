@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 # Create your tests here.
 '''
-ALTA ESTERILIZACION
-- si bien se toman los datos de la mascota, puede darse el caso que una persona registrada en el sistema traiga animal sin patentar
+REVISAR longitudes de los campos domicilio rural form
 
-RETIRO/ENTREGA
--no se puede abrir listado principal del retiro/entrega 
+codeCleanup:
+ej. import "f" en formularios (como persona form)
+
+no se puede poner fecha nacimiento no patentando esterilizacion
 '''

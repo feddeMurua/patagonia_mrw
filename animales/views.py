@@ -121,8 +121,7 @@ def alta_solicitud(request):
     else:
         form = SolicitudForm
         domicilio_form = f.DomicilioRuralForm
-        return render(request, "criadero/solicitud_form.html", {'form': form,
-                                                                'domicilio_form': domicilio_form})
+    return render(request, "criadero/solicitud_form.html", {'form': form, 'domicilio_form': domicilio_form})
 
 
 @login_required(login_url='login')
@@ -158,7 +157,7 @@ def aplazo_solicitud(request, pk):
             return redirect('criadero:lista_solicitudes')
     else:
         form = AplazoSolicitudForm
-        return render(request, 'criadero/solicitud_aplazo.html', {"form": form, 'modificacion': True})
+    return render(request, 'criadero/solicitud_aplazo.html', {"form": form, 'modificacion': True})
 
 
 class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
@@ -190,7 +189,7 @@ def alta_disposicion(request, pk):
             return redirect('criadero:lista_solicitudes')
     else:
         form = DisposicionForm
-        return render(request, 'criadero/disposicion_form.html', {"form": form})
+    return render(request, 'criadero/disposicion_form.html', {"form": form})
 
 
 '''
@@ -240,7 +239,7 @@ def alta_esterilizacion(request):
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
         form = EsterilizacionPatenteForm
-        return render(request, 'esterilizacion/esterilizacion_turno.html', {'form': form})
+    return render(request, 'esterilizacion/esterilizacion_turno.html', {'form': form})
 
 
 @login_required(login_url='login')
@@ -259,7 +258,7 @@ def alta_esterilizacion_nopatentado(request):
         form = f.AltaPersonaFisicaForm
         turno_form = TurnoForm
         mascota_form = MascotaForm
-        return render(request, 'esterilizacion/esterilizacion_form.html', {'form': form, 'turno_form': turno_form,
+    return render(request, 'esterilizacion/esterilizacion_form.html', {'form': form, 'turno_form': turno_form,
                                                                        'mascota_form': mascota_form})
 
 
@@ -392,7 +391,7 @@ def alta_control(request):
             return redirect('controles:lista_controles')
     else:
         form = ControlAntirrabicoForm()
-        return render(request, 'control/control_form.html', {"form": form})
+    return render(request, 'control/control_form.html', {"form": form})
 
 
 @login_required(login_url='login')
@@ -442,7 +441,7 @@ def alta_visita(request, pk_control):
             return HttpResponseRedirect(reverse('controles:lista_visitas', args=pk_control))
     else:
         form = VisitaForm
-        return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
+    return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
 
 
 @login_required(login_url='login')
@@ -463,7 +462,7 @@ def modificacion_visita(request, pk, pk_control):
             return HttpResponseRedirect(reverse('controles:lista_visitas', args=pk_control))
     else:
         form = VisitaForm(instance=visita)
-        return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
+    return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
 
 
 '''
@@ -491,7 +490,7 @@ def alta_tramite(request):
                 return redirect('retiros_entregas:nuevo_tramite_nopatentado')
     else:
         form = RetiroEntregaForm
-        return render(request, 'retiroEntrega/retiroEntrega_tramite.html', {'form': form})
+    return render(request, 'retiroEntrega/retiroEntrega_tramite.html', {'form': form})
 
 
 @login_required(login_url='login')
@@ -513,7 +512,7 @@ def alta_tramite_patentado(request):
             return redirect('retiros_entregas:lista_retiro_entrega')
     else:
         form = ListaPatentesForm
-        return render(request, 'retiroEntrega/retiroEntrega_patentado.html', {'form': form})
+    return render(request, 'retiroEntrega/retiroEntrega_patentado.html', {'form': form})
 
 
 @login_required(login_url='login')
@@ -535,5 +534,5 @@ def alta_tramite_nopatentado(request):
     else:
         form = f.ListaPersonasGenericasForm
         mascota_form = MascotaForm
-        return render(request, 'retiroEntrega/retiroEntrega_noPatentado.html', {'form': form,
+    return render(request, 'retiroEntrega/retiroEntrega_noPatentado.html', {'form': form,
                                                                                 'mascota_form': mascota_form})

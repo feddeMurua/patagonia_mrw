@@ -17,7 +17,11 @@
                 <div class="form-group">
                     <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
                     {{ field|add_class:'form-control' }}
+                    {% for error in field.errors %}
+                      <span class="help-block">{{error}}</span>
+                    {% endfor %}
                 </div>
+
             {% endfor %}
         </div>
     </div>

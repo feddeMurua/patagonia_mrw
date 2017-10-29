@@ -126,6 +126,16 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
         exclude = ['domicilio']
         fields = '__all__'
 
+    def clean_cuit(self):
+        cuit = self.cleaned_data['cuit']
+        if cuit:
+            if PersonaJuridica.objects.filter(cuit=cuit).exists():
+                raise forms.ValidationError('Ya existe una empresa con este CUIT')
+
+            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuit):
+                raise forms.ValidationError('CUIT inválido, por favor siga este formato XX-YYYYYYYY-Z')
+        return cuit
+
 
 class AltaPersonalPropioForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
@@ -204,6 +214,41 @@ class DomicilioRuralForm(forms.ModelForm):
     class Meta:
         model = DomicilioRural
         fields = '__all__'
+
+    def clean_chacra(self):
+        chacra = self.cleaned_data['chacra']
+        if chacra:
+            if not regex_alfanumerico.match(chacra):
+                raise forms.ValidationError('La Chacra, solo puede contener letras/números y/o espacios')
+        return chacra
+
+    def clean_parcela(self):
+        parcela = self.cleaned_data['parcela']
+        if parcela:
+            if not regex_alfanumerico.match(parcela):
+                raise forms.ValidationError('La Parcela, solo puede contener letras/números y/o espacios')
+        return parcela
+
+    def clean_sector(self):
+        sector = self.cleaned_data['sector']
+        if sector:
+            if not regex_alfanumerico.match(sector):
+                raise forms.ValidationError('El sector, solo puede contener letras/números y/o espacios')
+        return sector
+
+    def clean_circunscripcion(self):
+        circunscripcion = self.cleaned_data['circunscripcion']
+        if circunscripcion:
+            if not regex_alfanumerico.match(circunscripcion):
+                raise forms.ValidationError('La Circunscripcion, solo puede contener letras/números y/o espacios')
+        return circunscripcion
+
+    def clean_ruta(self):
+        ruta = self.cleaned_data['ruta']
+        if ruta:
+            if not regex_alfanumerico.match(ruta):
+                raise forms.ValidationError('La Ruta, solo puede contener letras/números y/o espacios')
+        return ruta
 
 
 class LocalidadForm(forms.ModelForm):
