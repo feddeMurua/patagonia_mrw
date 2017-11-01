@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import *
 from desarrollo_patagonia.utils import *
-from django.views.generic.detail import DetailView
+from django.views.generic import DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django_addanother.views import CreatePopupMixin, UpdatePopupMixin
 
 
 @login_required(login_url='login')
@@ -165,5 +166,32 @@ def modificacion_personal_propio(request, pk):
 class DetallePersonalPropio(LoginRequiredMixin, DetailView):
     model = PersonalPropio
     template_name = "persona/personal_propio_detail.html"
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class AltaLocalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
+
+    model = Localidad
+    form_class = LocalidadForm
+    template_name = "domicilio/localidad_form.html"
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class AltaProvincia(LoginRequiredMixin, CreatePopupMixin, CreateView):
+
+    model = Provincia
+    form_class = ProvinciaForm
+    template_name = "domicilio/provincia_form.html"
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
+class AltaNacionalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
+
+    model = Nacionalidad
+    fields = '__all__'
+    template_name = "domicilio/nacionalidad_form.html"
     login_url = '/accounts/login/'
     redirect_field_name = 'next'

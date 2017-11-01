@@ -15,19 +15,8 @@
 
 {% block form-right %}
     {% if not modificacion %}
-        <div class="panel panel-default col-xs-12 col-md-5" id="container-form-botom-right">
-            <div class="panel-heading">Datos de la Mascota</div>
-            <div class="panel-body">
-                {% for field in mascota_form %}
-                    <div class="form-group">
-                        <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
-                        {{ field|add_class:'form-control' }}
-                        {% for error in field.errors %}
-                            <span class="help-block">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
+        <div class="col-xs-12 col-md-5" id="container-form-botom-right">
+            {% include 'mascota/cuadro_mascota.html' %}
         </div>
     {% endif %}
 {% endblock %}

@@ -9,26 +9,21 @@
 
 {% block url-volver %}{% url 'esterilizacion:lista_esterilizaciones' %}{% endblock %}
 
+{% block extra-form %}
+    {% for field in turno_form %}
+        <div class="form-group">
+            <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
+            {{ field|add_class:'form-control' }}
+            {% for error in field.errors %}
+                <span class="help-block">{{ error }}</span>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}
+
 {% block form-right %}
-    <div class="panel panel-default col-xs-12 col-md-5" id="container-form-right">
-        <div class="panel-heading">Fecha y Hora</div>
-        <div class="panel-body">
-            {% for field in turno_form %}
-                <div class="form-group">
-                    <label>{{ field.label }}</label>
-                    {{ field|add_class:'form-control' }}
-                </div>
-            {% endfor %}
-        </div>
-        <div class="panel-heading">Datos de la Mascota</div>
-        <div class="panel-body">
-            {% for field in mascota_form %}
-                <div class="form-group">
-                    <label>{{ field.label }}</label>
-                    {{ field|add_class:'form-control' }}
-                </div>
-            {% endfor %}
-        </div>
+    <div class="col-xs-12 col-md-5" id="container-form-right">
+        {% include 'mascota/cuadro_mascota.html' %}
     </div>
 {% endblock %}
 

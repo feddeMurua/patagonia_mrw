@@ -2,13 +2,11 @@
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
-{% block title %}Personas Físicas{% endblock %}
+{% block title %}Personal Propio{% endblock %}
 
-{% block header-title %}Personas Físicas{% endblock %}
+{% block header-title %}Personal Propio{% endblock %}
 
-{% block url-volver %}{% url 'inicio' %}{% endblock %}
-
-{% block panel-title %}Personas Físicas{% endblock %}
+{% block panel-title %}Personal Propio{% endblock %}
 
 {% block btn-nuevo %}
     <a href="{% url 'personas:nuevo_personal_propio' %}" class="btn btn-sm btn-primary btn-create">Nueva Persona</a>

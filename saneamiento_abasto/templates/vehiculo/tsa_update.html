@@ -21,10 +21,12 @@
 
 {% block scripts %}
     <script>
-        var selectRubro = document.getElementById('id_rubro_vehiculo').selectize,
-        categoria = $('#id_categoria');
+        categoria = $('#id_categoria'),
+        rubro = $('#id_rubro_vehiculo');
+
         categoria.on('change', setOptionsSelect);
         setOptionsSelect();
+
         function setOptionsSelect() {
             var id_categoria = categoria.val()
             if (id_categoria) {
@@ -32,10 +34,10 @@
                     url: '/vehiculos/getRubros/' + id_categoria,
                     dataType: 'json',
                     success: function(data){
-                        selectRubro.clearOptions();
+                        rubro.empty().trigger('change');
                         $.each(data, function(key, opt) {
-                            selectRubro.addOption({value: opt, text: key});
-                            selectRubro.addItem(opt);
+                            var nuevo = new Option(opt, key, false, false);
+                            rubro.append(nuevo).trigger('change');
                         })
                     },
                     error: function(err){

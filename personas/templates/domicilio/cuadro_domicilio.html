@@ -1,8 +1,11 @@
 {% load widget_tweaks %}
 
-<div class="panel panel-default col-md-5">
-    <div class="panel-heading domicilio-title">Domicilio</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Domicilio</h3>
+    </div>
     <div class="panel-body">
+        {{ domicilio_form.media }}
         {% for field in domicilio_form %}
             <div class="form-group">
                 <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>

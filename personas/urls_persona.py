@@ -18,5 +18,9 @@ urlpatterns = [
     url(r'^personal_propio/nuevo$', alta_personal_propio, name='nuevo_personal_propio'),
     url(r'^personal_propio/(?P<pk>\d+)$', DetallePersonalPropio.as_view(), name='detalle_personal_propio'),
     url(r'^personal_propio/borrar/(?P<pk>\d+)$', baja_personal_propio, name='borrar_personal_propio'),
-    url(r'^personal_propio/editar/(?P<pk>\d+)$', modificacion_personal_propio, name='modificar_personal_propio')
+    url(r'^personal_propio/editar/(?P<pk>\d+)$', modificacion_personal_propio, name='modificar_personal_propio'),
+
+    url(r'^domicilio/nueva_localidad/$', AltaLocalidad.as_view(), name='nueva_localidad'),
+    url(r'^domicilio/nueva_provincia/$', AltaProvincia.as_view(), name='nueva_provincia'),
+    url(r'^domicilio/nueva_nacionalidad/$', AltaNacionalidad.as_view(), name='nueva_nacionalidad')
 ]

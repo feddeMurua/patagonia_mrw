@@ -83,3 +83,10 @@ table th {
 	-webkit-transform: translateX(-50%);
 	transform: translateX(-50%);
 }
+
+h3.panel-title {
+    font-size: 21px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}

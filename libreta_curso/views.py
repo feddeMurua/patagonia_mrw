@@ -79,6 +79,34 @@ def cierre_de_curso(request, id_curso):
                                                            'apto_cierre': apto_cierre})
 
 
+class PdfAsistencia(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'curso/asistencia_pdf.html'
+    title = "Planilla de Asistencia de Alumnos"
+
+    def get_context_data(self, pk):  # pk del curso por paŕametro
+        lista_inscripciones = Inscripcion.objects.filter(curso__pk=pk)
+        curso = Curso.objects.get(id=pk)
+        return super(PdfAsistencia, self).get_context_data(
+            lista_inscripciones=lista_inscripciones,
+            curso=curso,
+            title="Curso"
+        )
+        
+
+class PdfAprobados(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'curso/aprobados_pdf.html'
+    title = "Planilla de Alumnos Aprobados"
+
+    def get_context_data(self, pk):  # pk del curso por paŕametro
+        lista_inscripciones = Inscripcion.objects.filter(curso__pk=pk, calificacion="Aprobado")
+        curso = Curso.objects.get(id=pk)
+        return super(PdfAprobados, self).get_context_data(
+            lista_inscripciones=lista_inscripciones,
+            curso=curso,
+            title="Curso"
+        )
+
+
 '''
 INSCRIPCIONES
 '''

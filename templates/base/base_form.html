@@ -14,10 +14,11 @@
     <div class="container container-form">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-body">
                     <div class="col-md-7" id="container-form-left">
                         {% block form-left %}
+                            {{ form.media }}
                             {% for field in form %}
                                 <div class="form-group">
                                     <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>

@@ -11,7 +11,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/particles.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.timepicker.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/select2.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/select2-bootstrap.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert2.css' %}"/>
     {% block stylesheets %}
@@ -31,9 +32,11 @@
 
     {% block no-header %}
         <header id="header-page" class="header">
-            <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
-                <span class="glyphicon glyphicon-arrow-left hvr-buzz pull-right"></span>
-            </a>
+            {% block no-return %}
+                <a href="{% block url-volver %}{% endblock %}" class="btn-volver">
+                    <span class="glyphicon glyphicon-arrow-left hvr-buzz pull-right"></span>
+                </a>
+            {% endblock %}
             <h1 class="header-title pull-left">
                 {% block header-title %}{% endblock %}
             </h1>
@@ -48,16 +51,12 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/particles.js' %}"></script>
     <script src="{% static 'js/jquery.timepicker.js' %}"></script>
-    <script src="{% static 'js/selectize.js' %}"></script>
+    <script src="{% static 'js/select2.full.js' %}"></script>
     <script src="{% static 'js/jquery.datetimepicker.full.js' %}"></script>
     <script src="{% static 'js/sweetalert2.js' %}"></script>
     <script>
-        $('select').selectize({
-            sortField: {
-                field: 'text',
-                direction: 'asc'
-            },
-            dropdownParent: 'body'
+        $('select').select2({
+            theme: "bootstrap"
         });
 
         $.datepicker.regional['es'] = {

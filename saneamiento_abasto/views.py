@@ -68,7 +68,7 @@ def nuevo_abastecedor_particular(request):
             # Se crea el detalle del movimiento
             detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
             servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " N° " + str(abastecedor.id)
+            descrip = str(servicio) + " N° " + str(abastecedor.pk)
             detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Particular')

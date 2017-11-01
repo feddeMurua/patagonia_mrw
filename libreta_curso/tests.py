@@ -7,8 +7,19 @@ from django.test import TestCase
 '''
 TEST:
 LIBRETAS:
-condiciones a verificar:
--validar que la persona exista en el curso y haya aprobado
--verificar que no se repita el n° de ingresos varios
--mostrar formato de curso solo fecha
+
+3 tipos de libreta:
+blanca (anual)
+amarilla (anual): solo pesqueras
+celeste (provisoria) Hasta próximo curso
+
+-En la impresion de libreta:
+deben figurar los dos sellos (opcion)
+
+-Iniciales del operador en todos los documentos que se imprimen
+
+ORDERNAR EN TODOS LOS CASOS ORDEN DE LAS ACCIONES POR CADA ITEM DE LA TABLA
+-deberia mostrar msj si confirma el titular en el pago de inscripcion
+
+combinar vista de pdf asistencia y pdf aprobados
 '''

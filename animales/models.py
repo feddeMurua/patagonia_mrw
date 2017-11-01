@@ -116,7 +116,7 @@ class Mascota(models.Model):
     categoria_mascota = models.CharField(max_length=6, choices=Categoria_Mascota)
     raza = models.CharField(max_length=50)
     sexo = models.CharField(max_length=15, choices=Sexo)
-    fecha_nacimiento = models.DateField(blank=True, null=True)
+    nacimiento_fecha = models.DateField(blank=True, null=True)
     baja = models.BooleanField(default=False)
 
     def __str__(self):

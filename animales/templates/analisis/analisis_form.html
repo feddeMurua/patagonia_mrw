@@ -22,8 +22,15 @@
 
 {% block form-right %}
     <div class="col-xs-12 col-md-5" id="container-form-right">
-        <p class="porcinos-title">Porcinos</p>
-        {% bootstrap_dynamic_formset formset can_delete=True %}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Porcinos</h3>
+            </div>
+            <div class="panel-body">
+                {{ formset.media }}
+                {% bootstrap_dynamic_formset formset can_delete=True %}
+            </div>
+        </div>
     </div>
 {% endblock %}
 

@@ -26,7 +26,7 @@ class LibretaSanitaria(models.Model):
 
 class Curso(models.Model):
     fecha_inicio = models.DateTimeField()
-    cupo = models.IntegerField(validators=[MaxValueValidator(500), MinValueValidator(1)])
+    cupo = models.IntegerField(validators=[MaxValueValidator(120), MinValueValidator(1)])
     lugar = models.CharField(max_length=50)
     finalizado = models.BooleanField(default=False)
 
@@ -37,7 +37,7 @@ class Curso(models.Model):
 class Inscripcion(models.Model):
     fecha_inscripcion = models.DateField(default=now)
     modificado = models.BooleanField(default=False)
-    nota_curso = models.CharField(max_length=15, choices=Calificaciones, blank=True)
+    calificacion = models.CharField(max_length=15, choices=Calificaciones, blank=True)
     porcentaje_asistencia = models.FloatField(null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)

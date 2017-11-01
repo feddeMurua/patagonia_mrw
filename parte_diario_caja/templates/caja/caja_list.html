@@ -6,12 +6,10 @@
 
 {% block header-title %}Parte Diario de Caja{% endblock %}
 
-{% block url-volver %}{% url 'inicio' %}{% endblock %}
-
 {% block panel-title %}Movimientos diarios{% endblock %}
 
 {% block btn-nuevo %}
-    <form class="form-inline" method="post">
+    <form class="form-inline" method="post" style="margin: 0px">
         {% csrf_token %}
         <div class="form-group">
             {{ datepicker }}

@@ -14,9 +14,9 @@
             <p>En el dia de la fecha el Sr.(a) {{ esterilizacion.interesado.apellido }},
                 {{ esterilizacion.interesado.nombre }} DNI N° {{ esterilizacion.interesado.dni }} domiciliado en
                 {{ esterilizacion.interesado.domicilio }} del ejido de Rawson, provincia del Chubut, propietario de la
-                mascota {{ mascota.categoria_mascota }}, {{ esterilizacion.mascota.sexo }}, que responde al nombre de
-                {{ esterilizacion.mascota.nombre }} y cuya edad es de {{ edad_mascota }} {{ tiempo_edad }}, ha
-                solicitado un turno para cirugia de esterilizacion.<br>
+                mascota {{ esterilizacion.mascota.categoria_mascota }}, {{ esterilizacion.mascota.sexo }}, que responde
+                al nombre de {{ esterilizacion.mascota.nombre }}{% if edad_mascota %}y cuya edad es de {{ edad_mascota }}
+                {{ tiempo_edad }}{% endif %}, ha solicitado un turno para cirugia de esterilizacion.<br>
                 En relacion al acto quirurgico DECLARA:<br>
                 Tener conocimiento de la intervencion quirúrgica a la que se someterá la mascota.<br>
                 Haber sido debida y completamente informado sobre los objetivos de la intervencion y sus

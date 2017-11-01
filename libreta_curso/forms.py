@@ -76,9 +76,8 @@ class CierreInscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
-        fields = ['nota_curso', 'porcentaje_asistencia']
+        fields = ['calificacion', 'porcentaje_asistencia']
         labels = {
-            'nota_curso': _("Calificacion"),
             'porcentaje_asistencia': _("Porcentaje de asistencia")
         }
 
