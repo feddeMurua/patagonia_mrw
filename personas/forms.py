@@ -279,16 +279,3 @@ class LocalidadForm(forms.ModelForm):
                 reverse_lazy('personas:nueva_provincia'),
             )
         }
-
-
-class ProvinciaForm(forms.ModelForm):
-
-    class Meta:
-        model = Provincia
-        fields = '__all__'
-        widgets = {
-            'nacionalidad': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_nacionalidad'),
-            )
-        }

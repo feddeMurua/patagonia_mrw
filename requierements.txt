@@ -1,0 +1,11 @@
+django
+django-bootstrap3
+django-addanother
+django-bootstrap-dynamic-formsets
+django-polymorphic
+django-widget-tweaks
+django-easy-pdf
+uWSGI
+xhtml2pdf
+reportlab
+python-dateutil
