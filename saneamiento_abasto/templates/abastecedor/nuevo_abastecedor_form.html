@@ -15,7 +15,9 @@
 {% endblock %}
 
 {% block form-right %}
-    {% include 'domicilio/cuadro_domicilio.html' %}
+    <div class="col-xs-12 col-md-5" id="container-form-right">
+        {% include 'domicilio/cuadro_domicilio.html' %}
+    </div>
 {% endblock %}
 
 {% block btn-cancelar %}

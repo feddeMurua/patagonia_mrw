@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .forms import *
 from .models import *
 from personas import forms as f
-from django.views.generic.detail import DetailView
+from django.views.generic import DetailView
 from parte_diario_caja import forms as pd_f
 from desarrollo_patagonia.utils import *
 from datetime import *

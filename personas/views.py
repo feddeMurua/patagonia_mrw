@@ -5,9 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import *
 from desarrollo_patagonia.utils import *
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django_addanother.views import CreatePopupMixin, UpdatePopupMixin
+from django_addanother.views import CreatePopupMixin
 
 
 @login_required(login_url='login')
@@ -15,9 +15,11 @@ def lista_clientes(request):
     return render(request, 'persona/cliente_list.html', {'listado': PersonaGenerica.objects.all()})
 
 
-@login_required(login_url='login')
-def alta_persona_fisica(request):
-    if request.method == 'POST':
+class AltaPersonaFisica(LoginRequiredMixin, CreatePopupMixin, View):
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def post(self, request):
         form = AltaPersonaFisicaForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
         if form.is_valid() & domicilio_form.is_valid():
@@ -26,11 +28,14 @@ def alta_persona_fisica(request):
             persona.save()
             log_crear(request.user.id, persona, 'Persona Física')
             return redirect('personas:lista_clientes')
-    else:
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                             'url_return': 'personas:lista_clientes'})
+
+    def get(self, request):
         form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
-    return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_clientes'})
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                             'url_return': 'personas:lista_clientes'})
 
 
 @login_required(login_url='login')
@@ -65,22 +70,27 @@ class DetallePersonaFisica(LoginRequiredMixin, DetailView):
     redirect_field_name = 'next'
 
 
-@login_required(login_url='login')
-def alta_persona_juridica(request):
-    if request.method == 'POST':
+class AltaPersonaJuridica(LoginRequiredMixin, CreatePopupMixin, View):
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def post(self, request):
         form = AltaPersonaJuridicaForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
-        if form.is_valid() and domicilio_form.is_valid():
+        if form.is_valid() & domicilio_form.is_valid():
             persona = form.save(commit=False)
             persona.domicilio = domicilio_form.save()
             persona.save()
             log_crear(request.user.id, persona, 'Persona Jurídica')
             return redirect('personas:lista_clientes')
-    else:
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                             'url_return': 'personas:lista_clientes'})
+
+    def get(self, request):
         form = AltaPersonaJuridicaForm
         domicilio_form = DomicilioForm
-    return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_clientes'})
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                             'url_return': 'personas:lista_clientes'})
 
 
 class DetallePersonaJuridica(LoginRequiredMixin, DetailView):
@@ -120,9 +130,11 @@ def lista_personal_propio(request):
     return render(request, 'persona/personal_propio_list.html', {'listado': PersonalPropio.objects.all()})
 
 
-@login_required(login_url='login')
-def alta_personal_propio(request):
-    if request.method == 'POST':
+class AltaPersonalPropio(LoginRequiredMixin, CreatePopupMixin, View):
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def post(self, request):
         form = AltaPersonalPropioForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
         if form.is_valid() & domicilio_form.is_valid():
@@ -131,11 +143,14 @@ def alta_personal_propio(request):
             persona.save()
             log_crear(request.user.id, persona, 'Personal Propio')
             return redirect('personas:lista_personal_propio')
-    else:
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                             'url_return': 'personas:lista_personal_propio'})
+
+    def get(self, request):
         form = AltaPersonalPropioForm
         domicilio_form = DomicilioForm
-    return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_personal_propio'})
+        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                             'url_return': 'personas:lista_personal_propio'})
 
 
 @login_required(login_url='login')
@@ -171,7 +186,6 @@ class DetallePersonalPropio(LoginRequiredMixin, DetailView):
 
 
 class AltaLocalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
-
     model = Localidad
     form_class = LocalidadForm
     template_name = "domicilio/localidad_form.html"
@@ -180,7 +194,6 @@ class AltaLocalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
 
 
 class AltaProvincia(LoginRequiredMixin, CreatePopupMixin, CreateView):
-
     model = Provincia
     form_class = ProvinciaForm
     template_name = "domicilio/provincia_form.html"
@@ -189,7 +202,6 @@ class AltaProvincia(LoginRequiredMixin, CreatePopupMixin, CreateView):
 
 
 class AltaNacionalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
-
     model = Nacionalidad
     fields = '__all__'
     template_name = "domicilio/nacionalidad_form.html"

@@ -50,7 +50,7 @@ class DomicilioRural(models.Model):
     ruta = models.CharField(max_length=25, null=True, blank=True)
 
     def __str__(self):
-        return "Chacra N°: %s, sobre ruta %s" % (self.chacra, self.ruta)
+        return "Chacra N°: %s" % self.chacra
 
 
 class PersonaGenerica(PolymorphicModel):
