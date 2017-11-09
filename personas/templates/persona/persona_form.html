@@ -6,8 +6,6 @@
 
 {% block header-title %}Alta/Modificacion de Persona{% endblock %}
 
-{% block url-volver %}{% url url_return %}{% endblock %}
-
 {% block form-right %}
     <div class="col-xs-12 col-md-5" id="container-form-right">
         {% include 'domicilio/cuadro_domicilio.html' %}
@@ -18,7 +16,7 @@
     <a class="btn btn-danger btn-cancelar" href="{% url url_return %}">Cancelar</a>
 {% endblock %}
 
-{% block scripts %}
+{% block more-scripts %}
     <script>
         $.datepicker.setDefaults({
             maxDate: new Date()

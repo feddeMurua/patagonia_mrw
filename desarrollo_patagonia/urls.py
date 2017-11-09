@@ -39,6 +39,4 @@ urlpatterns = [
     url(r'^controles/plagas/', include('saneamiento_abasto.urls_controlPlaga', namespace='controles_plagas')),
     url(r'^caja/', include('parte_diario_caja.urls_caja', namespace='caja')),
     url(r'^eventos/', include('event_log.urls_event_log', namespace='event_log')),
-]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

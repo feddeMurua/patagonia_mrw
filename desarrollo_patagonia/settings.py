@@ -25,7 +25,7 @@ SECRET_KEY = 'jl^-^8hf7y(6%c=3jf9)#vkhtq)l(3s4(4jaeonjx$a93w0==v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -136,6 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "estaticos"),
@@ -145,4 +146,4 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = 'inicio/'
 
 MEDIA_URL = '/fotos/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'fotos')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'fotos/')

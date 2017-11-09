@@ -13,70 +13,68 @@
 {% block content %}
     <div id="content">
         <div class="main">
-            <div class="container-fluid">
-                <table class="tarjeta">
-                    <tr>
-                        <td>
-                            <p align="center"><strong>Municipalidad de Rawson</strong></p>
-                            <p align="center">Capital de la Provincia del Chubut</p>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <p>TARJETA DE SANIDAD</p>
-                                        <img src="{{ libreta.foto.url }}" height="96" width="96">
-                                    </td>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <td>Apellido:</td>
-                                                <td>{{ libreta.persona.apellido }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nombres:</td>
-                                                <td>{{ libreta.persona.nombre }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>D.N.I:</td>
-                                                <td>{{ libreta.persona.dni }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nacionalidad:</td>
-                                                <td>{{ libreta.persona.nacionalidad }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Fecha de Nacimiento:</td>
-                                                <td>{{ libreta.persona.fecha_nacimiento }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Domicilio:</td>
-                                                <td>{{ libreta.persona.domicilio }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Realizo curso:</td>
-                                                {% if libreta.curso %}
-                                                    <td>SI - {{ libreta.curso.fecha_inicio }}</td>
-                                                {% else %}
-                                                    <td>NO</td>
-                                                {% endif %}
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <p align="center"><strong>Tarjeta de Sanidad N°: {{ libreta.persona.dni }}</strong></p>
-                            <br>
-                            <p>En la Direccion de Veterinaria, Saneamiento y Abasto consta que el interesado hallase
-                            exento de enfermedades contagiosas, segun CERTIFICADO, expedido por el/la Dr./Dra.
-                            {{ libreta.profesional_examen_clinico }}.<br>
-                            La presente vence el {{ libreta.fecha_vencimiento }}<br>
-                            Rawson, Chubut - {% now "jS F Y H:i" %}</p>
-                            <img src="{% static 'images/rawson.png' %}" height="96" width="96">
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <table class="tarjeta">
+                <tr>
+                    <td>
+                        <p align="center"><strong>Municipalidad de Rawson</strong></p>
+                        <p align="center">Capital de la Provincia del Chubut</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    <p>TARJETA DE SANIDAD</p>
+                                    <img class="foto" src="{{ libreta.foto.url }}" height="96" width="96">
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>Apellido:</td>
+                                            <td>{{ libreta.persona.apellido }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nombres:</td>
+                                            <td>{{ libreta.persona.nombre }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>D.N.I:</td>
+                                            <td>{{ libreta.persona.dni }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nacionalidad:</td>
+                                            <td>{{ libreta.persona.nacionalidad }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fecha de Nacimiento:</td>
+                                            <td>{{ libreta.persona.fecha_nacimiento }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Domicilio:</td>
+                                            <td>{{ libreta.persona.domicilio }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Realizo curso:</td>
+                                            {% if libreta.curso %}
+                                                <td>SI - {{ libreta.curso.fecha_inicio }}</td>
+                                            {% else %}
+                                                <td>NO</td>
+                                            {% endif %}
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <p align="center"><strong>Tarjeta de Sanidad N°: {{ libreta.persona.dni }}</strong></p>
+                        <br>
+                        <p>En la Direccion de Veterinaria, Saneamiento y Abasto consta que el interesado hallase
+                        exento de enfermedades contagiosas, segun CERTIFICADO, expedido por el/la Dr./Dra.
+                        {{ libreta.profesional_examen_clinico }}.<br>
+                        La presente vence el {{ libreta.fecha_vencimiento }}<br>
+                        Rawson, Chubut - {% now "jS F Y H:i" %}</p>
+                        <img src="{% static 'images/rawson.png' %}" height="96" width="96">
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 {% endblock %}

@@ -11,9 +11,9 @@
 {% block panel-title %}Desinfeccion{% endblock %}
 
 {% block btn-nuevo %}
-  {% if flag  or listado|length == 0 or estado == 'Atrasado' %}
-    <a href="{% url 'desinfecciones:nueva_desinfeccion' pk_vehiculo %}" class="btn btn-sm btn-primary btn-create">Realizar desinfeccion</a>
-  {% endif %}
+    {% if not listado or not estado == 'Al dia' %}
+        <a href="{% url 'desinfecciones:nueva_desinfeccion' pk_vehiculo %}" class="btn btn-sm btn-primary btn-create">Realizar desinfeccion</a>
+    {% endif %}
 {% endblock %}
 
 {% block tabla %}
@@ -43,7 +43,7 @@
 {% endblock %}
 
 {% block panel-footer %}
-    {% if desinfecciones %}
+    {% if listado %}
         <div class="panel-footer" align="right">
             <b>Estado: {{ estado }}</b>
         </div>

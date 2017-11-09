@@ -5,6 +5,11 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_form.css' %}"/>
+    <script type="text/javascript">
+        if (window.opener && window.opener != window) {
+            document.documentElement.className = 'js';
+        }
+    </script>
     {% block more-stylesheets %}{% endblock %}
 {% endblock %}
 
@@ -51,4 +56,8 @@
 {% endblock %}
 
 {% block scripts %}
+    <script>
+        $('.add-related').find('img').attr('src', '{% static 'images/btn_add.png' %}');
+    </script>
+    {% block more-scripts %}{% endblock %}
 {% endblock %}

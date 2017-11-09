@@ -91,11 +91,6 @@ Categoria_E = {
     'Otros': "Otros"
 }
 
-Quincena = (
-    ('Primera', _("Primera")),
-    ('Segunda', _("Segunda")),
-)
-
 Estado_Desinfeccion = (
     ('Realizada', _("Realizada")),
     ('No realizada', _("No realizada")),

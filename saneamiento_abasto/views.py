@@ -248,7 +248,8 @@ def alta_vehiculo(request):
         form = VehiculoForm(request.POST)
         if form.is_valid():
             vehiculo = form.save(commit=False)
-            vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
+            if vehiculo.categoria == 'TSA':
+                vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
             vehiculo.save()
             log_crear(request.user.id, vehiculo, 'Vehiculo')
             return redirect('vehiculo:lista_vehiculos')
@@ -291,20 +292,25 @@ DESINFECCIONES
 '''
 
 
-def get_vencimiento(fecha_realizacion):
-    if fecha_realizacion.day <= 15:
-        proximo_vencimiento = (fecha_realizacion + relativedelta(months=1)).replace(day=15)
-    else:
-        proximo_vencimiento = (fecha_realizacion + relativedelta(months=2)).replace(day=1)
+def get_quincena():
+    return 'Primera' if now().day <= 15 else 'Segunda'
 
-    return proximo_vencimiento
+
+def get_vencimiento(fecha_realizacion):
+    proximo_vencimiento = fecha_realizacion + relativedelta(months=1)
+    if fecha_realizacion.day <= 15:
+        return proximo_vencimiento.replace(day=15)
+    else:
+        return proximo_vencimiento.replace(day=monthrange(proximo_vencimiento.year, proximo_vencimiento.month)[1])
 
 
 def get_estado(desinfecciones):
     estado = 'Al dia'
     if desinfecciones:
-        if desinfecciones[0].proximo_vencimiento < datetime.date.today():
+        if desinfecciones[0].proximo_vencimiento < now().date():
             estado = 'Atrasado'
+        elif desinfecciones[0].proximo_vencimiento.month == now().month:
+            estado = 'Quincena en curso'
     return estado
 
 
@@ -312,29 +318,8 @@ def get_estado(desinfecciones):
 def lista_desinfecciones(request, pk_vehiculo):
     listado_desinfecciones = Desinfeccion.objects.filter(vehiculo__pk=pk_vehiculo).order_by('-fecha_realizacion')
     estado = get_estado(listado_desinfecciones)
-    quincena = ""
-    flag = False
-    if (listado_desinfecciones):
-        quincena = listado_desinfecciones[0].quincena
-        '''
-        solamente se debería mostrar el boton de alta desinfeccion en la quincena del mes correspondiente
-        '''
-        mes = listado_desinfecciones[0].proximo_vencimiento.month
-        if quincena == 'Primera':
-            if (mes == datetime.date.today().month) and (datetime.date.today().day <=15):
-                flag = True
-        else: #segunda quincena
-            if (((mes-1) == datetime.date.today().month) and (datetime.date.today().day >15)):
-                flag = True
-
-    contexto = {'listado': listado_desinfecciones,
-                'estado': estado,
-                'pk_vehiculo': pk_vehiculo,
-                'flag': flag
-
-    }
-
-    return render(request, 'desinfeccion/desinfeccion_list.html', contexto)
+    return render(request, 'desinfeccion/desinfeccion_list.html', {'listado': listado_desinfecciones,
+                                                                   'estado': estado, 'pk_vehiculo': pk_vehiculo})
 
 
 @login_required(login_url='login')
