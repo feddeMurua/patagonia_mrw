@@ -32,7 +32,7 @@
                 <td>
                   <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'controles_plagas:detalle_control_plaga' control.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                   <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'controles_plagas:modificar_control_plaga' control.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                  <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'controles_plagas:borrar_control_plaga' control.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                  <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'controles_plagas:borrar_control_plaga' control.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}

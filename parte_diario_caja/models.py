@@ -73,4 +73,28 @@ class CuentaCorriente(models.Model):
     titular_cc = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s" % self.titular
+        return "%s" % self.titular_cc
+
+
+class ArqueoDiario(models.Model):
+    nro_planilla = models.IntegerField()
+    fecha = models.DateTimeField(default=now)
+    billetes_quinientos = models.IntegerField(default=0)
+    billetes_doscientos = models.IntegerField(default=0)
+    billetes_cien = models.IntegerField(default=0)
+    billetes_cincuenta = models.IntegerField(default=0)
+    billetes_veinte = models.IntegerField(default=0)
+    billetes_diez = models.IntegerField(default=0)
+    billetes_cinco = models.IntegerField(default=0)
+    billetes_dos = models.IntegerField(default=0)
+    monedas_dos = models.IntegerField(default=0)
+    monedas_uno = models.IntegerField(default=0)
+    monedas_cincuenta = models.IntegerField(default=0)
+    monedas_veinticinco = models.IntegerField(default=0)
+    cant_debito_credito = models.IntegerField()
+    sub_debito_credito = models.FloatField()
+    cant_cheques = models.FloatField()
+    sub_cheques = models.FloatField()
+    ingresos_varios = models.FloatField()
+    cambio = models.FloatField(default=0)
+    total = models.FloatField()

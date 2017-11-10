@@ -20,3 +20,13 @@ def lista_detalle_movimientos(request):
     movimientos = DetalleMovimiento.objects.filter(movimiento__fecha=fecha_busqueda).order_by('movimiento__nro_ingreso')
     datepicker = DatePickerForm
     return render(request, 'caja/caja_list.html', {'listado': movimientos, 'datepicker': datepicker})
+
+
+'''
+ARQUEO DIARIO DE CAJA
+'''
+
+
+@login_required(login_url='login')
+def lista_arqueos(request):
+    return render(request, 'arqueo/arqueo_list.html', {'listado': ArqueoDiario.objects.all()})
