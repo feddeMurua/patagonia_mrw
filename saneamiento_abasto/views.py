@@ -175,6 +175,14 @@ def lista_productos(request, reinspeccion_pk):
                                                                'listado': ReinspeccionProducto.objects.filter(
                                                                    reinspeccion__pk=reinspeccion_pk)})
 
+#nuevo producto en el sistema, sin estar relacionado con la inspeccion
+class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):
+    model = Producto
+    form_class = AltaProductoForm
+    template_name = "reinspeccion/simple_producto_form.html"
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
 
 @login_required(login_url='login')
 def nuevo_producto(request, reinspeccion_pk):

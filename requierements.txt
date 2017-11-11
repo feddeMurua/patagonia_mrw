@@ -6,6 +6,6 @@ django-polymorphic
 django-widget-tweaks
 django-easy-pdf
 uWSGI
-xhtml2pdf
+xhtml2pdf==0.2b1
 reportlab
 python-dateutil

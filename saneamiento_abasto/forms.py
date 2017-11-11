@@ -5,7 +5,11 @@ from functools import partial
 from .models import *
 from django.utils.translation import ugettext as _
 import datetime
-
+from django_addanother.widgets import AddAnotherWidgetWrapper
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django_addanother.views import CreatePopupMixin
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
@@ -44,11 +48,23 @@ class ModificacionReinspeccionForm(forms.ModelForm):
         fields = '__all__'
 
 
+class AltaProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['nombre']
+
+
 class ReinspeccionProductoForm(forms.ModelForm):
 
     class Meta:
         model = ReinspeccionProducto
         fields = ['producto', 'kilo_producto']
+        widgets = {
+            'producto': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('reinspecciones:nuevo_producto'),
+            )
+        }
         labels = {
             'kilo_producto': _("Kg de producto")
         }
@@ -56,6 +72,7 @@ class ReinspeccionProductoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.reinspeccion_pk = kwargs.pop('reinspeccion_pk', None)
         super(ReinspeccionProductoForm, self).__init__(*args, **kwargs)
+
 
     def clean_producto(self):
         producto = self.cleaned_data['producto']
