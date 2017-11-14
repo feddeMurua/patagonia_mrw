@@ -81,8 +81,10 @@ class PersonaFisica(PersonaGenerica):
     rubro = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        datos = " %s - %s" % (self.apellido, self.dni)
-        return super(PersonaFisica, self).__str__() + datos
+        apellido = "%s, " % self.apellido
+        dni = " - %s" % self.dni
+
+        return apellido + super(PersonaFisica, self).__str__() + dni
 
 
 class RolActuante(models.Model):

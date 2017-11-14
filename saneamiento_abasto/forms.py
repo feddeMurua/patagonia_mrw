@@ -5,6 +5,8 @@ from functools import partial
 from .models import *
 from django.utils.translation import ugettext as _
 import datetime
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
@@ -33,6 +35,8 @@ class ReinspeccionForm(forms.ModelForm):
         turno = self.cleaned_data['turno']
         if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(22, 0):
             raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 22:00 hs.')
+        elif turno.date() < timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
         return turno
 
 
@@ -42,6 +46,14 @@ class ModificacionReinspeccionForm(forms.ModelForm):
         model = Reinspeccion
         exclude = ['abastecedor']
         fields = '__all__'
+
+    def clean_turno(self):
+        turno = self.cleaned_data['turno']
+        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(22, 0):
+            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 22:00 hs.')
+        elif turno.date() < timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
+        return turno
 
 
 class ReinspeccionProductoForm(forms.ModelForm):
@@ -133,6 +145,13 @@ class ControlDePlagaForm(forms.ModelForm):
             'tipo_plaga': _("Tipo de plaga")
         }
 
+    def clean_fecha_prox_visita(self):
+        fecha_prox_visita = self.cleaned_data['fecha_prox_visita']
+        if fecha_prox_visita < timezone.now().date() + relativedelta(days=1):
+            raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues del control que se está'
+                                        ' registrando')
+        return fecha_prox_visita
+
 
 class ModificacionControlDePlagaForm(forms.ModelForm):
     fecha_prox_visita = forms.DateField(widget=DateInput(), label="Fecha de próxima visita")
@@ -144,3 +163,10 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }
+
+    def clean_fecha_prox_visita(self):
+        fecha_prox_visita = self.cleaned_data['fecha_prox_visita']
+        if fecha_prox_visita < timezone.now().date() + relativedelta(days=1):
+            raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues del control que se está'
+                                        ' registrando')
+        return fecha_prox_visita

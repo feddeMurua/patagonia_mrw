@@ -106,8 +106,7 @@ class RetiroEntregaAnimal(models.Model):
         return "%s" % self.interesado
 
     def to_json(self):
-        if self.tramite:
-            return {'tramite': self.tramite, 'observaciones': self.observaciones, 'patentado': self.patentado}
+        return {'tramite': self.tramite, 'observaciones': self.observaciones, 'patentado': self.patentado}
 
 
 class Mascota(models.Model):

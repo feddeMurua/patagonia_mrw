@@ -1,8 +1,9 @@
 {% extends "base/base_listado.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
 
-{% block title %}Caja{% endblock %}
+{% block title %}Parte Diario de Caja{% endblock %}
 
 {% block header-title %}Parte Diario de Caja{% endblock %}
 
@@ -11,9 +12,16 @@
 {% block btn-nuevo %}
     <form class="form-inline" method="post" style="margin: 0px">
         {% csrf_token %}
-        <div class="form-group">
-            {{ datepicker }}
-        </div>
+        {{ fecha_form.media }}
+        {% for field in fecha_form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
         <button type="submit" class="btn btn-primary">
             <span class="glyphicon glyphicon-search"></span> Buscar
         </button>

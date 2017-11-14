@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from django.db import models
 from personas import models as m
 from .choices import *
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class TipoServicio(models.Model):
@@ -15,7 +16,7 @@ class TipoServicio(models.Model):
 
 class Servicio(models.Model):
     nombre = models.CharField(max_length=50)
-    importe = models.FloatField()
+    importe = models.FloatField(validators=[MinValueValidator(0)])
     tipo = models.ForeignKey('TipoServicio', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -77,24 +78,25 @@ class CuentaCorriente(models.Model):
 
 
 class ArqueoDiario(models.Model):
-    nro_planilla = models.IntegerField()
     fecha = models.DateTimeField(default=now)
-    billetes_quinientos = models.IntegerField(default=0)
-    billetes_doscientos = models.IntegerField(default=0)
-    billetes_cien = models.IntegerField(default=0)
-    billetes_cincuenta = models.IntegerField(default=0)
-    billetes_veinte = models.IntegerField(default=0)
-    billetes_diez = models.IntegerField(default=0)
-    billetes_cinco = models.IntegerField(default=0)
-    billetes_dos = models.IntegerField(default=0)
-    monedas_dos = models.IntegerField(default=0)
-    monedas_uno = models.IntegerField(default=0)
-    monedas_cincuenta = models.IntegerField(default=0)
-    monedas_veinticinco = models.IntegerField(default=0)
-    cant_debito_credito = models.IntegerField()
-    sub_debito_credito = models.FloatField()
-    cant_cheques = models.FloatField()
-    sub_cheques = models.FloatField()
-    ingresos_varios = models.FloatField()
-    cambio = models.FloatField(default=0)
+    nro_planilla = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
+    billetes_quinientos = models.IntegerField(validators=[MinValueValidator(0)])
+    billetes_doscientos = models.IntegerField(validators=[MinValueValidator(0)])
+    billetes_cien = models.IntegerField(validators=[MinValueValidator(0)])
+    billetes_cincuenta = models.IntegerField(validators=[MinValueValidator(0)])
+    billetes_veinte = models.IntegerField(validators=[MinValueValidator(0)])
+    billetes_diez = models.IntegerField(validators=[MinValueValidator(0)])
+    billetes_cinco = models.IntegerField(validators=[MinValueValidator(0)])
+    billetes_dos = models.IntegerField(validators=[MinValueValidator(0)])
+    monedas_dos = models.IntegerField(validators=[MinValueValidator(0)])
+    monedas_uno = models.IntegerField(validators=[MinValueValidator(0)])
+    monedas_cincuenta = models.IntegerField(validators=[MinValueValidator(0)])
+    monedas_veinticinco = models.IntegerField(validators=[MinValueValidator(0)])
+    debito_credito_cant = models.IntegerField(validators=[MinValueValidator(0)])
+    debito_credito_sub = models.FloatField(validators=[MinValueValidator(0)])
+    cheques_cant = models.IntegerField(validators=[MinValueValidator(0)])
+    cheques_sub = models.FloatField(validators=[MinValueValidator(0)])
     total = models.FloatField()
+
+    def __str__(self):
+        return "%s - %s" % (self.fecha, self.nro_planilla)

@@ -18,12 +18,16 @@
 {% block btn-nuevo %}
     <form class="form-filtro form-inline" method="post" style="margin: 0px">
         {% csrf_token %}
-        <div class="form-group">
-            Fecha desde: {{ rango_form.fecha_desde|add_class:'form-control'|add_class:'fecha_desde' }}
-        </div>
-        <div class="form-group">
-            Fecha hasta: {{ rango_form.fecha_hasta|add_class:'form-control'|add_class:'fecha_hasta' }}
-        </div>
+        {{ rango_form.media }}
+        {% for field in rango_form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
         <button type="submit" class="btn btn-primary">
             <span class="glyphicon glyphicon-search"></span> Buscar
         </button>
@@ -51,11 +55,11 @@
 
 {% block more-scripts %}
     <script>
-        $('.fecha_desde').datetimepicker({
+        $('#id_fecha_desde').datetimepicker({
             format:'d/m/Y H:i',
             maxDate: new Date()
         });
-        $('.fecha_hasta').datetimepicker({
+        $('fecha_hasta').datetimepicker({
             format:'d/m/Y H:i',
             maxDate: new Date()
         });

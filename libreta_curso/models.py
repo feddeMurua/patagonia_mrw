@@ -5,7 +5,6 @@ from django.db import models
 from django.utils.timezone import now
 from django.core.validators import MaxValueValidator, MinValueValidator
 from personas import models as m
-import os
 
 
 class LibretaSanitaria(models.Model):
@@ -25,13 +24,13 @@ class LibretaSanitaria(models.Model):
 
 
 class Curso(models.Model):
-    fecha_inicio = models.DateTimeField()
+    fecha = models.DateField()
     cupo = models.IntegerField(validators=[MaxValueValidator(120), MinValueValidator(1)])
     lugar = models.CharField(max_length=50)
     finalizado = models.BooleanField(default=False)
 
     def __str__(self):
-        return "Curso Nro: %s - %s" % (self.pk, self.fecha_inicio.date())
+        return "Curso Nro: %s - %s" % (self.pk, self.fecha)
 
 
 class Inscripcion(models.Model):

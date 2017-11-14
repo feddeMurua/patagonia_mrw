@@ -14,15 +14,8 @@
 
 {% block more-scripts %}
     <script>
-        var fecha = new Date();
-
-        $('#id_fecha_inicio').datetimepicker({
-            format:'d/m/Y H:i',
-            step:30,
-            minDate: fecha.addDays(7),
-            defaultDate: fecha.addDays(7)
+        $.datepicker.setDefaults({
+            minDate: "+7d"
         });
-
-        $.datetimepicker.setLocale('es');
     </script>
 {% endblock %}

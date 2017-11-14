@@ -8,6 +8,8 @@ from django.utils.translation import ugettext as _
 from .models import *
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -99,6 +101,12 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
                 raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
         return rubro
 
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada debe ser menor a la fecha actual')
+        return fecha_nacimiento
+
 
 class ModificacionPersonaFisicaForm(forms.ModelForm):
 
@@ -125,6 +133,12 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
             if not regex_alfabetico.match(rubro):
                 raise forms.ValidationError('El rubro de la persona solo puede contener letras y espacios')
         return rubro
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada debe ser menor a la fecha actual')
+        return fecha_nacimiento
 
 
 class AltaPersonaJuridicaForm(forms.ModelForm):
@@ -161,12 +175,24 @@ class AltaPersonalPropioForm(forms.ModelForm):
         exclude = ['documentacion_retirada', 'domicilio']
         fields = '__all__'
 
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada debe ser menor a la fecha actual')
+        return fecha_nacimiento
+
 
 class ModificacionPersonalPropioForm(forms.ModelForm):
 
     class Meta:
         model = PersonalPropio
         fields = ['telefono', 'email', 'obra_social', 'rubro', 'documentacion_retirada', 'rol_actuante']
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada debe ser menor a la fecha actual')
+        return fecha_nacimiento
 
 
 class DomicilioForm(forms.ModelForm):

@@ -13,7 +13,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from dateutil.relativedelta import *
-from datetime import date
+from django.utils import timezone
 
 
 '''
@@ -23,7 +23,7 @@ CURSOS
 
 @login_required(login_url='login')
 def lista_curso(request):
-    return render(request, 'curso/curso_list.html', {'fecha_hoy': now, 'listado': Curso.objects.all()})
+    return render(request, 'curso/curso_list.html', {'fecha_hoy': timezone.now().date(), 'listado': Curso.objects.all()})
 
 
 @login_required(login_url='login')
@@ -117,8 +117,9 @@ def lista_inscripciones_curso(request, id_curso):
     lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
     curso = Curso.objects.get(pk=id_curso)
     cupo_restante = curso.cupo - len(lista_inscripciones)
-    return render(request, "curso/curso_inscripciones.html", {'fecha_hoy': now, 'cupo_restante': cupo_restante,
-                                                              'listado': lista_inscripciones, 'curso': curso})
+    return render(request, "curso/curso_inscripciones.html", {'fecha_hoy': timezone.now(), 'curso': curso,
+                                                              'cupo_restante': cupo_restante,
+                                                              'listado': lista_inscripciones})
 
 
 @login_required(login_url='login')
@@ -221,7 +222,7 @@ def get_cursos(pk_persona):
 @login_required(login_url='login')
 def lista_libreta(request):
     return render(request, 'libreta/libreta_list.html', {'listado': LibretaSanitaria.objects.all(),
-                                                         'fecha_hoy': date.today()})
+                                                         'fecha_hoy': timezone.now()})
 
 
 @login_required(login_url='login')
@@ -233,9 +234,9 @@ def alta_libreta(request):
         if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
-                libreta.fecha_vencimiento = date.today() + relativedelta(years=1)
+                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
             else:
-                libreta.fecha_vencimiento = date.today() + relativedelta(months=int(request.POST['meses']))
+                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(months=int(request.POST['meses']))
             cursos = get_cursos(libreta.persona.pk)
             if cursos:
                 libreta.curso = cursos[-1]
@@ -280,9 +281,9 @@ def modificacion_libreta(request, pk):
         if form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
-                libreta.fecha_vencimiento = date.today() + relativedelta(years=1)
+                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
             else:
-                libreta.fecha_vencimiento = date.today() + relativedelta(months=int(request.POST['meses']))
+                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(months=int(request.POST['meses']))
                 libreta.save()
             log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')

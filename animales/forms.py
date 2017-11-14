@@ -8,6 +8,7 @@ from .models import *
 from .choices import *
 import re
 import datetime
+from django.utils import timezone
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
 
@@ -36,6 +37,12 @@ class AltaAnalisisForm(forms.ModelForm):
                 reverse_lazy('personas:nueva_localidad'),
             )
         }
+
+    def clean_fecha(self):
+        fecha = self.cleaned_data['fecha']
+        if fecha > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return fecha
 
 
 class ModificacionAnalisisForm(forms.ModelForm):
@@ -104,6 +111,12 @@ class DisposicionForm(forms.ModelForm):
             'nro_disposicion': _("N° de disposicion")
         }
 
+    def clean_fecha_disposicion(self):
+        fecha_disposicion = self.cleaned_data['fecha_disposicion']
+        if fecha_disposicion > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return fecha_disposicion
+
 
 class TurnoForm(forms.Form):
     turno = forms.DateTimeField(required=True)
@@ -112,6 +125,8 @@ class TurnoForm(forms.Form):
         turno = self.cleaned_data['turno']
         if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(12, 0):
             raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 12:00 hs.')
+        elif turno.date() < timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
         return turno
 
 
@@ -144,6 +159,12 @@ class MascotaForm(forms.ModelForm):
         if not regex_alfabetico.match(raza):
             raise forms.ValidationError('La raza de la mascota, solo puede contener letras/numeros y/o espacios')
         return raza
+
+    def clean_nacimiento_fecha(self):
+        nacimiento_fecha = self.cleaned_data['nacimiento_fecha']
+        if nacimiento_fecha and nacimiento_fecha > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return nacimiento_fecha
 
 
 class PatenteForm(forms.ModelForm):
@@ -192,6 +213,12 @@ class ControlAntirrabicoForm(forms.ModelForm):
             )
         }
 
+    def clean_fecha_suceso(self):
+        fecha_suceso = self.cleaned_data['fecha_suceso']
+        if fecha_suceso > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return fecha_suceso
+
 
 class VisitaForm(forms.ModelForm):
 
@@ -220,3 +247,11 @@ class ListaPatentesForm(forms.Form):
 class EsterilizacionPatenteForm(forms.Form):
     patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)
     turno = forms.DateTimeField(required=True)
+
+    def clean_turno(self):
+        turno = self.cleaned_data['turno']
+        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(12, 0):
+            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 12:00 hs.')
+        elif turno.date() < timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
+        return turno

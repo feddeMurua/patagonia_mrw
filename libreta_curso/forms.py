@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 from django import forms
 from functools import partial
 import re
-import datetime
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 from .models import *
 from django.utils.translation import ugettext as _
 from django_addanother.widgets import AddAnotherWidgetWrapper
@@ -17,14 +18,12 @@ regex_alfanumerico = re.compile(r"^[a-zñA-ZÑ0-9]+((\s[a-zñA-ZÑ0-9]+)+)?$")
 
 
 class CursoForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DateInput())
 
     class Meta:
         model = Curso
         fields = '__all__'
         exclude = ['finalizado']
-        labels = {
-            'fecha_inicio': _("Fecha y hora")
-        }
 
     def clean_lugar(self):
         lugar = self.cleaned_data['lugar']
@@ -32,11 +31,12 @@ class CursoForm(forms.ModelForm):
             raise forms.ValidationError('El nombre del lugar solo puede contener letras/numeros y/o espacios')
         return lugar
 
-    def clean_fecha_inicio(self):
-        fecha_inicio = self.cleaned_data['fecha_inicio']
-        if fecha_inicio.time() < datetime.time(8, 0) or fecha_inicio.time() > datetime.time(22, 0):
-            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 22:00 hs.')
-        return fecha_inicio
+    def clean_fecha(self):
+        fecha = self.cleaned_data['fecha']
+        if fecha < timezone.now().date() + relativedelta(days=7):
+            raise forms.ValidationError('Debe haber al menos una semana de diferencia entre la fecha de inicio'
+                                        'seleccionada y la fecha actual')
+        return fecha
 
 
 class InscripcionForm(forms.ModelForm):
@@ -122,6 +122,12 @@ class LibretaForm(forms.ModelForm):
                                         'y/o espacios')
         return lugar_examen_clinico
 
+    def clean_fecha_examen_clinico(self):
+        fecha_examen_clinico = self.cleaned_data['fecha_examen_clinico']
+        if fecha_examen_clinico > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return fecha_examen_clinico
+
 
 class ModificacionLibretaForm(forms.ModelForm):
     fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
@@ -150,3 +156,9 @@ class ModificacionLibretaForm(forms.ModelForm):
             raise forms.ValidationError('El nombre del lugar del examen clínico solo puede contener letras/numeros'
                                         'y/o espacios')
         return lugar_examen_clinico
+
+    def clean_fecha_examen_clinico(self):
+        fecha_examen_clinico = self.cleaned_data['fecha_examen_clinico']
+        if fecha_examen_clinico > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return fecha_examen_clinico

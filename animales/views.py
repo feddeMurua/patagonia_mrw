@@ -12,7 +12,7 @@ from personas import forms as f
 from django.views.generic import DetailView
 from parte_diario_caja import forms as pd_f
 from desarrollo_patagonia.utils import *
-from datetime import *
+from django.utils import timezone
 
 
 '''
@@ -211,7 +211,7 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
         tiempo_edad = None
         edad_mascota = None
         if esterilizacion.mascota.nacimiento_fecha:
-            edad_mascota = (now().date() - esterilizacion.mascota.nacimiento_fecha).days / 30
+            edad_mascota = (timezone.now().date() - esterilizacion.mascota.nacimiento_fecha).days / 30
             tiempo_edad = 'MESES'
             if 11 < edad_mascota < 24:
                 edad_mascota = 1
@@ -236,7 +236,7 @@ def alta_esterilizacion(request):
             esterilizacion = Esterilizacion(turno=form.cleaned_data['turno'], interesado=patente.persona,
                                             mascota=patente.mascota)
             esterilizacion.save()
-            log_crear(request.user.id, esterilizacion, 'Esterilizacion de Animal Patentado')
+            log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
         form = EsterilizacionPatenteForm
@@ -253,7 +253,7 @@ def alta_esterilizacion_nopatentado(request):
             esterilizacion = Esterilizacion(interesado=form.cleaned_data['persona'],
                                             mascota=mascota_form.save(), turno=turno_form.cleaned_data['turno'])
             esterilizacion.save()
-            log_crear(request.user.id, esterilizacion, 'Esterilizacion de Animal no Patentado')
+            log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal no Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
         form = f.ListaPersonasGenericasForm
@@ -261,6 +261,14 @@ def alta_esterilizacion_nopatentado(request):
         mascota_form = MascotaForm
     return render(request, 'esterilizacion/esterilizacion_form.html', {'form': form, 'turno_form': turno_form,
                                                                        'mascota_form': mascota_form})
+
+
+@login_required(login_url='login')
+def baja_esterilizacion(request, pk):
+    esterilizacion = Esterilizacion.objects.get(pk=pk)
+    log_eliminar(request.user.id, esterilizacion, 'Turno para Esterilizacion')
+    esterilizacion.delete()
+    return HttpResponse()
 
 
 '''
@@ -276,10 +284,10 @@ def lista_patente(request):
 @login_required(login_url='login')
 def retiro_garrapaticida(request, pk):
     patente = Patente.objects.get(pk=pk)
-    if patente.fecha_garrapaticida and (now().date() - patente.fecha_garrapaticida).days <= 7:
+    if patente.fecha_garrapaticida and (timezone.now().date() - patente.fecha_garrapaticida).days <= 7:
         return HttpResponse("Aun no han pasado 7 dias desde el último retiro")
     else:
-        patente.fecha_garrapaticida = now()
+        patente.fecha_garrapaticida = timezone.now()
         patente.save()
         log_modificar(request.user.id, patente, 'Entrega de Garrapaticida')
         return HttpResponse("El retiro de garrapaticida se registro correctamente")
@@ -288,10 +296,10 @@ def retiro_garrapaticida(request, pk):
 @login_required(login_url='login')
 def retiro_antiparasitario(request, pk):
     patente = Patente.objects.get(pk=pk)
-    if patente.fecha_antiparasitario and ((now().date() - patente.fecha_antiparasitario).days / 30) <= 6:
+    if patente.fecha_antiparasitario and ((timezone.now().date() - patente.fecha_antiparasitario).days / 30) <= 6:
         return HttpResponse("Aun no han pasado 6 meses desde el último retiro")
     else:
-        patente.fecha_antiparasitario = now()
+        patente.fecha_antiparasitario = timezone.now()
         patente.save()
         log_modificar(request.user.id, patente, 'Entrega de Antiparasitario')
         return HttpResponse("El retiro de antiparasitario se registro correctamente")
@@ -381,9 +389,9 @@ def lista_controles(request):
 @login_required(login_url='login')
 def alta_control(request):
     if request.method == 'POST':
-        control_form = ControlAntirrabicoForm(request.POST)
-        if control_form.is_valid():
-            log_crear(request.user.id, control_form.save(), 'Control Antirrabico')
+        form = ControlAntirrabicoForm(request.POST)
+        if form.is_valid():
+            log_crear(request.user.id, form.save(), 'Control Antirrabico')
             return redirect('controles:lista_controles')
     else:
         form = ControlAntirrabicoForm()
@@ -415,10 +423,10 @@ class PdfInfraccion(LoginRequiredMixin, PDFTemplateView):
 def lista_visitas_control(request, pk_control):
     lista_visitas = Visita.objects.filter(control__pk=pk_control)
     control = ControlAntirrabico.objects.get(pk=pk_control)
-    dias_suceso = (now().date() - control.fecha_suceso).days
+    dias_suceso = (timezone.now().date() - control.fecha_suceso).days
     ultima_visita = lista_visitas.last()
     apto_visita = True
-    if dias_suceso > 10 or (ultima_visita and ultima_visita.fecha_visita == now().date()):
+    if dias_suceso > 10 or (ultima_visita and ultima_visita.fecha_visita == timezone.now().date()):
         apto_visita = False
     return render(request, 'control/visita_list.html', {'pk_control': pk_control, 'listado': lista_visitas,
                                                         'apto_visita': apto_visita})
@@ -524,6 +532,7 @@ def alta_tramite_nopatentado(request):
             if retiro_entrega.tramite == 'RETIRO':
                 mascota.baja = True
                 mascota.save()
+            retiro_entrega.save()
             log_crear(request.user.id, retiro_entrega, 'Nuevo Retiro/Entrega de Animal no Patentado')
             return redirect('retiros_entregas:lista_retiro_entrega')
     else:

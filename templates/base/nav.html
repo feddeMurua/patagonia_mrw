@@ -49,7 +49,7 @@
         <li><a href="#">Caja</a>
             <ul>
                 <li><a href="{% url 'caja:lista_detalle_movimientos' %}"><span>Parte Diario</span></a></li>
-                <li><a href="#"><span>Arqueo Diario de Efectivo</span></a></li>
+                <li><a href="{% url 'arqueo:lista_arqueos' %}"><span>Arqueo Diario de Efectivo</span></a></li>
                 <li><a href="#"><span>Cuentas Corrientes</span></a></li>
             </ul>
         </li>
@@ -58,6 +58,7 @@
                 {% if user.is_staff %}
                     <li><a href="{% url 'lista_usuarios' %}">Menu de Usuarios</a></li>
                     <li><a href="{% url 'event_log:lista_eventos' %}">Seguimiento de Eventos de Usuarios</a></li>
+                    <li><a href="{% url 'servicios:lista_servicios' %}">Administracion de Servicios</a></li>
                 {% endif %}
                 <li><a href="{% url 'cambio_password' %}">Cambiar Contraseña</a></li>
                 <li><a href="{% url 'logout' %}">Salir</a></li>

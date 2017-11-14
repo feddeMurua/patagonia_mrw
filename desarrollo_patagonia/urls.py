@@ -38,5 +38,7 @@ urlpatterns = [
     url(r'^desinfecciones/', include('saneamiento_abasto.urls_desinfecciones', namespace='desinfecciones')),
     url(r'^controles/plagas/', include('saneamiento_abasto.urls_controlPlaga', namespace='controles_plagas')),
     url(r'^caja/', include('parte_diario_caja.urls_caja', namespace='caja')),
+    url(r'^arqueo/', include('parte_diario_caja.urls_arqueo', namespace='arqueo')),
+    url(r'^servicios/', include('parte_diario_caja.urls_servicios', namespace='servicios')),
     url(r'^eventos/', include('event_log.urls_event_log', namespace='event_log')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

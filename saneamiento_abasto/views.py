@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from dateutil.relativedelta import relativedelta
 from calendar import monthrange
-import datetime
 from personas import forms as f
 from .forms import *
 from .choices import *
@@ -14,6 +13,7 @@ from parte_diario_caja import forms as pd_f
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from desarrollo_patagonia.utils import *
 from django.views.generic.detail import DetailView
+from django.utils import timezone
 
 '''
 ABASTECEDORES
@@ -293,7 +293,7 @@ DESINFECCIONES
 
 
 def get_quincena():
-    return 'Primera' if now().day <= 15 else 'Segunda'
+    return 'Primera' if timezone.now().day <= 15 else 'Segunda'
 
 
 def get_vencimiento(fecha_realizacion):
@@ -307,9 +307,9 @@ def get_vencimiento(fecha_realizacion):
 def get_estado(desinfecciones):
     estado = 'Al dia'
     if desinfecciones:
-        if desinfecciones[0].proximo_vencimiento < now().date():
+        if desinfecciones[0].proximo_vencimiento < timezone.now().date():
             estado = 'Atrasado'
-        elif desinfecciones[0].proximo_vencimiento.month == now().month:
+        elif desinfecciones[0].proximo_vencimiento.month == timezone.now().month:
             estado = 'Quincena en curso'
     return estado
 

@@ -1,0 +1,32 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Arqueo Diario de Caja{% endblock %}
+
+{% block header-title %}Arqueo Diario de Caja{% endblock %}
+
+{% block panel-title %}Arqueos diarios{% endblock %}
+
+{% block btn-nuevo %}
+    <a href="{% url 'arqueo:nuevo_arqueo' %}" class="btn btn-sm btn-primary btn-create">Realizar Arqueo Diario</a>
+{% endblock %}
+
+{% block tabla %}
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>N° de Planilla</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for arqueo in listado %}
+            <tr>
+                <td>{{ arqueo.fecha }}</td>
+                <td>{{ arqueo.nro_planilla }}</td>
+                <td>{{ arqueo.total }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}

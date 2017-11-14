@@ -38,7 +38,7 @@ class Reinspeccion(models.Model):
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s" % self.turno
+        return "%s - %s" % (self.abastecedor, self.turno.date())
 
 
 class Vehiculo(models.Model):
