@@ -19,6 +19,7 @@ class AbastecedorForm(forms.ModelForm):
 
     class Meta:
         model = Abastecedor
+        exclude = ['cc']
         fields = '__all__'
 
 
@@ -62,7 +63,7 @@ class ReinspeccionProductoForm(forms.ModelForm):
         widgets = {
             'producto': AddAnotherWidgetWrapper(
                 forms.Select,
-                reverse_lazy('reinspecciones:nuevo_producto'),
+                reverse_lazy('reinspecciones:alta_producto'),
             )
         }
         labels = {

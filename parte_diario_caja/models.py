@@ -48,29 +48,3 @@ class DetalleMovimiento(models.Model):
         self.servicio = servicio
         self.movimiento = movimiento
         self.descripcion = descrip
-
-
-class MovimientoCC(models.Model):
-    fecha = models.DateField(default=now)
-    nro_ingreso = models.BigIntegerField()
-    cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s" % self.nro_ingreso
-
-
-class DetalleMovimientoCC(models.Model):
-    movimiento_cc = models.ForeignKey('MovimientoCC', on_delete=models.CASCADE)
-    servicio = models.ForeignKey('Servicio', on_delete=models.CASCADE)
-    descripcion = models.CharField(max_length=100)
-
-    def __str__(self):
-        return "%s" % self.descripcion
-
-
-class CuentaCorriente(models.Model):
-    saldo = models.FloatField()
-    titular_cc = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s" % self.titular

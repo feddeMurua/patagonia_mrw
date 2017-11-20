@@ -169,11 +169,43 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
     return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'modificacion': True})
 
 
+def reinspeccion_cc(request, reinspeccion_pk):
+    reinspeccion_prod = ReinspeccionProducto.objects.all().filter(reinspeccion__pk=reinspeccion_pk).values()
+
+    total_kg = 0
+    minimo = 30 # kilaje minimo para probar....
+    tarifa = 0.25 # precio por kilaje
+
+    for r in reinspeccion_prod:
+        for key, value in r.items():
+            if key == 'kilo_producto':
+                total_kg +=value
+
+    cc = CuentaCorriente()
+
+    if total_kg <= minimo:
+        cc.saldo = 55
+    else:
+        cc.saldo = 55 + (total_kg * tarifa)
+    cc.save()
+
+    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk) #Para actualizar campo CC
+    Abastecedor.objects.filter(pk=reinspeccion.abastecedor.pk).update(cc=cc) #Creo la relacion con el Abastecedor: filtrado en reinspecion:list
+
+    detalle_cc = DetalleCC()
+    detalle_cc.cc = cc
+    detalle_cc.detalle = reinspeccion
+    detalle_cc.save()
+
+    return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
+
+
 @login_required(login_url='login')
 def lista_productos(request, reinspeccion_pk):
     return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
                                                                'listado': ReinspeccionProducto.objects.filter(
                                                                    reinspeccion__pk=reinspeccion_pk)})
+
 
 #nuevo producto en el sistema, sin estar relacionado con la inspeccion
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):

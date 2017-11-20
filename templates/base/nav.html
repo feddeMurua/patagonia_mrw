@@ -36,7 +36,7 @@
         </li>
         <li><a href="#">Abasto</a>
             <ul>
-                <li><a href="{% url 'abastecedores:lista_abastecedores' %}"><span>Abastecedores</span></a></li>
+                <li><a href="{% url 'abastecedores:lista_abastecedores' %}"><span>Abastecedores</span></a></li>                
                 <li><a href="{% url 'reinspecciones:lista_reinspecciones' %}"><span>Reinspecciones</span></a></li>
             </ul>
         </li>
@@ -50,7 +50,6 @@
             <ul>
                 <li><a href="{% url 'caja:lista_detalle_movimientos' %}"><span>Parte Diario</span></a></li>
                 <li><a href="#"><span>Arqueo Diario de Efectivo</span></a></li>
-                <li><a href="#"><span>Cuentas Corrientes</span></a></li>
             </ul>
         </li>
         <li><a href="#">Usuario: {{ user.get_username }}</a>
