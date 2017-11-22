@@ -30,6 +30,7 @@ class ReinspeccionForm(forms.ModelForm):
     class Meta:
         model = Reinspeccion
         fields = '__all__'
+        exclude = ['cc']
         labels = {
             'num_certificado': _("N° de certificado")
         }

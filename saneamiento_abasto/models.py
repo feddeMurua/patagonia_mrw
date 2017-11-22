@@ -9,7 +9,6 @@ from .choices import *
 
 class Abastecedor(models.Model):
     responsable = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-    cc = models.OneToOneField('CuentaCorriente', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return "%s" % self.responsable
@@ -37,7 +36,8 @@ class Reinspeccion(models.Model):
     precintado = models.IntegerField()
     num_certificado = models.BigIntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
-
+    cc = models.OneToOneField('CuentaCorriente', on_delete=models.CASCADE, null=True, blank=True)
+    
     def __str__(self):
         return "%s -%s" % (self.turno, self.abastecedor)
 

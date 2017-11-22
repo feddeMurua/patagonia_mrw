@@ -126,6 +126,17 @@ def baja_abastecedor(request, pk):
     return HttpResponse()
 
 
+
+'''
+CUENTAS CORRIENTES
+'''
+
+
+@login_required(login_url='login')
+def lista_cc(request):
+    return render(request, 'cuentaCorriente/cc_list.html', {'listado': DetalleCC.objects.all()})
+
+
 '''
 REINSPECCIONES
 '''
@@ -169,6 +180,7 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
     return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'modificacion': True})
 
 
+@login_required(login_url='login')
 def reinspeccion_cc(request, reinspeccion_pk):
     reinspeccion_prod = ReinspeccionProducto.objects.all().filter(reinspeccion__pk=reinspeccion_pk).values()
 
@@ -176,26 +188,28 @@ def reinspeccion_cc(request, reinspeccion_pk):
     minimo = 30 # kilaje minimo para probar....
     tarifa = 0.25 # precio por kilaje
 
+
     for r in reinspeccion_prod:
         for key, value in r.items():
             if key == 'kilo_producto':
                 total_kg +=value
 
-    cc = CuentaCorriente()
+    if total_kg > 0: #Existen productos en la reinspeccion
+        cc = CuentaCorriente()
 
-    if total_kg <= minimo:
-        cc.saldo = 55
-    else:
-        cc.saldo = 55 + (total_kg * tarifa)
-    cc.save()
+        if total_kg <= minimo:
+            cc.saldo = 55
+        else:
+            cc.saldo = 55 + (total_kg * tarifa)
+        cc.save()
 
-    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk) #Para actualizar campo CC
-    Abastecedor.objects.filter(pk=reinspeccion.abastecedor.pk).update(cc=cc) #Creo la relacion con el Abastecedor: filtrado en reinspecion:list
+        Reinspeccion.objects.filter(pk=reinspeccion_pk).update(cc=cc) #actualizacion reinspeccion
+        reinspeccion= Reinspeccion.objects.get(pk=reinspeccion_pk)
 
-    detalle_cc = DetalleCC()
-    detalle_cc.cc = cc
-    detalle_cc.detalle = reinspeccion
-    detalle_cc.save()
+        detalle_cc = DetalleCC()
+        detalle_cc.cc = cc
+        detalle_cc.detalle = reinspeccion
+        detalle_cc.save()
 
     return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
 
