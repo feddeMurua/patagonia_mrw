@@ -24,7 +24,7 @@
         {% for esterilizacion in listado %}
             <tr>
                 <td>{{ esterilizacion.turno }}</td>
-                <td>{{ esterilizacion.interesado }} - {{ esterilizacion.interesado.dni }}</td>
+                <td>{{ esterilizacion.interesado }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir Consentimiento" href="{% url 'esterilizacion:pdf_consentimiento' esterilizacion.pk %}"><em class="glyphicon glyphicon-print"></em></a>
                     <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'esterilizacion:borrar_esterilizacion' esterilizacion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>

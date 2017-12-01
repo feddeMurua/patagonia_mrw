@@ -47,10 +47,12 @@
                 <td>Fecha de Vencimiento:</td>
                 <td>{{ object.fecha_vencimiento }}</td>
             </tr>
-            <tr>
-                <td>Foto:</td>
-                <td><img src="{{ object.foto.url }}" style="max-width:128px; max-height:128px"></td>
-            </tr>
+            {% if object.foto %}
+                <tr>
+                    <td>Foto:</td>
+                    <td><img src="{{ object.foto.url }}" style="max-width:128px; max-height:128px"></td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 {% endblock %}

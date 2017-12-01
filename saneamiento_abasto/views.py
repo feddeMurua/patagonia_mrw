@@ -248,7 +248,8 @@ def alta_vehiculo(request):
         form = VehiculoForm(request.POST)
         if form.is_valid():
             vehiculo = form.save(commit=False)
-            if vehiculo.categoria == 'TSA':
+            print (vehiculo.categoria)
+            if vehiculo.tipo_vehiculo == 'TSA':
                 vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
             vehiculo.save()
             log_crear(request.user.id, vehiculo, 'Vehiculo')
