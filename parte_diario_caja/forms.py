@@ -6,6 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import *
 from django.utils import timezone
 import re
+from django_addanother.widgets import AddAnotherWidgetWrapper
+from django.core.urlresolvers import reverse_lazy
 
 regex_alfanumerico = re.compile(r"^[a-zñA-ZÑ0-9]+((\s[a-zñA-ZÑ0-9]+)+)?$")
 
@@ -27,32 +29,21 @@ class MovimientoDiarioForm(forms.ModelForm):
         exclude = ['fecha']
         fields = '__all__'
         labels = {
-            'nro_ingreso': _("N° de ingresos varios")
-        }
-
-    def clean_nro_ingreso(self):
-        nro_ingreso = self.cleaned_data['nro_ingreso']
-        try:
-            movimiento = MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
-            print (self.cleaned_data['titular'])
-            if movimiento.titular != self.cleaned_data['titular']:
-                raise forms.ValidationError(
-                    'El N° de Ingresos Varios ingresado ya existe, a nombre de ' + str(movimiento.titular))
-        except ObjectDoesNotExist:
-            pass
-        return nro_ingreso
-
-
-class DetalleMovimientoDiarioForm(forms.ModelForm):
-
-    class Meta:
-        model = DetalleMovimiento
-        exclude = ['movimiento', 'descripcion']
-        fields = '__all__'
-        labels = {
+            'nro_ingreso': _("N° de ingresos varios"),
             'forma_pago': _("Forma de pago"),
             'nro_cheque': _("N° de cheque")
         }
+
+
+class DetalleMovimientoDiarioForm(forms.ModelForm):
+    movimiento = forms.ModelChoiceField(queryset=MovimientoDiario.objects.filter(fecha=timezone.now().date()),
+                                        widget=AddAnotherWidgetWrapper(forms.Select, reverse_lazy('caja:nueva_factura')),
+                                        label="Factura")
+
+    class Meta:
+        model = DetalleMovimiento
+        exclude = ['descripcion']
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         tipo = kwargs.pop('tipo')

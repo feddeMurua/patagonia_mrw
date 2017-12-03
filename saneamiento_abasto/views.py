@@ -29,24 +29,18 @@ def lista_abastecedor(request):
 def alta_abastecedor(request):
     if request.method == 'POST':
         form = AbastecedorForm(request.POST)
-        mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
+        if form.is_valid() & detalle_mov_form.is_valid():
             abastecedor = form.save()
-            # Se crea el detalle del movimiento
-            detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
-            servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " N° " + str(abastecedor.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_form.descripcion = str(detalle_mov_form.servicio) + " N° " + str(abastecedor.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor')
             return redirect('abastecedores:lista_abastecedores')
     else:
         form = AbastecedorForm
-        mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/abastecedor_form.html', {'form': form, 'mov_diario_form': mov_diario_form,
-                                                                 'detalle_mov_diario_form': detalle_mov_diario_form})
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
+    return render(request, 'abastecedor/abastecedor_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
 
 
 @login_required(login_url='login')
@@ -54,34 +48,24 @@ def nuevo_abastecedor_particular(request):
     if request.method == 'POST':
         form = f.AltaPersonaFisicaForm(request.POST)
         domicilio_form = f.DomicilioForm(request.POST)
-        mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if form.is_valid() & domicilio_form.is_valid() & mov_diario_form.is_valid() & \
-                detalle_mov_diario_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
+        if form.is_valid() & domicilio_form.is_valid() & detalle_mov_form.is_valid():
             responsable = form.save(commit=False)
             responsable.domicilio = domicilio_form.save()
             responsable.save()
             abastecedor = Abastecedor(responsable=responsable)
             abastecedor.save()
-            print (abastecedor)
-            # Se crea el detalle del movimiento
-            detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
-            servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " N° " + str(abastecedor.pk)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_form.descripcion = str(detalle_mov_form.servicio) + " N° " + str(abastecedor.pk)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Particular')
             return redirect('abastecedores:lista_abastecedores')
     else:
         form = f.AltaPersonaFisicaForm
         domicilio_form = f.DomicilioForm
-        mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form,
-                                                                       'domicilio_form': domicilio_form,
-                                                                       'mov_diario_form': mov_diario_form,
-                                                                       'detalle_mov_diario_form': detalle_mov_diario_form
-                                                                       })
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form,
+                                                                       'detalle_mov_form': detalle_mov_form})
 
 
 @login_required(login_url='login')
@@ -89,33 +73,24 @@ def nuevo_abastecedor_empresa(request):
     if request.method == 'POST':
         form = f.AltaPersonaJuridicaForm(request.POST)
         domicilio_form = f.DomicilioForm(request.POST)
-        mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if form.is_valid() & domicilio_form.is_valid() & mov_diario_form.is_valid() & \
-                detalle_mov_diario_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
+        if form.is_valid() & domicilio_form.is_valid() & detalle_mov_form.is_valid():
             responsable = form.save(commit=False)
             responsable.domicilio = domicilio_form.save()
             responsable.save()
             abastecedor = Abastecedor(responsable=responsable)
             abastecedor.save()
-            # Se crea el detalle del movimiento
-            detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
-            servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " N° " + str(abastecedor.pk)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_form.descripcion = str(detalle_mov_form.servicio) + " N° " + str(abastecedor.pk)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Empresa')
             return redirect('abastecedores:lista_abastecedores')
     else:
         form = f.AltaPersonaJuridicaForm
         domicilio_form = f.DomicilioForm
-        mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form,
-                                                                       'domicilio_form': domicilio_form,
-                                                                       'mov_diario_form': mov_diario_form,
-                                                                       'detalle_mov_diario_form': detalle_mov_diario_form
-                                                                       })
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form,
+                                                                       'detalle_mov_form': detalle_mov_form})
 
 
 @login_required(login_url='login')
@@ -382,24 +357,18 @@ def lista_controles_plaga(request):
 def alta_control_plaga(request):
     if request.method == 'POST':
         form = ControlDePlagaForm(request.POST)
-        mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Control de Plagas')
-        if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Control de Plagas')
+        if form.is_valid() & detalle_mov_form.is_valid():
             control_plaga = form.save()
-            # Se crea el detalle del movimiento
-            detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
-            servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " N° " + str(control_plaga.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_form.descripcion = str(detalle_mov_form.servicio) + " N° " + str(control_plaga.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, control_plaga, 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')
     else:
         form = ControlDePlagaForm
-        mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Control de Plagas')
-    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'mov_diario_form': mov_diario_form,
-                                                                    'detalle_mov_diario_form': detalle_mov_diario_form})
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Control de Plagas')
+    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
 
 
 class DetalleControlPlaga(LoginRequiredMixin, DetailView):

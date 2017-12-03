@@ -32,22 +32,22 @@
     <thead>
         <tr>
             <th>Fecha</th>
-            <th>N° Ingreso</th>
-            <th>Importe</th>
+            <th>N° Ingresos Varios</th>
             <th>Titular</th>
-            <th>Detalle</th>
             <th>Forma de Pago</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
     <tbody>
-        {% for detalle in listado %}
+        {% for movimiento in listado %}
             <tr>
-                <td>{{ detalle.movimiento.fecha }}</td>
-                <td>{{ detalle.movimiento.nro_ingreso }}</td>
-                <td> $ {{ detalle.servicio.importe }}</td>
-                <td>{{ detalle.movimiento.titular }}</td>
-                <td>{{ detalle.descripcion }}</td>
-                <td>{{ detalle.forma_pago }}</td>
+                <td>{{ movimiento.fecha }}</td>
+                <td>{{ movimiento.nro_ingreso }}</td>
+                <td>{{ movimiento.titular }}</td>
+                <td>{{ movimiento.forma_pago }}</td>
+                <td>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'caja:detalle_movimiento' movimiento.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                </td>
             </tr>
         {% endfor %}
     </tbody>

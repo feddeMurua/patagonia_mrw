@@ -78,28 +78,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for field in form %}
-                                            <tr>
-                                                <td>{{ field.label }}</td>
-                                                <td>{{ field|add_class:'form-control'|add_class:'cant_efectivo_manual' }}</td>
-                                                <td align="center">$<span class="sub_valor_manual" id="efectivo_{{ forloop.counter }}">0</span></td>
-                                            </tr>
-                                        {% endfor %}
+                                        <tr>
+                                            <td>Efectivo</td>
+                                            <td align="center"><span>{{ ingresos_varios.efectivo_cant }}</span></td>
+                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.efectivo_imp }}</span></td>
+                                        </tr>
                                         <tr>
                                             <td>Débito/Crédito</td>
-                                            <td>{{ form_otros.debito_credito_cant|add_class:'form-control' }}</td>
-                                            <td>{{ form_otros.debito_credito_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
+                                            <td align="center"><span>{{ ingresos_varios.debito_credito_cant }}</span></td>
+                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.debito_credito_imp }}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Cheques</td>
-                                            <td>{{ form_otros.cheques_cant|add_class:'form-control' }}</td>
-                                            <td>{{ form_otros.cheques_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
+                                            <td align="center"><span>{{ ingresos_varios.cheque_cant }}</span></td>
+                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.cheque_imp }}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="panel-footer">
-                                <b>Total de recuento manual: $<span class="sub_manual"></span></b>
+                                <b>Total de recuento de sistema: $<span class="sub_sistema"></span></b>
                             </div>
                         </div>
                     </div>

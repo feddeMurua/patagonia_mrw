@@ -117,7 +117,7 @@ def lista_inscripciones_curso(request, id_curso):
     lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
     curso = Curso.objects.get(pk=id_curso)
     cupo_restante = curso.cupo - len(lista_inscripciones)
-    return render(request, "curso/curso_inscripciones.html", {'fecha_hoy': timezone.now(), 'curso': curso,
+    return render(request, "curso/curso_inscripciones.html", {'fecha_hoy': timezone.now().date(), 'curso': curso,
                                                               'cupo_restante': cupo_restante,
                                                               'listado': lista_inscripciones})
 
@@ -126,29 +126,22 @@ def lista_inscripciones_curso(request, id_curso):
 def alta_inscripcion(request, id_curso):
     if request.method == 'POST':
         form = InscripcionForm(request.POST, id_curso=id_curso)
-        mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST,
-                                                                   tipo='Curso de Manipulacion de Alimentos')
-        if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Curso de Manipulacion de Alimentos')
+        if form.is_valid() & detalle_mov_form.is_valid():
             inscripcion = form.save(commit=False)
             inscripcion.curso = Curso.objects.get(pk=id_curso)
             inscripcion.save()
-            # Se crea el detalle del movimiento
-            detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
-            servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " N° " + str(inscripcion.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(inscripcion.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, inscripcion, 'Inscripcion a Curso')
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', args=id_curso))
     else:
         form = InscripcionForm
-        mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Curso de Manipulacion de Alimentos')
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Curso de Manipulacion de Alimentos')
     url_return = 'cursos:inscripciones_curso'
     return render(request, "inscripcion/inscripcion_form.html", {'id_curso': id_curso, 'url_return': url_return,
-                                                                 'form': form, 'mov_diario_form': mov_diario_form,
-                                                                 'detalle_mov_diario_form': detalle_mov_diario_form})
+                                                                 'form': form, 'detalle_mov_form': detalle_mov_form})
 
 
 @login_required(login_url='login')
@@ -229,9 +222,8 @@ def lista_libreta(request):
 def alta_libreta(request):
     if request.method == 'POST':
         form = LibretaForm(request.POST, request.FILES)
-        mov_diario_form = pd_f.MovimientoDiarioForm(request.POST)
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Libreta Sanitaria')
-        if form.is_valid() & mov_diario_form.is_valid() & detalle_mov_diario_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Libreta Sanitaria')
+        if form.is_valid() & detalle_mov_form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
                 libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
@@ -241,20 +233,15 @@ def alta_libreta(request):
             if cursos:
                 libreta.curso = cursos[-1]
             libreta.save()
-            # Se crea el detalle del movimiento
-            detalle_mov_diario = detalle_mov_diario_form.save(commit=False)
-            servicio = detalle_mov_diario.servicio
-            descrip = str(servicio) + " N° " + str(libreta.id)
-            detalle_mov_diario.agregar_detalle(mov_diario_form.save(), servicio, descrip)
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.se) + " N° " + str(libreta.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = LibretaForm
-        mov_diario_form = pd_f.MovimientoDiarioForm
-        detalle_mov_diario_form = pd_f.DetalleMovimientoDiarioForm(tipo='Libreta Sanitaria')
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'mov_diario_form': mov_diario_form,
-                                                         'detalle_mov_diario_form': detalle_mov_diario_form})
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Libreta Sanitaria')
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
 
 
 class DetalleLibreta(LoginRequiredMixin, DetailView):

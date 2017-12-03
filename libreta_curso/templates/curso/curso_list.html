@@ -32,7 +32,7 @@
                       <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'cursos:borrar_curso' curso.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     {% endif %}
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'cursos:modificar_curso' curso.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    {% if not curso.finalizado and fecha_hoy > curso.fecha %}
+                    {% if not curso.finalizado and fecha_hoy < curso.fecha %}
                         <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="{% url 'cursos:inscripciones_curso' curso.pk %}"><em class="glyphicon glyphicon-user"></em></a>
                     {% endif %}
                     {% if not curso.finalizado and fecha_hoy >= curso.fecha %}

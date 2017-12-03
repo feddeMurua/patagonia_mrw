@@ -23,32 +23,24 @@ class Servicio(models.Model):
         return "%s" % self.nombre
 
 
-# 18-10-17: Titular se paso de DetalleMovimiento a Movimiento
-
-
 class MovimientoDiario(models.Model):
     fecha = models.DateField(default=now)
     titular = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-    nro_ingreso = models.BigIntegerField()
+    nro_ingreso = models.BigIntegerField(unique=True)
+    forma_pago = models.CharField(max_length=50, choices=TipoPago, default='Efectivo')
+    nro_cheque = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return "N° Ingresos Varios: %s" % self.nro_ingreso
+        return "N° Ingresos Varios: %s - %s" % (self.nro_ingreso, self.titular)
 
 
 class DetalleMovimiento(models.Model):
     movimiento = models.ForeignKey('MovimientoDiario', on_delete=models.CASCADE)
     servicio = models.ForeignKey('Servicio', on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=100)
-    forma_pago = models.CharField(max_length=50, choices=TipoPago, default='Efectivo')
-    nro_cheque = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return "%s" % self.descripcion
-
-    def agregar_detalle(self, movimiento, servicio, descrip):
-        self.servicio = servicio
-        self.movimiento = movimiento
-        self.descripcion = descrip
 
 
 class MovimientoCC(models.Model):

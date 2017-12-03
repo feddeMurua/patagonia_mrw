@@ -9,7 +9,6 @@ from .models import *
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
 from django.utils import timezone
-from dateutil.relativedelta import relativedelta
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 

@@ -1,0 +1,77 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Detalle de Movimiento{% endblock %}
+
+{% block header-title %}Detalle de Movimiento{% endblock %}
+
+{% block url-volver %}{% url 'caja:lista_movimientos' %}{% endblock %}
+
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+            <tr>
+                <td>Fecha:</td>
+                <td>{{ movimiento.fecha }}</td>
+            </tr>
+            <tr>
+                <td>N° Ingresos Varios:</td>
+                <td>{{ movimiento.nro_ingreso }}</td>
+            </tr>
+            <tr>
+                <td>Titular:</td>
+                <td>{{ movimiento.titular }}</td>
+            </tr>
+            <tr>
+                <td>Forma de Pago:</td>
+                <td>{{ movimiento.forma_pago }}</td>
+            </tr>
+        {% if movimiento.forma_pago == 'Cheque' %}
+            <tr>
+                <td>N° de Cheque:</td>
+                <td>{{ movimiento.nro_cheque }}</td>
+            </tr>
+         {% endif %}
+        </tbody>
+    </table>
+    <div class="container-fluid container-list col-md-12" id="tbl-detalles">
+        <div class="row">
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col col-xs-6">
+                            <h3 class="panel-title">Detalles</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover table-list" align="center">
+                        <thead align="center">
+                            <tr>
+                                <th>Descripcion</th>
+                                <th>Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            {% for detalle in detalles %}
+                                <tr>
+                                    <td>{{ detalle.descripcion }}</td>
+                                    <td>${{ detalle.servicio.importe }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td><b>TOTAL: ${{ total }}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'caja:lista_movimientos' %}" class="btn btn-primary">Regresar</a>
+{% endblock %}

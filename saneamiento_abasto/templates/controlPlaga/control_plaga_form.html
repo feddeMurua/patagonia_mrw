@@ -21,8 +21,7 @@
     <a class="btn btn-danger btn-cancelar" href="{% url 'controles_plagas:lista_controles_plagas' %}">Cancelar</a>
 {% endblock %}
 
-{% block scripts %}
-    <script src="{% static 'js/mov_config.js' %}"></script>
+{% block more-scripts %}
     <script>
         $.datepicker.setDefaults({
             minDate: "+1d"

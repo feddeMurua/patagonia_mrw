@@ -11,7 +11,7 @@
 {% block panel-title %}Inscripciones{% endblock %}
 
 {% block btn-nuevo %}
-    {% if fecha_hoy < curso.fecha_inicio and not curso.finalizado and cupo_restante > 0%}
+    {% if fecha_hoy < curso.fecha and not curso.finalizado and cupo_restante > 0 %}
         <a href="{% url 'inscripciones:nueva_inscripcion' curso.pk %}" class="btn btn-sm btn-primary btn-create" >Nueva Inscripción</a>
     {% endif %}
 {% endblock %}
