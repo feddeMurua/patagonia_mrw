@@ -24,7 +24,7 @@ class ReinspeccionProducto(models.Model):
 
 
 class Producto(models.Model):
-    nombre = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=150, unique=True)
 
     def __str__(self):
         return "%s" % self.nombre
@@ -36,10 +36,35 @@ class Reinspeccion(models.Model):
     precintado = models.IntegerField()
     num_certificado = models.BigIntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
+    cc = models.OneToOneField('CuentaCorriente', on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return "%s -%s" % (self.turno, self.abastecedor)
+
+
+'''
+CUENTAS CORRIENTES
+'''
+
+
+class DetalleCC(models.Model):
+    detalle = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
+    cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s" % (self.abastecedor, self.turno.date())
+        return "cuenta: %s, saldo: %s" % (self.cc, self.cc.saldo)
 
+
+class CuentaCorriente(models.Model):
+    saldo = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return "cuenta: %s" % self.id
+
+
+'''
+VEHICULO Y DESINFECCIONES
+'''
 
 class Vehiculo(models.Model):
     marca = models.CharField(max_length=15, choices=Marca_vehiculo)

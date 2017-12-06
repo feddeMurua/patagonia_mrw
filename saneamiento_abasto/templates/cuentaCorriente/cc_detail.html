@@ -1,0 +1,21 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Cuentas Corrientes{% endblock %}
+
+{% block header-title %}Detalle de la Cuenta Corriente{% endblock %}
+
+{% block url-volver %}{% url 'cuentas_corrientes:lista_cc' %}{% endblock %}
+
+{% block detail %}
+    <table class="table table-information">
+        <tbody>
+
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'cuentas_corrientes:lista_cc' %}" class="btn btn-primary" role="button">Regresar</a>
+{% endblock %}

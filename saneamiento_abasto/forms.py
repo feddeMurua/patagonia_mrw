@@ -7,7 +7,11 @@ from django.utils.translation import ugettext as _
 import datetime
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-
+from django_addanother.widgets import AddAnotherWidgetWrapper
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django_addanother.views import CreatePopupMixin
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
@@ -17,6 +21,7 @@ class AbastecedorForm(forms.ModelForm):
 
     class Meta:
         model = Abastecedor
+        exclude = ['cc']
         fields = '__all__'
 
 
@@ -27,6 +32,7 @@ class ReinspeccionForm(forms.ModelForm):
     class Meta:
         model = Reinspeccion
         fields = '__all__'
+        exclude = ['cc']
         labels = {
             'num_certificado': _("N° de certificado")
         }
@@ -55,12 +61,23 @@ class ModificacionReinspeccionForm(forms.ModelForm):
             raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
         return turno
 
+class AltaProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['nombre']
+
 
 class ReinspeccionProductoForm(forms.ModelForm):
 
     class Meta:
         model = ReinspeccionProducto
         fields = ['producto', 'kilo_producto']
+        widgets = {
+            'producto': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('reinspecciones:alta_producto'),
+            )
+        }
         labels = {
             'kilo_producto': _("Kg de producto")
         }

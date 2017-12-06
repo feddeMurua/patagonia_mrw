@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^editar/(?P<reinspeccion_pk>\d+)$', modificacion_reinspeccion, name='modificar_reinspeccion'),
     url(r'^productos/(?P<reinspeccion_pk>\d+)$', lista_productos, name='lista_productos'),
     url(r'^productos/nuevo/(?P<reinspeccion_pk>\d+)$', nuevo_producto, name='nuevo_producto'),
+    url(r'^productos/nuevo$', AltaProducto.as_view(), name='alta_producto'),
     url(r'^productos/borrar/(?P<pk>\d+)$', baja_producto, name='borrar_producto'),
     url(r'^productos/editar/(?P<pk>\d+)/(?P<reinspeccion_pk>\d+)$', modificar_producto, name='modificar_producto'),
+    url(r'^reinspeccion/cuenta-corriente/(?P<reinspeccion_pk>\d+)$', reinspeccion_cc, name='reinspeccion_cc'),
 ]

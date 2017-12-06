@@ -101,6 +101,17 @@ def baja_abastecedor(request, pk):
     return HttpResponse()
 
 
+
+'''
+CUENTAS CORRIENTES
+'''
+
+
+@login_required(login_url='login')
+def lista_cc(request):
+    return render(request, 'cuentaCorriente/cc_list.html', {'listado': DetalleCC.objects.all()})
+
+
 '''
 REINSPECCIONES
 '''
@@ -145,10 +156,53 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
 
 
 @login_required(login_url='login')
+def reinspeccion_cc(request, reinspeccion_pk):
+    reinspeccion_prod = ReinspeccionProducto.objects.all().filter(reinspeccion__pk=reinspeccion_pk).values()
+
+    total_kg = 0
+    minimo = 30 # kilaje minimo para probar....
+    tarifa = 0.25 # precio por kilaje
+
+
+    for r in reinspeccion_prod:
+        for key, value in r.items():
+            if key == 'kilo_producto':
+                total_kg +=value
+
+    if total_kg > 0: #Existen productos en la reinspeccion
+        cc = CuentaCorriente()
+
+        if total_kg <= minimo:
+            cc.saldo = 55
+        else:
+            cc.saldo = 55 + (total_kg * tarifa)
+        cc.save()
+
+        Reinspeccion.objects.filter(pk=reinspeccion_pk).update(cc=cc) #actualizacion reinspeccion
+        reinspeccion= Reinspeccion.objects.get(pk=reinspeccion_pk)
+
+        detalle_cc = DetalleCC()
+        detalle_cc.cc = cc
+        detalle_cc.detalle = reinspeccion
+        detalle_cc.save()
+
+    return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
+
+
+@login_required(login_url='login')
 def lista_productos(request, reinspeccion_pk):
     return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
                                                                'listado': ReinspeccionProducto.objects.filter(
                                                                    reinspeccion__pk=reinspeccion_pk)})
+
+
+#nuevo producto en el sistema, sin estar relacionado con la inspeccion
+class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):
+    model = Producto
+    form_class = AltaProductoForm
+    template_name = "reinspeccion/simple_producto_form.html"
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
 
 
 @login_required(login_url='login')

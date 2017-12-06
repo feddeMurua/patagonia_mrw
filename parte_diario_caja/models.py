@@ -43,32 +43,6 @@ class DetalleMovimiento(models.Model):
         return "%s" % self.descripcion
 
 
-class MovimientoCC(models.Model):
-    fecha = models.DateField(default=now)
-    nro_ingreso = models.BigIntegerField()
-    cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s" % self.nro_ingreso
-
-
-class DetalleMovimientoCC(models.Model):
-    movimiento_cc = models.ForeignKey('MovimientoCC', on_delete=models.CASCADE)
-    servicio = models.ForeignKey('Servicio', on_delete=models.CASCADE)
-    descripcion = models.CharField(max_length=100)
-
-    def __str__(self):
-        return "%s" % self.descripcion
-
-
-class CuentaCorriente(models.Model):
-    saldo = models.FloatField()
-    titular_cc = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s" % self.titular_cc
-
-
 class ArqueoDiario(models.Model):
     fecha = models.DateTimeField(default=now)
     nro_planilla = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
