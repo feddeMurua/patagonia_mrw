@@ -207,7 +207,7 @@ def get_cursos(pk_persona):
     inscripciones = Inscripcion.objects.filter(persona__pk=pk_persona)
     cursos = []
     for inscripcion in inscripciones:
-        if inscripcion.nota_curso == 'Aprobado':
+        if inscripcion.calificacion == 'Aprobado':
             cursos.append(inscripcion.curso)
     return cursos
 
@@ -234,7 +234,7 @@ def alta_libreta(request):
                 libreta.curso = cursos[-1]
             libreta.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.se) + " N° " + str(libreta.id)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(libreta.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')

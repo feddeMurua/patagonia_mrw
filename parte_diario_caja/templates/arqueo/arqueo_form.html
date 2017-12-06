@@ -19,12 +19,14 @@
             {% csrf_token %}
             <div class="panel panel-primary">
                 <div class="panel-body">
+                    <div class="form-group">
+                        <label>{{ form.nro_planilla.label }} *</label>
+                        {{ form.nro_planilla|add_class:'form-control' }}
+                    </div>
                     <div class="col-md-6" id="container-form-left">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Recuento manual</h3>
-                                </div>
+                                <h3 class="panel-title">Recuento manual</h3>
                             </div>
                             <div class="panel-body">
                                 <table class="table">
@@ -37,11 +39,13 @@
                                     </thead>
                                     <tbody>
                                         {% for field in form %}
-                                            <tr>
-                                                <td>{{ field.label }}</td>
-                                                <td>{{ field|add_class:'form-control'|add_class:'cant_efectivo_manual' }}</td>
-                                                <td align="center">$<span class="sub_valor_manual" id="efectivo_{{ forloop.counter }}">0</span></td>
-                                            </tr>
+                                            {% if field.label != "N° de planilla" and field.label != "Total de recuento manual"%}
+                                                <tr>
+                                                    <td>{{ field.label }}</td>
+                                                    <td>{{ field|add_class:'form-control'|add_class:'cant_efectivo_manual' }}</td>
+                                                    <td align="center">$<span class="sub_valor_manual" id="efectivo_{{ forloop.counter }}">0</span></td>
+                                                </tr>
+                                            {% endif %}
                                         {% endfor %}
                                         <tr>
                                             <td>Débito/Crédito</td>
@@ -57,16 +61,17 @@
                                 </table>
                             </div>
                             <div class="panel-footer">
-                                <b>Subtotal de recuento manual: $<span class="sub_manual"></span></b>
+                                <div class="form-group">
+                                    <label>{{ form.total_manual.label }}</label>
+                                    {{ form.total_manual|add_class:'form-control'|add_class:'sub_manual' }}
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6" id="container-form-right">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Recuento de sistema</h3>
-                                </div>
+                                <h3 class="panel-title">Recuento de sistema</h3>
                             </div>
                             <div class="panel-body">
                                 <table class="table">
@@ -80,24 +85,25 @@
                                     <tbody>
                                         <tr>
                                             <td>Efectivo</td>
-                                            <td align="center"><span>{{ ingresos_varios.efectivo_cant }}</span></td>
+                                            <td align="center"><span>{{ ingresos_varios.efectivo_mov }}</span></td>
                                             <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.efectivo_imp }}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Débito/Crédito</td>
-                                            <td align="center"><span>{{ ingresos_varios.debito_credito_cant }}</span></td>
-                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.debito_credito_imp }}</span></td>
+                                            <td align="center"><span>{{ ingresos_varios.tarjeta_mov }}</span></td>
+                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.tarjeta_imp }}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Cheques</td>
-                                            <td align="center"><span>{{ ingresos_varios.cheque_cant }}</span></td>
+                                            <td align="center"><span>{{ ingresos_varios.cheque_mov }}</span></td>
                                             <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.cheque_imp }}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="panel-footer">
-                                <b>Total de recuento de sistema: $<span class="sub_sistema"></span></b>
+                                <b>Total de movimientos registrados en el sistema: {{ ingresos_varios.total_mov }}</b><br>
+                                <b>Total de recuento de sistema: ${{ ingresos_varios.total_imp }}</b>
                             </div>
                         </div>
                     </div>

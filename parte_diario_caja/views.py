@@ -19,7 +19,7 @@ MOVIMIENTO DIARIO
 
 class AltaFactura(LoginRequiredMixin, CreatePopupMixin, CreateView):
     model = MovimientoDiario
-    fields = ['titular', 'nro_ingreso', 'forma_pago', 'nro_cheque']
+    form_class = MovimientoDiarioForm
     template_name = "caja/factura_form.html"
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
@@ -64,44 +64,51 @@ def lista_arqueos(request):
 
 def get_ingresos_varios():
     movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date())
-    debito_credito_cant = 0
-    debito_credito_imp = 0
-    cheque_cant = 0
+    tarjeta_mov = 0
+    tarjeta_imp = 0
+    cheque_mov = 0
     cheque_imp = 0
-    efectivo_cant = 0
+    efectivo_mov = 0
     efectivo_imp = 0
+    total_mov = 0
+    total_imp = 0
     if movimientos:
         for movimiento in movimientos:
             if movimiento.forma_pago != 'Eximido':
                 importe = DetalleMovimiento.objects.filter(movimiento=movimiento).aggregate(Sum('servicio__importe'))
                 if movimiento.forma_pago == 'Debito' or movimiento.forma_pago == 'Credito':
-                    debito_credito_cant += 1
-                    debito_credito_imp += importe['servicio__importe__sum']
+                    tarjeta_mov += 1
+                    tarjeta_imp += importe['servicio__importe__sum']
                 elif movimiento.forma_pago == 'Cheque':
-                    cheque_cant += 1
+                    cheque_mov += 1
                     cheque_imp += importe['servicio__importe__sum']
                 else:
-                    efectivo_cant += 1
+                    efectivo_mov += 1
                     efectivo_imp += importe['servicio__importe__sum']
-    return {'debito_credito_cant': debito_credito_cant, 'debito_credito_imp': debito_credito_imp,
-            'cheque_cant': cheque_cant, 'cheque_imp': cheque_imp, 'efectivo_cant': efectivo_cant,
-            'efectivo_imp': efectivo_imp}
+        total_mov = tarjeta_mov + cheque_mov + efectivo_mov
+        total_imp = tarjeta_imp + cheque_imp + efectivo_imp
+    return {'tarjeta_mov': tarjeta_mov, 'tarjeta_imp': tarjeta_imp, 'cheque_mov': cheque_mov, 'cheque_imp': cheque_imp,
+            'efectivo_mov': efectivo_mov, 'efectivo_imp': efectivo_imp, 'total_mov': total_mov, 'total_imp': total_imp}
 
 
 @login_required(login_url='login')
 def alta_arqueo(request):
     ingresos_varios = get_ingresos_varios()
     if request.method == 'POST':
-        form = ArqueoDiarioEfectivoForm(request.POST)
-        form_otros = ArqueoDiarioOtrosForm(request.POST)
+        form = ArqueoEfectivoForm(request.POST)
+        form_otros = ArqueoOtrosForm(request.POST)
         if form.is_valid() & form_otros.is_valid():
-            arqueo = form.save(commit=False)
-            request.session['datos'] = arqueo.to_json_datos()
-            request.session['dinero'] = arqueo.to_json_dinero()
-            return redirect('arqueo:resumen_alta_arqueo')
+            datos = {}
+            datos.update(form.cleaned_data)
+            datos.update(form_otros.cleaned_data)
+            arqueo = ArqueoDiario.objects.create(**datos)
+            arqueo.total_manual = request.POST['']
+            arqueo.detalle_sistema(ingresos_varios)
+            log_crear(request.user.id, form.save(), 'Arqueo diario de caja')
+            return redirect('arqueo:lista_arqueos')
     else:
-        form = ArqueoDiarioEfectivoForm
-        form_otros = ArqueoDiarioOtrosForm
+        form = ArqueoEfectivoForm
+        form_otros = ArqueoOtrosForm
     return render(request, 'arqueo/arqueo_form.html', {'form': form, 'form_otros': form_otros,
                                                        'ingresos_varios': ingresos_varios})
 

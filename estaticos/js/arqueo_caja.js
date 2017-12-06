@@ -1,9 +1,3 @@
-var sum_sis = 0;
-$('.sub_valor_sistema').each(function() {
-    sum_sis += +($(this).text());
-});
-$('.sub_sistema').text(sum_sis);
-
 updateSubs();
 
 var cant_efectivo_manual = $('.cant_efectivo_manual'),
@@ -35,10 +29,10 @@ function updateSubs() {
 function updateTotal() {
     var sum = 0;
     $('.sub_valor_manual').each(function() {
-        sum += +($(this).text());
+        sum += +$(this).text();
     });
     $('.sub_otros_manual').each(function() {
-        sum += +($(this).val());
+        sum += +$(this).val();
     });
-    $('.sub_manual').text(sum);
+    $('.sub_manual').val(sum);
 }

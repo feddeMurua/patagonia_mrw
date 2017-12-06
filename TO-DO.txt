@@ -1,9 +1,5 @@
 - Rubro TSA -> Many-To-Many
 - Esterilizacion: Comprobante de turno
-- Esterilizacion: - Aplicacion de anticonceptivos (cantidad)
-                  - Cantidad de partos
-                  - Ultimo celo
-- Control antirrabico: SE PAGA
 - Control antirrabico: Acta de Infraccion
 - Control de Plaga: Impresion de Actuacion
 - Control de Plaga: Pago diferido - Certificado de deuda

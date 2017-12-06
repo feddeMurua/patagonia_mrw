@@ -244,9 +244,50 @@ class ListaPatentesForm(forms.Form):
     patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)
 
 
-class EsterilizacionPatenteForm(forms.Form):
-    patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)
-    turno = forms.DateTimeField(required=True)
+class EsterilizacionPatenteForm(forms.ModelForm):
+    ultimo_celo = forms.DateField(widget=DateInput(), required=False)
+
+    class Meta:
+        model = Esterilizacion
+        exclude = ['interesado', 'mascota']
+        fields = '__all__'
+        labels = {
+            'anticonceptivos': _("Cantidad de anticonceptivos aplicados"),
+            'partos': _("Cantidad de partos"),
+        }
+
+    def clean_ultimo_celo(self):
+        ultimo_celo = self.cleaned_data['ultimo_celo']
+        if ultimo_celo > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return ultimo_celo
+
+    def clean_turno(self):
+        turno = self.cleaned_data['turno']
+        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(12, 0):
+            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 12:00 hs.')
+        elif turno.date() < timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
+        return turno
+
+
+class EsterilizacionNuevoForm(forms.ModelForm):
+    ultimo_celo = forms.DateField(widget=DateInput(), required=False)
+
+    class Meta:
+        model = Esterilizacion
+        exclude = ['mascota']
+        fields = '__all__'
+        labels = {
+            'anticonceptivos': _("Cantidad de anticonceptivos aplicados"),
+            'partos': _("Cantidad de partos"),
+        }
+
+    def clean_ultimo_celo(self):
+        ultimo_celo = self.cleaned_data['ultimo_celo']
+        if ultimo_celo > timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada no puede ser mayor a la fecha actual')
+        return ultimo_celo
 
     def clean_turno(self):
         turno = self.cleaned_data['turno']

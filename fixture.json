@@ -551,5 +551,19 @@
   "fields": {
     "nombre": "Libreta Sanitaria"
   }
+},
+{
+  "model": "parte_diario_caja.tiposervicio",
+  "pk": 7,
+  "fields": {
+    "nombre": "Vehiculos"
+  }
+},
+{
+  "model": "parte_diario_caja.tiposervicio",
+  "pk": 8,
+  "fields": {
+    "nombre": "Control Antirrabico"
+  }
 }
 ]

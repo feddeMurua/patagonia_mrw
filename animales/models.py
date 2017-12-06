@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.timezone import now
 from personas import models as m
 from .choices import *
+from django.core.validators import MinValueValidator
 
 
 class Analisis(models.Model):
@@ -81,6 +82,9 @@ class AplazoSolicitud(models.Model):
 class Esterilizacion(models.Model):
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True)
+    anticonceptivos = models.IntegerField(validators=[MinValueValidator(0)], blank=True)
+    partos = models.IntegerField(validators=[MinValueValidator(0)], blank=True)
+    ultimo_celo = models.DateField(blank=True)
     turno = models.DateTimeField()
 
     def __str__(self):

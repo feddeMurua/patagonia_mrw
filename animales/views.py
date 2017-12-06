@@ -42,7 +42,7 @@ def alta_analisis(request):
             for porcino in porcinos:
                 porcino.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_form.servicio) + " N° " + str(analisis.id)
+            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(analisis.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, analisis, 'Analisis de Triquinosis')
             return redirect('analisis:lista_analisis')
@@ -223,37 +223,38 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
 @login_required(login_url='login')
 def alta_esterilizacion(request):
     if request.method == 'POST':
-        form = EsterilizacionPatenteForm(request.POST)
-        if form.is_valid():
+        form = ListaPatentesForm(request.POST)
+        esterilizacion_form = EsterilizacionPatenteForm(request.POST)
+        if form.is_valid() & esterilizacion_form.is_valid():
+            esterilizacion = esterilizacion_form.save(commit=False)
             patente = form.cleaned_data['patente']
-            esterilizacion = Esterilizacion(turno=form.cleaned_data['turno'], interesado=patente.persona,
-                                            mascota=patente.mascota)
+            esterilizacion.interesado = patente.persona
+            esterilizacion.mascota = patente.mascota
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
-        form = EsterilizacionPatenteForm
-    return render(request, 'esterilizacion/esterilizacion_turno.html', {'form': form})
+        form = ListaPatentesForm
+        esterilizacion_form = EsterilizacionPatenteForm
+    return render(request, 'esterilizacion/esterilizacion_turno.html', {'form': form,
+                                                                        'esterilizacion_form': esterilizacion_form})
 
 
 @login_required(login_url='login')
 def alta_esterilizacion_nopatentado(request):
     if request.method == 'POST':
-        form = f.ListaPersonasGenericasForm(request.POST)
-        turno_form = TurnoForm(request.POST)
+        form = EsterilizacionNuevoForm(request.POST)
         mascota_form = MascotaForm(request.POST)
-        if form.is_valid() and turno_form.is_valid() and mascota_form.is_valid():
-            esterilizacion = Esterilizacion(interesado=form.cleaned_data['persona'],
-                                            mascota=mascota_form.save(), turno=turno_form.cleaned_data['turno'])
+        if form.is_valid() & mascota_form.is_valid():
+            esterilizacion = form.save(commit=False)
+            esterilizacion.mascota = mascota_form.save()
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal no Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
-        form = f.ListaPersonasGenericasForm
-        turno_form = TurnoForm
+        form = EsterilizacionNuevoForm
         mascota_form = MascotaForm
-    return render(request, 'esterilizacion/esterilizacion_form.html', {'form': form, 'turno_form': turno_form,
-                                                                       'mascota_form': mascota_form})
+    return render(request, 'esterilizacion/esterilizacion_form.html', {'form': form, 'mascota_form': mascota_form})
 
 
 @login_required(login_url='login')
@@ -310,7 +311,7 @@ def alta_patente(request):
             patente.mascota = mascota
             patente.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_formservicio) + " - Chapa: " + str(mascota.id)
+            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " - Chapa: " + str(mascota.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, patente, 'Patente')
             return redirect('patentes:lista_patentes')
@@ -377,12 +378,18 @@ def lista_controles(request):
 def alta_control(request):
     if request.method == 'POST':
         form = ControlAntirrabicoForm(request.POST)
-        if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Control Antirrabico')
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Control Antirrabico')
+        if form.is_valid() & detalle_mov_form.is_valid():
+            control = form.save()
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(control.pk)
+            detalle_mov_diario.save()
+            log_crear(request.user.id, control, 'Control Antirrabico')
             return redirect('controles:lista_controles')
     else:
-        form = ControlAntirrabicoForm()
-    return render(request, 'control/control_form.html', {"form": form})
+        form = ControlAntirrabicoForm
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Control Antirrabico')
+    return render(request, 'control/control_form.html', {"form": form, 'detalle_mov_form': detalle_mov_form})
 
 
 @login_required(login_url='login')

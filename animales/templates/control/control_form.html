@@ -8,6 +8,14 @@
 
 {% block url-volver %}{% url 'controles:lista_controles' %}{% endblock %}
 
+{% block form-right %}
+    {% if not modificacion %}
+        <div class="col-xs-12 col-md-5" id="container-form-right">
+            {% include 'caja/cuadro_facturacion.html' %}
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'controles:lista_controles' %}">Cancelar</a>
 {% endblock %}

@@ -52,14 +52,16 @@ class DetalleMovimientoDiarioForm(forms.ModelForm):
         self.fields['servicio'] = forms.ModelChoiceField(queryset=Servicio.objects.filter(tipo__nombre=tipo))
 
 
-class ArqueoDiarioEfectivoForm(forms.ModelForm):
+class ArqueoEfectivoForm(forms.ModelForm):
 
     class Meta:
         model = ArqueoDiario
-        exclude = ['nro_planilla', 'fecha', 'total', 'debito_credito_cant', 'debito_credito_sub', 'cheques_cant',
-                   'cheques_sub']
+        exclude = ['fecha', 'debito_credito_cant', 'debito_credito_sub', 'cheques_cant', 'cheques_sub',
+                   'mov_efectivo_sis', 'sub_efectivo_sis', 'mov_tarjeta_sis', 'mov_tarjeta_sis', 'sub_tarjeta_sis',
+                   'mov_cheque_sis', 'sub_cheque_sis', 'total_sistema']
         fields = '__all__'
         labels = {
+            'nro_planilla': _("N° de planilla"),
             'billetes_quinientos': _("Billetes de quinientos ($500,00)"),
             'billetes_doscientos': _("Billetes de Doscientos ($200,00)"),
             'billetes_cien': _("Billetes de cien ($100,00)"),
@@ -71,11 +73,12 @@ class ArqueoDiarioEfectivoForm(forms.ModelForm):
             'monedas_dos': _("Monedas de dos ($2,00)"),
             'monedas_uno': _("Monedas de uno ($1,00)"),
             'monedas_cincuenta': _("Monedas de cincuenta ctvs ($0,50)"),
-            'monedas_veinticinco': _("Monedas de veinticinco ctvs. ($0,25)")
+            'monedas_veinticinco': _("Monedas de veinticinco ctvs. ($0,25)"),
+            'total_manual': _("Total de recuento manual")
         }
 
 
-class ArqueoDiarioOtrosForm(forms.ModelForm):
+class ArqueoOtrosForm(forms.ModelForm):
 
     class Meta:
         model = ArqueoDiario
