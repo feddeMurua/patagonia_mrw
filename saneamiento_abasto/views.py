@@ -182,12 +182,11 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
 
 @login_required(login_url='login')
 def reinspeccion_cc(request, reinspeccion_pk):
-    reinspeccion_prod = ReinspeccionProducto.objects.all().filter(reinspeccion__pk=reinspeccion_pk).values()
+    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk).values()
 
     total_kg = 0
     minimo = 30 # kilaje minimo para probar....
     tarifa = 0.25 # precio por kilaje
-
 
     for r in reinspeccion_prod:
         for key, value in r.items():
@@ -203,7 +202,7 @@ def reinspeccion_cc(request, reinspeccion_pk):
             cc.saldo = 55 + (total_kg * tarifa)
         cc.save()
 
-        Reinspeccion.objects.filter(pk=reinspeccion_pk).update(cc=cc) #actualizacion reinspeccion
+        #Reinspeccion.objects.filter(pk=reinspeccion_pk).update(cc=cc) #actualizacion reinspeccion
         reinspeccion= Reinspeccion.objects.get(pk=reinspeccion_pk)
 
         detalle_cc = DetalleCC()

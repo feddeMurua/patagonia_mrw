@@ -16,7 +16,9 @@
     <thead>
         <tr>
             <th>Abastecedor</th>
-            <th>Saldo</th>
+            <th>Monto</th>
+            <th>Turno Reinspección</th>
+            <th>AGREGAR FECHA</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
@@ -25,6 +27,8 @@
             <tr>
                 <td>{{ detalle.detalle.abastecedor }}</td>
                 <td>{{ detalle.cc.saldo }}</td>
+                <td>{{ detalle.detalle.turno }}</td>
+                <td> :p </td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Ver Detalles" href="#"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="#"><em class="glyphicon glyphicon-pencil"></em></a>
