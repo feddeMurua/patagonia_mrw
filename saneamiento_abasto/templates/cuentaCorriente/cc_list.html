@@ -21,13 +21,13 @@
         </tr>
     </thead>
     <tbody>
-        {% for detalle in listado %}
+        {% for cuenta in listado %}
             <tr>
-                <td>{{ detalle.detalle.abastecedor }}</td>
-                <td>{{ detalle.cc.saldo }}</td>
+                <td>{{ cuenta.abastecedor }}</td>
+                <td>{{ cuenta.saldo }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Ver Detalles" href="#"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="#"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-danger" data-toggle="tooltip" title="Cancelar saldo" href="#"><em class="glyphicon glyphicon-pencil"></em></a>
                 </td>
             </tr>
         {% endfor %}

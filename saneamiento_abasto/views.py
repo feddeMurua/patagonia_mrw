@@ -67,7 +67,6 @@ def nuevo_abastecedor_particular(request):
     return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form,
                                                                        'detalle_mov_form': detalle_mov_form})
 
-
 @login_required(login_url='login')
 def nuevo_abastecedor_empresa(request):
     if request.method == 'POST':
@@ -92,7 +91,6 @@ def nuevo_abastecedor_empresa(request):
     return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form,
                                                                        'detalle_mov_form': detalle_mov_form})
 
-
 @login_required(login_url='login')
 def baja_abastecedor(request, pk):
     abastecedor = Abastecedor.objects.get(pk=pk)
@@ -108,7 +106,7 @@ CUENTAS CORRIENTES
 
 @login_required(login_url='login')
 def lista_cc(request):
-    return render(request, 'cuentaCorriente/cc_list.html', {'listado': DetalleCC.objects.all()})
+    return render(request, 'cuentaCorriente/cc_list.html', {'listado': CuentaCorriente.objects.all()})
 
 
 '''
@@ -157,29 +155,25 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
 @login_required(login_url='login')
 def reinspeccion_cc(request, reinspeccion_pk):
     reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-    cc = CuentaCorriente.objects.get()
+    cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
     reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
 
     total_kg = 0
-    minimo = 30  # kilaje minimo para probar....
+    kg_minimo = 30  # kilaje minimo para probar....
+    tarifa_minima = 55
     tarifa = 0.25  # precio por kilaje
+    monto = tarifa_minima
 
     for r in reinspeccion_prod:
         total_kg += r.kilo_producto
 
-    if total_kg <= minimo:
-        cc.saldo = 55
-    else:
-        cc.saldo = 55 + (total_kg * tarifa)
-    cc.save()
+    if total_kg > kg_minimo:
+        monto += total_kg * tarifa
 
-    Reinspeccion.objects.filter(pk=reinspeccion_pk).update(cc=cc)  # actualizacion reinspeccion
-    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-
-    detalle_cc = DetalleCC()
-    detalle_cc.cc = cc
-    detalle_cc.detalle = reinspeccion
+    detalle_cc = DetalleCC(detalle=reinspeccion, monto=monto, cc=cc)
     detalle_cc.save()
+    cc.saldo += monto
+    cc.save()
 
     return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
 
@@ -191,7 +185,7 @@ def lista_productos(request, reinspeccion_pk):
                                                                    reinspeccion__pk=reinspeccion_pk)})
 
 
-#nuevo producto en el sistema, sin estar relacionado con la inspeccion
+# nuevo producto en el sistema, sin estar relacionado con la inspeccion
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):
     model = Producto
     form_class = AltaProductoForm
@@ -272,8 +266,7 @@ def alta_vehiculo(request):
         form = VehiculoForm(request.POST)
         if form.is_valid():
             vehiculo = form.save(commit=False)
-            print (vehiculo.categoria)
-            if vehiculo.tipo_vehiculo == 'TSA':
+            if vehiculo.categoria == 'TSA':
                 vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
             vehiculo.save()
             log_crear(request.user.id, vehiculo, 'Vehiculo')

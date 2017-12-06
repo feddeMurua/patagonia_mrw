@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
@@ -9,6 +8,10 @@ from .choices import *
 
 class Abastecedor(models.Model):
     responsable = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        super(Abastecedor, self).save(*args, **kwargs)
+        CuentaCorriente.objects.create(abastecedor=self)
 
     def __str__(self):
         return "%s" % self.responsable
@@ -36,10 +39,9 @@ class Reinspeccion(models.Model):
     precintado = models.IntegerField()
     num_certificado = models.BigIntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
-    cc = models.OneToOneField('CuentaCorriente', on_delete=models.CASCADE, null=True, blank=True)
-    
+
     def __str__(self):
-        return "%s -%s" % (self.turno, self.abastecedor)
+        return "%s" % self.abastecedor
 
 
 '''
@@ -49,22 +51,25 @@ CUENTAS CORRIENTES
 
 class DetalleCC(models.Model):
     detalle = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
+    monto = models.FloatField(default=0.0)
     cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "cuenta: %s, saldo: %s" % (self.cc, self.cc.saldo)
+        return "%s, Saldo: %s" % (self.detalle, self.monto)
 
 
 class CuentaCorriente(models.Model):
     saldo = models.FloatField(default=0.0)
+    abastecedor = models.OneToOneField('Abastecedor', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return "cuenta: %s" % self.id
+        return "Cuenta: %s" % self.id
 
 
 '''
 VEHICULO Y DESINFECCIONES
 '''
+
 
 class Vehiculo(models.Model):
     marca = models.CharField(max_length=15, choices=Marca_vehiculo)
