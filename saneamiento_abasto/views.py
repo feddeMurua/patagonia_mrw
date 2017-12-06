@@ -33,7 +33,7 @@ def alta_abastecedor(request):
         if form.is_valid() & detalle_mov_form.is_valid():
             abastecedor = form.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.id)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor')
             return redirect('abastecedores:lista_abastecedores')
@@ -56,7 +56,7 @@ def nuevo_abastecedor_particular(request):
             abastecedor = Abastecedor(responsable=responsable)
             abastecedor.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.pk)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.pk)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Particular')
             return redirect('abastecedores:lista_abastecedores')
@@ -81,7 +81,7 @@ def nuevo_abastecedor_empresa(request):
             abastecedor = Abastecedor(responsable=responsable)
             abastecedor.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.pk)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.pk)
             detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Empresa')
             return redirect('abastecedores:lista_abastecedores')
@@ -99,7 +99,6 @@ def baja_abastecedor(request, pk):
     log_eliminar(request.user.id, abastecedor, 'Abastecedor')
     abastecedor.delete()
     return HttpResponse()
-
 
 
 '''
@@ -157,34 +156,30 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
 
 @login_required(login_url='login')
 def reinspeccion_cc(request, reinspeccion_pk):
-    reinspeccion_prod = ReinspeccionProducto.objects.all().filter(reinspeccion__pk=reinspeccion_pk).values()
+    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
+    cc = CuentaCorriente.objects.get()
+    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
 
     total_kg = 0
-    minimo = 30 # kilaje minimo para probar....
-    tarifa = 0.25 # precio por kilaje
-
+    minimo = 30  # kilaje minimo para probar....
+    tarifa = 0.25  # precio por kilaje
 
     for r in reinspeccion_prod:
-        for key, value in r.items():
-            if key == 'kilo_producto':
-                total_kg +=value
+        total_kg += r.kilo_producto
 
-    if total_kg > 0: #Existen productos en la reinspeccion
-        cc = CuentaCorriente()
+    if total_kg <= minimo:
+        cc.saldo = 55
+    else:
+        cc.saldo = 55 + (total_kg * tarifa)
+    cc.save()
 
-        if total_kg <= minimo:
-            cc.saldo = 55
-        else:
-            cc.saldo = 55 + (total_kg * tarifa)
-        cc.save()
+    Reinspeccion.objects.filter(pk=reinspeccion_pk).update(cc=cc)  # actualizacion reinspeccion
+    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
 
-        Reinspeccion.objects.filter(pk=reinspeccion_pk).update(cc=cc) #actualizacion reinspeccion
-        reinspeccion= Reinspeccion.objects.get(pk=reinspeccion_pk)
-
-        detalle_cc = DetalleCC()
-        detalle_cc.cc = cc
-        detalle_cc.detalle = reinspeccion
-        detalle_cc.save()
+    detalle_cc = DetalleCC()
+    detalle_cc.cc = cc
+    detalle_cc.detalle = reinspeccion
+    detalle_cc.save()
 
     return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
 
@@ -415,7 +410,7 @@ def alta_control_plaga(request):
         if form.is_valid() & detalle_mov_form.is_valid():
             control_plaga = form.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(control_plaga.id)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(control_plaga.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, control_plaga, 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')

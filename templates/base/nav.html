@@ -49,8 +49,8 @@
         </li>
         <li><a href="#">Caja</a>
             <ul>
-                <li><a href="{% url 'caja:lista_detalle_movimientos' %}"><span>Parte Diario</span></a></li>
-                <li><a href="#"><span>Arqueo Diario de Efectivo</span></a></li>
+                <li><a href="{% url 'caja:lista_movimientos' %}"><span>Parte Diario</span></a></li>
+                <li><a href="{% url 'arqueo:lista_arqueos' %}"><span>Arqueo Diario de Efectivo</span></a></li>
             </ul>
         </li>
         <li><a href="#">Usuario: {{ user.get_username }}</a>

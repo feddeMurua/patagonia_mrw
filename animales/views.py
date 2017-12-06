@@ -42,7 +42,7 @@ def alta_analisis(request):
             for porcino in porcinos:
                 porcino.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(analisis.id)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(analisis.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, analisis, 'Analisis de Triquinosis')
             return redirect('analisis:lista_analisis')
@@ -311,7 +311,7 @@ def alta_patente(request):
             patente.mascota = mascota
             patente.save()
             detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_form.descripcion = str(detalle_mov_diario.servicio) + " - Chapa: " + str(mascota.id)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " - Chapa: " + str(mascota.id)
             detalle_mov_diario.save()
             log_crear(request.user.id, patente, 'Patente')
             return redirect('patentes:lista_patentes')
