@@ -8,7 +8,9 @@ Welcome to Patagonia's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   pantallaprincipal
+   libretacurso
 
 
 

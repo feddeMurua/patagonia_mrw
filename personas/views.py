@@ -9,10 +9,9 @@ from django.views.generic import DetailView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 
-
 @login_required(login_url='login')
-def lista_clientes(request):
-    return render(request, 'persona/cliente_list.html', {'listado': PersonaGenerica.objects.all()})
+def lista_contribuyentes(request):
+    return render(request, 'persona/contribuyente_list.html', {'listado': PersonaGenerica.objects.all()})
 
 
 class AltaPersonaFisica(LoginRequiredMixin, CreatePopupMixin, View):
@@ -27,15 +26,15 @@ class AltaPersonaFisica(LoginRequiredMixin, CreatePopupMixin, View):
             persona.domicilio = domicilio_form.save()
             persona.save()
             log_crear(request.user.id, persona, 'Persona Física')
-            return redirect('personas:lista_clientes')
+            return redirect('personas:lista_contribuyentes')
         return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_clientes'})
+                                                             'url_return': 'personas:lista_contribuyentes'})
 
     def get(self, request):
         form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
         return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_clientes'})
+                                                             'url_return': 'personas:lista_contribuyentes'})
 
 
 @login_required(login_url='login')
@@ -55,12 +54,12 @@ def modificacion_persona_fisica(request, pk):
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Persona Física')
-            return redirect('personas:lista_clientes')
+            return redirect('personas:lista_contribuyentes')
     else:
         form = ModificacionPersonaFisicaForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_clientes'})
+                                                         'url_return': 'personas:lista_contribuyentes'})
 
 
 class DetallePersonaFisica(LoginRequiredMixin, DetailView):
@@ -82,15 +81,15 @@ class AltaPersonaJuridica(LoginRequiredMixin, CreatePopupMixin, View):
             persona.domicilio = domicilio_form.save()
             persona.save()
             log_crear(request.user.id, persona, 'Persona Jurídica')
-            return redirect('personas:lista_clientes')
+            return redirect('personas:lista_contribuyentes')
         return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_clientes'})
+                                                             'url_return': 'personas:lista_contribuyentes'})
 
     def get(self, request):
         form = AltaPersonaJuridicaForm
         domicilio_form = DomicilioForm
         return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_clientes'})
+                                                             'url_return': 'personas:lista_contribuyentes'})
 
 
 class DetallePersonaJuridica(LoginRequiredMixin, DetailView):
@@ -117,12 +116,12 @@ def modificacion_persona_juridica(request, pk):
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Persona Jurídica')
-            return redirect('personas:lista_clientes')
+            return redirect('personas:lista_contribuyentes')
     else:
         form = ModificacionPersonaJuridicaForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                         'url_return': 'personas:lista_clientes'})
+                                                         'url_return': 'personas:lista_contribuyentes'})
 
 
 @login_required(login_url='login')

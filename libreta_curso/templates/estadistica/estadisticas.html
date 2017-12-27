@@ -1,0 +1,56 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block no-particles %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Basic Panel</h2>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <canvas id="myChart" width="40" height="40"></canvas>
+    </div>
+  </div>
+</div>
+{% endblock %}
+<!--
+
+estadisticas:
+
+GESTION CURSOS
+
+- promedio de inscriptos por curso
+- promedio de cursos por año
+- promedio de Calificaciones
+- cantidad de libretas por tipo
+
+-->
+
+{% block scripts %}
+<script src="{% static 'js/chart.js' %}"></script>
+
+<script>
+
+  var ctx = document.getElementById('myChart');
+  var label_curso = JSON.parse('{{ label_curso|safe }}');
+  var datos_cursos = JSON.parse('{{ datos_cursos|safe }}');
+  var myChart = new Chart(ctx, {
+     type: 'bar',
+     data: {
+         labels: label_curso,
+         datasets: [
+             {
+                 data: datos_cursos,
+                 label: 'Cursos',
+             }
+         ]
+     }
+  })
+
+</script>
+
+{% endblock %}

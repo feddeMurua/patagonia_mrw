@@ -10,7 +10,7 @@
 
 {% block header-title %}Detalle de Persona Fisica{% endblock %}
 
-{% block url-volver %}{% url 'personas:lista_clientes' %}{% endblock %}
+{% block url-volver %}{% url 'personas:lista_contribuyentes' %}{% endblock %}
 
 {% block detail %}
     <table class="table table-information">
@@ -60,7 +60,7 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'personas:lista_clientes' %}" class="btn btn-primary">Regresar</a>
+    <a href="{% url 'personas:lista_contribuyentes' %}" class="btn btn-primary">Regresar</a>
 {% endblock %}
 
 {% block more-scripts %}

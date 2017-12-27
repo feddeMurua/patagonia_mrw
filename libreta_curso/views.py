@@ -14,7 +14,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from dateutil.relativedelta import *
 from django.utils import timezone
-
+import simplejson as json
+import numpy as np
 
 '''
 CURSOS
@@ -91,7 +92,7 @@ class PdfAsistencia(LoginRequiredMixin, PDFTemplateView):
             curso=curso,
             title="Curso"
         )
-        
+
 
 class PdfAprobados(LoginRequiredMixin, PDFTemplateView):
     template_name = 'curso/aprobados_pdf.html'
@@ -290,3 +291,35 @@ class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
             pagesize="A4",
             libreta=libreta
         )
+
+
+'''
+ESTADÍSTICAS
+'''
+
+@login_required(login_url='login')
+def estadisticas(request):
+
+    #CANTIDAD DE ALUMNOS POR CURSO
+
+    cursos = Curso.objects.all()
+    datos = {} # inscripciones por curso
+    for curso in cursos:
+        datos[str(curso.fecha)] = Inscripcion.objects.filter(curso=curso).count()
+
+    label_curso = datos.keys()
+    datos_cursos = datos.values()
+
+    print("----------------------")
+    print(np.average(datos_cursos))
+    print("----------------------")
+
+
+
+
+    context = {
+        'label_curso': json.dumps(label_curso),
+        'datos_cursos': json.dumps(datos_cursos),
+    }
+
+    return render(request, "estadistica/estadisticas.html",context)
