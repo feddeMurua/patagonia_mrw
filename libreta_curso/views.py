@@ -15,8 +15,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from dateutil.relativedelta import *
 from django.utils import timezone
 import simplejson as json
-import numpy as np
-
+from random import randint
+from desarrollo_patagonia import factories
 '''
 CURSOS
 '''
@@ -304,17 +304,32 @@ def estadisticas(request):
 
     cursos = Curso.objects.all()
     datos = {} # inscripciones por curso
+
     for curso in cursos:
         datos[str(curso.fecha)] = Inscripcion.objects.filter(curso=curso).count()
 
     label_curso = datos.keys()
     datos_cursos = datos.values()
 
+
+
+
+    '''
     print("----------------------")
     print(np.average(datos_cursos))
     print("----------------------")
 
 
+    for x in xrange(24):
+        cursos = factories.CursoFactory()
+
+    for x in xrange(96):
+        personas = factories.PersonaFactory()
+
+    for x in xrange(1000):
+        inscripciones = factories.InscripcionFactory()
+
+    '''
 
 
     context = {

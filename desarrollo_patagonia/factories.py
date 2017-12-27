@@ -1,38 +1,42 @@
-from .models import *
-from personas import models as m
+from personas import models as p
+from libreta_curso import models as lc
+from libreta_curso import choices as cc
 import factory
 import factory.fuzzy
 import datetime
 
-'''
-MOVER DIRECCION, LOCALIDAD, PROVINCIA, NACIONALIDAD,
-A FACTORY EN PERSONAS
-'''
+class CursoFactory(factory.django.DjangoModelFactory):
+    fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    cupo = factory.fuzzy.FuzzyInteger(0)
+    lugar = factory.fuzzy.FuzzyText(length=25)
+    finalizado = False
+
+    class Meta:
+        model = lc.Curso
 
 
 class NacionalidadFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=25)
 
     class Meta:
-        model = m.Nacionalidad
+        model = p.Nacionalidad
 
 
 class ProvinciaFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=25)
-    nacionalidad = NacionalidadFactory()
+    nacionalidad = factory.Iterator(p.Nacionalidad.objects.all())
 
     class Meta:
-        model = m.Provincia
+        model = p.Provincia
 
 
 class LocalidadFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=25)
     cp = factory.fuzzy.FuzzyInteger(9000)
-    provincia = ProvinciaFactory()
+    provincia = factory.Iterator(p.Provincia.objects.all())
 
     class Meta:
-        model = m.Localidad
-
+        model = p.Localidad
 
 class DomicilioFactory(factory.django.DjangoModelFactory):
     barrio = factory.fuzzy.FuzzyText(length=20)
@@ -42,12 +46,43 @@ class DomicilioFactory(factory.django.DjangoModelFactory):
     nro = factory.fuzzy.FuzzyInteger(0)
     dpto = factory.fuzzy.FuzzyText(length=50)
     piso = factory.fuzzy.FuzzyInteger(0)
-    localidad = LocalidadFactory()
+    localidad = factory.Iterator(p.Localidad.objects.all())
 
     class Meta:
-        model = m.Domicilio
+        model = p.Domicilio
 
 
+class PersonaFactory(factory.django.DjangoModelFactory):
+    nombre = factory.fuzzy.FuzzyText(length=25)
+    domicilio = DomicilioFactory()
+    telefono = factory.fuzzy.FuzzyText(length=10)
+    email = factory.fuzzy.FuzzyText(length=10)
+    apellido = factory.fuzzy.FuzzyText(length=20)
+    fecha_nacimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    dni = factory.fuzzy.FuzzyText(length=25)
+    nacionalidad = factory.Iterator(p.Nacionalidad.objects.all())
+    obra_social = factory.fuzzy.FuzzyText(length=10)
+    documentacion_retirada = False
+    rubro = factory.fuzzy.FuzzyText(length=10)
+
+
+    class Meta:
+        model = p.PersonaFisica
+
+
+class InscripcionFactory(factory.django.DjangoModelFactory):
+    fecha_inscripcion = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    modificado = False
+    calificacion = factory.fuzzy.FuzzyChoice(choices=cc.Calificaciones)
+    porcentaje_asistencia = factory.fuzzy.FuzzyFloat(0.0)
+    observaciones = factory.fuzzy.FuzzyText(length=25)
+    curso = factory.Iterator(lc.Curso.objects.all())
+    persona = factory.Iterator(p.PersonaFisica.objects.all())
+
+    class Meta:
+        model = lc.Inscripcion
+
+'''
 class TipoServicioFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=50)
 
@@ -87,3 +122,4 @@ class DetalleMovimientoFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = DetalleMovimiento
+'''

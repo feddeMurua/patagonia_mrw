@@ -12,7 +12,7 @@
   <h2>Basic Panel</h2>
   <div class="panel panel-default">
     <div class="panel-body">
-      <canvas id="myChart" width="40" height="40"></canvas>
+      <canvas id="myChart" width="5" height="5"></canvas>
     </div>
   </div>
 </div>
@@ -35,19 +35,46 @@ GESTION CURSOS
 
 <script>
 
+  function getRandomColor() {
+      var letters = '0123456789ABCDEF'.split('');
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+  }
+
   var ctx = document.getElementById('myChart');
   var label_curso = JSON.parse('{{ label_curso|safe }}');
   var datos_cursos = JSON.parse('{{ datos_cursos|safe }}');
+
+  var background_colors = []
+  for (var i = 0, len = label_curso.length; i < len; i++) {
+    background_colors.push(getRandomColor());
+  }
+
   var myChart = new Chart(ctx, {
      type: 'bar',
      data: {
          labels: label_curso,
          datasets: [
              {
-                 data: datos_cursos,
-                 label: 'Cursos',
+               data: datos_cursos,
+               label: 'Cursos',
+               backgroundColor: background_colors,
+               borderWidth: 1
              }
          ]
+     },
+     options: {
+       scales: {
+           yAxes: [{
+               ticks: {
+                   beginAtZero:true,
+                   stepSize: 1,
+               },
+           }]
+       }
      }
   })
 
