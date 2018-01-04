@@ -5,6 +5,7 @@ import factory
 import factory.fuzzy
 import datetime
 
+
 class CursoFactory(factory.django.DjangoModelFactory):
     fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     cupo = factory.fuzzy.FuzzyInteger(0)
@@ -73,7 +74,7 @@ class PersonaFactory(factory.django.DjangoModelFactory):
 class InscripcionFactory(factory.django.DjangoModelFactory):
     fecha_inscripcion = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     modificado = False
-    calificacion = factory.fuzzy.FuzzyChoice(choices=cc.Calificaciones)
+    calificacion = factory.fuzzy.FuzzyChoice(['Aprobado','Desaprobado','Sin Calificar'])
     porcentaje_asistencia = factory.fuzzy.FuzzyFloat(0.0)
     observaciones = factory.fuzzy.FuzzyText(length=25)
     curso = factory.Iterator(lc.Curso.objects.all())
@@ -81,6 +82,22 @@ class InscripcionFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = lc.Inscripcion
+
+
+class LibretaFactory(factory.django.DjangoModelFactory):
+    persona = factory.Iterator(p.PersonaFisica.objects.all())
+    curso = factory.Iterator(lc.Curso.objects.all())
+    observaciones = factory.fuzzy.FuzzyText(length=25)
+    fecha_examen_clinico = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    profesional_examen_clinico = factory.fuzzy.FuzzyText(length=25)
+    lugar_examen_clinico = factory.fuzzy.FuzzyText(length=25)
+    fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    tipo_libreta = factory.fuzzy.FuzzyChoice(['Blanca','Amarilla','Celeste'])
+    fecha_vencimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+
+    class Meta:
+        model = lc.LibretaSanitaria
+
 
 '''
 class TipoServicioFactory(factory.django.DjangoModelFactory):
