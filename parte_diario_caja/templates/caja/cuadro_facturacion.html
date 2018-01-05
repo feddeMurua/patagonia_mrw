@@ -8,7 +8,16 @@
         {{ detalle_mov_form.media }}
         {% for field in detalle_mov_form %}
             <div class="form-group">
-                <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
+                <label>{{ field.label }}</label>
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        {% for field in servicio_form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
                 {{ field|add_class:'form-control' }}
                 {% for error in field.errors %}
                     <span class="help-block">{{ error }}</span>

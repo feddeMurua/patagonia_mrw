@@ -21,7 +21,7 @@ function updateSubs() {
     $('#efectivo_8').text($('#id_billetes_dos').val() * 2);
     $('#efectivo_9').text($('#id_monedas_dos').val() * 2);
     $('#efectivo_10').text($('#id_monedas_uno').val() * 1);
-    $('#efectivo_11').text($('#id_monedas_cincuenta').val() * 0.5);
+    $('#efectivo_11').text($('#id_monedas_cincuenta').val() * 0.50);
     $('#efectivo_12').text($('#id_monedas_veinticinco').val() * 0.25);
     updateTotal();
 }

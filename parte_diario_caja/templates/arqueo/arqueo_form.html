@@ -22,6 +22,9 @@
                     <div class="form-group">
                         <label>{{ form.nro_planilla.label }} *</label>
                         {{ form.nro_planilla|add_class:'form-control' }}
+                        {% for error in form.nro_planilla.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
                     </div>
                     <div class="col-md-6" id="container-form-left">
                         <div class="panel panel-info">
@@ -43,7 +46,7 @@
                                                 <tr>
                                                     <td>{{ field.label }}</td>
                                                     <td>{{ field|add_class:'form-control'|add_class:'cant_efectivo_manual' }}</td>
-                                                    <td align="center">$<span class="sub_valor_manual" id="efectivo_{{ forloop.counter }}">0</span></td>
+                                                    <td align="center">$<span class="sub_valor_manual" id="efectivo_{{ forloop.counter0 }}">0,00</span></td>
                                                 </tr>
                                             {% endif %}
                                         {% endfor %}
@@ -64,6 +67,9 @@
                                 <div class="form-group">
                                     <label>{{ form.total_manual.label }}</label>
                                     {{ form.total_manual|add_class:'form-control'|add_class:'sub_manual' }}
+                                    {% for error in form.total_manual.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

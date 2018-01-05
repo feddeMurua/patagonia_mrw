@@ -126,22 +126,17 @@ def lista_inscripciones_curso(request, id_curso):
 def alta_inscripcion(request, id_curso):
     if request.method == 'POST':
         form = InscripcionForm(request.POST, id_curso=id_curso)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Curso de Manipulacion de Alimentos')
-        if form.is_valid() & detalle_mov_form.is_valid():
+        if form.is_valid():
             inscripcion = form.save(commit=False)
             inscripcion.curso = Curso.objects.get(pk=id_curso)
             inscripcion.save()
-            detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(inscripcion.id)
-            detalle_mov_diario.save()
             log_crear(request.user.id, inscripcion, 'Inscripcion a Curso')
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', args=id_curso))
     else:
         form = InscripcionForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Curso de Manipulacion de Alimentos')
     url_return = 'cursos:inscripciones_curso'
     return render(request, "inscripcion/inscripcion_form.html", {'id_curso': id_curso, 'url_return': url_return,
-                                                                 'form': form, 'detalle_mov_form': detalle_mov_form})
+                                                                 'form': form})
 
 
 @login_required(login_url='login')
@@ -222,8 +217,9 @@ def lista_libreta(request):
 def alta_libreta(request):
     if request.method == 'POST':
         form = LibretaForm(request.POST, request.FILES)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Libreta Sanitaria')
-        if form.is_valid() & detalle_mov_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        servicio_form = pd_f.ListaServicios(request.POST, tipo='Libreta Sanitaria')
+        if form.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
                 libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
@@ -233,15 +229,16 @@ def alta_libreta(request):
             if cursos:
                 libreta.curso = cursos[-1]
             libreta.save()
-            detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(libreta.id)
-            detalle_mov_diario.save()
+            detalle_mov = detalle_mov_form.save(commit=False)
+            detalle_mov.completar(servicio_form.cleaned_data['servicio'], libreta)
             log_crear(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = LibretaForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Libreta Sanitaria')
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        servicio_form = pd_f.ListaServicios(tipo='Libreta Sanitaria')
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
+                                                         'servicio_form': servicio_form})
 
 
 class DetalleLibreta(LoginRequiredMixin, DetailView):

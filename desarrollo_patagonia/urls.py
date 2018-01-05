@@ -8,6 +8,7 @@ from usuarios.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^selectable/', include('selectable.urls')),
 
     url(r'^login$', LoginView.as_view(template_name='usuarios/login.html'), name='login'),
     url(r'^logout$', LogoutView.as_view(next_page=reverse_lazy('inicio')), name='logout'),

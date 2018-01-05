@@ -8,12 +8,6 @@
 
 {% block url-volver %}{% url 'abastecedores:lista_abastecedores' %}{% endblock %}
 
-{% block extra-form %}
-    {% if not modificacion %}
-        {% include 'caja/cuadro_facturacion.html' %}
-    {% endif %}
-{% endblock %}
-
 {% block form-right %}
     <div class="col-xs-12 col-md-5" id="container-form-right">
         {% include 'domicilio/cuadro_domicilio.html' %}

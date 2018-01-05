@@ -9,7 +9,9 @@
 {% block panel-title %}Arqueos diarios{% endblock %}
 
 {% block btn-nuevo %}
-    <a href="{% url 'arqueo:nuevo_arqueo' %}" class="btn btn-sm btn-primary btn-create">Realizar Arqueo Diario</a>
+    {% if not realizado %}
+        <a href="{% url 'arqueo:nuevo_arqueo' %}" class="btn btn-sm btn-primary btn-create">Realizar Arqueo Diario</a>
+    {% endif %}
 {% endblock %}
 
 {% block tabla %}
@@ -25,7 +27,7 @@
             <tr>
                 <td>{{ arqueo.fecha }}</td>
                 <td>{{ arqueo.nro_planilla }}</td>
-                <td>{{ arqueo.total }}</td>
+                <td>${{ arqueo.total_manual }}</td>
             </tr>
         {% endfor %}
     </tbody>

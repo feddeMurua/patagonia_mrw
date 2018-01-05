@@ -11,9 +11,49 @@
 {% block detail %}
     <table class="table table-information">
         <tbody>
-
+            <tr>
+                <td>Abastecedor:</td>
+                <td>{{ cuenta.abastecedor }}</td>
+            </tr>
+            <tr>
+                <td>Saldo actual:</td>
+                <td>${{ cuenta.saldo }}</td>
+            </tr>
         </tbody>
     </table>
+    {% if detalles %}
+        <div class="container-fluid container-list col-md-12" id="tbl-detalles">
+            <div class="row">
+                <div class="panel panel-default panel-table">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col col-xs-6">
+                                <h3 class="panel-title">Detalles de la cuenta corriente</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-list">
+                            <thead>
+                                <tr>
+                                    <th>Descripcion</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detalle in detalles %}
+                                    <tr align="center">
+                                        <td>{{ detalle.detalle }}</td>
+                                        <td>${{ detalle.monto }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block btn-footer %}

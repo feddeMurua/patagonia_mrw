@@ -108,3 +108,11 @@ Plagas = (
     ('Pulgas', _("Pulgas")),
     ('Otros', _("Otros")),
 )
+
+Turno_Reinspeccion = (
+    ('Mañana', _("Mañana")),
+    ('Tarde', _("Tarde")),
+    ('Sabado', _("Sabado")),
+    ('Feriado', _("Feriado")),
+    ('Excepcion', _("Excepcion"))
+)

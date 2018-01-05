@@ -1,0 +1,25 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Patentes{% endblock %}
+
+{% block header-title %}Renovacion/Duplicado de Patente{% endblock %}
+
+{% block url-volver %}{% url 'patentes:lista_patentes' %}{% endblock %}
+
+{% block extra-form %}
+    {% if fecha_hoy >= patente.fecha_vencimiento %}
+        <input type="radio" name="radio" value="renovacion" checked> Renovacion<br>
+        <input type="radio" name="radio" value="duplicado"> Duplicado
+    {% else %}
+        <input type="radio" name="radio" value="renovacion" disabled> Renovacion<br>
+        <input type="radio" name="radio" value="duplicado" checked> Duplicado
+    {% endif %}
+    <br><br>
+    {% include 'caja/cuadro_facturacion.html' %}
+{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'patentes:lista_patentes' %}">Cancelar</a>
+{% endblock %}

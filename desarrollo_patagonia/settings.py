@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_bootstrap_dynamic_formsets',
     'polymorphic',
     'django_addanother',
+    'selectable'
 ]
 
 MIDDLEWARE = [

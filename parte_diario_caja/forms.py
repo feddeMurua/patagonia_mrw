@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 from django.utils.translation import ugettext as _
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist
 from .models import *
 from django.utils import timezone
 import re
@@ -42,12 +41,15 @@ class DetalleMovimientoDiarioForm(forms.ModelForm):
 
     class Meta:
         model = DetalleMovimiento
-        exclude = ['descripcion']
-        fields = '__all__'
+        fields = ['movimiento']
+
+
+class ListaServicios(forms.Form):
+    servicio = forms.ModelChoiceField(queryset=Servicio.objects.all())
 
     def __init__(self, *args, **kwargs):
         tipo = kwargs.pop('tipo')
-        super(DetalleMovimientoDiarioForm, self).__init__(*args, **kwargs)
+        super(ListaServicios, self).__init__(*args, **kwargs)
 
         self.fields['servicio'] = forms.ModelChoiceField(queryset=Servicio.objects.filter(tipo__nombre=tipo))
 
@@ -58,7 +60,7 @@ class ArqueoEfectivoForm(forms.ModelForm):
         model = ArqueoDiario
         exclude = ['fecha', 'debito_credito_cant', 'debito_credito_sub', 'cheques_cant', 'cheques_sub',
                    'mov_efectivo_sis', 'sub_efectivo_sis', 'mov_tarjeta_sis', 'mov_tarjeta_sis', 'sub_tarjeta_sis',
-                   'mov_cheque_sis', 'sub_cheque_sis', 'total_sistema']
+                   'mov_cheque_sis', 'sub_cheque_sis', 'mov_total_sistema', 'imp_total_sistema']
         fields = '__all__'
         labels = {
             'nro_planilla': _("N° de planilla"),
@@ -90,9 +92,3 @@ class ServicioForm(forms.ModelForm):
     class Meta:
         model = Servicio
         fields = '__all__'
-
-    def clean_nombre(self):
-        nombre = self.cleaned_data['nombre']
-        if not regex_alfanumerico.match(nombre):
-            raise forms.ValidationError('El nombre solo puede contener letras/numeros y/o espacios')
-        return nombre

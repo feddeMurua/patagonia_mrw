@@ -30,12 +30,9 @@
                 <td>{{ reinspeccion.num_certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
                 <td>
-                  <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-edit"></em></a>
-                  <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                  <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" href="{% url 'reinspecciones:borrar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
-                  {% if not reinspeccion.cc %}
-                    <a class="btn btn-success btn-cc" data-toggle="tooltip" title="Agregar a Cuenta Corriente" href="{% url 'reinspecciones:reinspeccion_cc' reinspeccion.pk %}"><em class="glyphicon glyphicon-usd"></em></a>
-                  {% endif %}
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-edit"></em></a>
+                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'reinspecciones:borrar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}
