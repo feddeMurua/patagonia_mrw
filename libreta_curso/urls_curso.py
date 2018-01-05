@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^editar/(?P<pk>\d+)$', modificacion_curso, name='modificar_curso'),
     url(r'^inscripciones/(?P<id_curso>\d+)$', lista_inscripciones_curso, name='inscripciones_curso'),
     url(r'^cierre/(?P<id_curso>\d+)$', cierre_de_curso, name='cierre_curso'),
-    url(r'^pdf/(?P<pk>\d+)$', PdfAsistencia.as_view(), name='pdf_asistencia'),
+    url(r'^pdf/(?P<pk>\d+)$', PdfAsistencia.as_view(), name='pdf_asistencia'),    
+    url(r'^opciones', opciones_estadisticas, name='opciones_estadisticas')
 ]

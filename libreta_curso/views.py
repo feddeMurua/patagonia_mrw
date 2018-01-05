@@ -14,8 +14,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from dateutil.relativedelta import *
 from django.utils import timezone
-
-
+import simplejson as json
+import numpy as np
+from desarrollo_patagonia import factories
+import collections
+import datetime
 '''
 CURSOS
 '''
@@ -91,7 +94,7 @@ class PdfAsistencia(LoginRequiredMixin, PDFTemplateView):
             curso=curso,
             title="Curso"
         )
-        
+
 
 class PdfAprobados(LoginRequiredMixin, PDFTemplateView):
     template_name = 'curso/aprobados_pdf.html'
@@ -287,3 +290,190 @@ class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
             pagesize="A4",
             libreta=libreta
         )
+
+
+'''
+ESTADÍSTICAS
+'''
+
+
+@login_required(login_url='login')
+def opciones_estadisticas(request):
+
+    '''
+    #PARA FILTRAR POR DATE RANGE MAS ADELANTE
+    if request.method == 'POST':
+
+        fecha_desde = datetime.datetime.strptime(request.POST.get('desde'), '%d/%m/%Y').strftime('%Y-%m-%d')
+        fecha_hasta = datetime.datetime.strptime(request.POST.get('hasta'), '%d/%m/%Y').strftime('%Y-%m-%d')
+
+        return redirect('cursos:opciones_estadisticas')
+    '''
+        
+    #CALIFICACIONES
+
+
+    #diccionario de datos
+    aprobados_curso = {}
+    desaprobados_curso = {}
+    s_c_curso = {}
+
+    years = Curso.objects.values_list('fecha')
+
+    for anio in years:
+
+        #acumuladores
+        s_c = 0
+        aprobados = 0
+        desaprobados = 0
+
+        cursos_anio = Inscripcion.objects.filter(curso__fecha__year=anio[0].year).values_list("calificacion")
+
+        for nota in cursos_anio:
+            if nota[0] == "Sin Calificar":
+                s_c+=1
+            elif nota[0] == "Aprobado":
+                aprobados+=1
+            else:
+                desaprobados+=1
+
+        s_c_curso[str(anio[0].year)] = s_c
+        aprobados_curso[str(anio[0].year)] = aprobados
+        desaprobados_curso[str(anio[0].year)] = desaprobados
+
+
+    ord_s_c_curso = collections.OrderedDict(sorted(s_c_curso.items()))
+    ord_aprobados = collections.OrderedDict(sorted(aprobados_curso.items()))
+    ord_desaprobados = collections.OrderedDict(sorted(desaprobados_curso.items()))
+
+    label_curso_anios = ord_s_c_curso.keys() # indistinto para los datos (tienen la misma clave)
+    datos_sc = ord_s_c_curso.values()
+    datos_aprobados = ord_aprobados.values()
+    datos_desaprobados = ord_desaprobados.values()
+
+
+    #CURSOS POR AÑO
+
+
+    cursos_anuales = {}
+
+    years = Curso.objects.values_list('fecha')
+
+    for anio in years:
+            cursos_anuales[str(anio[0].year)] = Curso.objects.filter(fecha__year=anio[0].year).count()
+
+    ord_cursos_anuales = collections.OrderedDict(sorted(cursos_anuales.items()))
+
+    label_year = ord_cursos_anuales.keys()
+    datos_cursos_anuales = ord_cursos_anuales.values()
+
+
+    #INSCRIPCIONES A CURSO
+
+    #CANTIDAD DE ALUMNOS POR CURSO
+
+    inscripciones = {} # inscripciones por curso
+
+    cursos = Curso.objects.all()
+
+    for curso in cursos:
+        inscripciones[str(curso.fecha)] = Inscripcion.objects.filter(curso__fecha=curso.fecha).count()
+
+    ord_inscripciones = collections.OrderedDict(sorted(inscripciones.items()))
+
+    label_cursos = ord_inscripciones.keys()
+    datos_inscripciones = ord_inscripciones.values()
+
+
+
+    #LIBRETAS POR TIPO
+
+
+    #diccionario de datos
+    libretas_blancas = {}
+    libretas_amarillas = {}
+    libretas_celestes = {}
+
+    years = LibretaSanitaria.objects.values_list('fecha')
+
+    for anio in years:
+
+        #acumuladores
+        blancas = 0
+        amarillas = 0
+        celestes = 0
+
+        libretras_anio = LibretaSanitaria.objects.filter(fecha__year=anio[0].year).values_list("tipo_libreta")
+
+        for color in libretras_anio:
+            if color[0] == "Blanca":
+                blancas+=1
+            elif color[0] == "Amarilla":
+                amarillas+=1
+            else:
+                celestes+=1
+
+        libretas_blancas[str(anio[0].year)] = blancas
+        libretas_amarillas[str(anio[0].year)] = amarillas
+        libretas_celestes[str(anio[0].year)] = celestes
+
+
+    ord_libretas_blancas = collections.OrderedDict(sorted(libretas_blancas.items()))
+    ord_libretas_amarillas = collections.OrderedDict(sorted(libretas_amarillas.items()))
+    ord_libretas_celestes = collections.OrderedDict(sorted(libretas_celestes.items()))
+
+    label_libretas_anios = ord_libretas_blancas.keys() # indistinto para los datos (tienen la misma clave)
+    datos_blanca = ord_libretas_blancas.values()
+    datos_amarilla = ord_libretas_amarillas.values()
+    datos_celeste = ord_libretas_celestes.values()
+
+
+
+    context = {
+        #inscripciones
+        'label_cursos': json.dumps(label_cursos),
+        'datos_inscripciones': json.dumps(datos_inscripciones),
+        'promedio_inscriptos': int(np.average(datos_inscripciones)),
+        #cursos
+        'label_year': json.dumps(label_year),
+        'datos_cursos_anuales': json.dumps(datos_cursos_anuales),
+        'promedio_anual': int(np.average(datos_cursos_anuales)),
+        #calificaciones
+        'label_curso_anios': json.dumps(label_curso_anios),
+        'datos_sc': json.dumps(datos_sc),
+        'promedio_sc': int(np.average(datos_sc)),
+        'datos_aprobados': json.dumps(datos_aprobados),
+        'promedio_aprobados': int(np.average(datos_aprobados)),
+        'datos_desaprobados': json.dumps(datos_desaprobados),
+        'promedio_desaprobados': int(np.average(datos_desaprobados)),
+        #libretras
+        'label_libretas_anios': json.dumps(label_libretas_anios),
+        'datos_blanca': json.dumps(datos_blanca),
+        'promedio_blanca': int(np.average(datos_blanca)),
+        'datos_amarilla': json.dumps(datos_amarilla),
+        'promedio_amarilla': int(np.average(datos_amarilla)),
+        'datos_celeste': json.dumps(datos_celeste),
+        'promedio_celeste': int(np.average(datos_celeste)),
+    }
+
+
+
+    '''
+
+    #Para cargar con el factory
+
+    for x in xrange(10):
+        cursos = factories.CursoFactory()
+
+    for x in xrange(45):
+        personas = factories.PersonaFactory()
+
+    for x in xrange(45):
+        inscripciones = factories.InscripcionFactory()
+
+    for x in xrange(45):
+        libretas = factories.LibretaFactory()
+
+    '''
+
+    return render(request, "estadistica/opciones_estadisticas.html",context)

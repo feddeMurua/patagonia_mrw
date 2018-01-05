@@ -10,27 +10,28 @@
     <ul id="menu-bar">
         <li><a href="#">Personas</a>
             <ul>
-                <li><a href="{% url 'personas:lista_clientes' %}"><span>Clientes</span></a></li>
+                <li><a href="{% url 'personas:lista_contribuyentes' %}"><span>Contribuyentes</span></a></li>
                 <li><a href="{% url 'personas:lista_personal_propio' %}"><span>Personal Propio</span></a></li>
             </ul>
         </li>
         <li><a href="#">Cursos/Libretas</a>
             <ul>
-                <li><a href="{% url 'cursos:lista_cursos' %}"><span>Curso de Manipulacion de Alimentos</span></a></li>
+                <li><a href="{% url 'cursos:lista_cursos' %}"><span>Curso de Manipulación de Alimentos</span></a></li>
                 <li><a href="{% url 'libretas:lista_libretas' %}"><span>Libreta Sanitaria</span></a></li>
+                <li><a href="{% url 'cursos:opciones_estadisticas' %}"><span>Estadísticas</span></a></li>
             </ul>
         </li>
         <li><a href="#">Analisis/Controles</a>
             <ul>
-                <li><a href="{% url 'analisis:lista_analisis' %}"><span>Analisis de Triquinosis</span></a></li>
-                <li><a href="{% url 'criadero:lista_solicitudes' %}"><span>Habilitacion de Criadero de Cerdos</span></a></li>
-                <li><a href="{% url 'controles:lista_controles' %}"><span>Control Antirrabico</span></a></li>
+                <li><a href="{% url 'analisis:lista_analisis' %}"><span>Análisis de Triquinosis</span></a></li>
+                <li><a href="{% url 'criadero:lista_solicitudes' %}"><span>Habilitación de Criadero de Cerdos</span></a></li>
+                <li><a href="{% url 'controles:lista_controles' %}"><span>Control Antirrábico</span></a></li>
             </ul>
         </li>
         <li><a href="#">Mascotas</a>
             <ul>
                 <li><a href="{% url 'patentes:lista_patentes' %}"><span>Patentamiento</span></a></li>
-                <li><a href="{% url 'esterilizacion:lista_esterilizaciones' %}"><span>Esterilizacion</span></a></li>
+                <li><a href="{% url 'esterilizacion:lista_esterilizaciones' %}"><span>Esterilización</span></a></li>
                 <li><a href="{% url 'retiros_entregas:lista_retiro_entrega' %}"><span>Retiros y Entregas</span></a></li>
             </ul>
         </li>
@@ -38,12 +39,12 @@
             <ul>
                 <li><a href="{% url 'abastecedores:lista_abastecedores' %}"><span>Abastecedores</span></a></li>
                 <li><a href="{% url 'reinspecciones:lista_reinspecciones' %}"><span>Reinspecciones</span></a></li>
-                <li><a href="{% url 'cuentas_corrientes:lista_cc' %}"><span>Cuentas Corrientes</span></a></li>                
+                <li><a href="{% url 'cuentas_corrientes:lista_cc' %}"><span>Cuentas Corrientes</span></a></li>
             </ul>
         </li>
         <li><a href="#">Transportes/Desinfecciones</a>
             <ul>
-                <li><a href="{% url 'vehiculo:lista_vehiculos' %}"><span>Vehiculos</span></a></li>
+                <li><a href="{% url 'vehiculo:lista_vehiculos' %}"><span>Vehículos</span></a></li>
                 <li><a href="{% url 'controles_plagas:lista_controles_plagas' %}"><span>Control de Plagas</span></a></li>
             </ul>
         </li>
@@ -53,12 +54,12 @@
                 <li><a href="{% url 'arqueo:lista_arqueos' %}"><span>Arqueo Diario de Efectivo</span></a></li>
             </ul>
         </li>
-        <li><a href="#">Usuario: {{ user.get_username }}</a>
+        <li class="pull-right"><a href="#">Usuario: {{ user.get_username }}</a>
             <ul>
                 {% if user.is_staff %}
-                    <li><a href="{% url 'lista_usuarios' %}">Menu de Usuarios</a></li>
+                    <li><a href="{% url 'lista_usuarios' %}">Menú de Usuarios</a></li>
                     <li><a href="{% url 'event_log:lista_eventos' %}">Seguimiento de Eventos de Usuarios</a></li>
-                    <li><a href="{% url 'servicios:lista_servicios' %}">Administracion de Servicios</a></li>
+                    <li><a href="{% url 'servicios:lista_servicios' %}">Administración de Servicios</a></li>
                 {% endif %}
                 <li><a href="{% url 'cambio_password' %}">Cambiar Contraseña</a></li>
                 <li><a href="{% url 'logout' %}">Salir</a></li>

@@ -2,7 +2,7 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
-    url(r'^clientes', lista_clientes, name='lista_clientes'),
+    url(r'^contribuyentes', lista_contribuyentes, name='lista_contribuyentes'),
 
     url(r'^fisicas/nueva$', AltaPersonaFisica.as_view(), name='nueva_persona_fisica'),
     url(r'^fisicas/(?P<pk>\d+)$', DetallePersonaFisica.as_view(), name='detalle_persona_fisica'),
@@ -22,5 +22,6 @@ urlpatterns = [
 
     url(r'^domicilio/nueva_localidad/$', AltaLocalidad.as_view(), name='nueva_localidad'),
     url(r'^domicilio/nueva_provincia/$', AltaProvincia.as_view(), name='nueva_provincia'),
-    url(r'^domicilio/nueva_nacionalidad/$', AltaNacionalidad.as_view(), name='nueva_nacionalidad')
+    url(r'^domicilio/nueva_nacionalidad/$', AltaNacionalidad.as_view(), name='nueva_nacionalidad'),
+
 ]
