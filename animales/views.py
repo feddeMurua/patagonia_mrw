@@ -33,14 +33,15 @@ def alta_analisis(request):
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Analisis de Triquinosis')
         if form.is_valid() & formset.is_valid() & detalle_mov_form.is_valid():
             analisis = form.save()
-            porcinos = []
-            for porcino_form in formset:
-                porcino = porcino_form.save(commit=False)
-                if porcino.precinto is not None and porcino.categoria_porcino != '':
-                    porcino.analisis = analisis
-                    porcinos.append(porcino)
-            for porcino in porcinos:
-                porcino.save()
+
+            #logica formset
+
+            for form in formset.forms:
+                porcino_item = form.save(commit=False)
+                porcino_item.analisis = analisis
+                porcino_item.save()
+
+
             detalle_mov_diario = detalle_mov_form.save(commit=False)
             detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(analisis.id)
             detalle_mov_diario.save()
