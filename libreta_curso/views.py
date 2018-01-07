@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from dateutil.relativedelta import *
 from django.utils import timezone
-import simplejson as json
+import json
 import numpy as np
 from desarrollo_patagonia import factories
 import collections
@@ -312,7 +312,7 @@ def opciones_estadisticas(request):
 
         return redirect('cursos:opciones_estadisticas')
     '''
-        
+
     #CALIFICACIONES
 
 
@@ -388,7 +388,6 @@ def opciones_estadisticas(request):
     datos_inscripciones = ord_inscripciones.values()
 
 
-
     #LIBRETAS POR TIPO
 
 
@@ -434,29 +433,21 @@ def opciones_estadisticas(request):
 
     context = {
         #inscripciones
-        'label_cursos': json.dumps(label_cursos),
-        'datos_inscripciones': json.dumps(datos_inscripciones),
         'promedio_inscriptos': int(np.average(datos_inscripciones)),
         #cursos
-        'label_year': json.dumps(label_year),
-        'datos_cursos_anuales': json.dumps(datos_cursos_anuales),
         'promedio_anual': int(np.average(datos_cursos_anuales)),
         #calificaciones
-        'label_curso_anios': json.dumps(label_curso_anios),
-        'datos_sc': json.dumps(datos_sc),
         'promedio_sc': int(np.average(datos_sc)),
-        'datos_aprobados': json.dumps(datos_aprobados),
         'promedio_aprobados': int(np.average(datos_aprobados)),
-        'datos_desaprobados': json.dumps(datos_desaprobados),
         'promedio_desaprobados': int(np.average(datos_desaprobados)),
         #libretras
-        'label_libretas_anios': json.dumps(label_libretas_anios),
-        'datos_blanca': json.dumps(datos_blanca),
         'promedio_blanca': int(np.average(datos_blanca)),
-        'datos_amarilla': json.dumps(datos_amarilla),
         'promedio_amarilla': int(np.average(datos_amarilla)),
-        'datos_celeste': json.dumps(datos_celeste),
         'promedio_celeste': int(np.average(datos_celeste)),
+        'lista_labels': json.dumps([label_cursos, label_year, label_curso_anios, label_libretas_anios]),
+        'lista_datos': json.dumps([{'Inscripciones':datos_inscripciones},{'Cursos':datos_cursos_anuales},\
+                                    {'Sin calificar':datos_sc,'Aprobados':datos_aprobados,\
+                                    'Desaprobados':datos_desaprobados},{'Blancas':datos_blanca,'Amarillas':datos_amarilla,'Celestes':datos_celeste}])
     }
 
 

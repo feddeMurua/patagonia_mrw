@@ -136,189 +136,55 @@ GESTION CURSOS
   }
 
   /*
-  PRIMER CHART
+  CHART GENERICO
   */
 
-  var ctx = document.getElementById('chartPromInscriptos');
-  var label_cursos = JSON.parse('{{ label_cursos|safe }}');
-  var datos_inscripciones = JSON.parse('{{ datos_inscripciones|safe }}');
+  var labels_list = JSON.parse('{{lista_labels|safe}}');
+  var datos_list = JSON.parse('{{lista_datos|safe}}');
 
-  var background_colors = []
-  for (var i = 0, len = label_cursos.length; i < len; i++) {
-    background_colors.push(getRandomColor());
-  }
+  $('canvas').each( function (index) {
 
-  var chartPromInscriptos = new Chart(ctx, {
-     type: 'bar',
-     data: {
-         labels: label_cursos,
-         datasets: [
-             {
-               data: datos_inscripciones,
-               label: 'Alumnos',
-               backgroundColor: background_colors,
-               borderWidth: 1
-             }
-         ]
-     },
-     options: {
-       scales: {
-           yAxes: [{
-               ticks: {
-                   beginAtZero:true,
-                   stepSize: 1,
-               },
-           }]
+    var ctx = $(this),
+    labels = labels_list[index];
+    datos = datos_list[index];
+
+    var background_colors = []
+    for (var i = 0, len = labels.length; i < len; i++) {
+      background_colors.push(getRandomColor());
+    }
+
+    datasets = []
+    $.each(datos, function(key, value){
+      datasets.push({
+        data: value,
+        label: key,
+        backgroundColor: background_colors,
+        borderWidth: 1
+        }
+      )
+    })
+
+    var chart = new Chart(ctx, {
+       type: 'bar',
+       data: {
+           labels: labels ,
+           datasets: datasets
+       },
+       options: {
+         scales: {
+             yAxes: [{
+                 ticks: {
+                     beginAtZero:true,
+                     stepSize: 1,
+                 },
+             }],
+             xAxes: [{
+               
+             }]
+         }
        }
-     }
-  })
-
-  /*
-  SEGUNDO CHART
-  */
-
-  var ctx = document.getElementById('chartPromCursosAnual');
-  var label_year = JSON.parse('{{ label_year|safe }}');
-  var datos_cursos_anuales = JSON.parse('{{ datos_cursos_anuales|safe }}');
-
-  var background_colors = []
-  for (var i = 0, len = label_year.length; i < len; i++) {
-    background_colors.push(getRandomColor());
-  }
-
-  var chartPromCursosAnual = new Chart(ctx, {
-     type: 'bar',
-     data: {
-         labels: label_year,
-         datasets: [
-             {
-               data: datos_cursos_anuales,
-               label: 'Cursos',
-               backgroundColor: background_colors,
-               borderWidth: 1
-             }
-         ]
-     },
-     options: {
-       scales: {
-           yAxes: [{
-               ticks: {
-                   beginAtZero:true,
-                   stepSize: 1,
-               },
-           }]
-       }
-     }
-  })
-
-  /*
-  TERCER CHART
-  */
-
-  var ctx = document.getElementById("chartCalificaciones");
-  var label_curso_anios = JSON.parse('{{ label_curso_anios|safe }}');
-  var datos_aprobados = JSON.parse('{{ datos_aprobados|safe }}');
-  var datos_desaprobados = JSON.parse('{{ datos_desaprobados|safe }}');
-  var datos_sc = JSON.parse('{{ datos_sc|safe }}');
-
-  var data = {
-
-      labels: label_curso_anios,
-      datasets: [
-          {
-            data: datos_aprobados,
-            label: 'Aprobados',
-            backgroundColor: background_colors,
-            borderWidth: 1
-          },
-
-          {
-            data: datos_desaprobados,
-            label: 'Desaprobados',
-            backgroundColor: background_colors,
-            borderWidth: 1
-          },
-
-          {
-            data: datos_sc,
-            label: 'Sin Calificar',
-            backgroundColor: background_colors,
-            borderWidth: 1
-          },
-
-      ]
-  }
-
-  var chartCalificaciones = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-      options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                    beginAtZero:true,
-                    stepSize: 1,
-                  }
-              }]
-          }
-      }
+    })
   });
-
-  /*
-  CUARTO CHART
-  */
-
-  var ctx = document.getElementById("chartLibretas");
-  var label_libretas_anios = JSON.parse('{{ label_libretas_anios|safe }}');
-  var datos_blanca = JSON.parse('{{ datos_blanca|safe }}');
-  var datos_amarilla = JSON.parse('{{ datos_amarilla|safe }}');
-  var datos_celeste = JSON.parse('{{ datos_celeste|safe }}');
-
-  var data = {
-
-      labels: label_libretas_anios,
-      datasets: [
-          {
-            data: datos_blanca,
-            label: 'Blancas',
-            backgroundColor: background_colors,
-            borderWidth: 1
-          },
-
-          {
-            data: datos_amarilla,
-            label: 'Amarillas',
-            backgroundColor: background_colors,
-            borderWidth: 1
-          },
-
-          {
-            data: datos_celeste,
-            label: 'Celestes',
-            backgroundColor: background_colors,
-            borderWidth: 1
-          },
-
-      ]
-  }
-
-  var chartLibretas = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-      options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                    beginAtZero:true,
-                    stepSize: 1,
-                  }
-              }]
-          }
-      }
-  });
-
 
 </script>
 
