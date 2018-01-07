@@ -1,7 +1,5 @@
 from personas import models as p
 from libreta_curso import models as lc
-from libreta_curso import choices as cc
-import factory
 import factory.fuzzy
 import datetime
 
@@ -39,6 +37,7 @@ class LocalidadFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = p.Localidad
 
+
 class DomicilioFactory(factory.django.DjangoModelFactory):
     barrio = factory.fuzzy.FuzzyText(length=20)
     calle = factory.fuzzy.FuzzyText(length=50)
@@ -66,7 +65,6 @@ class PersonaFactory(factory.django.DjangoModelFactory):
     documentacion_retirada = False
     rubro = factory.fuzzy.FuzzyText(length=10)
 
-
     class Meta:
         model = p.PersonaFisica
 
@@ -74,7 +72,7 @@ class PersonaFactory(factory.django.DjangoModelFactory):
 class InscripcionFactory(factory.django.DjangoModelFactory):
     fecha_inscripcion = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     modificado = False
-    calificacion = factory.fuzzy.FuzzyChoice(['Aprobado','Desaprobado','Sin Calificar'])
+    calificacion = factory.fuzzy.FuzzyChoice(['Aprobado', 'Desaprobado', 'Sin Calificar'])
     porcentaje_asistencia = factory.fuzzy.FuzzyFloat(0.0)
     observaciones = factory.fuzzy.FuzzyText(length=25)
     curso = factory.Iterator(lc.Curso.objects.all())
@@ -92,7 +90,7 @@ class LibretaFactory(factory.django.DjangoModelFactory):
     profesional_examen_clinico = factory.fuzzy.FuzzyText(length=25)
     lugar_examen_clinico = factory.fuzzy.FuzzyText(length=25)
     fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
-    tipo_libreta = factory.fuzzy.FuzzyChoice(['Blanca','Amarilla','Celeste'])
+    tipo_libreta = factory.fuzzy.FuzzyChoice(['Blanca', 'Amarilla', 'Celeste'])
     fecha_vencimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
 
     class Meta:

@@ -301,7 +301,7 @@ ESTADÍSTICAS
 def opciones_estadisticas(request):
 
     '''
-    #PARA FILTRAR POR DATE RANGE MAS ADELANTE
+    # PARA FILTRAR POR DATE RANGE MAS ADELANTE
     if request.method == 'POST':
 
         fecha_desde = datetime.datetime.strptime(request.POST.get('desde'), '%d/%m/%Y').strftime('%Y-%m-%d')
@@ -310,10 +310,9 @@ def opciones_estadisticas(request):
         return redirect('cursos:opciones_estadisticas')
     '''
 
-    #CALIFICACIONES
+    # CALIFICACIONES
 
-
-    #diccionario de datos
+    # diccionario de datos
     aprobados_curso = {}
     desaprobados_curso = {}
     s_c_curso = {}
@@ -322,7 +321,7 @@ def opciones_estadisticas(request):
 
     for anio in years:
 
-        #acumuladores
+        # acumuladores
         s_c = 0
         aprobados = 0
         desaprobados = 0
@@ -331,29 +330,26 @@ def opciones_estadisticas(request):
 
         for nota in cursos_anio:
             if nota[0] == "Sin Calificar":
-                s_c+=1
+                s_c += 1
             elif nota[0] == "Aprobado":
-                aprobados+=1
+                aprobados += 1
             else:
-                desaprobados+=1
+                desaprobados += 1
 
         s_c_curso[str(anio[0].year)] = s_c
         aprobados_curso[str(anio[0].year)] = aprobados
         desaprobados_curso[str(anio[0].year)] = desaprobados
 
-
     ord_s_c_curso = collections.OrderedDict(sorted(s_c_curso.items()))
     ord_aprobados = collections.OrderedDict(sorted(aprobados_curso.items()))
     ord_desaprobados = collections.OrderedDict(sorted(desaprobados_curso.items()))
 
-    label_curso_anios = ord_s_c_curso.keys() # indistinto para los datos (tienen la misma clave)
+    label_curso_anios = ord_s_c_curso.keys()  # indistinto para los datos (tienen la misma clave)
     datos_sc = ord_s_c_curso.values()
     datos_aprobados = ord_aprobados.values()
     datos_desaprobados = ord_desaprobados.values()
 
-
-    #CURSOS POR AÑO
-
+    # CURSOS POR AÑO
 
     cursos_anuales = {}
 
@@ -367,12 +363,11 @@ def opciones_estadisticas(request):
     label_year = ord_cursos_anuales.keys()
     datos_cursos_anuales = ord_cursos_anuales.values()
 
+    # INSCRIPCIONES A CURSO
 
-    #INSCRIPCIONES A CURSO
+    # CANTIDAD DE ALUMNOS POR CURSO
 
-    #CANTIDAD DE ALUMNOS POR CURSO
-
-    inscripciones = {} # inscripciones por curso
+    inscripciones = {}  # inscripciones por curso
 
     cursos = Curso.objects.all()
 
@@ -384,11 +379,9 @@ def opciones_estadisticas(request):
     label_cursos = ord_inscripciones.keys()
     datos_inscripciones = ord_inscripciones.values()
 
+    # LIBRETAS POR TIPO
 
-    #LIBRETAS POR TIPO
-
-
-    #diccionario de datos
+    # diccionario de datos
     libretas_blancas = {}
     libretas_amarillas = {}
     libretas_celestes = {}
@@ -397,7 +390,7 @@ def opciones_estadisticas(request):
 
     for anio in years:
 
-        #acumuladores
+        # acumuladores
         blancas = 0
         amarillas = 0
         celestes = 0
@@ -406,16 +399,15 @@ def opciones_estadisticas(request):
 
         for color in libretras_anio:
             if color[0] == "Blanca":
-                blancas+=1
+                blancas += 1
             elif color[0] == "Amarilla":
-                amarillas+=1
+                amarillas += 1
             else:
-                celestes+=1
+                celestes += 1
 
         libretas_blancas[str(anio[0].year)] = blancas
         libretas_amarillas[str(anio[0].year)] = amarillas
         libretas_celestes[str(anio[0].year)] = celestes
-
 
     ord_libretas_blancas = collections.OrderedDict(sorted(libretas_blancas.items()))
     ord_libretas_amarillas = collections.OrderedDict(sorted(libretas_amarillas.items()))
@@ -426,31 +418,29 @@ def opciones_estadisticas(request):
     datos_amarilla = ord_libretas_amarillas.values()
     datos_celeste = ord_libretas_celestes.values()
 
-
-
     context = {
-        #inscripciones
+        # inscripciones
         'promedio_inscriptos': int(np.average(datos_inscripciones)),
-        #cursos
+        # cursos
         'promedio_anual': int(np.average(datos_cursos_anuales)),
-        #calificaciones
+        # calificaciones
         'promedio_sc': int(np.average(datos_sc)),
         'promedio_aprobados': int(np.average(datos_aprobados)),
         'promedio_desaprobados': int(np.average(datos_desaprobados)),
-        #libretras
+        # libretas
         'promedio_blanca': int(np.average(datos_blanca)),
         'promedio_amarilla': int(np.average(datos_amarilla)),
         'promedio_celeste': int(np.average(datos_celeste)),
         'lista_labels': json.dumps([label_cursos, label_year, label_curso_anios, label_libretas_anios]),
-        'lista_datos': json.dumps([{'Inscripciones':datos_inscripciones},{'Cursos':datos_cursos_anuales},\
-                                    {'Sin calificar':datos_sc,'Aprobados':datos_aprobados,\
-                                    'Desaprobados':datos_desaprobados},{'Blancas':datos_blanca,'Amarillas':datos_amarilla,'Celestes':datos_celeste}])
+        'lista_datos': json.dumps([{'Inscripciones': datos_inscripciones}, {'Cursos': datos_cursos_anuales},
+                                   {'Sin calificar': datos_sc, 'Aprobados': datos_aprobados,
+                                    'Desaprobados': datos_desaprobados}, {'Blancas': datos_blanca,
+                                                                          'Amarillas': datos_amarilla,
+                                                                          'Celestes': datos_celeste}])
     }
 
 
-
     '''
-
     #Para cargar con el factory
 
     for x in xrange(10):
@@ -464,7 +454,7 @@ def opciones_estadisticas(request):
 
     for x in xrange(45):
         libretas = factories.LibretaFactory()
-
     '''
 
-    return render(request, "estadistica/opciones_estadisticas.html",context)
+
+    return render(request, "estadistica/opciones_estadisticas.html", context)

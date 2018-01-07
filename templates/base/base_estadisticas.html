@@ -1,43 +1,37 @@
-{% extends "base/base_estadisticas.html" %}
+{% extends "base/base.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
 
-{% block title %}Estadisticas Libretas/Cursos{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_form.css' %}"/>
+    {% block more-stylesheets %}{% endblock %}
+{% endblock %}
 
-{% block header-title %}Estadisticas para Libretas/Cursos{% endblock %}
+{% block no-particles %}{% endblock %}
 
-{% block tabs %}
-    <ul>
-        <li><a href="#tabs-1">Alumnos Inscriptos por Curso</a></li>
-        <li><a href="#tabs-2">Cursos Dictados por Año</a></li>
-        <li><a href="#tabs-3">Calificaciones por Curso</a></li>
-        <li><a href="#tabs-4">Libretas por Curso</a></li>
-    </ul>
-    <div id="tabs-1">
-        <p><strong>Promedio de Alumnos Inscriptos por Curso: {{promedio_inscriptos}}</strong></p>
-        <canvas width="5" height="5"></canvas>
-    </div>
-    <div id="tabs-2">
-        <p><strong>Promedio de Cursos dictados por Año: {{promedio_anual}}</strong></p>
-        <canvas width="5" height="5"></canvas>
-    </div>
-    <div id="tabs-3">
-        <p><strong>Promedio HISTÓRICO de aprobados: {{promedio_aprobados}}</strong></p>
-        <p><strong>Promedio HISTÓRICO de desaprobados: {{promedio_desaprobados}}</strong></p>
-        <p><strong>Promedio HISTÓRICO sin calificación: {{promedio_sc}}</strong></p>
-        <canvas width="5" height="5"></canvas>
-    </div>
-    <div id="tabs-4">
-        <p><strong>Promedio HISTÓRICO de libretas blancas: {{promedio_blanca}}</strong></p>
-        <p><strong>Promedio HISTÓRICO de libretas amarillas: {{promedio_amarilla}}</strong></p>
-        <p><strong>Promedio HISTÓRICO de libretras celestes: {{promedio_celeste}}</strong></p>
-        <canvas width="5" height="5"></canvas>
+{% block content %}
+    <div class="container container-form">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <div id="tabs">
+                        {% block tabs %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 {% endblock %}
 
-{% block more-scripts %}
+{% block scripts %}
     <script src="{% static 'js/chart.js' %}"></script>
     <script>
+        $(function() {
+            $("#tabs").tabs();
+        });
+
         function getRandomColor() {
             var letters = '0123456789ABCDEF'.split('');
             var color = '#';
@@ -78,7 +72,7 @@
             var chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: labels ,
+                    labels: labels,
                     datasets: datasets
                 },
                 options: {
@@ -94,4 +88,5 @@
             });
         });
     </script>
+    {% block more-scripts %}{% endblock %}
 {% endblock %}
