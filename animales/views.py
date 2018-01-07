@@ -29,13 +29,6 @@ def lista_analisis(request):
 
 @login_required(login_url='login')
 def alta_analisis(request):
-
-    class RequiredFormset(BaseFormSet):
-        def __init__(self, *args, **kwargs):
-            super(RequiredFormset, self).__init__(*args, **kwargs)
-            for form in self.forms:
-                form.empty_permitted = False
-
     if request.method == 'POST':
         form = AltaAnalisisForm(request.POST)
         formset = AltaPorcinoFormSet(request.POST)
@@ -43,16 +36,16 @@ def alta_analisis(request):
         servicio_form = pd_f.ListaServicios(request.POST, tipo='Analisis de Triquinosis')
         if form.is_valid() & formset.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
             analisis = form.save()
-            porcinos = []
-            for porcino_form in formset:
-                porcino = porcino_form.save(commit=False)
-                if porcino.precinto is not None and porcino.categoria_porcino != '':
-                    porcino.analisis = analisis
-                    porcinos.append(porcino)
-            for porcino in porcinos:
-                porcino.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(servicio_form.cleaned_data['servicio'], analisis)
+
+            #logica formset
+
+            for form in formset.forms:
+                porcino_item = form.save(commit=False)
+                porcino_item.analisis = analisis
+                porcino_item.save()
+            detalle_mov_diario = detalle_mov_form.save(commit=False)
+            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(analisis.id)
+            detalle_mov_diario.save()
             log_crear(request.user.id, analisis, 'Analisis de Triquinosis')
             return redirect('analisis:lista_analisis')
     else:
@@ -61,7 +54,6 @@ def alta_analisis(request):
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         servicio_form = pd_f.ListaServicios(tipo='Analisis de Triquinosis')
     return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'can_delete': True,
-                                                           'servicio_form': servicio_form,
                                                            'detalle_mov_form': detalle_mov_form})
 
 

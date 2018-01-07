@@ -19,6 +19,9 @@
     {% endif %}
 {% endblock %}
 
+{% block no-select2 %}
+{% endblock %}
+
 {% block form-right %}
     <div class="col-xs-12 col-md-5" id="container-form-right">
         <div class="panel panel-primary">
@@ -26,8 +29,20 @@
                 <h3 class="panel-title">Porcinos</h3>
             </div>
             <div class="panel-body">
-                {{ formset.media }}
-                {% bootstrap_dynamic_formset formset can_delete=True %}
+              <fieldset id="fieldset_porcinos">
+                {% for form in formset.forms %}
+                  {% for field in form.visible_fields %}
+                    <div class="form-group">
+                      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                      {{ field|add_class:'form-control' }}
+                      {% for error in field.errors %}
+                        <span style="color:red;" class="help-block">{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
+                {% endfor %}
+              </fieldset>
+              {{ formset.management_form }}
             </div>
         </div>
     </div>
@@ -38,6 +53,15 @@
 {% endblock %}
 
 {% block more-scripts %}
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+
+    <script>
+      $('#fieldset_porcinos').formset({
+            addText: 'Agregar otro elemento',
+            deleteText: 'Eliminar'
+      });
+    </script>
+
     <script>
         var h = $('#container-form-left').height();
         $('#container-form-right').css('height', h - 20 + 'px');
