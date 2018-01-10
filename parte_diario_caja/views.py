@@ -63,8 +63,6 @@ def lista_arqueos(request):
     if not arqueos:
         realizado = False
     else:
-        print(arqueos.last().fecha)
-        print(timezone.now().date())
         realizado = True if arqueos.last().fecha == timezone.now().date() else False
     return render(request, 'arqueo/arqueo_list.html', {'listado': arqueos, 'realizado': realizado})
 
@@ -118,6 +116,11 @@ def alta_arqueo(request):
         form_otros = ArqueoOtrosForm
     return render(request, 'arqueo/arqueo_form.html', {'form': form, 'form_otros': form_otros,
                                                        'ingresos_varios': ingresos_varios})
+
+
+@login_required(login_url='login')
+def detalle_arqueo(request, pk):
+    return render(request, 'arqueo/arqueo_detail.html', {'arqueo': ArqueoDiario.objects.get(pk=pk)})
 
 
 @staff_member_required

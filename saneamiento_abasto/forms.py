@@ -182,6 +182,15 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
         return fecha_prox_visita
 
 
+class PagoDiferidoForm(forms.ModelForm):
+    fecha_pago = forms.DateField(widget=DateInput(), label="Fecha limite de pago")
+
+    class Meta:
+        model = PagoDiferido
+        exclude = ['control']
+        fields = '__all__'
+
+
 class PagoCCForm(forms.ModelForm):
 
     class Meta:

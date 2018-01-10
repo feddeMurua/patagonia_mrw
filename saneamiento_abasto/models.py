@@ -127,3 +127,14 @@ class ControlDePlaga(models.Model):
 
     def __str__(self):
         return "%s - %s - %s" % (self.fecha_hoy, self.responsable, self.tipo_plaga)
+
+
+class PagoDiferido(models.Model):
+    monto = models.FloatField()
+    fecha_pago = models.DateField()
+    control = models.ForeignKey('ControlDePlaga', on_delete=models.CASCADE)
+
+    def detalles(self, servicio, control):
+        self.monto = servicio.importe
+        self.control = control
+        self.save()

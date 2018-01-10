@@ -16,7 +16,6 @@
     <thead>
         <tr>
             <th>Fecha de Inicio</th>
-            <th>Cupo</th>
             <th>Lugar</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -25,7 +24,6 @@
         {% for curso in listado %}
             <tr>
                 <td>{{ curso.fecha }}</td>
-                <td>{{ curso.cupo }}</td>
                 <td>{{ curso.lugar }}</td>
                 <td>
                     {% if user.is_staff %}

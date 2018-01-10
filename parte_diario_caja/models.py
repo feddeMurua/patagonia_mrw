@@ -81,7 +81,6 @@ class ArqueoDiario(models.Model):
         return "%s - %s" % (self.fecha, self.nro_planilla)
 
     def detalle_sistema(self, datos):
-        print (datos)
         self.mov_efectivo_sis = datos['efectivo_mov']
         self.sub_efectivo_sis = datos['efectivo_imp']
         self.mov_tarjeta_sis = datos['tarjeta_mov']
@@ -90,3 +89,4 @@ class ArqueoDiario(models.Model):
         self.sub_cheque_sis = datos['cheque_imp']
         self.mov_total_sistema = datos['total_mov']
         self.sub_total_sistema = datos['total_imp']
+        self.save()

@@ -11,7 +11,22 @@
 {% block form-right %}
     {% if not modificacion %}
         <div class="col-xs-12 col-md-5" id="container-form-right">
-            {% include 'caja/cuadro_facturacion.html' %}
+            <div id="radio_options">
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="diferido" checked>Pago Diferido</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="normal">Pago Normal</label>
+                </div>
+            </div>
+            <br>
+            <div class="pago_diferido">
+                <input type="submit" class="btn btn-success" value="Generar comprobante de deuda">
+            </div>
+            <div class="pago_normal">
+                {% include 'caja/cuadro_facturacion.html' %}
+                <input type="submit" class="btn btn-success" value="Facturar">
+            </div>
         </div>
     {% endif %}
 {% endblock %}
@@ -25,5 +40,26 @@
         $.datepicker.setDefaults({
             minDate: "+1d"
         });
+
+        var pago_diferido = $('.pago_diferido'),
+        pago_normal = $('.pago_normal');
+
+        forma_pago = $("input[name='optradio']:checked").val();
+        hideFields();
+
+        $('#radio_options').change(function(){
+            forma_pago = $("input[name='optradio']:checked").val();
+            hideFields();
+        });
+
+        function hideFields() {
+            if (forma_pago == 'diferido') {
+                pago_diferido.removeClass('hidden');
+                pago_normal.addClass('hidden');
+            } else {
+                pago_diferido.addClass('hidden');
+                pago_normal.removeClass('hidden');
+            }
+        }
     </script>
 {% endblock %}

@@ -20,6 +20,7 @@
             <th>Fecha</th>
             <th>N° de Planilla</th>
             <th>Total</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,9 @@
                 <td>{{ arqueo.fecha }}</td>
                 <td>{{ arqueo.nro_planilla }}</td>
                 <td>${{ arqueo.total_manual }}</td>
+                <td>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'arqueo:detalle_arqueo' arqueo.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                </td>
             </tr>
         {% endfor %}
     </tbody>

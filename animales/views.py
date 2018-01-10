@@ -37,7 +37,7 @@ def alta_analisis(request):
         if form.is_valid() & formset.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
             analisis = form.save()
 
-            #logica formset
+            # logica formset
 
             for form in formset.forms:
                 porcino_item = form.save(commit=False)
@@ -54,7 +54,8 @@ def alta_analisis(request):
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         servicio_form = pd_f.ListaServicios(tipo='Analisis de Triquinosis')
     return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'can_delete': True,
-                                                           'detalle_mov_form': detalle_mov_form})
+                                                           'detalle_mov_form': detalle_mov_form,
+                                                           'servicio_form': servicio_form})
 
 
 @login_required(login_url='login')

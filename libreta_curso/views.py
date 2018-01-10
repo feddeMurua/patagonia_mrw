@@ -16,9 +16,10 @@ from dateutil.relativedelta import *
 from django.utils import timezone
 import json
 import numpy as np
-from desarrollo_patagonia import factories
 import collections
-import datetime
+from desarrollo_patagonia import factories
+
+
 '''
 CURSOS
 '''
@@ -134,7 +135,7 @@ def alta_inscripcion(request, id_curso):
             inscripcion.curso = Curso.objects.get(pk=id_curso)
             inscripcion.save()
             log_crear(request.user.id, inscripcion, 'Inscripcion a Curso')
-            return HttpResponseRedirect(reverse('cursos:inscripciones_curso', args=id_curso))
+            return HttpResponseRedirect(reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso}))
     else:
         form = InscripcionForm
     url_return = 'cursos:inscripciones_curso'
@@ -299,34 +300,40 @@ ESTADÍSTICAS
 
 @login_required(login_url='login')
 def opciones_estadisticas(request):
-
-    '''
-    # PARA FILTRAR POR DATE RANGE MAS ADELANTE
+    rango_form = RangoFechaForm
+    anio = timezone.now().year
+    years = range(anio, anio - 5, -1)
+    cursos = Curso.objects.filter(fecha__year__gt=years[-1])
     if request.method == 'POST':
-
-        fecha_desde = datetime.datetime.strptime(request.POST.get('desde'), '%d/%m/%Y').strftime('%Y-%m-%d')
-        fecha_hasta = datetime.datetime.strptime(request.POST.get('hasta'), '%d/%m/%Y').strftime('%Y-%m-%d')
-
-        return redirect('cursos:opciones_estadisticas')
-    '''
-
-    # CALIFICACIONES
+        rango_form = RangoFechaForm(request.POST)
+        if rango_form.is_valid():
+            fecha_desde = rango_form.cleaned_data['fecha_desde']
+            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
+            anio_desde = fecha_desde.year
+            anio_hasta = fecha_hasta.year
+            years = range(anio_hasta, anio_desde - 1, -1)
+            print(years)
+            cursos = Curso.objects.filter(fecha__gte=fecha_desde, fecha__lte=fecha_hasta)
 
     # diccionario de datos
     aprobados_curso = {}
     desaprobados_curso = {}
     s_c_curso = {}
 
-    years = Curso.objects.values_list('fecha')
+    cursos_anuales = {}
 
-    for anio in years:
+    libretas_blancas = {}
+    libretas_amarillas = {}
+    libretas_celestes = {}
+
+    for year in years:
 
         # acumuladores
         s_c = 0
         aprobados = 0
         desaprobados = 0
 
-        cursos_anio = Inscripcion.objects.filter(curso__fecha__year=anio[0].year).values_list("calificacion")
+        cursos_anio = Inscripcion.objects.filter(curso__fecha__year=year).values_list("calificacion")
 
         for nota in cursos_anio:
             if nota[0] == "Sin Calificar":
@@ -336,9 +343,34 @@ def opciones_estadisticas(request):
             else:
                 desaprobados += 1
 
-        s_c_curso[str(anio[0].year)] = s_c
-        aprobados_curso[str(anio[0].year)] = aprobados
-        desaprobados_curso[str(anio[0].year)] = desaprobados
+        s_c_curso[str(year)] = s_c
+        aprobados_curso[str(year)] = aprobados
+        desaprobados_curso[str(year)] = desaprobados
+
+
+        cursos_anuales[str(year)] = Curso.objects.filter(fecha__year=year).count()
+
+
+        # acumuladores
+        blancas = 0
+        amarillas = 0
+        celestes = 0
+
+        libretras_anio = LibretaSanitaria.objects.filter(fecha__year=year).values_list("tipo_libreta")
+
+        for color in libretras_anio:
+            if color[0] == "Blanca":
+                blancas += 1
+            elif color[0] == "Amarilla":
+                amarillas += 1
+            else:
+                celestes += 1
+
+        libretas_blancas[str(year)] = blancas
+        libretas_amarillas[str(year)] = amarillas
+        libretas_celestes[str(year)] = celestes
+
+    # CALIFICACIONES
 
     ord_s_c_curso = collections.OrderedDict(sorted(s_c_curso.items()))
     ord_aprobados = collections.OrderedDict(sorted(aprobados_curso.items()))
@@ -351,13 +383,6 @@ def opciones_estadisticas(request):
 
     # CURSOS POR AÑO
 
-    cursos_anuales = {}
-
-    years = Curso.objects.values_list('fecha')
-
-    for anio in years:
-            cursos_anuales[str(anio[0].year)] = Curso.objects.filter(fecha__year=anio[0].year).count()
-
     ord_cursos_anuales = collections.OrderedDict(sorted(cursos_anuales.items()))
 
     label_year = ord_cursos_anuales.keys()
@@ -365,11 +390,7 @@ def opciones_estadisticas(request):
 
     # INSCRIPCIONES A CURSO
 
-    # CANTIDAD DE ALUMNOS POR CURSO
-
     inscripciones = {}  # inscripciones por curso
-
-    cursos = Curso.objects.all()
 
     for curso in cursos:
         inscripciones[str(curso.fecha)] = Inscripcion.objects.filter(curso__fecha=curso.fecha).count()
@@ -381,34 +402,6 @@ def opciones_estadisticas(request):
 
     # LIBRETAS POR TIPO
 
-    # diccionario de datos
-    libretas_blancas = {}
-    libretas_amarillas = {}
-    libretas_celestes = {}
-
-    years = LibretaSanitaria.objects.values_list('fecha')
-
-    for anio in years:
-
-        # acumuladores
-        blancas = 0
-        amarillas = 0
-        celestes = 0
-
-        libretras_anio = LibretaSanitaria.objects.filter(fecha__year=anio[0].year).values_list("tipo_libreta")
-
-        for color in libretras_anio:
-            if color[0] == "Blanca":
-                blancas += 1
-            elif color[0] == "Amarilla":
-                amarillas += 1
-            else:
-                celestes += 1
-
-        libretas_blancas[str(anio[0].year)] = blancas
-        libretas_amarillas[str(anio[0].year)] = amarillas
-        libretas_celestes[str(anio[0].year)] = celestes
-
     ord_libretas_blancas = collections.OrderedDict(sorted(libretas_blancas.items()))
     ord_libretas_amarillas = collections.OrderedDict(sorted(libretas_amarillas.items()))
     ord_libretas_celestes = collections.OrderedDict(sorted(libretas_celestes.items()))
@@ -419,6 +412,7 @@ def opciones_estadisticas(request):
     datos_celeste = ord_libretas_celestes.values()
 
     context = {
+        'rango_form': rango_form,
         # inscripciones
         'promedio_inscriptos': int(np.average(datos_inscripciones)),
         # cursos
@@ -446,15 +440,14 @@ def opciones_estadisticas(request):
     for x in xrange(10):
         cursos = factories.CursoFactory()
 
-    for x in xrange(45):
+    for x in xrange(90):
         personas = factories.PersonaFactory()
 
-    for x in xrange(45):
+    for x in xrange(90):
         inscripciones = factories.InscripcionFactory()
 
     for x in xrange(45):
         libretas = factories.LibretaFactory()
     '''
-
 
     return render(request, "estadistica/opciones_estadisticas.html", context)

@@ -1,0 +1,133 @@
+{% extends "base/base_detail.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Arqueo Diario{% endblock %}
+
+{% block header-title %}Arqueo Diario - {{ arqueo.fecha }} - N° de Planilla: {{ arqueo.nro_planilla }}{% endblock %}
+
+{% block url-volver %}{% url 'arqueo:lista_arqueos' %}{% endblock %}
+
+{% block detail %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col col-xs-6">
+                    <h3 class="panel-title">Recuento Manual</h3>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tipo de Valor</th>
+                        <th>Cant. movimientos</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Billetes quinientos</td>
+                        <td><span>{{ arqueo.billetes_quinientos }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Billetes doscientos</td>
+                        <td><span>{{ arqueo.billetes_doscientos }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Billetes cien</td>
+                        <td><span>{{ arqueo.billetes_cien }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Billetes cincuenta</td>
+                        <td><span>{{ arqueo.billetes_cincuenta }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Billetes veinte</td>
+                        <td><span>{{ arqueo.billetes_veinte }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Billetes diez</td>
+                        <td><span>{{ arqueo.billetes_diez }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Billetes cinco</td>
+                        <td><span>{{ arqueo.billetes_cinco }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Billetes dos</td>
+                        <td><span>{{ arqueo.billetes_dos }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Monedas dos</td>
+                        <td><span>{{ arqueo.monedas_dos }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Monedas uno</td>
+                        <td><span>{{ arqueo.monedas_uno }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Monedas cincuenta</td>
+                        <td><span>{{ arqueo.monedas_cincuenta }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Monedas veinticinco</td>
+                        <td><span>{{ arqueo.monedas_veinticinco }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Débito/Crédito</td>
+                        <td><span>{{ arqueo.debito_credito_cant }}</span></td>
+                        <td>$<span class="sub_valor_sistema">{{ arqueo.debito_credito_sub }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Cheques</td>
+                        <td><span>{{ arqueo.cheques_cant }}</span></td>
+                        <td>$<span class="sub_valor_sistema">{{ arqueo.cheques_sub }}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col col-xs-6">
+                    <h3 class="panel-title">Recuento del Sistema</h3>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tipo de Valor</th>
+                        <th>Cant. movimientos</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Efectivo</td>
+                        <td><span>{{ arqueo.mov_efectivo_sis }}</span></td>
+                        <td>$<span class="sub_valor_sistema">{{ arqueo.sub_efectivo_sis }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Débito/Crédito</td>
+                        <td><span>{{ arqueo.mov_tarjeta_sis }}</span></td>
+                        <td>$<span class="sub_valor_sistema">{{ arqueo.sub_tarjeta_sis }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Cheques</td>
+                        <td><span>{{ arqueo.mov_cheque_sis }}</span></td>
+                        <td>$<span class="sub_valor_sistema">{{ arqueo.sub_cheque_sis }}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block btn-footer %}
+    <a href="{% url 'arqueo:lista_arqueos' %}" class="btn btn-primary" role="button">Regresar</a>
+{% endblock %}

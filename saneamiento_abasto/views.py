@@ -436,18 +436,28 @@ def alta_control_plaga(request):
         form = ControlDePlagaForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         servicio_form = pd_f.ListaServicios(request.POST, tipo='Control de Plagas')
-        if form.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
+        pago_diferido_form = PagoDiferidoForm(request.POST)
+        if form.is_valid() & servicio_form.is_valid():
             control_plaga = form.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(servicio_form.cleaned_data['servicio'], control_plaga)
+            servicio = servicio_form.cleaned_data['servicio']
+            if request.POST['optradio'] == 'normal':
+                if detalle_mov_form.is_valid():
+                    detalle_mov = detalle_mov_form.save(commit=False)
+                    detalle_mov.completar(servicio, control_plaga)
+            else:
+                if pago_diferido_form.is_valid():
+                    pago_diferido = pago_diferido_form.save(commit=False)
+                    pago_diferido.detalles(servicio, control_plaga)
             log_crear(request.user.id, control_plaga, 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')
     else:
         form = ControlDePlagaForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         servicio_form = pd_f.ListaServicios(tipo='Control de Plagas')
+        pago_diferido_form = PagoDiferidoForm
     return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'servicio_form': servicio_form,
-                                                                    'detalle_mov_form': detalle_mov_form})
+                                                                    'detalle_mov_form': detalle_mov_form,
+                                                                    'pago_diferido_form': pago_diferido_form})
 
 
 class DetalleControlPlaga(LoginRequiredMixin, DetailView):

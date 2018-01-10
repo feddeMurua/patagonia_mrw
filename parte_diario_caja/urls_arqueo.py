@@ -4,4 +4,5 @@ from .views import *
 urlpatterns = [
     url(r'^$', lista_arqueos, name='lista_arqueos'),
     url(r'^nuevo$', alta_arqueo, name='nuevo_arqueo'),
+    url(r'^detalle/(?P<pk>\d+)$', detalle_arqueo, name='detalle_arqueo'),
 ]

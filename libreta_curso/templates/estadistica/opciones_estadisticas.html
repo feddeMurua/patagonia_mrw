@@ -1,6 +1,7 @@
 {% extends "base/base_estadisticas.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
 
 {% block title %}Estadisticas Libretas/Cursos{% endblock %}
 
@@ -33,65 +34,4 @@
         <p><strong>Promedio HISTÓRICO de libretras celestes: {{promedio_celeste}}</strong></p>
         <canvas width="5" height="5"></canvas>
     </div>
-{% endblock %}
-
-{% block more-scripts %}
-    <script src="{% static 'js/chart.js' %}"></script>
-    <script>
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF'.split('');
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        /*
-        CHART GENERICO
-        */
-
-        var labels_list = JSON.parse('{{lista_labels|safe}}');
-        var datos_list = JSON.parse('{{lista_datos|safe}}');
-
-        $('canvas').each(function (index){
-            var ctx = $(this),
-            labels = labels_list[index];
-            datos = datos_list[index];
-
-            var background_colors = []
-            for (var i = 0, len = labels.length; i < len; i++) {
-                background_colors.push(getRandomColor());
-            }
-
-            datasets = []
-            $.each(datos, function(key, value) {
-                datasets.push(
-                    {
-                        data: value,
-                        label: key,
-                        backgroundColor: background_colors,
-                        borderWidth: 1
-                    })
-            })
-
-            var chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels ,
-                    datasets: datasets
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true,
-                                stepSize: 1
-                            }
-                        }]
-                    }
-                }
-            });
-        });
-    </script>
 {% endblock %}

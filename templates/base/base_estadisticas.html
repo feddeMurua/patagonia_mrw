@@ -5,7 +5,18 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_form.css' %}"/>
-    {% block more-stylesheets %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/eventos_list.css' %}"/>
+    {% block more-stylesheets %}
+        <style>
+            .form-group {
+                margin-right: 10px;
+            }
+
+            .form-group input {
+                width: 140px;
+            }
+        </style>
+    {% endblock %}
 {% endblock %}
 
 {% block no-particles %}{% endblock %}
@@ -14,7 +25,22 @@
     <div class="container container-form">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
+                <div class="panel-heading form-inline" align="right">
+                    {{ rango_form.media }}
+                    {% for field in rango_form %}
+                        <div class="form-group">
+                            <label>{{ field.label }}</label>
+                            {{ field|add_class:'form-control' }}
+                            {% for error in field.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span> Buscar
+                    </button>
+                </div>
                 <div class="panel-body">
                     <div id="tabs">
                         {% block tabs %}{% endblock %}
@@ -30,6 +56,10 @@
     <script>
         $(function() {
             $("#tabs").tabs();
+        });
+
+        $.datepicker.setDefaults({
+            maxDate: new Date()
         });
 
         function getRandomColor() {
