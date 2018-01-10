@@ -1,0 +1,34 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}Pago de Cuenta Corriente{% endblock %}
+
+{% block header-title %}Pago de Cuenta Corriente{% endblock %}
+
+{% block url-volver %}{% url 'cuentas_corrientes:pagos_cc' pk %}{% endblock %}
+
+{% block extra-form %}
+    <div class=" panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Datos de Facturacion</h3>
+        </div>
+        <div class="panel-body">
+            {{ detalle_mov_form.media }}
+            {% for field in detalle_mov_form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    {% for error in field.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'controles_plagas:lista_controles_plagas' %}">Cancelar</a>
+{% endblock %}

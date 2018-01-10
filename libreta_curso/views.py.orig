@@ -314,9 +314,15 @@ def opciones_estadisticas(request):
         return redirect('cursos:opciones_estadisticas')
     '''
 
+<<<<<<< HEAD
+    #CALIFICACIONES
+
+    #diccionario de datos
+=======
     # CALIFICACIONES
 
     # diccionario de datos
+>>>>>>> 07520cb63d774f047906ebfa71360572243ed514
     aprobados_curso = {}
     desaprobados_curso = {}
     s_c_curso = {}
@@ -343,7 +349,6 @@ def opciones_estadisticas(request):
         s_c_curso[str(anio[0].year)] = s_c
         aprobados_curso[str(anio[0].year)] = aprobados
         desaprobados_curso[str(anio[0].year)] = desaprobados
-
 
     ord_s_c_curso = collections.OrderedDict(sorted(s_c_curso.items()))
     ord_aprobados = collections.OrderedDict(sorted(aprobados_curso.items()))
@@ -386,7 +391,13 @@ def opciones_estadisticas(request):
 
     # LIBRETAS POR TIPO
 
+<<<<<<< HEAD
+    #LIBRETAS POR TIPO
+
+    #diccionario de datos
+=======
     # diccionario de datos
+>>>>>>> 07520cb63d774f047906ebfa71360572243ed514
     libretas_blancas = {}
     libretas_amarillas = {}
     libretas_celestes = {}
@@ -414,7 +425,6 @@ def opciones_estadisticas(request):
         libretas_amarillas[str(anio[0].year)] = amarillas
         libretas_celestes[str(anio[0].year)] = celestes
 
-
     ord_libretas_blancas = collections.OrderedDict(sorted(libretas_blancas.items()))
     ord_libretas_amarillas = collections.OrderedDict(sorted(libretas_amarillas.items()))
     ord_libretas_celestes = collections.OrderedDict(sorted(libretas_celestes.items()))
@@ -424,6 +434,7 @@ def opciones_estadisticas(request):
     datos_amarilla = ord_libretas_amarillas.values()
     datos_celeste = ord_libretas_celestes.values()
 
+<<<<<<< HEAD
 
     '''
     ------------------------------------
@@ -648,6 +659,8 @@ def opciones_estadisticas(request):
     CONTEXTO
     '''
 
+=======
+>>>>>>> 07520cb63d774f047906ebfa71360572243ed514
     context = {
         # inscripciones
         'promedio_inscriptos': int(np.average(datos_inscripciones)),
@@ -657,7 +670,8 @@ def opciones_estadisticas(request):
         'promedio_sc': int(np.average(datos_sc)),
         'promedio_aprobados': int(np.average(datos_aprobados)),
         'promedio_desaprobados': int(np.average(datos_desaprobados)),
-        # libretas
+<<<<<<< HEAD
+        #libretas
         'promedio_blanca': int(np.average(datos_blanca)),
         'promedio_amarilla': int(np.average(datos_amarilla)),
         'promedio_celeste': int(np.average(datos_celeste)),
@@ -693,8 +707,19 @@ def opciones_estadisticas(request):
                                     {'Can. Machos':datos_esterilizacion_can_macho,'Can. Hembras':datos_esterilizacion_can_hembra,\
                                     'Fel. Machos':datos_esterilizacion_fel_macho,'Fel. Hembras':datos_esterilizacion_fel_hembra},\
                                     {'Entregados':datos_entrega,'Retirados':datos_retiro}])
+=======
+        # libretas
+        'promedio_blanca': int(np.average(datos_blanca)),
+        'promedio_amarilla': int(np.average(datos_amarilla)),
+        'promedio_celeste': int(np.average(datos_celeste)),
+        'lista_labels': json.dumps([label_cursos, label_year, label_curso_anios, label_libretas_anios]),
+        'lista_datos': json.dumps([{'Inscripciones': datos_inscripciones}, {'Cursos': datos_cursos_anuales},
+                                   {'Sin calificar': datos_sc, 'Aprobados': datos_aprobados,
+                                    'Desaprobados': datos_desaprobados}, {'Blancas': datos_blanca,
+                                                                          'Amarillas': datos_amarilla,
+                                                                          'Celestes': datos_celeste}])
+>>>>>>> 07520cb63d774f047906ebfa71360572243ed514
     }
-
 
 
     '''
@@ -711,6 +736,7 @@ def opciones_estadisticas(request):
 
     for x in xrange(45):
         libretas = factories.LibretaFactory()
+<<<<<<< HEAD
 
     for x in xrange(50):
         analisis = factories.AnalisisFactory()
@@ -727,6 +753,8 @@ def opciones_estadisticas(request):
 
     for x in xrange(50):
         retiro_entrega = factories.RetiroEntregaAnimalFactory()
+=======
+>>>>>>> 07520cb63d774f047906ebfa71360572243ed514
     '''
 
 

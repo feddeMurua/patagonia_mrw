@@ -4,6 +4,7 @@ from django.db import models
 from personas import models as m
 from django.utils.timezone import now
 from .choices import *
+from django.core.validators import MinValueValidator
 
 
 class Abastecedor(models.Model):
@@ -23,7 +24,13 @@ class ReinspeccionProducto(models.Model):
     reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s" % (self.producto.nombre, self.reinspeccion)
+        return "%s" % self.producto.nombre
+
+    def to_json(self):
+        return {
+            'producto': {'nombre': self.producto.nombre},
+            'kilo_producto': self.kilo_producto
+        }
 
 
 class Producto(models.Model):
@@ -32,16 +39,20 @@ class Producto(models.Model):
     def __str__(self):
         return "%s" % self.nombre
 
+    def to_json(self):
+        return {'nombre': self.nombre}
+
 
 class Reinspeccion(models.Model):
-    turno = models.DateTimeField()
+    fecha = models.DateField(default=now)
+    turno = models.CharField(max_length=10, choices=Turno_Reinspeccion)
     inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField()
     num_certificado = models.BigIntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s" % self.abastecedor
+        return "%s - %s" % (self.fecha, self.abastecedor)
 
 
 '''
@@ -51,7 +62,7 @@ CUENTAS CORRIENTES
 
 class DetalleCC(models.Model):
     detalle = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
-    monto = models.FloatField(default=0.0)
+    monto = models.FloatField()
     cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -59,11 +70,20 @@ class DetalleCC(models.Model):
 
 
 class CuentaCorriente(models.Model):
-    saldo = models.FloatField(default=0.0)
+    saldo = models.FloatField(default=0)
     abastecedor = models.OneToOneField('Abastecedor', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return "Cuenta: %s" % self.id
+        return "Cuenta: %s" % self.pk
+
+
+class PagoCC(models.Model):
+    fecha = models.DateField(default=now)
+    monto = models.FloatField(validators=[MinValueValidator(0)])
+    cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s" % self.fecha
 
 
 '''
@@ -77,18 +97,11 @@ class Vehiculo(models.Model):
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=Tipo_Vehiculo, default='TPP')
     disposicion_resolucion = models.CharField(max_length=50, blank=True, null=True, unique=True)
-    # SI EL VEHICULO ES TSA
     categoria = models.CharField(max_length=50, choices=Categoria, blank=True, null=True)
     rubro_vehiculo = models.CharField(max_length=25, blank=True, null=True)
 
     def __str__(self):
         return "%s - %s" % (self.marca, self.dominio)
-
-
-'''
-TURNO EN RESPINSPECCION:
-    MATUTINO, VESPERTINO, SABADO, FERIADO, o EXCPECION: FUERA DE HORARIO (COMPUTA DOBLE) (CHOICE) (son 5)
-'''
 
 
 class Desinfeccion(models.Model):
@@ -104,12 +117,11 @@ class Desinfeccion(models.Model):
 
 
 class ControlDePlaga(models.Model):
-    # TENER EN CUENTA CERTIFICADO DE DEUDA
     fecha_hoy = models.DateField(default=now)
     responsable = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="responsable_propietario")
     funcionario_actuante = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, related_name="funcionario")
     tipo_plaga = models.CharField(max_length=50, choices=Plagas)
-    procedimiento = models.CharField(max_length=400)  # (aplicacion de producto en el acta)
+    procedimiento = models.CharField(max_length=400)
     recomendaciones = models.CharField(max_length=400, blank=True, null=True)
     fecha_prox_visita = models.DateField(blank=True, null=True)
 

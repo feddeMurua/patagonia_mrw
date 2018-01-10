@@ -32,25 +32,17 @@ class ReinspeccionForm(forms.ModelForm):
     class Meta:
         model = Reinspeccion
         fields = '__all__'
-        exclude = ['cc']
+        exclude = ['fecha', 'cc']
         labels = {
             'num_certificado': _("N° de certificado")
         }
-
-    def clean_turno(self):
-        turno = self.cleaned_data['turno']
-        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(22, 0):
-            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 22:00 hs.')
-        elif turno.date() < timezone.now().date():
-            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
-        return turno
 
 
 class ModificacionReinspeccionForm(forms.ModelForm):
 
     class Meta:
         model = Reinspeccion
-        exclude = ['abastecedor']
+        exclude = ['fecha', 'abastecedor', 'cc']
         fields = '__all__'
 
     def clean_turno(self):
@@ -60,6 +52,7 @@ class ModificacionReinspeccionForm(forms.ModelForm):
         elif turno.date() < timezone.now().date():
             raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
         return turno
+
 
 class AltaProductoForm(forms.ModelForm):
     class Meta:
@@ -187,3 +180,13 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
             raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues del control que se está'
                                         ' registrando')
         return fecha_prox_visita
+
+
+class PagoCCForm(forms.ModelForm):
+
+    class Meta:
+        model = PagoCC
+        fields = ['monto']
+        labels = {
+            'monto': _("Monto a cancelar")
+        }

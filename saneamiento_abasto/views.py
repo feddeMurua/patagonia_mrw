@@ -2,14 +2,13 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
-from dateutil.relativedelta import relativedelta
 from calendar import monthrange
 from personas import forms as f
 from .forms import *
 from .choices import *
 from parte_diario_caja import forms as pd_f
+from parte_diario_caja import models as pd_m
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from desarrollo_patagonia.utils import *
 from django.views.generic.detail import DetailView
@@ -29,18 +28,13 @@ def lista_abastecedor(request):
 def alta_abastecedor(request):
     if request.method == 'POST':
         form = AbastecedorForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if form.is_valid() & detalle_mov_form.is_valid():
+        if form.is_valid():
             abastecedor = form.save()
-            detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.id)
-            detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor')
             return redirect('abastecedores:lista_abastecedores')
     else:
         form = AbastecedorForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/abastecedor_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
+    return render(request, 'abastecedor/abastecedor_form.html', {'form': form})
 
 
 @login_required(login_url='login')
@@ -48,48 +42,38 @@ def nuevo_abastecedor_particular(request):
     if request.method == 'POST':
         form = f.AltaPersonaFisicaForm(request.POST)
         domicilio_form = f.DomicilioForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if form.is_valid() & domicilio_form.is_valid() & detalle_mov_form.is_valid():
+        if form.is_valid() & domicilio_form.is_valid():
             responsable = form.save(commit=False)
             responsable.domicilio = domicilio_form.save()
             responsable.save()
             abastecedor = Abastecedor(responsable=responsable)
             abastecedor.save()
-            detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.pk)
-            detalle_mov_diario.save()
             log_crear(request.user.id, abastecedor, 'Abastecedor - Particular')
             return redirect('abastecedores:lista_abastecedores')
     else:
         form = f.AltaPersonaFisicaForm
         domicilio_form = f.DomicilioForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form,
-                                                                       'detalle_mov_form': detalle_mov_form})
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form})
+
 
 @login_required(login_url='login')
 def nuevo_abastecedor_empresa(request):
     if request.method == 'POST':
         form = f.AltaPersonaJuridicaForm(request.POST)
         domicilio_form = f.DomicilioForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Abasto')
-        if form.is_valid() & domicilio_form.is_valid() & detalle_mov_form.is_valid():
+        if form.is_valid() & domicilio_form.is_valid():
             responsable = form.save(commit=False)
             responsable.domicilio = domicilio_form.save()
             responsable.save()
             abastecedor = Abastecedor(responsable=responsable)
             abastecedor.save()
-            detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(abastecedor.pk)
-            detalle_mov_diario.save()
-            log_crear(request.user.id, abastecedor, 'Abastecedor - Empresa')
+            log_crear(request.user.id, abastecedor, 'Abastecedor - Particular')
             return redirect('abastecedores:lista_abastecedores')
     else:
         form = f.AltaPersonaJuridicaForm
         domicilio_form = f.DomicilioForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Abasto')
-    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form,
-                                                                       'detalle_mov_form': detalle_mov_form})
+    return render(request, 'abastecedor/nuevo_abastecedor_form.html', {'form': form, 'domicilio_form': domicilio_form})
+
 
 @login_required(login_url='login')
 def baja_abastecedor(request, pk):
@@ -109,6 +93,43 @@ def lista_cc(request):
     return render(request, 'cuentaCorriente/cc_list.html', {'listado': CuentaCorriente.objects.all()})
 
 
+@login_required(login_url='login')
+def pagos_cc(request, pk):
+    cuenta = CuentaCorriente.objects.get(pk=pk)
+    return render(request, 'cuentaCorriente/cc_pagos_list.html', {'listado': PagoCC.objects.filter(cc=cuenta), 'cuenta': cuenta})
+
+
+@login_required(login_url='login')
+def realizar_pago_cc(request, pk):
+    cuenta = CuentaCorriente.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = PagoCCForm(request.POST)
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        if form.is_valid() & detalle_mov_form.is_valid():
+            pago = form.save(commit=False)
+            pago.cc = cuenta
+            pago.save()
+            cuenta.saldo -= pago.monto
+            cuenta.save()
+            detalle_mov = detalle_mov_form.save(commit=False)
+            detalle_mov.importe = pago.monto
+            detalle_mov.descripcion = 'Pago en Cuenta Corriente'
+            detalle_mov.save()
+            return HttpResponseRedirect(reverse('cuentas_corrientes:pagos_cc', kwargs={'pk': pk}))
+    else:
+        form = PagoCCForm
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+    return render(request, 'cuentaCorriente/cc_pago_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
+                                                                 'pk': pk})
+
+
+@login_required(login_url='login')
+def detalle_cc(request, pk):
+    cuenta = CuentaCorriente.objects.get(pk=pk)
+    detalles = DetalleCC.objects.filter(cc=cuenta)
+    return render(request, 'cuentaCorriente/cc_detail.html', {'cuenta': cuenta, 'detalles': detalles})
+
+
 '''
 REINSPECCIONES
 '''
@@ -121,14 +142,91 @@ def lista_reinspeccion(request):
 
 @login_required(login_url='login')
 def alta_reinspeccion(request):
+    producto_form = ReinspeccionProductoForm
     if request.method == 'POST':
         form = ReinspeccionForm(request.POST)
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Reinspeccion')
+            reinspeccion = form.save()
+            carga_productos(request, reinspeccion)
+            monto = get_monto(reinspeccion)
+            if request.POST['optradio'] == 'normal':
+                if detalle_mov_form.is_valid():
+                    detalle_mov = detalle_mov_form.save(commit=False)
+                    detalle_mov.importe = monto
+                    detalle_mov.descripcion = 'Reinspeccion Veterinaria'
+                    detalle_mov.save()
+            else:
+                cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
+                detalle = DetalleCC(detalle=reinspeccion, monto=monto, cc=cc)
+                detalle.save()
+                cc.saldo += monto
+                cc.save()
+            log_crear(request.user.id, reinspeccion, 'Reinspeccion')
             return redirect('reinspecciones:lista_reinspecciones')
     else:
+        if 'productos' in request.session:
+            del request.session['productos']
+        request.session['productos'] = []
         form = ReinspeccionForm
-    return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form})
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+    return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'producto_form': producto_form,
+                                                                   'detalle_mov_form': detalle_mov_form})
+
+
+def get_monto(reinspeccion):
+    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
+
+    total_kg = 0
+    kg_minimo = 30
+    servicio = pd_m.Servicio.objects.get(nombre="Reinspeccion")
+    tarifa_minima = 55
+    tarifa = servicio.importe
+    monto = tarifa_minima
+
+    for r in reinspeccion_prod:
+        total_kg += r.kilo_producto
+
+    if total_kg > kg_minimo:
+        monto += total_kg * tarifa
+
+    return monto
+
+
+def existe_producto(request, producto):
+    for item in request.session['productos']:
+        if item['producto']['nombre'] == producto.producto.nombre:
+            return True
+    return False
+
+
+@login_required(login_url='login')
+def agregar_producto(request):
+    form = ReinspeccionProductoForm(request.POST)
+    success = True
+    if form.is_valid():
+        producto = form.save(commit=False)
+        if existe_producto(request, producto):
+            success = False
+        else:
+            request.session['productos'].append(producto.to_json())
+            request.session.modified = True
+    return JsonResponse({'success': success, 'productos': request.session['productos']})
+
+
+@login_required(login_url='login')
+def eliminar_producto(request, nombre):
+    productos = request.session['productos']
+    productos[:] = [p for p in productos if p.get('producto').get('nombre') != nombre]
+    request.session['productos'] = productos
+    return JsonResponse({'productos': request.session['productos']})
+
+
+def carga_productos(request, reinspeccion):
+    for producto in request.session['productos']:
+        prod = Producto.objects.get(nombre=producto['producto']['nombre'])
+        item = ReinspeccionProducto(producto=prod, kilo_producto=producto['kilo_producto'], reinspeccion=reinspeccion)
+        item.save()
 
 
 @login_required(login_url='login')
@@ -153,33 +251,8 @@ def modificacion_reinspeccion(request, reinspeccion_pk):
 
 
 @login_required(login_url='login')
-def reinspeccion_cc(request, reinspeccion_pk):
-    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-    cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
-    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
-
-    total_kg = 0
-    kg_minimo = 30  # kilaje minimo para probar....
-    tarifa_minima = 55
-    tarifa = 0.25  # precio por kilaje
-    monto = tarifa_minima
-
-    for r in reinspeccion_prod:
-        total_kg += r.kilo_producto
-
-    if total_kg > kg_minimo:
-        monto += total_kg * tarifa
-
-    detalle_cc = DetalleCC(detalle=reinspeccion, monto=monto, cc=cc)
-    detalle_cc.save()
-    cc.saldo += monto
-    cc.save()
-
-    return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
-
-
-@login_required(login_url='login')
 def lista_productos(request, reinspeccion_pk):
+    print(ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk))
     return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
                                                                'listado': ReinspeccionProducto.objects.filter(
                                                                    reinspeccion__pk=reinspeccion_pk)})
@@ -192,44 +265,6 @@ class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):
     template_name = "reinspeccion/simple_producto_form.html"
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
-
-
-@login_required(login_url='login')
-def nuevo_producto(request, reinspeccion_pk):
-    if request.method == 'POST':
-        form = ReinspeccionProductoForm(request.POST, reinspeccion_pk=reinspeccion_pk)
-        if form.is_valid():
-            producto = form.save(commit=False)
-            producto.reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-            producto.save()
-            log_crear(request.user.id, producto, 'Producto de Reinspeccion')
-            return HttpResponseRedirect(reverse('reinspecciones:lista_productos', args=reinspeccion_pk))
-    else:
-        form = ReinspeccionProductoForm
-    return render(request, "reinspeccion/producto_form.html", {'reinspeccion_pk': reinspeccion_pk, 'form': form})
-
-
-@login_required(login_url='login')
-def baja_producto(request, pk):
-    producto = ReinspeccionProducto.objects.get(pk=pk)
-    log_eliminar(request.user.id, producto, 'Producto de Reinspeccion')
-    producto.delete()
-    return HttpResponse()
-
-
-@login_required(login_url='login')
-def modificar_producto(request, pk, reinspeccion_pk):
-    reinspeccion_producto = ReinspeccionProducto.objects.get(pk=pk)
-    if request.method == 'POST':
-        form = ModificacionReinspeccionProductoForm(request.POST, instance=reinspeccion_producto)
-        if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Producto de Reinspeccion')
-            return HttpResponseRedirect(reverse('reinspecciones:lista_productos',
-                                                kwargs={'reinspeccion_pk': reinspeccion_pk}))
-    else:
-        form = ModificacionReinspeccionProductoForm(instance=reinspeccion_producto)
-        return render(request, 'reinspeccion/producto_form.html', {'form': form, 'reinspeccion_pk': reinspeccion_pk,
-                                                                   'modificacion': True})
 
 
 '''
@@ -386,7 +421,7 @@ def modificar_desinfeccion(request, pk_vehiculo, pk):
 
 
 '''
-CONTROLES DE PLAGAS
+CONTROL DE PLAGAS
 '''
 
 
@@ -399,18 +434,20 @@ def lista_controles_plaga(request):
 def alta_control_plaga(request):
     if request.method == 'POST':
         form = ControlDePlagaForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, tipo='Control de Plagas')
-        if form.is_valid() & detalle_mov_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        servicio_form = pd_f.ListaServicios(request.POST, tipo='Control de Plagas')
+        if form.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
             control_plaga = form.save()
-            detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(control_plaga.id)
-            detalle_mov_diario.save()
+            detalle_mov = detalle_mov_form.save(commit=False)
+            detalle_mov.completar(servicio_form.cleaned_data['servicio'], control_plaga)
             log_crear(request.user.id, control_plaga, 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')
     else:
         form = ControlDePlagaForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(tipo='Control de Plagas')
-    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        servicio_form = pd_f.ListaServicios(tipo='Control de Plagas')
+    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'servicio_form': servicio_form,
+                                                                    'detalle_mov_form': detalle_mov_form})
 
 
 class DetalleControlPlaga(LoginRequiredMixin, DetailView):

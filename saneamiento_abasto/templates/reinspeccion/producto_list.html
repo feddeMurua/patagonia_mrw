@@ -10,16 +10,11 @@
 
 {% block panel-title %}Productos{% endblock %}
 
-{% block btn-nuevo %}
-    <a href="{% url 'reinspecciones:nuevo_producto' reinspeccion_pk %}" class="btn btn-sm btn-primary btn-create">Nuevo Producto</a>
-{% endblock %}
-
 {% block tabla %}
     <thead>
         <tr>
             <th>Producto</th>
             <th>Peso</th>
-            <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
     <tbody>
@@ -27,10 +22,6 @@
             <tr>
                 <td>{{ producto.producto.nombre }}</td>
                 <td>{{ producto.kilo_producto }} Kg</td>
-                <td>
-                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_producto' producto.pk reinspeccion_pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'reinspecciones:borrar_producto' producto.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
-                </td>
             </tr>
         {% endfor %}
     </tbody>

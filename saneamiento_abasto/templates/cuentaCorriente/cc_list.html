@@ -6,11 +6,7 @@
 
 {% block header-title %}Cuentas Corrientes{% endblock %}
 
-{% block panel-title %}Abastecedores{% endblock %}
-
-{% block btn-nuevo %}
-
-{% endblock %}
+{% block panel-title %}Cuentas{% endblock %}
 
 {% block tabla %}
     <thead>
@@ -24,10 +20,10 @@
         {% for cuenta in listado %}
             <tr>
                 <td>{{ cuenta.abastecedor }}</td>
-                <td>{{ cuenta.saldo }}</td>
+                <td>${{ cuenta.saldo }}</td>
                 <td>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Ver Detalles" href="#"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-danger" data-toggle="tooltip" title="Cancelar saldo" href="#"><em class="glyphicon glyphicon-pencil"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Ver Detalles" href="{% url 'cuentas_corrientes:detalle_cc' cuenta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-success" data-toggle="tooltip" title="Cancelar saldo" href="{% url 'cuentas_corrientes:pagos_cc' cuenta.pk %}"><em class="glyphicon glyphicon-usd"></em></a>
                 </td>
             </tr>
         {% endfor %}

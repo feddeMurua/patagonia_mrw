@@ -1,8 +1,11 @@
 from personas import models as p
 from libreta_curso import models as lc
+<<<<<<< HEAD
 from animales import models as a
 
 import factory
+=======
+>>>>>>> 07520cb63d774f047906ebfa71360572243ed514
 import factory.fuzzy
 import datetime
 
@@ -67,7 +70,6 @@ class PersonaFactory(factory.django.DjangoModelFactory):
     obra_social = factory.fuzzy.FuzzyText(length=10)
     documentacion_retirada = False
     rubro = factory.fuzzy.FuzzyText(length=10)
-
 
     class Meta:
         model = p.PersonaFisica

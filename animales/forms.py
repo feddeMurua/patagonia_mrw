@@ -11,7 +11,6 @@ import datetime
 from django.utils import timezone
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
-
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 

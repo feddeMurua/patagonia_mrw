@@ -39,7 +39,7 @@ def lista_movimientos(request):
 def get_total(detalles):
     total = 0
     for detalle in detalles:
-        total += detalle.servicio.importe
+        total += detalle.importe
     return total
 
 
@@ -59,7 +59,14 @@ ARQUEO DIARIO DE CAJA
 
 @login_required(login_url='login')
 def lista_arqueos(request):
-    return render(request, 'arqueo/arqueo_list.html', {'listado': ArqueoDiario.objects.all()})
+    arqueos = ArqueoDiario.objects.all()
+    if not arqueos:
+        realizado = False
+    else:
+        print(arqueos.last().fecha)
+        print(timezone.now().date())
+        realizado = True if arqueos.last().fecha == timezone.now().date() else False
+    return render(request, 'arqueo/arqueo_list.html', {'listado': arqueos, 'realizado': realizado})
 
 
 def get_ingresos_varios():
@@ -75,16 +82,16 @@ def get_ingresos_varios():
     if movimientos:
         for movimiento in movimientos:
             if movimiento.forma_pago != 'Eximido':
-                importe = DetalleMovimiento.objects.filter(movimiento=movimiento).aggregate(Sum('servicio__importe'))
+                importe = DetalleMovimiento.objects.filter(movimiento=movimiento).aggregate(Sum('importe'))
                 if movimiento.forma_pago == 'Debito' or movimiento.forma_pago == 'Credito':
                     tarjeta_mov += 1
-                    tarjeta_imp += importe['servicio__importe__sum']
+                    tarjeta_imp += importe['importe__sum']
                 elif movimiento.forma_pago == 'Cheque':
                     cheque_mov += 1
-                    cheque_imp += importe['servicio__importe__sum']
+                    cheque_imp += importe['importe__sum']
                 else:
                     efectivo_mov += 1
-                    efectivo_imp += importe['servicio__importe__sum']
+                    efectivo_imp += importe['importe__sum']
         total_mov = tarjeta_mov + cheque_mov + efectivo_mov
         total_imp = tarjeta_imp + cheque_imp + efectivo_imp
     return {'tarjeta_mov': tarjeta_mov, 'tarjeta_imp': tarjeta_imp, 'cheque_mov': cheque_mov, 'cheque_imp': cheque_imp,
@@ -102,9 +109,9 @@ def alta_arqueo(request):
             datos.update(form.cleaned_data)
             datos.update(form_otros.cleaned_data)
             arqueo = ArqueoDiario.objects.create(**datos)
-            arqueo.total_manual = request.POST['']
+            arqueo.total_manual = request.POST['total_manual']
             arqueo.detalle_sistema(ingresos_varios)
-            log_crear(request.user.id, form.save(), 'Arqueo diario de caja')
+            log_crear(request.user.id, arqueo, 'Arqueo diario de caja')
             return redirect('arqueo:lista_arqueos')
     else:
         form = ArqueoEfectivoForm
