@@ -32,10 +32,12 @@
                     <td>Tipo de Vehiculo:</td>
                     <td>Transporte Público de Pasajeros</td>
                 </tr>
-                <tr>
-                    <td>N° de Resolucion:</td>
-                    <td>{{ object.disposicion_resolucion }}</td>
-                </tr>
+                {% if object.disposicion_resolucion %}
+                  <tr>
+                      <td>N° de Resolucion:</td>
+                      <td>{{ object.disposicion_resolucion }}</td>
+                  </tr>
+                {% endif %}
             {% else %}
                 <tr>
                     <td>Tipo de Vehiculo:</td>

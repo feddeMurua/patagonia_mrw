@@ -15,6 +15,7 @@
 {% block tabla %}
     <thead>
         <tr>
+            <th>Fecha</th>
             <th>Interesado</th>
             <th>Mascota</th>
             <th>Trámite</th>
@@ -24,6 +25,7 @@
     <tbody>
         {% for tramite in listado %}
             <tr>
+                <td>{{ tramite.fecha }}</td>
                 <td>{{ tramite.interesado }}</td>
                 <td>{{ tramite.mascota }}</td>
                 <td>{{ tramite.tramite }}</td>
