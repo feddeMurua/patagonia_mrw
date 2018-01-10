@@ -370,8 +370,6 @@ def opciones_estadisticas(request):
 
     # INSCRIPCIONES A CURSO
 
-    # CANTIDAD DE ALUMNOS POR CURSO
-
     inscripciones = {}  # inscripciones por curso
 
     cursos = Curso.objects.all()
@@ -647,7 +645,7 @@ def opciones_estadisticas(request):
     '''
     CONTEXTO
     '''
-
+    
     context = {
         # inscripciones
         'promedio_inscriptos': int(np.average(datos_inscripciones)),
@@ -714,7 +712,6 @@ def opciones_estadisticas(request):
 
     for x in xrange(50):
         analisis = factories.AnalisisFactory()
-
 
     for x in xrange(50):
         mascotas = factories.MascotaFactory()

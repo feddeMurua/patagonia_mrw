@@ -127,6 +127,7 @@ class MascotaFactory(factory.django.DjangoModelFactory):
 
 class PatenteFactory(factory.django.DjangoModelFactory):
     fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    fecha_vencimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     persona = factory.Iterator(p.PersonaFisica.objects.all())
     mascota = factory.Iterator(a.Mascota.objects.all())
     fecha_garrapaticida = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))

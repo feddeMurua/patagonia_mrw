@@ -13,85 +13,41 @@
         <li><a href="#tabs-3">Calificaciones por Curso</a></li>
         <li><a href="#tabs-4">Libretas por Curso</a></li>
     </ul>
+
+    <style>
+      .chartAreaWrapper {
+        width: 4000px;
+      }
+    </style>
+
+    
     <div id="tabs-1">
         <p><strong>Promedio de Alumnos Inscriptos por Curso: {{promedio_inscriptos}}</strong></p>
-        <canvas width="5" height="5"></canvas>
+        <div class="chartAreaWrapper">
+          <canvas height="35"></canvas>
+        </div>
     </div>
     <div id="tabs-2">
         <p><strong>Promedio de Cursos dictados por Año: {{promedio_anual}}</strong></p>
-        <canvas width="5" height="5"></canvas>
+        <div class="chartAreaWrapper">
+          <canvas height="35"></canvas>
+        </div>
     </div>
     <div id="tabs-3">
         <p><strong>Promedio HISTÓRICO de aprobados: {{promedio_aprobados}}</strong></p>
         <p><strong>Promedio HISTÓRICO de desaprobados: {{promedio_desaprobados}}</strong></p>
         <p><strong>Promedio HISTÓRICO sin calificación: {{promedio_sc}}</strong></p>
-        <canvas width="5" height="5"></canvas>
+        <div class="chartAreaWrapper">
+          <canvas height="35"></canvas>
+        </div>
     </div>
     <div id="tabs-4">
         <p><strong>Promedio HISTÓRICO de libretas blancas: {{promedio_blanca}}</strong></p>
         <p><strong>Promedio HISTÓRICO de libretas amarillas: {{promedio_amarilla}}</strong></p>
         <p><strong>Promedio HISTÓRICO de libretras celestes: {{promedio_celeste}}</strong></p>
-        <canvas width="5" height="5"></canvas>
+        <div class="chartAreaWrapper">
+          <canvas height="35"></canvas>
+        </div>
     </div>
-{% endblock %}
 
-{% block more-scripts %}
-    <script src="{% static 'js/chart.js' %}"></script>
-    <script>
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF'.split('');
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        /*
-        CHART GENERICO
-        */
-
-        var labels_list = JSON.parse('{{lista_labels|safe}}');
-        var datos_list = JSON.parse('{{lista_datos|safe}}');
-
-        $('canvas').each(function (index){
-            var ctx = $(this),
-            labels = labels_list[index];
-            datos = datos_list[index];
-
-            var background_colors = []
-            for (var i = 0, len = labels.length; i < len; i++) {
-                background_colors.push(getRandomColor());
-            }
-
-            datasets = []
-            $.each(datos, function(key, value) {
-                datasets.push(
-                    {
-                        data: value,
-                        label: key,
-                        backgroundColor: background_colors,
-                        borderWidth: 1
-                    })
-            })
-
-            var chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels ,
-                    datasets: datasets
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true,
-                                stepSize: 1
-                            }
-                        }]
-                    }
-                }
-            });
-        });
-    </script>
 {% endblock %}

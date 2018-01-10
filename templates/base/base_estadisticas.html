@@ -11,12 +11,12 @@
 {% block no-particles %}{% endblock %}
 
 {% block content %}
-    <div class="container container-form">
+    <div class="container-fluid container-form">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="panel panel-primary">
+            <div class="panel panel-primary" id ="panel-tabs">
                 <div class="panel-body">
-                    <div id="tabs">
+                    <div id="tabs" style="overflow:scroll;">
                         {% block tabs %}{% endblock %}
                     </div>
                 </div>
@@ -27,7 +27,9 @@
 
 {% block scripts %}
     <script src="{% static 'js/chart.js' %}"></script>
+
     <script>
+
         $(function() {
             $("#tabs").tabs();
         });
@@ -69,7 +71,7 @@
                     })
             })
 
-            var chart = new Chart(ctx, {
+            var data = {
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -85,8 +87,11 @@
                         }]
                     }
                 }
-            });
+            }
+
+            var chart = new Chart(ctx,data);
         });
     </script>
+
     {% block more-scripts %}{% endblock %}
 {% endblock %}
