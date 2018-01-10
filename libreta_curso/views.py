@@ -620,7 +620,7 @@ def opciones_estadisticas(request):
     '''
     CONTEXTO
     '''
-
+    
     context = {
         'rango_form': rango_form,
         # inscripciones
@@ -686,7 +686,6 @@ def opciones_estadisticas(request):
 
     for x in xrange(50):
         analisis = factories.AnalisisFactory()
-
 
     for x in xrange(50):
         mascotas = factories.MascotaFactory()

@@ -128,6 +128,7 @@ class Mascota(models.Model):
 
 
 class Patente(models.Model):
+    fecha = models.DateField(default=now)
     fecha_vencimiento = models.DateField()
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)

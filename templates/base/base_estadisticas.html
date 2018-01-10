@@ -22,7 +22,7 @@
 {% block no-particles %}{% endblock %}
 
 {% block content %}
-    <div class="container container-form">
+    <div class="container-fluid container-form">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="panel panel-default">
@@ -42,7 +42,7 @@
                     </button>
                 </div>
                 <div class="panel-body">
-                    <div id="tabs">
+                    <div id="tabs" style="overflow:scroll;">
                         {% block tabs %}{% endblock %}
                     </div>
                 </div>
