@@ -12,17 +12,6 @@
   <h2>Estadísticas</h2>
   <div class="panel panel-default">
     <div class="panel-body">
-      <!--
-      <div>
-        <form method="post" class="form-inline">
-          {% csrf_token %}
-          <br><br><br><br>
-          Fecha desde: <input type="text" name="desde" class="datepicker">
-          Fecha hasta: <input type="text" name="hasta" class="datepicker">
-          <input type="submit" value="Filtrar">
-        </form>
-      </div>
-      -->
 
       <div class="checkbox">
         <label><input id="opcion1" type="checkbox" value="" onchange="valueChanged()">
@@ -44,6 +33,30 @@
         Libretas por Curso</label>
       </div>
 
+      <div class="checkbox">
+        <label><input id="opcion5" type="checkbox" value="" onchange="valueChanged()">
+        Analisis por año </label>
+      </div>
+
+      <div class="checkbox">
+        <label><input id="opcion6" type="checkbox" value="" onchange="valueChanged()">
+        Categorias de Analisis por año </label>
+      </div>
+
+      <div class="checkbox">
+        <label><input id="opcion7" type="checkbox" value="" onchange="valueChanged()">
+        Patentamiento de animales por año </label>
+      </div>
+
+      <div class="checkbox">
+        <label><input id="opcion8" type="checkbox" value="" onchange="valueChanged()">
+        Esterilización de animales por año </label>
+      </div>
+
+      <div class="checkbox">
+        <label><input id="opcion9" type="checkbox" value="" onchange="valueChanged()">
+        Retiro/Entrega de animales por año </label>
+      </div>
 
     </div>
   </div>
@@ -72,7 +85,40 @@
         <p><strong>Promedio HISTÓRICO de libretas amarillas: {{promedio_amarilla}}</strong></p>
         <p><strong>Promedio HISTÓRICO de libretras celestes: {{promedio_celeste}}</strong></p>
         <canvas id="chartLibretas" width="5" height="5"></canvas>
+      </div>
 
+      <div id="div-opcion5" style="display:none;">
+        <p><strong>Promedio de análisis por año: {{promedio_analisis}}</strong></p>
+        <canvas id="chartAnalisis" width="5" height="5"></canvas>
+      </div>
+
+      <div id="div-opcion6" style="display:none;">
+        <p><strong>Promedio HISTÓRICO de porkers: {{promedio_porkers}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de lechones: {{promedio_lechones}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de adultos: {{promedio_adultos}}</strong></p>
+        <canvas id="chartCategoriasAnalisis" width="5" height="5"></canvas>
+      </div>
+
+      <div id="div-opcion7" style="display:none;">
+        <p><strong>Promedio HISTÓRICO de Caninos Machos: {{promedio_can_macho}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Caninos Hembras: {{promedio_can_hembra}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Felinos Machos: {{promedio_fel_macho}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Felinos Hembras: {{promedio_fel_hembra}}</strong></p>
+        <canvas id="chartPatenteAnimales" width="5" height="5"></canvas>
+      </div>
+
+      <div id="div-opcion8" style="display:none;">
+        <p><strong>Promedio HISTÓRICO de Caninos Machos: {{promedio_esterilizacion_can_macho}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Caninos Hembras: {{promedio_esterlizacion_can_hembra}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Felinos Machos: {{promedio_esterlizacion_fel_macho}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Felinos Hembras: {{promedio_esterlizacion_fel_hembra}}</strong></p>
+        <canvas id="chartEsterilizacionAnimales" width="5" height="5"></canvas>
+      </div>
+
+      <div id="div-opcion9" style="display:none;">
+        <p><strong>Promedio HISTÓRICO de Entrega de Animales: {{promedio_entrega}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Retiro de Animales: {{promedio_retiro}}</strong></p>
+        <canvas id="chartRetiroEntrega" width="5" height="5"></canvas>
       </div>
 
     </div>
@@ -124,6 +170,31 @@ GESTION CURSOS
           $("#div-opcion4").show();
       else
           $("#div-opcion4").hide();
+
+      if($('#opcion5').is(":checked"))
+          $("#div-opcion5").show();
+      else
+          $("#div-opcion5").hide();
+
+      if($('#opcion6').is(":checked"))
+          $("#div-opcion6").show();
+      else
+          $("#div-opcion6").hide();
+
+      if($('#opcion7').is(":checked"))
+          $("#div-opcion7").show();
+      else
+          $("#div-opcion7").hide();
+
+      if($('#opcion8').is(":checked"))
+          $("#div-opcion8").show();
+      else
+          $("#div-opcion8").hide();
+
+      if($('#opcion9').is(":checked"))
+          $("#div-opcion9").show();
+      else
+          $("#div-opcion9").hide();
   }
 
   function getRandomColor() {
@@ -179,7 +250,7 @@ GESTION CURSOS
                  },
              }],
              xAxes: [{
-               
+
              }]
          }
        }

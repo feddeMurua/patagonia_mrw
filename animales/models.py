@@ -100,6 +100,7 @@ class Turno(models.Model):
 
 
 class RetiroEntregaAnimal(models.Model):
+    fecha = models.DateField(default=now)
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     patentado = models.BooleanField(default=False)
     mascota = models.ForeignKey('Mascota', null=True)

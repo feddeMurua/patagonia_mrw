@@ -1,6 +1,7 @@
 from personas import models as p
 from libreta_curso import models as lc
-from libreta_curso import choices as cc
+from animales import models as a
+
 import factory
 import factory.fuzzy
 import datetime
@@ -97,6 +98,65 @@ class LibretaFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = lc.LibretaSanitaria
+
+
+class AnalisisFactory(factory.django.DjangoModelFactory):
+    fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    interesado = factory.Iterator(p.PersonaFisica.objects.all())
+    procedencia = factory.Iterator(p.Localidad.objects.all())
+    medico_veterinario = factory.Iterator(p.PersonalPropio.objects.all())
+    resultado = factory.fuzzy.FuzzyChoice(['Positivo','Negativo'])
+    categoria = factory.fuzzy.FuzzyChoice(['Lechon','Porker','Adulto'])
+
+    class Meta:
+        model = a.Analisis
+
+
+class MascotaFactory(factory.django.DjangoModelFactory):
+    nombre = factory.fuzzy.FuzzyText(length=25)
+    pelaje = factory.fuzzy.FuzzyText(length=25)
+    categoria_mascota = factory.fuzzy.FuzzyChoice(['CANINA','FELINA'])
+    raza = factory.fuzzy.FuzzyText(length=25)
+    sexo = factory.fuzzy.FuzzyChoice(['Macho','Hembra'])
+    baja = False
+
+    class Meta:
+        model = a.Mascota
+
+
+class PatenteFactory(factory.django.DjangoModelFactory):
+    fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    persona = factory.Iterator(p.PersonaFisica.objects.all())
+    mascota = factory.Iterator(a.Mascota.objects.all())
+    fecha_garrapaticida = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    fecha_antiparasitario = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    observaciones = factory.fuzzy.FuzzyText(length=25)
+
+    class Meta:
+        model = a.Patente
+
+
+class EsterilizacionFactory(factory.django.DjangoModelFactory):
+    interesado = factory.Iterator(p.PersonaGenerica.objects.all())
+    mascota = factory.Iterator(a.Mascota.objects.all())
+    anticonceptivos = factory.fuzzy.FuzzyInteger(0)
+    partos = factory.fuzzy.FuzzyInteger(0)
+    ultimo_celo = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    turno = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+
+    class Meta:
+        model = a.Esterilizacion
+
+
+class RetiroEntregaAnimalFactory(factory.django.DjangoModelFactory):
+    interesado = factory.Iterator(p.PersonaGenerica.objects.all())
+    patentado = False
+    mascota = factory.Iterator(a.Mascota.objects.all())
+    tramite = factory.fuzzy.FuzzyChoice(['ENTREGA','RETIRO'])
+    observaciones = factory.fuzzy.FuzzyText(length=25)
+
+    class Meta:
+        model = a.RetiroEntregaAnimal
 
 
 '''
