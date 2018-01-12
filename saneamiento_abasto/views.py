@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 from calendar import monthrange
 from personas import forms as f
@@ -176,19 +177,16 @@ def alta_reinspeccion(request):
 
 def get_monto(reinspeccion):
     reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
+    precios = ReinspeccionPrecios.objects.get()
 
     total_kg = 0
-    kg_minimo = 30
-    servicio = pd_m.Servicio.objects.get(nombre="Reinspeccion")
-    tarifa_minima = 55
-    tarifa = servicio.importe
-    monto = tarifa_minima
+    monto = precios.precio_min
 
     for r in reinspeccion_prod:
         total_kg += r.kilo_producto
 
-    if total_kg > kg_minimo:
-        monto += total_kg * tarifa
+    if total_kg > precios.kg_min:
+        monto += total_kg * precios.precio_kg
 
     return monto
 
@@ -229,42 +227,25 @@ def carga_productos(request, reinspeccion):
         item.save()
 
 
-@login_required(login_url='login')
-def baja_reinspeccion(request, reinspeccion_pk):
-    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-    log_eliminar(request.user.id, reinspeccion, 'Reinspeccion')
-    reinspeccion.delete()
-    return HttpResponse()
-
-
-@login_required(login_url='login')
-def modificacion_reinspeccion(request, reinspeccion_pk):
-    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-    if request.method == 'POST':
-        form = ModificacionReinspeccionForm(request.POST, instance=reinspeccion)
-        if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Reinspeccion')
-            return redirect('reinspecciones:lista_reinspecciones')
-    else:
-        form = ModificacionReinspeccionForm(instance=reinspeccion)
-    return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'modificacion': True})
-
-
-@login_required(login_url='login')
-def lista_productos(request, reinspeccion_pk):
-    print(ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk))
-    return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
-                                                               'listado': ReinspeccionProducto.objects.filter(
-                                                                   reinspeccion__pk=reinspeccion_pk)})
-
-
-# nuevo producto en el sistema, sin estar relacionado con la inspeccion
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):
     model = Producto
     form_class = AltaProductoForm
     template_name = "reinspeccion/simple_producto_form.html"
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
+
+
+@login_required(login_url='login')
+@staff_member_required
+def precios_reinspeccion(request):
+    if request.method == 'POST':
+        form = ReinspeccionPreciosForm(request.POST, instance=ReinspeccionPrecios.objects.get())
+        if form.is_valid():
+            log_modificar(request.user.id, form.save(), 'Precios Reinspeccion')
+            return redirect('reinspecciones:lista_reinspecciones')
+    else:
+        form = ReinspeccionPreciosForm(instance=ReinspeccionPrecios.objects.get())
+    return render(request, 'reinspeccion/reinspeccion_precios.html', {'form': form})
 
 
 '''
@@ -407,6 +388,7 @@ def baja_desinfeccion(request, pk):
     return HttpResponse()
 
 
+@login_required(login_url='login')
 def modificar_desinfeccion(request, pk_vehiculo, pk):
     desinfeccion = Desinfeccion.objects.get(pk=pk)
     if request.method == 'POST':

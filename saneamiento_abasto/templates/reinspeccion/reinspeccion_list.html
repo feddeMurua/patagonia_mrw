@@ -9,7 +9,10 @@
 {% block panel-title %}Reinspecciones{% endblock %}
 
 {% block btn-nuevo %}
-    <a href="{% url 'reinspecciones:nueva_reinspeccion' %}" class="btn btn-sm btn-primary btn-create">Nueva Reinspeccion</a>
+    <a href="{% url 'reinspecciones:nueva_reinspeccion' %}" class="btn btn-primary btn-create">Nueva Reinspeccion</a>
+    {% if user.is_staff %}
+        <a href="{% url 'reinspecciones:precios_reinspeccion' %}" class="btn btn-info">Precios vigentes</a>
+    {% endif %}
 {% endblock %}
 
 {% block tabla %}

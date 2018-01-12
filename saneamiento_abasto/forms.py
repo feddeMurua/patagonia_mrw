@@ -101,6 +101,17 @@ class ModificacionReinspeccionProductoForm(forms.ModelForm):
         }
 
 
+class ReinspeccionPreciosForm(forms.ModelForm):
+
+    class Meta:
+        model = ReinspeccionPrecios
+        fields = '__all__'
+        labels = {
+            'precio_min': _("Monto mínimo"),
+            'precio_kg': _("Precio por Kg")
+        }
+
+
 class VehiculoForm(forms.ModelForm):
 
     class Meta:

@@ -9,6 +9,7 @@ from django.views.generic import DetailView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 
+
 @login_required(login_url='login')
 def lista_contribuyentes(request):
     return render(request, 'persona/contribuyente_list.html', {'listado': PersonaGenerica.objects.all()})

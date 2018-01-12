@@ -5,6 +5,7 @@ from personas import models as m
 from django.utils.timezone import now
 from .choices import *
 from django.core.validators import MinValueValidator
+from solo.models import SingletonModel
 
 
 class Abastecedor(models.Model):
@@ -53,6 +54,18 @@ class Reinspeccion(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.fecha, self.abastecedor)
+
+
+class ReinspeccionPrecios(SingletonModel):
+    kg_min = models.IntegerField(validators=[MinValueValidator(1)], default=30)
+    precio_min = models.FloatField(validators=[MinValueValidator(0)], default=55)
+    precio_kg = models.FloatField(validators=[MinValueValidator(0)], default=0.25)
+
+    def __unicode__(self):
+        return u"Precios Vigentes Reinspeccion"
+
+    class Meta:
+        verbose_name = "Precios Vigentes Reinspeccion"
 
 
 '''

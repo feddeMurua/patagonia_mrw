@@ -51,9 +51,9 @@ INSTALLED_APPS = [
     'bootstrap3',
     'widget_tweaks',
     'easy_pdf',
-    'django_bootstrap_dynamic_formsets',
     'polymorphic',
-    'django_addanother'
+    'django_addanother',
+    'solo'
 ]
 
 MIDDLEWARE = [
