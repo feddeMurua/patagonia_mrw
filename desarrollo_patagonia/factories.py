@@ -1,12 +1,11 @@
 from personas import models as p
 from libreta_curso import models as lc
 from animales import models as a
-
-import factory
 import factory.fuzzy
 import datetime
 
 
+'''
 class CursoFactory(factory.django.DjangoModelFactory):
     fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     cupo = factory.fuzzy.FuzzyInteger(0)
@@ -161,7 +160,7 @@ class RetiroEntregaAnimalFactory(factory.django.DjangoModelFactory):
         model = a.RetiroEntregaAnimal
 
 
-'''
+
 class TipoServicioFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=50)
 

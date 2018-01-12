@@ -22,6 +22,7 @@
 {% block more-scripts %}
     <script>
         var tipo_vehiculo = $('#id_tipo_vehiculo'),
+        tipo_tpp = $('#id_tipo_tpp')
         disp_res = $('#id_disposicion_resolucion'),
         categoria = $('#id_categoria'),
         rubro = $('#id_rubro_vehiculo');
@@ -31,11 +32,17 @@
 
         function hideFields() {
             if (tipo_vehiculo.val() == 'TPP') {
+                tipo_tpp.parent().removeClass('hidden');
+                tipo_tpp.prop('required', true);
                 disp_res.parent().removeClass('hidden');
+                disp_res.prop('required', false);
                 categoria.parent().addClass('hidden');
                 rubro.parent().addClass('hidden');
             } else {
+                tipo_tpp.parent().addClass('hidden');
+                tipo_tpp.prop('required', false);
                 disp_res.parent().addClass('hidden');
+                disp_res.prop('required', true);
                 categoria.parent().removeClass('hidden');
                 rubro.parent().removeClass('hidden');
             }

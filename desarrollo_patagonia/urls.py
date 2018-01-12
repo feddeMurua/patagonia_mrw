@@ -42,4 +42,6 @@ urlpatterns = [
     url(r'^arqueo/', include('parte_diario_caja.urls_arqueo', namespace='arqueo')),
     url(r'^servicios/', include('parte_diario_caja.urls_servicios', namespace='servicios')),
     url(r'^eventos/', include('event_log.urls_event_log', namespace='event_log')),
+    url(r'^estadisticas/', include('libreta_curso.urls_estadisticas', namespace='est_lc')),
+    url(r'^estadisticas/', include('animales.urls_estadisticas', namespace='est_am'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

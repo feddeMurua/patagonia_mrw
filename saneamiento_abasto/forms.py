@@ -109,6 +109,7 @@ class VehiculoForm(forms.ModelForm):
         fields = '__all__'
         labels = {
             'tipo_vehiculo': _("Tipo de vehiculo"),
+            'tipo_tpp': _("Tipo de transporte"),
             'disposicion_resolucion': _("Resolucion")
         }
 

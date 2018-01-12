@@ -91,6 +91,12 @@ Categoria_E = {
     'Otros': "Otros"
 }
 
+Tipo_TPP = (
+    ('Colectivo', _("Colectivo")),
+    ('TR', _("Taxi/Remisse")),
+    ('Escolar', _("Escolar"))
+)
+
 Estado_Desinfeccion = (
     ('Realizada', _("Realizada")),
     ('No realizada', _("No realizada")),

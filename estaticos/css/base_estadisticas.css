@@ -1,0 +1,15 @@
+.form-group {
+    margin-right: 10px;
+}
+
+.form-group input {
+    width: 140px;
+}
+
+.container-form {
+    margin: 35px auto 35px auto;
+}
+
+.chartAreaWrapper {
+    width: 4000px;
+}

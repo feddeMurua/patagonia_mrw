@@ -1,0 +1,26 @@
+{% extends "base/base_estadisticas.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Estadisticas Animales{% endblock %}
+
+{% block header-title %}Estadisticas para Animales{% endblock %}
+
+{% block tabs %}
+    <ul>
+        <li><a href="#tabs-1">Alumnos Inscriptos por Curso</a></li>
+        <li><a href="#tabs-2">Cursos Dictados por Año</a></li>
+    </ul>
+    <div id="tabs-1">
+        <p><strong>Promedio de Alumnos Inscriptos por Curso: {{promedio_inscriptos}}</strong></p>
+        <div class="chartAreaWrapper">
+          <canvas height="35"></canvas>
+        </div>
+    </div>
+    <div id="tabs-2">
+        <p><strong>Promedio de Cursos dictados por Año: {{promedio_anual}}</strong></p>
+        <div class="chartAreaWrapper">
+          <canvas height="35"></canvas>
+        </div>
+    </div>
+{% endblock %}
