@@ -69,19 +69,15 @@
                         <label><input type="radio" name="optradio" value="normal">Pago Normal</label>
                     </div>
                 </div>
-                <div class="pago_cc">
-                    <input type="submit" class="btn btn-success" value="Agregar a Cuenta Corriente">
-                </div>
                 <div class="pago_normal">
                     {% include 'caja/cuadro_facturacion.html' %}
-                    <input type="submit" class="btn btn-success" value="Facturar">
                 </div>
             </div>
 
             <div class="form-navigation">
                 <button type="button" class="previous btn btn-info pull-left">&lt; Anterior</button>
                 <button type="button" class="next btn btn-info pull-right">Siguiente &gt;</button>
-                <input class="btn btn-default pull-right" type="submit">
+                <input type="submit" class="btn btn-success pull-right" value="Finalizar">
                 <span class="clearfix"></span>
             </div>
         </form>
@@ -188,15 +184,12 @@
             });
         };
 
-        var pago_cc = $('.pago_cc'),
-        pago_normal = $('.pago_normal');
+        var pago_normal = $('.pago_normal');
 
         function hideFields() {
             if (forma_pago == 'cc') {
-                pago_cc.removeClass('hidden');
                 pago_normal.addClass('hidden');
             } else {
-                pago_cc.addClass('hidden');
                 pago_normal.removeClass('hidden');
             }
         }
