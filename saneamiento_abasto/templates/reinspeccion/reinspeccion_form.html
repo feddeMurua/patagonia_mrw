@@ -6,7 +6,7 @@
 {% block title %}Reinspeccion{% endblock %}
 
 {% block more-stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/smart_wizard.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/parsley.css' %}"/>
 {% endblock %}
 
 {% block header-title %}Alta/Modificacion de Reinspeccion{% endblock %}
@@ -15,76 +15,74 @@
 
 {% block content %}
     <div class="container container-form">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" class="reinspeccion-form">
             {% csrf_token %}
-            <div id="smartwizard">
-                <ul>
-                    <li><a href="#step-1">Paso 1<br /><small>Datos de la Reinspeccion</small></a></li>
-                    <li><a href="#step-2">Paso 2<br /><small>Productos de la Reinspeccion</small></a></li>
-                    <li><a href="#step-3">Paso 3<br /><small>Informacion de Facturacion</small></a></li>
-                </ul>
-                <div>
-                    <div id="step-1" class="">
-                        {{ form.media }}
-                        {% for field in form %}
-                            <div class="form-group">
-                                <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
-                                {{ field|add_class:'form-control' }}
-                            </div>
-                        {% endfor %}
-                        {% if form.non_field_errors%}
-                            <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
-                        {% endif %}
+            <div class="form-section">
+                {{ form.media }}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
+                        {{ field|add_class:'form-control' }}
                     </div>
-                    <div id="step-2" class="">
-                        <div class="panel panel-info panel-table">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-4 col-md-4">
-                                        <h3 class="panel-title">Productos</h3>
-                                    </div>
-                                    <div class="col-xs-8 col-md-8 text-right">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregar_producto">Agregar Producto</button>
-                                    </div>
-                                </div>
+                {% endfor %}
+                {% if form.non_field_errors%}
+                    <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
+                {% endif %}
+            </div>
+            <div class="form-section">
+                <div class="panel panel-info panel-table">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-4 col-md-4">
+                                <h3 class="panel-title">Productos</h3>
                             </div>
-                            <div class="panel-body">
-                                <div class="container-fluid container-table">
-                                    <table class="table table-list table-bordered table-striped" id="table-list">
-                                        <thead>
-                                            <tr align="center">
-                                                <th>Producto</th>
-                                                <th>Peso</th>
-                                                <th><em class="glyphicon glyphicon-cog"></em></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="col-xs-8 col-md-8 text-right">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregar_producto">Agregar Producto</button>
                             </div>
                         </div>
                     </div>
-                    <div id="step-3" class="">
-                        Seleccione la Forma de Pago
-                        <br>
-                        <div id="radio_options">
-                            <div class="radio">
-                                <label><input type="radio" name="optradio" value="cc" checked>Cuenta Corriente</label>
-                            </div>
-                            <div class="radio">
-                                <label><input type="radio" name="optradio" value="normal">Pago Normal</label>
-                            </div>
-                        </div>
-                        <div class="pago_cc">
-                            <input type="submit" class="btn btn-success" value="Agregar a Cuenta Corriente">
-                        </div>
-                        <div class="pago_normal">
-                            {% include 'caja/cuadro_facturacion.html' %}
-                            <input type="submit" class="btn btn-success" value="Facturar">
+                    <div class="panel-body">
+                        <div class="container-fluid container-table">
+                            <table class="table table-list table-bordered table-striped" id="table-list">
+                                <thead>
+                                    <tr align="center">
+                                        <th>Producto</th>
+                                        <th>Peso</th>
+                                        <th><em class="glyphicon glyphicon-cog"></em></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="form-section">
+                Seleccione la Forma de Pago
+                <br>
+                <div id="radio_options">
+                    <div class="radio">
+                        <label><input type="radio" name="optradio" value="cc" checked>Cuenta Corriente</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="optradio" value="normal">Pago Normal</label>
+                    </div>
+                </div>
+                <div class="pago_cc">
+                    <input type="submit" class="btn btn-success" value="Agregar a Cuenta Corriente">
+                </div>
+                <div class="pago_normal">
+                    {% include 'caja/cuadro_facturacion.html' %}
+                    <input type="submit" class="btn btn-success" value="Facturar">
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button type="button" class="previous btn btn-info pull-left">&lt; Anterior</button>
+                <button type="button" class="next btn btn-info pull-right">Siguiente &gt;</button>
+                <input class="btn btn-default pull-right" type="submit">
+                <span class="clearfix"></span>
             </div>
         </form>
     </div>
@@ -115,15 +113,13 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block more-scripts %}
-    <script src="{% static 'js/datatables.js' %}"></script>
-    <script src="{% static 'js/jquery.smartWizard.js' %}"></script>
+    <script src="{% static 'js/parsley.js' %}"></script>
+    <script src="{% static 'js/118n/es.js' %}"></script>
     <script>
         $(document).ready(function(){
-            $('#smartwizard').smartWizard();
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -204,5 +200,47 @@
                 pago_normal.removeClass('hidden');
             }
         }
+
+        $(function () {
+            var $sections = $('.form-section');
+
+            function navigateTo(index) {
+                // Mark the current section with the class 'current'
+                $sections
+                    .removeClass('current')
+                    .eq(index)
+                    .addClass('current');
+                // Show only the navigation buttons that make sense for the current section:
+                $('.form-navigation .previous').toggle(index > 0);
+                var atTheEnd = index >= $sections.length - 1;
+                $('.form-navigation .next').toggle(!atTheEnd);
+                $('.form-navigation [type=submit]').toggle(atTheEnd);
+            }
+
+            function curIndex() {
+                // Return the current index by looking at which section has the class 'current'
+                return $sections.index($sections.filter('.current'));
+            }
+
+            // Previous button is easy, just go back
+            $('.form-navigation .previous').click(function() {
+                navigateTo(curIndex() - 1);
+            });
+
+            // Next button goes forward iff current block validates
+            $('.form-navigation .next').click(function() {
+                $('.reinspeccion-form').parsley().whenValidate({
+                    group: 'block-' + curIndex()
+                }).done(function() {
+                    navigateTo(curIndex() + 1);
+                });
+            });
+
+            // Prepare sections by setting the `data-parsley-group` attribute to 'block-0', 'block-1', etc.
+            $sections.each(function(index, section) {
+                $(section).find(':input').attr('data-parsley-group', 'block-' + index);
+            });
+            navigateTo(0); // Start at the beginning
+        });
     </script>
 {% endblock %}
