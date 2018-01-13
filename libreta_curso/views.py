@@ -397,7 +397,10 @@ def estadisticas_lc(request):
     ord_inscripciones = collections.OrderedDict(sorted(inscripciones.items()))
 
     label_cursos = ord_inscripciones.keys()
-    datos_inscripciones = ord_inscripciones.values()
+    if cursos:
+        datos_inscripciones = ord_inscripciones.values()
+    else:
+        datos_inscripciones = 0
 
     # LIBRETAS POR TIPO
 

@@ -227,6 +227,12 @@ def carga_productos(request, reinspeccion):
         item.save()
 
 
+@login_required(login_url='login')
+def lista_productos(request, reinspeccion_pk):
+    return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
+                                                               'listado': ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk)})
+
+
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):
     model = Producto
     form_class = AltaProductoForm
