@@ -1,3 +1,27 @@
+/*form step*/
+.form-section {
+  display: none;
+}
+
+.form-section.current {
+  display: inherit;
+}
+
+.form-section.prueba {
+  display: inherit;
+}
+
+
+.btn-info, .btn-default {
+  margin-top: 10px;
+}
+
+
+html.codepen body {
+  margin: 1em;
+}
+/*fin form step*/
+
 input.parsley-success,
 select.parsley-success,
 textarea.parsley-success {

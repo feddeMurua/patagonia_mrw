@@ -734,8 +734,8 @@ def estadisticas_mascotas(request):
             elif animal[0] == "RETIRO":
                 retiros += 1
 
-        entrega_animales[str(anio[0].year)] = entregas
-        retiro_animales[str(anio[0].year)] = retiros
+        entrega_animales[str(year)] = entregas
+        retiro_animales[str(year)] = retiros
 
     # patentamiento
 
