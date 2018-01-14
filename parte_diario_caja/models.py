@@ -88,5 +88,5 @@ class ArqueoDiario(models.Model):
         self.mov_cheque_sis = datos['cheque_mov']
         self.sub_cheque_sis = datos['cheque_imp']
         self.mov_total_sistema = datos['total_mov']
-        self.sub_total_sistema = datos['total_imp']
+        self.imp_total_sistema = datos['total_imp']
         self.save()

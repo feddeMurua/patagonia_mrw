@@ -15,8 +15,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/select2-bootstrap.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert2.css' %}"/>
-    <script src="{% static 'js/jquery.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.js' %}"></script>
     {% block stylesheets %}
     {% endblock %}
     <title>{% block title %}{% endblock %}</title>
@@ -48,9 +46,10 @@
     {% block content %}
     {% endblock %}
 
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/particles.js' %}"></script>
-    <script src="{% static 'js/jquery.timepicker.js' %}"></script>
     <script src="{% static 'js/select2.full.js' %}"></script>
     <script src="{% static 'js/jquery.datetimepicker.full.js' %}"></script>
     <script src="{% static 'js/sweetalert2.js' %}"></script>
@@ -87,8 +86,6 @@
                     $("#fecha").datepicker("option","minDate",selectedDate);
                 }
             });
-
-            $('.timepicker').timepicker();
         });
     </script>
     {% block scripts %}

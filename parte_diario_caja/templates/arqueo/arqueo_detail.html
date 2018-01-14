@@ -12,7 +12,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col col-xs-6">
+                <div class="col col-md-6">
                     <h3 class="panel-title">Recuento Manual</h3>
                 </div>
             </div>
@@ -29,61 +29,79 @@
                 <tbody>
                     <tr>
                         <td>Billetes quinientos</td>
-                        <td><span>{{ arqueo.billetes_quinientos }}</span></td>
+                        <td id="id_billetes_quinientos">{{ arqueo.billetes_quinientos }}</td>
+                        <td id="efectivo_1"></td>
                     </tr>
                     <tr>
                         <td>Billetes doscientos</td>
-                        <td><span>{{ arqueo.billetes_doscientos }}</span></td>
+                        <td id="id_billetes_doscientos">{{ arqueo.billetes_doscientos }}</td>
+                        <td id="efectivo_2"></td>
                     </tr>
                     <tr>
                         <td>Billetes cien</td>
-                        <td><span>{{ arqueo.billetes_cien }}</span></td>
+                        <td id="id_billetes_cien">{{ arqueo.billetes_cien }}</td>
+                        <td id="efectivo_3"></td>
                     </tr>
                     <tr>
                         <td>Billetes cincuenta</td>
-                        <td><span>{{ arqueo.billetes_cincuenta }}</span></td>
+                        <td id="id_billetes_cincuenta">{{ arqueo.billetes_cincuenta }}</td>
+                        <td id="efectivo_4"></td>
                     </tr>
                     <tr>
                         <td>Billetes veinte</td>
-                        <td><span>{{ arqueo.billetes_veinte }}</span></td>
+                        <td id="id_billetes_veinte">{{ arqueo.billetes_veinte }}</td>
+                        <td id="efectivo_5"></td>
                     </tr>
                     <tr>
                         <td>Billetes diez</td>
-                        <td><span>{{ arqueo.billetes_diez }}</span></td>
+                        <td id="id_billetes_diez">{{ arqueo.billetes_diez }}</td>
+                        <td id="efectivo_6"></td>
                     </tr>
                     <tr>
                         <td>Billetes cinco</td>
-                        <td><span>{{ arqueo.billetes_cinco }}</span></td>
+                        <td id="id_billetes_cinco">{{ arqueo.billetes_cinco }}</td>
+                        <td id="efectivo_7"></td>
                     </tr>
                     <tr>
                         <td>Billetes dos</td>
-                        <td><span>{{ arqueo.billetes_dos }}</span></td>
+                        <td id="id_billetes_dos">{{ arqueo.billetes_dos }}</td>
+                        <td id="efectivo_8"></td>
                     </tr>
                     <tr>
                         <td>Monedas dos</td>
-                        <td><span>{{ arqueo.monedas_dos }}</span></td>
+                        <td id="id_monedas_dos">{{ arqueo.monedas_dos }}</td>
+                        <td id="efectivo_9"></td>
                     </tr>
                     <tr>
                         <td>Monedas uno</td>
-                        <td><span>{{ arqueo.monedas_uno }}</span></td>
+                        <td id="id_monedas_uno">{{ arqueo.monedas_uno }}</td>
+                        <td id="efectivo_10"></td>
                     </tr>
                     <tr>
                         <td>Monedas cincuenta</td>
-                        <td><span>{{ arqueo.monedas_cincuenta }}</span></td>
+                        <td id="id_monedas_cincuenta">{{ arqueo.monedas_cincuenta }}</td>
+                        <td id="efectivo_11"></td>
                     </tr>
                     <tr>
                         <td>Monedas veinticinco</td>
-                        <td><span>{{ arqueo.monedas_veinticinco }}</span></td>
+                        <td id="id_monedas_veinticinco">{{ arqueo.monedas_veinticinco }}</td>
+                        <td id="efectivo_12"></td>
                     </tr>
                     <tr>
                         <td>Débito/Crédito</td>
-                        <td><span>{{ arqueo.debito_credito_cant }}</span></td>
-                        <td>$<span class="sub_valor_sistema">{{ arqueo.debito_credito_sub }}</span></td>
+                        <td>{{ arqueo.debito_credito_cant }}</td>
+                        <td>${{ arqueo.debito_credito_sub }}</td>
                     </tr>
                     <tr>
                         <td>Cheques</td>
-                        <td><span>{{ arqueo.cheques_cant }}</span></td>
-                        <td>$<span class="sub_valor_sistema">{{ arqueo.cheques_sub }}</span></td>
+                        <td>{{ arqueo.cheques_cant }}</td>
+                        <td>${{ arqueo.cheques_sub }}</td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td><b>TOTAL DE RECUENTO MANUAL:</b></td>
+                        <td></td>
+                        <td><b>${{ arqueo.total_manual }}</b></td>
                     </tr>
                 </tbody>
             </table>
@@ -92,7 +110,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col col-xs-6">
+                <div class="col col-md-6">
                     <h3 class="panel-title">Recuento del Sistema</h3>
                 </div>
             </div>
@@ -109,18 +127,24 @@
                 <tbody>
                     <tr>
                         <td>Efectivo</td>
-                        <td><span>{{ arqueo.mov_efectivo_sis }}</span></td>
-                        <td>$<span class="sub_valor_sistema">{{ arqueo.sub_efectivo_sis }}</span></td>
+                        <td>{{ arqueo.mov_efectivo_sis }}</td>
+                        <td>${{ arqueo.sub_efectivo_sis }}</td>
                     </tr>
                     <tr>
                         <td>Débito/Crédito</td>
-                        <td><span>{{ arqueo.mov_tarjeta_sis }}</span></td>
-                        <td>$<span class="sub_valor_sistema">{{ arqueo.sub_tarjeta_sis }}</span></td>
+                        <td>{{ arqueo.mov_tarjeta_sis }}</td>
+                        <td>${{ arqueo.sub_tarjeta_sis }}</td>
                     </tr>
                     <tr>
                         <td>Cheques</td>
-                        <td><span>{{ arqueo.mov_cheque_sis }}</span></td>
-                        <td>$<span class="sub_valor_sistema">{{ arqueo.sub_cheque_sis }}</span></td>
+                        <td>{{ arqueo.mov_cheque_sis }}</td>
+                        <td>${{ arqueo.sub_cheque_sis }}</td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td><b>TOTAL DE RECUENTO DE SISTEMA:</b></td>
+                        <td></td>
+                        <td><b>${{ arqueo.imp_total_sistema }}</b></td>
                     </tr>
                 </tbody>
             </table>
@@ -130,4 +154,22 @@
 
 {% block btn-footer %}
     <a href="{% url 'arqueo:lista_arqueos' %}" class="btn btn-primary" role="button">Regresar</a>
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        console.log($('#id_billetes_doscientos').text());
+        $('#efectivo_1').text('$' + $('#id_billetes_quinientos').text() * 500);
+        $('#efectivo_2').text('$' + $('#id_billetes_doscientos').text() * 200);
+        $('#efectivo_3').text('$' + $('#id_billetes_cien').val() * 100);
+        $('#efectivo_4').text('$' + $('#id_billetes_cincuenta').text() * 50);
+        $('#efectivo_5').text('$' + $('#id_billetes_veinte').text() * 20);
+        $('#efectivo_6').text('$' + $('#id_billetes_diez').text() * 10);
+        $('#efectivo_7').text('$' + $('#id_billetes_cinco').text() * 5);
+        $('#efectivo_8').text('$' + $('#id_billetes_dos').text() * 2);
+        $('#efectivo_9').text('$' + $('#id_monedas_dos').text() * 2);
+        $('#efectivo_10').text('$' + $('#id_monedas_uno').text() * 1);
+        $('#efectivo_11').text('$' + $('#id_monedas_cincuenta').text() * 0.50);
+        $('#efectivo_12').text('$' + $('#id_monedas_veinticinco').text() * 0.25);
+    </script>
 {% endblock %}

@@ -1,2 +1,0 @@
-RESPINSPCCION:
-si no existe precinto, 000 (puede ser null)
