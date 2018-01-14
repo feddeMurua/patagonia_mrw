@@ -24,7 +24,23 @@ for x in xrange(45):
 for x in xrange(45):
     vehiculos = factories.VehiculoFactory()
 
+
+for x in xrange(85):
+    desinfecciones = factories.DesinfeccionFactory()
+
 '''
+
+
+class DesinfeccionFactory(factory.django.DjangoModelFactory):
+    fecha_realizacion = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    proximo_vencimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    vehiculo = factory.Iterator(sa.Vehiculo.objects.all())
+    quincena = factory.fuzzy.FuzzyChoice(['Primera', 'Segunda'])
+    infraccion = False
+
+    class Meta:
+        model = sa.Desinfeccion
+
 
 class CursoFactory(factory.django.DjangoModelFactory):
     fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))

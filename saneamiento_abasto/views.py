@@ -15,7 +15,10 @@ from desarrollo_patagonia.utils import *
 from django.views.generic.detail import DetailView
 from django.utils import timezone
 from desarrollo_patagonia import factories
-
+from libreta_curso import forms as lc_f
+import collections
+import numpy as np
+import json 
 '''
 ABASTECEDORES
 '''
@@ -479,7 +482,7 @@ def modificacion_control_plaga(request, pk):
 
 @login_required(login_url='login')
 def estadisticas_vehiculos(request):
-    '''
+
     rango_form = lc_f.RangoFechaForm
     anio = timezone.now().year
     years = range(anio, anio - 5, -1)
@@ -492,144 +495,67 @@ def estadisticas_vehiculos(request):
             anio_hasta = fecha_hasta.year
             years = range(anio_hasta, anio_desde - 1, -1)
 
-    patente_can_macho = {}
-    patente_can_hembra = {}
-    patente_fel_macho = {}
-    patente_fel_hembra = {}
-    esterilizacion_can_macho = {}
-    esterilizacion_can_hembra = {}
-    esterilizacion_fel_macho = {}
-    esterilizacion_fel_hembra = {}
-    entrega_animales = {}
-    retiro_animales = {}
+    des_tr = {} #desinfeccion taxi/remis
+    des_escolares = {}
+    des_tsa = {}
+    des_colectivos = {}
 
     for year in years:
 
         # acumuladores
-        can_macho = 0
-        can_hembra = 0
-        fel_macho = 0
-        fel_hembra = 0
+        tr = 0
+        escolares = 0
+        tsa = 0
+        colectivos = 0
+        tpp = 0
 
-        patentes_caninos = Patente.objects.filter(fecha__year=year).values_list(
-            "mascota__categoria_mascota", "mascota__sexo")
+        desinfecciones_vehiculos = Desinfeccion.objects.filter(fecha_realizacion__year=year).values_list(
+            "vehiculo__tipo_vehiculo", "vehiculo__tipo_tpp")
 
-        for patente in patentes_caninos:
-            if (patente[0] == 'CANINA') and (patente[1] == 'Macho'):
-                can_macho += 1
-            elif (patente[0] == 'CANINA') and (patente[1] == 'Hembra'):
-                can_hembra += 1
-            elif (patente[0] == 'FELINA') and (patente[1] == 'Macho'):
-                fel_macho += 1
+        for des in desinfecciones_vehiculos:
+            if (des[0] == 'TSA'):
+                tsa+=1
+            elif (des[1] == 'Colectivo'):
+                colectivos+=1
+            elif (des[1] == 'TR'):
+                tr +=1
             else:
-                fel_hembra += 1
+                escolares+=1
 
-        patente_can_macho[str(year)] = can_macho
-        patente_can_hembra[str(year)] = can_hembra
-        patente_fel_macho[str(year)] = fel_macho
-        patente_fel_hembra[str(year)] = fel_hembra
+        des_tsa[str(year)] = tsa
+        des_tr[str(year)] = tr
+        des_colectivos[str(year)] = colectivos
+        des_escolares[str(year)] = escolares
 
-        # acumuladores
-        can_macho = 0
-        can_hembra = 0
-        fel_macho = 0
-        fel_hembra = 0
 
-        esterilizaciones = Esterilizacion.objects.filter(turno__year=year).values_list(
-            "mascota__categoria_mascota", "mascota__sexo")
+    # desinfecciones vehiculos
 
-        for esterilizacion in esterilizaciones:
-            if (esterilizacion[0] == 'CANINA') and (esterilizacion[1] == 'Macho'):
-                can_macho += 1
-            elif (esterilizacion[0] == 'CANINA') and (esterilizacion[1] == 'Hembra'):
-                can_hembra += 1
-            elif (esterilizacion[0] == 'FELINA') and (esterilizacion[1] == 'Macho'):
-                fel_macho += 1
-            else:
-                fel_hembra += 1
+    ord_des_tsa = collections.OrderedDict(sorted(des_tsa.items()))
+    ord_des_tr = collections.OrderedDict(sorted(des_tr.items()))
+    ord_des_colectivos = collections.OrderedDict(sorted(des_colectivos.items()))
+    ord_des_escolares = collections.OrderedDict(sorted(des_escolares.items()))
 
-        esterilizacion_can_macho[str(year)] = can_macho
-        esterilizacion_can_hembra[str(year)] = can_hembra
-        esterilizacion_fel_macho[str(year)] = fel_macho
-        esterilizacion_fel_hembra[str(year)] = fel_hembra
+    label_categoria_des = ord_des_tsa.keys()  # indistinto para los datos (tienen la misma clave)
+    datos_des_tsa = ord_des_tsa.values()
+    datos_des_tr = ord_des_tr.values()
+    datos_des_colectivos = ord_des_colectivos.values()
+    datos_des_escolares = ord_des_escolares.values()
 
-        # acumuladores
-        entregas = 0
-        retiros = 0
 
-        animales_anio = RetiroEntregaAnimal.objects.filter(fecha__year=year).values_list("tramite")
-
-        for animal in animales_anio:
-            if animal[0] == "ENTREGA":
-                entregas += 1
-            elif animal[0] == "RETIRO":
-                retiros += 1
-
-        entrega_animales[str(year)] = entregas
-        retiro_animales[str(year)] = retiros
-
-    # patentamiento
-
-    ord_patente_can_macho = collections.OrderedDict(sorted(patente_can_macho.items()))
-    ord_patente_can_hembra = collections.OrderedDict(sorted(patente_can_hembra.items()))
-    ord_patente_fel_macho = collections.OrderedDict(sorted(patente_fel_macho.items()))
-    ord_patente_fel_hembra = collections.OrderedDict(sorted(patente_fel_hembra.items()))
-
-    label_categoria_patente = ord_patente_can_macho.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_can_macho = ord_patente_can_macho.values()
-    datos_can_hembra = ord_patente_can_hembra.values()
-    datos_fel_macho = ord_patente_fel_macho.values()
-    datos_fel_hembra = ord_patente_fel_hembra.values()
-
-    # esterilizacion
-
-    ord_esterilizacion_can_macho = collections.OrderedDict(sorted(esterilizacion_can_macho.items()))
-    ord_esterilizacion_can_hembra = collections.OrderedDict(sorted(esterilizacion_can_hembra.items()))
-    ord_esterilizacion_fel_macho = collections.OrderedDict(sorted(esterilizacion_fel_macho.items()))
-    ord_esterilizacion_fel_hembra = collections.OrderedDict(sorted(esterilizacion_fel_hembra.items()))
-
-    label_categoria_esterilizacion = ord_esterilizacion_can_macho.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_esterilizacion_can_macho = ord_esterilizacion_can_macho.values()
-    datos_esterilizacion_can_hembra = ord_esterilizacion_can_hembra.values()
-    datos_esterilizacion_fel_macho = ord_esterilizacion_fel_macho.values()
-    datos_esterilizacion_fel_hembra = ord_esterilizacion_fel_hembra.values()
-
-    # RETIRO Y ENTREGA DE ANIMALES
-
-    ord_entrega_animales = collections.OrderedDict(sorted(entrega_animales.items()))
-    ord_retiro_animales = collections.OrderedDict(sorted(retiro_animales.items()))
-
-    label_animales_anios = ord_entrega_animales.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_entrega = ord_entrega_animales.values()
-    datos_retiro = ord_retiro_animales.values()
 
     context = {
         'rango_form': rango_form,
         # mascotas
-        'promedio_can_macho': int(np.average(datos_can_macho)),
-        'promedio_can_hembra': int(np.average(datos_can_hembra)),
-        'promedio_fel_macho': int(np.average(datos_fel_macho)),
-        'promedio_fel_hembra': int(np.average(datos_fel_hembra)),
-        # esterilizacion
-        'promedio_esterilizacion_can_macho': int(np.average(datos_esterilizacion_can_macho)),
-        'promedio_esterlizacion_can_hembra': int(np.average(datos_esterilizacion_can_hembra)),
-        'promedio_esterlizacion_fel_macho': int(np.average(datos_esterilizacion_fel_macho)),
-        'promedio_esterlizacion_fel_hembra': int(np.average(datos_esterilizacion_fel_hembra)),
-        # retiros y entrega
-        'promedio_entrega': int(np.average(datos_entrega)),
-        'promedio_retiro': int(np.average(datos_retiro)),
+        'promedio_tsa': int(np.average(datos_des_tsa)),
+        'promedio_tr': int(np.average(datos_des_tr)),
+        'promedio_colectivos': int(np.average(datos_des_colectivos)),
+        'promedio_escolares': int(np.average(datos_des_escolares)),
         # datos y etiquetas
-        'lista_labels': json.dumps([label_categoria_patente, label_categoria_esterilizacion, label_animales_anios]),
-        'lista_datos': json.dumps([{'Can. Machos': datos_can_macho, 'Can. Hembras': datos_can_hembra,
-                                    'Fel. Machos': datos_fel_macho, 'Fel. Hembras': datos_fel_hembra},
-                                   {'Can. Machos': datos_esterilizacion_can_macho,
-                                    'Can. Hembras': datos_esterilizacion_can_hembra,
-                                    'Fel. Machos': datos_esterilizacion_fel_macho,
-                                    'Fel. Hembras': datos_esterilizacion_fel_hembra},
-                                   {'Entregados': datos_entrega, 'Retirados': datos_retiro}])
+        'lista_labels': json.dumps([label_categoria_des]),
+        'lista_datos': json.dumps([{'TSA': datos_des_tsa, 'Taxis/Remiss': datos_des_tr,
+                                    'Colectivos': datos_des_colectivos, 'Escolares': datos_des_escolares},
+                                ])
     }
-    '''
 
 
-    
-    return render(request, "estadistica/estadisticas_vehiculos.html")
+    return render(request, "estadistica/estadisticas_vehiculos.html", context)
