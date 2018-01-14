@@ -1,0 +1,40 @@
+{% extends "base/base_estadisticas.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Estadisticas Mascotas{% endblock %}
+
+{% block header-title %}Estadisticas para Vehículos{% endblock %}
+
+{% block tabs %}
+    <ul>
+        <li><a href="#tabs-1">Patentamiento de Animales por Año</a></li>
+        <li><a href="#tabs-2">Esterilización de Animales por Año</a></li>
+        <li><a href="#tabs-3">Retiro/Entrega de Animales por Año</a></li>
+    </ul>
+    <div id="tabs-1">
+      <p><strong>Promedio HISTÓRICO de Caninos Machos: {{promedio_can_macho}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Caninos Hembras: {{promedio_can_hembra}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Felinos Machos: {{promedio_fel_macho}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Felinos Hembras: {{promedio_fel_hembra}}</strong></p>
+      <div class="chartAreaWrapper">
+        <canvas height="40"></canvas>
+      </div>
+    </div>
+    <div id="tabs-2">
+      <p><strong>Promedio HISTÓRICO de Caninos Machos: {{promedio_esterilizacion_can_macho}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Caninos Hembras: {{promedio_esterlizacion_can_hembra}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Felinos Machos: {{promedio_esterlizacion_fel_macho}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Felinos Hembras: {{promedio_esterlizacion_fel_hembra}}</strong></p>
+      <div class="chartAreaWrapper">
+        <canvas height="40"></canvas>
+      </div>
+    </div>
+    <div id="tabs-3">
+      <p><strong>Promedio HISTÓRICO de Entrega de Animales: {{promedio_entrega}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Retiro de Animales: {{promedio_retiro}}</strong></p>
+      <div class="chartAreaWrapper">
+        <canvas height="40"></canvas>
+      </div>
+    </div>
+{% endblock %}

@@ -1,11 +1,31 @@
 from personas import models as p
 from libreta_curso import models as lc
 from animales import models as a
+from saneamiento_abasto import models as sa
 import factory.fuzzy
 import datetime
 
 
 '''
+#Para cargar con el factory
+
+for x in xrange(10):
+    cursos = factories.CursoFactory()
+
+for x in xrange(45):
+    personas = factories.PersonaFactory()
+
+for x in xrange(45):
+    inscripciones = factories.InscripcionFactory()
+
+for x in xrange(45):
+    libretas = factories.LibretaFactory()
+
+for x in xrange(45):
+    vehiculos = factories.VehiculoFactory()
+
+'''
+
 class CursoFactory(factory.django.DjangoModelFactory):
     fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     cupo = factory.fuzzy.FuzzyInteger(0)
@@ -161,6 +181,19 @@ class RetiroEntregaAnimalFactory(factory.django.DjangoModelFactory):
 
 
 
+class VehiculoFactory(factory.django.DjangoModelFactory):
+    marca = factory.fuzzy.FuzzyChoice(['Chevrolet', 'Fiat', 'Ford', 'Renault'])
+    dominio = factory.fuzzy.FuzzyText(length=5)
+    titular = factory.Iterator(p.PersonaFisica.objects.all())
+    tipo_vehiculo = factory.fuzzy.FuzzyChoice(['TSA', 'TPP'])
+    tipo_tpp = factory.fuzzy.FuzzyChoice(['Colectivo', 'TR','Escolar'])
+    categoria = factory.fuzzy.FuzzyChoice(['Categoria_A', 'Categoria_B', 'Categoria_C' ,'Categoria_D', 'Categoria_E'])
+
+    class Meta:
+        model = sa.Vehiculo
+
+
+'''
 class TipoServicioFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=50)
 
