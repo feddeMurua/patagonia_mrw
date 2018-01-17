@@ -14,7 +14,11 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from desarrollo_patagonia.utils import *
 from django.views.generic.detail import DetailView
 from django.utils import timezone
-
+from desarrollo_patagonia import factories
+from libreta_curso import forms as lc_f
+import collections
+import numpy as np
+import json 
 '''
 ABASTECEDORES
 '''
@@ -147,7 +151,7 @@ def alta_reinspeccion(request):
     if request.method == 'POST':
         form = ReinspeccionForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() & len(request.session['productos']) > 0:
             reinspeccion = form.save()
             carga_productos(request, reinspeccion)
             monto = get_monto(reinspeccion)
@@ -434,8 +438,10 @@ def alta_control_plaga(request):
                     detalle_mov.completar(servicio, control_plaga)
             else:
                 if pago_diferido_form.is_valid():
-                    pago_diferido = pago_diferido_form.save(commit=False)
-                    pago_diferido.detalles(servicio, control_plaga)
+                    control_plaga.pagado = False
+                    control_plaga.save()
+                    pago = pago_diferido_form.save(commit=False)
+                    pago.detalles(servicio, control_plaga)
             log_crear(request.user.id, control_plaga, 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')
     else:
@@ -474,3 +480,104 @@ def modificacion_control_plaga(request, pk):
     else:
         form = ModificacionControlDePlagaForm(instance=control_plaga)
     return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'modificacion': True})
+
+
+@login_required(login_url='login')
+def pago_diferido(request, pk):
+    control = ControlDePlaga.objects.get(pk=pk)
+    pago = PagoDiferido.objects.get(control=control)
+    if request.method == 'POST':
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        if detalle_mov_form.is_valid():
+            detalle_mov = detalle_mov_form.save(commit=False)
+            detalle_mov.importe = pago.monto
+            detalle_mov.descripcion = 'Fumigacion, desinfeccion, desratizacion'
+            detalle_mov.save()
+            control.pagado = True
+            control.save()
+            log_crear(request.user.id, pago, 'Pago de Control de Plagas')
+            return redirect('controles_plagas:lista_controles_plagas')
+    else:
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+    return render(request, 'controlPlaga/pago_control_form.html', {'detalle_mov_form': detalle_mov_form})
+
+
+@login_required(login_url='login')
+def estadisticas_vehiculos(request):
+
+    rango_form = lc_f.RangoFechaForm
+    anio = timezone.now().year
+    years = range(anio, anio - 5, -1)
+    if request.method == 'POST':
+        rango_form = lc_f.RangoFechaForm(request.POST)
+        if rango_form.is_valid():
+            fecha_desde = rango_form.cleaned_data['fecha_desde']
+            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
+            anio_desde = fecha_desde.year
+            anio_hasta = fecha_hasta.year
+            years = range(anio_hasta, anio_desde - 1, -1)
+
+    des_tr = {} #desinfeccion taxi/remis
+    des_escolares = {}
+    des_tsa = {}
+    des_colectivos = {}
+
+    for year in years:
+
+        # acumuladores
+        tr = 0
+        escolares = 0
+        tsa = 0
+        colectivos = 0
+        tpp = 0
+
+        desinfecciones_vehiculos = Desinfeccion.objects.filter(fecha_realizacion__year=year).values_list(
+            "vehiculo__tipo_vehiculo", "vehiculo__tipo_tpp")
+
+        for des in desinfecciones_vehiculos:
+            if (des[0] == 'TSA'):
+                tsa+=1
+            elif (des[1] == 'Colectivo'):
+                colectivos+=1
+            elif (des[1] == 'TR'):
+                tr +=1
+            else:
+                escolares+=1
+
+        des_tsa[str(year)] = tsa
+        des_tr[str(year)] = tr
+        des_colectivos[str(year)] = colectivos
+        des_escolares[str(year)] = escolares
+
+
+    # desinfecciones vehiculos
+
+    ord_des_tsa = collections.OrderedDict(sorted(des_tsa.items()))
+    ord_des_tr = collections.OrderedDict(sorted(des_tr.items()))
+    ord_des_colectivos = collections.OrderedDict(sorted(des_colectivos.items()))
+    ord_des_escolares = collections.OrderedDict(sorted(des_escolares.items()))
+
+    label_categoria_des = ord_des_tsa.keys()  # indistinto para los datos (tienen la misma clave)
+    datos_des_tsa = ord_des_tsa.values()
+    datos_des_tr = ord_des_tr.values()
+    datos_des_colectivos = ord_des_colectivos.values()
+    datos_des_escolares = ord_des_escolares.values()
+
+
+
+    context = {
+        'rango_form': rango_form,
+        # mascotas
+        'promedio_tsa': int(np.average(datos_des_tsa)),
+        'promedio_tr': int(np.average(datos_des_tr)),
+        'promedio_colectivos': int(np.average(datos_des_colectivos)),
+        'promedio_escolares': int(np.average(datos_des_escolares)),
+        # datos y etiquetas
+        'lista_labels': json.dumps([label_categoria_des]),
+        'lista_datos': json.dumps([{'TSA': datos_des_tsa, 'Taxis/Remiss': datos_des_tr,
+                                    'Colectivos': datos_des_colectivos, 'Escolares': datos_des_escolares},
+                                ])
+    }
+
+
+    return render(request, "estadistica/estadisticas_vehiculos.html", context)

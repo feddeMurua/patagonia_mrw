@@ -202,6 +202,13 @@ class PagoDiferidoForm(forms.ModelForm):
         exclude = ['control']
         fields = '__all__'
 
+    def clean_fecha_pago(self):
+        fecha_pago = self.cleaned_data['fecha_pago']
+        if fecha_pago < timezone.now().date() + relativedelta(days=1):
+            raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues del control que se está'
+                                        ' registrando')
+        return fecha_pago
+
 
 class PagoCCForm(forms.ModelForm):
 

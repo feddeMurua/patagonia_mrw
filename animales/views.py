@@ -644,7 +644,7 @@ def estadisticas_animales(request):
             analisis = factories.AnalisisFactory()
         '''
 
-    return render(request, "estadistica/estadisticas_animales.html", context)
+    return render(request, "estadistica/estadisticas_analisis.html", context)
 
 
 @login_required(login_url='login')

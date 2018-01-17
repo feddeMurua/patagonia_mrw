@@ -21,11 +21,11 @@
             </div>
             <br>
             <div class="pago_diferido">
-                <input type="submit" class="btn btn-success" value="Generar comprobante de deuda">
+                <label>Fecha de Pago *</label>
+                {{ pago_diferido_form.fecha_pago }}
             </div>
             <div class="pago_normal">
                 {% include 'caja/cuadro_facturacion.html' %}
-                <input type="submit" class="btn btn-success" value="Facturar">
             </div>
         </div>
     {% endif %}

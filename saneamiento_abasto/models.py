@@ -138,6 +138,7 @@ class ControlDePlaga(models.Model):
     procedimiento = models.CharField(max_length=400)
     recomendaciones = models.CharField(max_length=400, blank=True, null=True)
     fecha_prox_visita = models.DateField(blank=True, null=True)
+    pagado = models.BooleanField(default=True)
 
     def __str__(self):
         return "%s - %s - %s" % (self.fecha_hoy, self.responsable, self.tipo_plaga)
@@ -152,3 +153,6 @@ class PagoDiferido(models.Model):
         self.monto = servicio.importe
         self.control = control
         self.save()
+
+    def __str__(self):
+        return "%s - %s - %s" % (self.control.responsable, self.control.tipo_plaga, self.fecha_pago)

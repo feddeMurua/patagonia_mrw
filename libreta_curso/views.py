@@ -416,7 +416,7 @@ def estadisticas_lc(request):
     '''
     CONTEXTO
     '''
-    
+
     context = {
         'rango_form': rango_form,
         # inscripciones
@@ -437,21 +437,5 @@ def estadisticas_lc(request):
                                    {'Sin calificar': datos_sc, 'Aprobados': datos_aprobados, 'Desaprobados': datos_desaprobados},
                                    {'Blancas': datos_blanca, 'Amarillas': datos_amarilla, 'Celestes': datos_celeste}])
     }
-
-    '''
-    #Para cargar con el factory
-
-    for x in xrange(10):
-        cursos = factories.CursoFactory()
-
-    for x in xrange(45):
-        personas = factories.PersonaFactory()
-
-    for x in xrange(45):
-        inscripciones = factories.InscripcionFactory()
-
-    for x in xrange(45):
-        libretas = factories.LibretaFactory()
-    '''
 
     return render(request, "estadistica/estadisticas_lc.html", context)

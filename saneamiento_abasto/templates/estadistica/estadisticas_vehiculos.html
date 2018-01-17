@@ -1,0 +1,22 @@
+{% extends "base/base_estadisticas.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Estadisticas Mascotas{% endblock %}
+
+{% block header-title %}Estadisticas para Vehículos{% endblock %}
+
+{% block tabs %}
+    <ul>
+        <li><a href="#tabs-1">Desinfecciones de Vehículos</a></li>
+    </ul>
+    <div id="tabs-1">
+      <p><strong>Promedio HISTÓRICO de TSA: {{promedio_tsa}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Taxi/Remis: {{promedio_tr}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Colectivos: {{promedio_colectivos}}</strong></p>
+      <p><strong>Promedio HISTÓRICO de Escolares: {{promedio_escolares}}</strong></p>
+      <div class="chartAreaWrapper">
+        <canvas height="40"></canvas>
+      </div>
+    </div>
+{% endblock %}

@@ -18,13 +18,26 @@
         <form method="post" class="reinspeccion-form">
             {% csrf_token %}
             <div class="form-section">
-                {{ form.media }}
-                {% for field in form %}
-                    <div class="form-group">
-                        <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
-                        {{ field|add_class:'form-control' }}
-                    </div>
-                {% endfor %}
+                <div class="form-group">
+                    <label>Turno *</label>
+                    {{ form.turno }}
+                </div>
+                <div class="form-group">
+                    <label>Inspectores *</label>
+                    {{ form.inspectores }}
+                </div>
+                <div class="form-group">
+                    <label>Precintado *</label>
+                    {{ form.precintado|add_class:'form-control' }}
+                </div>
+                <div class="form-group">
+                    <label>N° de Certificado *</label>
+                    {{ form.num_certificado|add_class:'form-control' }}
+                </div>
+                <div class="form-group">
+                    <label>Abastecedor *</label>
+                    {{ form.abastecedor }}
+                </div>
                 {% if form.non_field_errors%}
                     <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
                 {% endif %}
@@ -70,7 +83,13 @@
                     </div>
                 </div>
                 <div class="pago_normal">
-                    {% include 'caja/cuadro_facturacion.html' %}
+                    <div class="form-group">
+                        <label>Factura *</label>
+                        {{ detalle_mov_form.movimiento }}
+                    </div>
+                    {% if form.non_field_errors%}
+                        <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
+                    {% endif %}
                 </div>
             </div>
 
