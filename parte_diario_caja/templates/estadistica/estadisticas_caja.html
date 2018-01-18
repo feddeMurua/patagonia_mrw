@@ -1,0 +1,18 @@
+{% extends "base/base_estadisticas.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Estadisticas Caja{% endblock %}
+
+{% block header-title %}Estadisticas Parte Diario Caja{% endblock %}
+
+{% block tabs %}
+    <ul>
+        <li><a href="#tabs-1">Importes Servicio Anual</a></li>
+    </ul>
+    <div id="tabs-1">
+      <div class="chartAreaWrapper">
+        <canvas height="40"></canvas>
+      </div>
+    </div>
+{% endblock %}

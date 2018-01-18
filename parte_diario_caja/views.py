@@ -11,6 +11,10 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 from django.db.models import Sum
+from libreta_curso import forms as lc_f
+import collections
+import numpy as np
+import json
 
 '''
 MOVIMIENTO DIARIO
@@ -163,3 +167,42 @@ def modificacion_servicio(request, pk):
     else:
         form = ServicioForm(instance=servicio)
     return render(request, 'servicio/servicio_form.html', {'form': form})
+
+
+@login_required(login_url='login')
+def estadisticas_caja(request):
+    '''
+    rango_form = lc_f.RangoFechaForm
+    anio = timezone.now().year
+    years = range(anio, anio - 5, -1)
+    if request.method == 'POST':
+        rango_form = lc_f.RangoFechaForm(request.POST)
+        if rango_form.is_valid():
+            fecha_desde = rango_form.cleaned_data['fecha_desde']
+            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
+            anio_desde = fecha_desde.year
+            anio_hasta = fecha_hasta.year
+            years = range(anio_hasta, anio_desde - 1, -1)
+
+    '''
+    importe_anual = {} # importe anual POR SERVICIO
+
+    total_general = 0 # total general
+
+    movimientos_caja = MovimientoDiario.objects.filter(fecha__year=2018)
+
+    for mov in movimientos_caja:
+        for detalle in DetalleMovimiento.objects.filter(movimiento=mov):
+            importe_anual[detalle.servicio] = (DetalleMovimiento.objects.filter(movimiento__fecha__year=2018, servicio=detalle.servicio).count())*detalle.importe
+
+    print("-----------------")    
+    print(importe_anual)
+    print("-----------------")
+
+    '''
+    context = {
+        'rango_form':rango_form
+    }
+    '''
+
+    return render(request, "estadistica/estadisticas_caja.html")
