@@ -87,27 +87,39 @@
                     })
             })
 
-            var chart = new Chart(ctx, {
-                type: 'bar',
+            if(document.getElementById('canvas_caja')){
+
+              var myPieChart = new Chart(ctx,{
+                type: 'doughnut',
                 data: {
                     labels: labels,
                     datasets: datasets
                 },
-                options: {
-                    scales: {
-                        xAxes: [{
-                          categoryPercentage: 0.5,
-                          barPercentage: 0.9
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true,
-                                stepSize: 1
-                            }
-                        }]
-                    }
-                }
-            });
+              });
+
+            } else {
+              var chart = new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                      labels: labels,
+                      datasets: datasets
+                  },
+                  options: {
+                      scales: {
+                          xAxes: [{
+                            categoryPercentage: 0.5,
+                            barPercentage: 0.9
+                          }],
+                          yAxes: [{
+                              ticks: {
+                                  beginAtZero:true,
+                                  stepSize: 1
+                              }
+                          }]
+                      }
+                  }
+              });
+            }
         });
     </script>
     {% block more-scripts %}{% endblock %}

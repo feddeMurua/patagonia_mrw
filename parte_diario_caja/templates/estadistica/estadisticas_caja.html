@@ -10,9 +10,75 @@
     <ul>
         <li><a href="#tabs-1">Importes Servicio Anual</a></li>
     </ul>
+
+    <style>
+      table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+      }
+
+      td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+      }
+
+      tr:nth-child(even) {
+          background-color: #dddddd;
+      }
+    </style>
+
     <div id="tabs-1">
-      <div class="chartAreaWrapper">
-        <canvas height="40"></canvas>
+      <div class="row">
+        <div class="col-md-2">
+          <table>
+              <thead>
+                {% for key, value in dict.items %}
+                <tr>
+                  <th>{{key}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>${{value}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                  <td><strong>Total general en el año: ${{total_general}}</strong></td>
+                </tr>
+            <tbody>
+          </table>
+        </div>
+        <div class="col-md-2">
+          <table>
+              <thead>
+                <tr>
+                  <th>Porcentajes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for v in porcentajes %}
+                <tr>
+                  <td>{{v}}%</td>
+                </tr>
+                <tr>
+                  {% if porcentajes|length == forloop.counter %}
+                    <td>100%</td>
+                  {% else %}
+                    <td>-</td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+            <tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+
+      <div class="chartAreaWrapper">
+        <canvas height="40" id="canvas_caja"></canvas>
+      </div>
+
+
 {% endblock %}
