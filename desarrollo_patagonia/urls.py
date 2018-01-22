@@ -44,5 +44,6 @@ urlpatterns = [
     url(r'^eventos/', include('event_log.urls_event_log', namespace='event_log')),
     url(r'^estadisticas/', include('libreta_curso.urls_estadisticas', namespace='est_lc')),
     url(r'^estadisticas/', include('animales.urls_estadisticas', namespace='est_am')),
-    url(r'^estadisticas/', include('saneamiento_abasto.urls_estadisticas', namespace='est_ab'))
+    url(r'^estadisticas/', include('saneamiento_abasto.urls_estadisticas', namespace='est_ab')),
+    url(r'^estadisticas/', include('parte_diario_caja.urls_estadisticas', namespace='est_pdc'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -11,6 +11,10 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 from django.db.models import Sum
+from libreta_curso import forms as lc_f
+import collections
+import numpy as np
+import json
 
 '''
 MOVIMIENTO DIARIO
@@ -163,3 +167,37 @@ def modificacion_servicio(request, pk):
     else:
         form = ServicioForm(instance=servicio)
     return render(request, 'servicio/servicio_form.html', {'form': form})
+
+
+@login_required(login_url='login')
+def estadisticas_caja(request):
+
+    importe_anual = {} # importe anual POR SERVICIO
+
+    movimientos_caja = MovimientoDiario.objects.filter(fecha__year=2018)
+
+    for mov in movimientos_caja:
+        for detalle in DetalleMovimiento.objects.filter(movimiento=mov):
+            importe_anual[detalle.servicio] = (DetalleMovimiento.objects.filter(movimiento__fecha__year=2018, servicio=detalle.servicio).count())*detalle.importe
+
+    total_general = sum(importe_anual.values()) #Total generado en el año
+
+    ord_importe_anual = collections.OrderedDict(sorted(importe_anual.iteritems(), key=lambda (k,v): (v,k))) #Ordena los servicios por importe
+
+    label_servicios = ord_importe_anual.keys()  # indistinto para los datos (tienen la misma clave)
+    datos_servicios = ord_importe_anual.values()
+
+    porcentajes = []
+    for v in ord_importe_anual.values():
+        porcentajes.append(float("{0:.2f}".format(v*100/total_general)))
+
+    context = {
+        'dict': ord_importe_anual,
+        'porcentajes': porcentajes,
+        'total_general': total_general,
+        # datos y etiquetas
+        'lista_labels': json.dumps([label_servicios]),
+        'lista_datos': json.dumps([{'Servicios': datos_servicios},])
+    }
+
+    return render(request, "estadistica/estadisticas_caja.html", context)

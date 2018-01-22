@@ -38,6 +38,7 @@ class DetalleMovimiento(models.Model):
     movimiento = models.ForeignKey('MovimientoDiario', on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=100)
     importe = models.FloatField()
+    servicio = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return "%s" % self.descripcion
@@ -45,6 +46,7 @@ class DetalleMovimiento(models.Model):
     def completar(self, servicio, obj):
         self.descripcion = str(servicio) + " | N° " + str(obj.id)
         self.importe = servicio.importe
+        self.servicio = str(servicio)
         self.save()
 
 
