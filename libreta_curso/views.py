@@ -9,6 +9,7 @@ from .forms import *
 from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
+from parte_diario_caja import forms as pd_m
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
@@ -222,8 +223,7 @@ def alta_libreta(request):
     if request.method == 'POST':
         form = LibretaForm(request.POST, request.FILES)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        servicio_form = pd_f.ListaServicios(request.POST, tipo='Libreta Sanitaria')
-        if form.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
+        if form.is_valid() & detalle_mov_form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
                 libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
@@ -234,15 +234,13 @@ def alta_libreta(request):
                 libreta.curso = cursos[-1]
             libreta.save()
             detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(servicio_form.cleaned_data['servicio'], libreta)
+            detalle_mov.completar(pd_m.Servicio.objects.get(nombre="Alta de libreta sanitaria"), libreta)
             log_crear(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = LibretaForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        servicio_form = pd_f.ListaServicios(tipo='Libreta Sanitaria')
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'servicio_form': servicio_form})
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
 
 
 class DetalleLibreta(LoginRequiredMixin, DetailView):
@@ -291,6 +289,32 @@ class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
             pagesize="A4",
             libreta=libreta
         )
+
+
+@login_required(login_url='login')
+def renovacion_libreta(request, pk):
+    libreta = LibretaSanitaria.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = RenovacionLibretaForm(request.POST, instance=libreta)
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        if form.is_valid() & detalle_mov_form.is_valid():
+            libreta = form.save(commit=False)
+            if libreta.tipo_libreta != 'Celeste':
+                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
+            else:
+                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(months=int(request.POST['meses']))
+            cursos = get_cursos(libreta.persona.pk)
+            if cursos:
+                libreta.curso = cursos[-1]
+            libreta.save()
+            detalle_mov = detalle_mov_form.save(commit=False)
+            detalle_mov.completar(pd_m.Servicio.objects.get(nombre="Renovacion de libreta sanitaria"), libreta)
+            log_crear(request.user.id, libreta, 'Renovacion de Libreta Sanitaria')
+            return redirect('libretas:lista_libretas')
+    else:
+        form = RenovacionLibretaForm(instance=libreta)
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
 
 
 '''

@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.utils.translation import ugettext as _
 import sys
+from django.utils.translation import ugettext as _
 
 reload(sys)
 sys.setdefaultencoding('utf8')  # Para que no de error por los acentos
 
-Tipo_Vehiculo = (
+TIPO_VEHICULO = (
     ('TSA', _("Transporte de Sustancias Alimenticias")),
     ('TPP', _("Transporte Público de Pasajeros"))
 )
 
-Marca_vehiculo = (
+MARCA_VEHICULO = (
     ('Alfa Romeo', _("Alfa Romeo")),
     ('Audi', _("Audi")),
     ('BMW', _("BMW")),
@@ -37,7 +37,7 @@ Marca_vehiculo = (
     ('Volkswagen', _("Volkswagen")),
 )
 
-Categoria = (
+CATEGORIA = (
     ('Categoria_A',
      _("Transporte isotérmico con equipo de frio para transportar productos congelados")),
 
@@ -54,7 +54,7 @@ Categoria = (
      _("Otros")),
 )
 
-Categoria_A = {
+CATEGORIA_A = {
     'Productos carneos': "Productos carneos",
     'Aves': "Aves",
     'Pescados': "Pescados",
@@ -63,7 +63,7 @@ Categoria_A = {
     'Helados': "Helados"
 }
 
-Categoria_B = {
+CATEGORIA_B = {
     'Productos carneos': "Productos carneos",
     'Aves': "Aves",
     'Fiambres': "Fiambres",
@@ -74,36 +74,36 @@ Categoria_B = {
     'Productos de rotiseria': "Productos de rotiseria"
 }
 
-Categoria_C = {
+CATEGORIA_C = {
     'Bebidas': "Bebidas",
     'Aguas': "Aguas",
     'Panificados y afines': "Panificados y afines"
 }
 
-Categoria_D = {
+CATEGORIA_D = {
     'Frutas': "Frutas",
     'Verduras': "Verduras",
     'Huevos': "Huevos",
     'Bebidas': "Bebidas"
 }
 
-Categoria_E = {
+CATEGORIA_E = {
     'Otros': "Otros"
 }
 
-Tipo_TPP = (
+TIPO_TPP = (
     ('Colectivo', _("Colectivo")),
     ('TR', _("Taxi/Remisse")),
     ('Escolar', _("Escolar"))
 )
 
-Estado_Desinfeccion = (
+ESTADO_DESINFECCION = (
     ('Realizada', _("Realizada")),
     ('No realizada', _("No realizada")),
     ('Vencida', _("Vencida"))
 )
 
-Plagas = (
+PLAGAS = (
     ('Palomas', _("Palomas")),
     ('Ratas', _("Ratas")),
     ('Cucarachas', _("Cucarachas")),
@@ -115,10 +115,19 @@ Plagas = (
     ('Otros', _("Otros")),
 )
 
-Turno_Reinspeccion = (
+TURNO_REINSPECCION = (
     ('Mañana', _("Mañana")),
     ('Tarde', _("Tarde")),
     ('Sabado', _("Sabado")),
     ('Feriado', _("Feriado")),
     ('Excepcion', _("Excepcion"))
+)
+
+PAGO_DIFERIDO = (
+    ('30', _("30 Dias")),
+    ('60', _("60 Dias")),
+    ('90', _("90 Dias")),
+    ('120', _("120 Dias")),
+    ('150', _("150 Dias")),
+    ('180', _("180 Dias"))
 )

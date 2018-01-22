@@ -1,6 +1,7 @@
 {% extends "base/base_form.html" %}
 {% load staticfiles %}
 {% load staticfiles bootstrap3 %}
+{% load widget_tweaks %}
 
 {% block title %}Control de Plagas{% endblock %}
 
@@ -22,7 +23,7 @@
             <br>
             <div class="pago_diferido">
                 <label>Fecha de Pago *</label>
-                {{ pago_diferido_form.fecha_pago }}
+                {{ pago_diferido_form.fecha_pago|add_class:'form-control' }}
             </div>
             <div class="pago_normal">
                 {% include 'caja/cuadro_facturacion.html' %}
@@ -42,7 +43,10 @@
         });
 
         var pago_diferido = $('.pago_diferido'),
-        pago_normal = $('.pago_normal');
+        pago_normal = $('.pago_normal'),
+        movimiento = $('#id_movimiento'),
+        servicio = $('#id_servicio'),
+        fecha_pago = $('#id_fecha_pago');
 
         forma_pago = $("input[name='optradio']:checked").val();
         hideFields();
@@ -56,9 +60,15 @@
             if (forma_pago == 'diferido') {
                 pago_diferido.removeClass('hidden');
                 pago_normal.addClass('hidden');
+                movimiento.prop('required', false);
+                servicio.prop('required', false);
+                fecha_pago.prop('required', true);
             } else {
                 pago_diferido.addClass('hidden');
                 pago_normal.removeClass('hidden');
+                movimiento.prop('required', true);
+                servicio.prop('required', true);
+                fecha_pago.prop('required', false);
             }
         }
     </script>

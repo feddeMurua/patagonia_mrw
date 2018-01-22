@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
-from personas import models as m
 from django.utils.timezone import now
-from .choices import *
 from django.core.validators import MinValueValidator
 from solo.models import SingletonModel
+from personas import models as m
+from .choices import *
 
 
 class Abastecedor(models.Model):
@@ -46,7 +46,7 @@ class Producto(models.Model):
 
 class Reinspeccion(models.Model):
     fecha = models.DateField(default=now)
-    turno = models.CharField(max_length=10, choices=Turno_Reinspeccion)
+    turno = models.CharField(max_length=10, choices=TURNO_REINSPECCION)
     inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField()
     num_certificado = models.BigIntegerField()
@@ -105,13 +105,13 @@ VEHICULO Y DESINFECCIONES
 
 
 class Vehiculo(models.Model):
-    marca = models.CharField(max_length=15, choices=Marca_vehiculo)
+    marca = models.CharField(max_length=15, choices=MARCA_VEHICULO)
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
-    tipo_vehiculo = models.CharField(max_length=3, choices=Tipo_Vehiculo, default='TPP')
-    tipo_tpp = models.CharField(max_length=15, blank=True, null=True, choices=Tipo_TPP)
+    tipo_vehiculo = models.CharField(max_length=3, choices=TIPO_VEHICULO, default='TPP')
+    tipo_tpp = models.CharField(max_length=15, blank=True, null=True, choices=TIPO_TPP)
     disposicion_resolucion = models.CharField(max_length=50, blank=True, null=True, unique=True)
-    categoria = models.CharField(max_length=50, choices=Categoria, blank=True, null=True)
+    categoria = models.CharField(max_length=50, choices=CATEGORIA, blank=True, null=True)
     rubro_vehiculo = models.CharField(max_length=25, blank=True, null=True)
 
     def __str__(self):
@@ -134,7 +134,7 @@ class ControlDePlaga(models.Model):
     fecha_hoy = models.DateField(default=now)
     responsable = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="responsable_propietario")
     funcionario_actuante = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, related_name="funcionario")
-    tipo_plaga = models.CharField(max_length=50, choices=Plagas)
+    tipo_plaga = models.CharField(max_length=50, choices=PLAGAS)
     procedimiento = models.CharField(max_length=400)
     recomendaciones = models.CharField(max_length=400, blank=True, null=True)
     fecha_prox_visita = models.DateField(blank=True, null=True)
@@ -146,7 +146,7 @@ class ControlDePlaga(models.Model):
 
 class PagoDiferido(models.Model):
     monto = models.FloatField()
-    fecha_pago = models.DateField()
+    fecha_pago = models.CharField(max_length=15, choices=PAGO_DIFERIDO)
     control = models.ForeignKey('ControlDePlaga', on_delete=models.CASCADE)
 
     def detalles(self, servicio, control):

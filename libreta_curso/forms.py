@@ -130,6 +130,16 @@ class LibretaForm(forms.ModelForm):
 
 
 class ModificacionLibretaForm(forms.ModelForm):
+
+    class Meta:
+        model = LibretaSanitaria
+        fields = ['observaciones', 'foto']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+
+
+class RenovacionLibretaForm(forms.ModelForm):
     fecha_examen_clinico = forms.DateField(widget=DateInput(), label="Fecha de examen clínico")
 
     class Meta:

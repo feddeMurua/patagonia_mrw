@@ -11,6 +11,7 @@ from .models import *
 from personas import forms as f
 from django.views.generic import DetailView
 from parte_diario_caja import forms as pd_f
+from parte_diario_caja import models as pd_m
 from desarrollo_patagonia.utils import *
 from django.utils import timezone
 from dateutil.relativedelta import *
@@ -311,24 +312,22 @@ def alta_patente(request):
     if request.method == 'POST':
         form = PatenteForm(request.POST)
         mascota_form = MascotaForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, )
-        servicio_form = pd_f.ListaServicios(request.POST, tipo='Patentamiento')
-        if form.is_valid() & mascota_form.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        if form.is_valid() & mascota_form.is_valid() & detalle_mov_form.is_valid():
             patente = form.save(commit=False)
             patente.mascota = mascota_form.save()
             patente.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
             patente.save()
             detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(servicio_form.cleaned_data['servicio'], patente)
+            detalle_mov.completar(pd_m.Servicio.objects.get(nombre="Registro/patente anual"), patente)
             log_crear(request.user.id, patente, 'Patente')
             return redirect('patentes:lista_patentes')
     else:
         form = PatenteForm
         mascota_form = MascotaForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        servicio_form = pd_f.ListaServicios(tipo='Patentamiento')
     return render(request, "patente/patente_form.html", {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'mascota_form': mascota_form, 'servicio_form': servicio_form})
+                                                         'mascota_form': mascota_form})
 
 
 class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
@@ -369,21 +368,21 @@ def modificacion_patente(request, pk):
 def reno_dup_patente(request, pk):
     patente = Patente.objects.get(pk=pk)
     if request.method == 'POST':
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST, )
-        servicio_form = pd_f.ListaServicios(request.POST, tipo='Patentamiento')
-        if detalle_mov_form.is_valid() & servicio_form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        if detalle_mov_form.is_valid():
+            detalle_mov = detalle_mov_form.save(commit=False)
             if request.POST['radio'] == 'renovacion':
                 patente.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
                 patente.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(servicio_form.cleaned_data['servicio'], patente)
-            log_crear(request.user.id, patente, 'Patente')
+                servicio = pd_m.Servicio.objects.get(nombre="Renovacion de patente")
+            else:
+                servicio = pd_m.Servicio.objects.get(nombre="Duplicado de patente")
+            detalle_mov.completar(servicio, patente)
+            log_crear(request.user.id, patente, servicio.nombre)
             return redirect('patentes:lista_patentes')
     else:
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        servicio_form = pd_f.ListaServicios(tipo='Patentamiento')
     return render(request, 'patente/patente_reno_dup.html', {'detalle_mov_form': detalle_mov_form, 'patente': patente,
-                                                             'servicio_form': servicio_form,
                                                              'fecha_hoy': timezone.now().date()})
 
 

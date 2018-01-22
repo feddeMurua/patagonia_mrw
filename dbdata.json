@@ -570,7 +570,7 @@
   "model": "parte_diario_caja.servicio",
   "pk": 1,
   "fields": {
-    "nombre": "Libreta sanitaria",
+    "nombre": "Alta de libreta sanitaria",
     "importe": 160.0,
     "tipo": 6
   }
@@ -579,14 +579,23 @@
   "model": "parte_diario_caja.servicio",
   "pk": 2,
   "fields": {
-    "nombre": "Analisis triquinosis",
+    "nombre": "Renovacion de libreta sanitaria",
+    "importe": 160.0,
+    "tipo": 6
+  }
+},
+{
+  "model": "parte_diario_caja.servicio",
+  "pk": 3,
+  "fields": {
+    "nombre": "Analisis de triquinosis",
     "importe": 60.0,
     "tipo": 3
   }
 },
 {
   "model": "parte_diario_caja.servicio",
-  "pk": 3,
+  "pk": 4,
   "fields": {
     "nombre": "Desinfeccion: Taxi, Remisse, Escolar, TSA",
     "importe": 100.0,
@@ -595,7 +604,7 @@
 },
 {
   "model": "parte_diario_caja.servicio",
-  "pk": 4,
+  "pk": 5,
   "fields": {
     "nombre": "Desinfeccion: Colectivo",
     "importe": 150.0,
@@ -604,7 +613,7 @@
 },
 {
   "model": "parte_diario_caja.servicio",
-  "pk": 5,
+  "pk": 6,
   "fields": {
     "nombre": "Fumigacion, desinfeccion, desratizacion",
     "importe": 350.0,
@@ -613,7 +622,7 @@
 },
 {
   "model": "parte_diario_caja.servicio",
-  "pk": 6,
+  "pk": 7,
   "fields": {
     "nombre": "Registro/patente anual",
     "importe": 130.0,
@@ -622,7 +631,7 @@
 },
 {
   "model": "parte_diario_caja.servicio",
-  "pk": 7,
+  "pk": 8,
   "fields": {
     "nombre": "Duplicado de patente",
     "importe": 130.0,
@@ -631,7 +640,16 @@
 },
 {
   "model": "parte_diario_caja.servicio",
-  "pk": 8,
+  "pk": 9,
+  "fields": {
+    "nombre": "Renovacion de patente",
+    "importe": 130.0,
+    "tipo": 4
+  }
+},
+{
+  "model": "parte_diario_caja.servicio",
+  "pk": 10,
   "fields": {
     "nombre": "Control antirrabico",
     "importe": 500.0,

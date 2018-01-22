@@ -242,13 +242,16 @@
             });
         };
 
-        var pago_normal = $('.pago_normal');
+        var pago_normal = $('.pago_normal'),
+        movimiento = $('#id_movimiento');
 
         function hideFields() {
             if (forma_pago == 'cc') {
                 pago_normal.addClass('hidden');
+                movimiento.prop('required', false);
             } else {
                 pago_normal.removeClass('hidden');
+                movimiento.prop('required', true);
             }
         }
     </script>

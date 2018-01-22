@@ -39,6 +39,7 @@
                     {% if user.is_staff %}
                         <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'libretas:borrar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     {% endif %}
+                    <a class="btn btn-info" data-toggle="tooltip" title="Renovacion" href="{% url 'libretas:renovacion_libreta' libreta.pk %}"><em class="glyphicon glyphicon-refresh"></em></a>
                 </td>
             </tr>
         {% endfor %}

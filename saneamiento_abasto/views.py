@@ -18,7 +18,9 @@ from desarrollo_patagonia import factories
 from libreta_curso import forms as lc_f
 import collections
 import numpy as np
-import json 
+import json
+
+
 '''
 ABASTECEDORES
 '''
@@ -151,7 +153,7 @@ def alta_reinspeccion(request):
     if request.method == 'POST':
         form = ReinspeccionForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        if form.is_valid() & len(request.session['productos']) > 0:
+        if form.is_valid() & len(request.session['productos']):
             reinspeccion = form.save()
             carga_productos(request, reinspeccion)
             monto = get_monto(reinspeccion)
@@ -266,11 +268,11 @@ VEHICULO
 @login_required(login_url='login')
 def get_rubros_json(request, id_categoria):
     return JsonResponse({
-        'Categoria_A': Categoria_A,
-        'Categoria_B': Categoria_B,
-        'Categoria_C': Categoria_C,
-        'Categoria_D': Categoria_D,
-        'Categoria_E': Categoria_E
+        'Categoria_A': CATEGORIA_A,
+        'Categoria_B': CATEGORIA_B,
+        'Categoria_C': CATEGORIA_C,
+        'Categoria_D': CATEGORIA_D,
+        'Categoria_E': CATEGORIA_E
     }.get(id_categoria, None))
 
 
@@ -427,30 +429,30 @@ def alta_control_plaga(request):
     if request.method == 'POST':
         form = ControlDePlagaForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        servicio_form = pd_f.ListaServicios(request.POST, tipo='Control de Plagas')
         pago_diferido_form = PagoDiferidoForm(request.POST)
-        if form.is_valid() & servicio_form.is_valid():
-            control_plaga = form.save()
-            servicio = servicio_form.cleaned_data['servicio']
+        if form.is_valid():
+            servicio = pd_m.Servicio.objects.get(nombre='Fumigacion, desinfeccion, desratizacion')
             if request.POST['optradio'] == 'normal':
                 if detalle_mov_form.is_valid():
+                    control_plaga = form.save()
                     detalle_mov = detalle_mov_form.save(commit=False)
                     detalle_mov.completar(servicio, control_plaga)
+                    log_crear(request.user.id, control_plaga, 'Control de Plagas')
+                    return redirect('controles_plagas:lista_controles_plagas')
             else:
                 if pago_diferido_form.is_valid():
+                    control_plaga = form.save()
                     control_plaga.pagado = False
                     control_plaga.save()
                     pago = pago_diferido_form.save(commit=False)
                     pago.detalles(servicio, control_plaga)
-            log_crear(request.user.id, control_plaga, 'Control de Plagas')
-            return redirect('controles_plagas:lista_controles_plagas')
+                    log_crear(request.user.id, control_plaga, 'Control de Plagas')
+                    return redirect('controles_plagas:lista_controles_plagas')
     else:
         form = ControlDePlagaForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        servicio_form = pd_f.ListaServicios(tipo='Control de Plagas')
-        pago_diferido_form = PagoDiferidoForm
-    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'servicio_form': servicio_form,
-                                                                    'detalle_mov_form': detalle_mov_form,
+        pago_diferido_form = PagoDiferidoForm()
+    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
                                                                     'pago_diferido_form': pago_diferido_form})
 
 
@@ -535,14 +537,14 @@ def estadisticas_vehiculos(request):
             "vehiculo__tipo_vehiculo", "vehiculo__tipo_tpp")
 
         for des in desinfecciones_vehiculos:
-            if (des[0] == 'TSA'):
-                tsa+=1
-            elif (des[1] == 'Colectivo'):
-                colectivos+=1
-            elif (des[1] == 'TR'):
-                tr +=1
+            if des[0] == 'TSA':
+                tsa += 1
+            elif des[1] == 'Colectivo':
+                colectivos += 1
+            elif des[1] == 'TR':
+                tr += 1
             else:
-                escolares+=1
+                escolares += 1
 
         des_tsa[str(year)] = tsa
         des_tr[str(year)] = tr
@@ -563,8 +565,6 @@ def estadisticas_vehiculos(request):
     datos_des_colectivos = ord_des_colectivos.values()
     datos_des_escolares = ord_des_escolares.values()
 
-
-
     context = {
         'rango_form': rango_form,
         # mascotas
@@ -578,6 +578,5 @@ def estadisticas_vehiculos(request):
                                     'Colectivos': datos_des_colectivos, 'Escolares': datos_des_escolares},
                                 ])
     }
-
 
     return render(request, "estadistica/estadisticas_vehiculos.html", context)

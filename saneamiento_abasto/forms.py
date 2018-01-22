@@ -13,12 +13,11 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 
-DateInput = partial(forms.DateInput, {'class': 'datepicker'})
-TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
+DATEINPUT = partial(forms.DateInput, {'class': 'datepicker'})
+TIMEINPUT = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
 class AbastecedorForm(forms.ModelForm):
-
     class Meta:
         model = Abastecedor
         exclude = ['cc']
@@ -39,7 +38,6 @@ class ReinspeccionForm(forms.ModelForm):
 
 
 class ModificacionReinspeccionForm(forms.ModelForm):
-
     class Meta:
         model = Reinspeccion
         exclude = ['fecha', 'abastecedor', 'cc']
@@ -61,7 +59,6 @@ class AltaProductoForm(forms.ModelForm):
 
 
 class ReinspeccionProductoForm(forms.ModelForm):
-
     class Meta:
         model = ReinspeccionProducto
         fields = ['producto', 'kilo_producto']
@@ -92,7 +89,6 @@ class ReinspeccionProductoForm(forms.ModelForm):
 
 
 class ModificacionReinspeccionProductoForm(forms.ModelForm):
-
     class Meta:
         model = ReinspeccionProducto
         fields = ['kilo_producto']
@@ -102,7 +98,6 @@ class ModificacionReinspeccionProductoForm(forms.ModelForm):
 
 
 class ReinspeccionPreciosForm(forms.ModelForm):
-
     class Meta:
         model = ReinspeccionPrecios
         fields = '__all__'
@@ -113,7 +108,6 @@ class ReinspeccionPreciosForm(forms.ModelForm):
 
 
 class VehiculoForm(forms.ModelForm):
-
     class Meta:
         model = Vehiculo
         exclude = ['rubro_vehiculo']
@@ -126,7 +120,6 @@ class VehiculoForm(forms.ModelForm):
 
 
 class ModificarTSAForm(forms.ModelForm):
-
     class Meta:
         model = Vehiculo
         exclude = ['titular', 'tipo_vehiculo', 'rubro_vehiculo']
@@ -137,7 +130,6 @@ class ModificarTSAForm(forms.ModelForm):
 
 
 class ModificarTPPForm(forms.ModelForm):
-
     class Meta:
         model = Vehiculo
         exclude = ['titular', 'tipo_vehiculo', 'categoria', 'rubro_vehiculo']
@@ -148,20 +140,19 @@ class ModificarTPPForm(forms.ModelForm):
 
 
 class DesinfeccionForm(forms.ModelForm):
-
     class Meta:
         model = Desinfeccion
         fields = ['justificativo']
 
 
 class ControlDePlagaForm(forms.ModelForm):
-    fecha_prox_visita = forms.DateField(widget=DateInput(), label="Fecha de próxima visita")
+    fecha_prox_visita = forms.DateField(widget=DATEINPUT(), label="Fecha de próxima visita")
     funcionario_actuante = forms.ModelChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Inspector'))
 
     class Meta:
         model = ControlDePlaga
-        exclude = ['fecha_hoy']
+        exclude = ['fecha_hoy', 'pagado']
         fields = '__all__'
         labels = {
             'tipo_plaga': _("Tipo de plaga")
@@ -176,11 +167,11 @@ class ControlDePlagaForm(forms.ModelForm):
 
 
 class ModificacionControlDePlagaForm(forms.ModelForm):
-    fecha_prox_visita = forms.DateField(widget=DateInput(), label="Fecha de próxima visita")
+    fecha_prox_visita = forms.DateField(widget=DATEINPUT(), label="Fecha de próxima visita")
 
     class Meta:
         model = ControlDePlaga
-        exclude = ['fecha_hoy', 'responsable', 'funcionario_actuante']
+        exclude = ['fecha_hoy', 'responsable', 'funcionario_actuante', 'pagado']
         fields = '__all__'
         labels = {
             'tipo_plaga': _("Tipo de plaga")
@@ -195,23 +186,13 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
 
 
 class PagoDiferidoForm(forms.ModelForm):
-    fecha_pago = forms.DateField(widget=DateInput(), label="Fecha limite de pago")
-
     class Meta:
         model = PagoDiferido
         exclude = ['control']
         fields = '__all__'
 
-    def clean_fecha_pago(self):
-        fecha_pago = self.cleaned_data['fecha_pago']
-        if fecha_pago < timezone.now().date() + relativedelta(days=1):
-            raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues del control que se está'
-                                        ' registrando')
-        return fecha_pago
-
 
 class PagoCCForm(forms.ModelForm):
-
     class Meta:
         model = PagoCC
         fields = ['monto']
