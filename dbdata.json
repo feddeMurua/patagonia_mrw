@@ -511,6 +511,92 @@
   }
 },
 {
+  "model": "saneamiento_abasto.producto",
+  "pk": 3,
+  "fields": {
+    "nombre": "Quesos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 4,
+  "fields": {
+    "nombre": "Fiambres"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 5,
+  "fields": {
+    "nombre": "Grasa Bovina"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 6,
+  "fields": {
+    "nombre": "Huevos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 7,
+  "fields": {
+    "nombre": "Embutidos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 8,
+  "fields": {
+    "nombre": "Pescados"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 9,
+  "fields": {
+    "nombre": "Porcinos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 10,
+  "fields": {
+    "nombre": "Bovinos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 11,
+  "fields": {
+    "nombre": "Aves"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 12,
+  "fields": {
+    "nombre": "Ovinos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 13,
+  "fields": {
+    "nombre": "Manteca"
+  }
+},
+{
+  "model": "saneamiento_abasto.reinspeccionprecios",
+  "pk": 1,
+  "fields": {
+    "kg_min": 30,
+    "precio_min": 55.0,
+    "precio_kg": 0.25
+  }
+},
+{
   "model": "parte_diario_caja.tiposervicio",
   "pk": 1,
   "fields": {
@@ -679,7 +765,7 @@
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$36000$BJMRYq9yMR8b$rdrwGtYLZgf8/KrXARtsXoY2hABt7ZV+6krbCH8DZsk=",
-    "last_login": "2018-01-12T15:28:33.000Z",
+    "last_login": "2018-01-24T23:18:35.087Z",
     "is_superuser": true,
     "username": "matty",
     "first_name": "",
@@ -690,6 +776,188 @@
     "date_joined": "2017-08-18T02:58:05.740Z",
     "groups": [],
     "user_permissions": []
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2018-01-24T23:19:01.081Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "1",
+    "object_repr": "Hamburguesa",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"nombre\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2018-01-24T23:19:16.029Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "1",
+    "object_repr": "Hamburguesas",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"nombre\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2018-01-24T23:23:44.045Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "3",
+    "object_repr": "Quesos",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2018-01-24T23:23:52.926Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "4",
+    "object_repr": "Fiambres",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2018-01-24T23:24:01.540Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "5",
+    "object_repr": "Grasa Vacuna",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2018-01-24T23:24:13.075Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "6",
+    "object_repr": "Huevos",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2018-01-24T23:24:20.874Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "7",
+    "object_repr": "Embutidos",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2018-01-24T23:24:30.945Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "8",
+    "object_repr": "Pescados",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2018-01-24T23:24:37.096Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "9",
+    "object_repr": "Porcinos",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2018-01-24T23:24:40.294Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "10",
+    "object_repr": "Bovinos",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2018-01-24T23:24:48.961Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "11",
+    "object_repr": "Aves",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2018-01-24T23:25:00.494Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "12",
+    "object_repr": "Ovinos",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2018-01-24T23:25:16.550Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "13",
+    "object_repr": "Manteca",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2018-01-24T23:26:25.423Z",
+    "user": 2,
+    "content_type": 33,
+    "object_id": "5",
+    "object_repr": "Grasa Bovina",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"nombre\"]}}]"
   }
 }
 ]
