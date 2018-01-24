@@ -7,10 +7,10 @@
 
 {% block header-title %}Alta/Modificacion de Desinfeccion{% endblock %}
 
-{% block url-volver %}{% url 'desinfecciones:lista_desinfecciones' pk_vehiculo %}{% endblock %}
+{% block url-volver %}{% url 'desinfecciones:lista_desinfecciones' vehiculo.pk %}{% endblock %}
 
 {% block form-left %}
-    {% if modificacion %}
+    {% if modificacion and vehiculo.tipo_vehiculo == 'TSA' %}
         <div class="form-group">
             Justificactivo: {{ form.justificativo|add_class:'form-control' }}
         </div>
@@ -18,30 +18,18 @@
         {% if estado == 'Atrasado' %}
             <div class="msg">La desinfeccion se esta realizando fuera de término. Se cobrara un recargo</div>
             <br>
-            {% if tipo_vehiculo == 'TSA' %}
+            {% if vehiculo.tipo_vehiculo == 'TSA' %}
                 <p>Si el responsable puede justificar el retraso, complete el campo a continuacion</p>
                 <div class="form-group">
                     {{ form.justificativo|add_class:'form-control' }}
                 </div>
             {% endif %}
         {% endif %}
+        {% include 'caja/cuadro_facturacion.html' %}
         <div class="msg">¿Desea confirmar la realizacion de la desinfeccion?</div>
     {% endif %}
 {% endblock %}
 
 {% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url 'desinfecciones:lista_desinfecciones' pk_vehiculo %}">Cancelar</a>
-{% endblock %}
-
-{% block more-scripts %}
-    <script>
-        $('#id_turno').datetimepicker({
-            format:'d/m/Y H:i',
-            step:30,
-            minDate: new Date(),
-            disabledWeekDays:[0]
-        });
-
-        $.datetimepicker.setLocale('es');
-    </script>
+    <a class="btn btn-danger btn-cancelar" href="{% url 'desinfecciones:lista_desinfecciones' vehiculo.pk %}">Cancelar</a>
 {% endblock %}

@@ -15,7 +15,7 @@ from parte_diario_caja import models as pd_m
 from desarrollo_patagonia.utils import *
 from django.utils import timezone
 from dateutil.relativedelta import *
-from libreta_curso import forms as lc_f
+from desarrollo_patagonia import forms as dp_f
 import json
 import collections
 import numpy as np
@@ -47,9 +47,8 @@ def alta_analisis(request):
                 porcino_item = form.save(commit=False)
                 porcino_item.analisis = analisis
                 porcino_item.save()
-            detalle_mov_diario = detalle_mov_form.save(commit=False)
-            detalle_mov_diario.descripcion = str(detalle_mov_diario.servicio) + " N° " + str(analisis.id)
-            detalle_mov_diario.save()
+            detalle_mov = detalle_mov_form.save(commit=False)
+            detalle_mov.completar(servicio_form.cleaned_data['servicio'], analisis)
             log_crear(request.user.id, analisis, 'Analisis de Triquinosis')
             return redirect('analisis:lista_analisis')
     else:
@@ -569,11 +568,11 @@ def alta_tramite_nopatentado(request):
 
 @login_required(login_url='login')
 def estadisticas_animales(request):
-    rango_form = lc_f.RangoFechaForm
+    rango_form = dp_f.RangoFechaForm
     anio = timezone.now().year
     years = range(anio, anio - 5, -1)
     if request.method == 'POST':
-        rango_form = lc_f.RangoFechaForm(request.POST)
+        rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
             fecha_desde = rango_form.cleaned_data['fecha_desde']
             fecha_hasta = rango_form.cleaned_data['fecha_hasta']
@@ -648,11 +647,11 @@ def estadisticas_animales(request):
 
 @login_required(login_url='login')
 def estadisticas_mascotas(request):
-    rango_form = lc_f.RangoFechaForm
+    rango_form = dp_f.RangoFechaForm
     anio = timezone.now().year
     years = range(anio, anio - 5, -1)
     if request.method == 'POST':
-        rango_form = lc_f.RangoFechaForm(request.POST)
+        rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
             fecha_desde = rango_form.cleaned_data['fecha_desde']
             fecha_hasta = rango_form.cleaned_data['fecha_hasta']

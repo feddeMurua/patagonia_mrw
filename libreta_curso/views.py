@@ -9,7 +9,8 @@ from .forms import *
 from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
-from parte_diario_caja import forms as pd_m
+from parte_diario_caja import models as pd_m
+from desarrollo_patagonia import forms as dp_f
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
@@ -324,12 +325,12 @@ ESTADÍSTICAS
 
 @login_required(login_url='login')
 def estadisticas_lc(request):
-    rango_form = RangoFechaForm
+    rango_form = dp_f.RangoFechaForm
     anio = timezone.now().year
     years = range(anio, anio - 5, -1)
     cursos = Curso.objects.filter(fecha__year__gt=years[-1])
     if request.method == 'POST':
-        rango_form = RangoFechaForm(request.POST)
+        rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
             fecha_desde = rango_form.cleaned_data['fecha_desde']
             fecha_hasta = rango_form.cleaned_data['fecha_hasta']

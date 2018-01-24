@@ -11,9 +11,8 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 from django.db.models import Sum
-from libreta_curso import forms as lc_f
+from desarrollo_patagonia import forms as dp_f
 import collections
-import numpy as np
 import json
 
 '''
@@ -171,18 +170,29 @@ def modificacion_servicio(request, pk):
 
 @login_required(login_url='login')
 def estadisticas_caja(request):
+    rango_form = dp_f.RangoFechaForm
+    anio = timezone.now().year
+    years = range(anio, anio - 5, -1)
+    if request.method == 'POST':
+        rango_form = dp_f.RangoFechaForm(request.POST)
+        if rango_form.is_valid():
+            fecha_desde = rango_form.cleaned_data['fecha_desde']
+            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
+            anio_desde = fecha_desde.year
+            anio_hasta = fecha_hasta.year
+            years = range(anio_hasta, anio_desde - 1, -1)
 
-    importe_anual = {} # importe anual POR SERVICIO
+    importe_anual = {}  # importe anual POR SERVICIO
 
-    movimientos_caja = MovimientoDiario.objects.filter(fecha__year=2018)
+    for year in years:
+        movimientos_caja = MovimientoDiario.objects.filter(fecha__year=year)
+        for mov in movimientos_caja:
+            for detalle in DetalleMovimiento.objects.filter(movimiento=mov):
+                importe_anual[detalle.servicio] = (DetalleMovimiento.objects.filter(movimiento__fecha__year=year, servicio=detalle.servicio).count())*detalle.importe
 
-    for mov in movimientos_caja:
-        for detalle in DetalleMovimiento.objects.filter(movimiento=mov):
-            importe_anual[detalle.servicio] = (DetalleMovimiento.objects.filter(movimiento__fecha__year=2018, servicio=detalle.servicio).count())*detalle.importe
+    total_general = sum(importe_anual.values())  # Total generado en el año
 
-    total_general = sum(importe_anual.values()) #Total generado en el año
-
-    ord_importe_anual = collections.OrderedDict(sorted(importe_anual.iteritems(), key=lambda (k,v): (v,k))) #Ordena los servicios por importe
+    ord_importe_anual = collections.OrderedDict(sorted(importe_anual.iteritems(), key=lambda (k, v): (v, k)))  # Ordena los servicios por importe
 
     label_servicios = ord_importe_anual.keys()  # indistinto para los datos (tienen la misma clave)
     datos_servicios = ord_importe_anual.values()
@@ -192,12 +202,13 @@ def estadisticas_caja(request):
         porcentajes.append(float("{0:.2f}".format(v*100/total_general)))
 
     context = {
+        'rango_form': rango_form,
         'dict': ord_importe_anual,
         'porcentajes': porcentajes,
         'total_general': total_general,
         # datos y etiquetas
         'lista_labels': json.dumps([label_servicios]),
-        'lista_datos': json.dumps([{'Servicios': datos_servicios},])
+        'lista_datos': json.dumps([{'Servicios': datos_servicios}])
     }
 
     return render(request, "estadistica/estadisticas_caja.html", context)

@@ -7,78 +7,64 @@
 {% block header-title %}Estadisticas Parte Diario Caja{% endblock %}
 
 {% block tabs %}
+    <style>
+        .tabla-datos {
+            padding-right:0;
+        }
+
+        .tabla-porcentajes {
+            padding-left:0;
+        }
+    </style>
+
     <ul>
         <li><a href="#tabs-1">Importes Servicio Anual</a></li>
     </ul>
-
-    <style>
-      table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
-      }
-
-      td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-      }
-
-      tr:nth-child(even) {
-          background-color: #dddddd;
-      }
-    </style>
-
     <div id="tabs-1">
-      <div class="row">
-        <div class="col-md-2">
-          <table>
-              <thead>
-                {% for key, value in dict.items %}
-                <tr>
-                  <th>{{key}}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>${{value}}</td>
-                </tr>
-                {% endfor %}
-                <tr>
-                  <td><strong>Total general en el año: ${{total_general}}</strong></td>
-                </tr>
-            <tbody>
-          </table>
+        <div class="row">
+            <div class="col-md-3 tabla-datos">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>Item</td>
+                            <td>Importe</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in dict.items %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>${{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2"><b>Total general en el año: ${{ total_general}}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-1 tabla-porcentajes">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>Porcentajes</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in porcentajes %}
+                            <tr>
+                                <td>{{ p }}%</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><b>100%</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-7">
+                <canvas id="canvas_caja"></canvas>
+            </div>
         </div>
-        <div class="col-md-2">
-          <table>
-              <thead>
-                <tr>
-                  <th>Porcentajes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for v in porcentajes %}
-                <tr>
-                  <td>{{v}}%</td>
-                </tr>
-                <tr>
-                  {% if porcentajes|length == forloop.counter %}
-                    <td>100%</td>
-                  {% else %}
-                    <td>-</td>
-                  {% endif %}
-                </tr>
-                {% endfor %}
-            <tbody>
-          </table>
-        </div>
-      </div>
-
-
-      <div class="chartAreaWrapper">
-        <canvas height="40" id="canvas_caja"></canvas>
-      </div>
-
-
+    </div>
 {% endblock %}

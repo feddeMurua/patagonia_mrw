@@ -123,7 +123,6 @@ class Desinfeccion(models.Model):
     proximo_vencimiento = models.DateField()
     vehiculo = models.ForeignKey('Vehiculo', on_delete=models.CASCADE)
     quincena = models.CharField(max_length=30)
-    infraccion = models.BooleanField(default=False)
     justificativo = models.TextField(max_length=250, blank=True, null=True)
 
     def __str__(self):

@@ -10,6 +10,7 @@ from .forms import *
 from .choices import *
 from parte_diario_caja import forms as pd_f
 from parte_diario_caja import models as pd_m
+from desarrollo_patagonia import forms as dp_f
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from desarrollo_patagonia.utils import *
 from django.views.generic.detail import DetailView
@@ -375,21 +376,32 @@ def nueva_desinfeccion(request, pk_vehiculo):
     vehiculo = Vehiculo.objects.get(pk=pk_vehiculo)
     if request.method == 'POST':
         form = DesinfeccionForm(request.POST)
-        if form.is_valid():
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        if form.is_valid() & detalle_mov_form.is_valid():
             desinfeccion = form.save(commit=False)
             desinfeccion.vehiculo = vehiculo
             desinfeccion.quincena = 'Primera' if desinfeccion.fecha_realizacion.day <= 15 else 'Segunda'
             desinfeccion.proximo_vencimiento = get_vencimiento(desinfeccion.fecha_realizacion)
-            if estado == 'Atrasado':
-                desinfeccion.infraccion = True
             desinfeccion.save()
+            detalle_mov = detalle_mov_form.save(commit=False)
+            importe = 0
+            if vehiculo.tipo_vehiculo == 'TPP' and vehiculo.tipo_tpp == 'Colectivo':
+                servicio = pd_m.Servicio.objects.get(nombre="Desinfeccion: Colectivo")
+            else:
+                servicio = pd_m.Servicio.objects.get(nombre="Desinfeccion: Taxi, Remisse, Escolar, TSA")
+            if estado == 'Atrasado':
+                importe = servicio.importe * 2
+            detalle_mov.importe = importe
+            detalle_mov.descripcion = str(servicio) + " | N° " + str(desinfeccion.id)
+            detalle_mov.servicio = str(servicio)
+            detalle_mov.save()
             log_crear(request.user.id, desinfeccion, 'Desinfeccion')
             return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=pk_vehiculo))
     else:
         form = DesinfeccionForm
-    return render(request, 'desinfeccion/desinfeccion_form.html', {'estado': estado, 'pk_vehiculo': pk_vehiculo,
-                                                                   'tipo_vehiculo': vehiculo.tipo_vehiculo,
-                                                                   'form': form})
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+    return render(request, 'desinfeccion/desinfeccion_form.html', {'estado': estado, 'vehiculo': vehiculo,
+                                                                   'form': form, 'detalle_mov_form': detalle_mov_form})
 
 
 @login_required(login_url='login')
@@ -410,8 +422,8 @@ def modificar_desinfeccion(request, pk_vehiculo, pk):
             return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=pk_vehiculo))
     else:
         form = DesinfeccionForm(instance=desinfeccion)
-    return render(request, 'desinfeccion/desinfeccion_form.html', {'form': form, 'pk_vehiculo': pk_vehiculo,
-                                                                   'modificacion': True})
+    return render(request, 'desinfeccion/desinfeccion_form.html', {'form': form, 'modificacion': True,
+                                                                   'vehiculo': Vehiculo.objects.get(pk=pk_vehiculo)})
 
 
 '''
@@ -506,12 +518,11 @@ def pago_diferido(request, pk):
 
 @login_required(login_url='login')
 def estadisticas_vehiculos(request):
-
-    rango_form = lc_f.RangoFechaForm
+    rango_form = dp_f.RangoFechaForm
     anio = timezone.now().year
     years = range(anio, anio - 5, -1)
     if request.method == 'POST':
-        rango_form = lc_f.RangoFechaForm(request.POST)
+        rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
             fecha_desde = rango_form.cleaned_data['fecha_desde']
             fecha_hasta = rango_form.cleaned_data['fecha_hasta']
@@ -519,7 +530,7 @@ def estadisticas_vehiculos(request):
             anio_hasta = fecha_hasta.year
             years = range(anio_hasta, anio_desde - 1, -1)
 
-    des_tr = {} #desinfeccion taxi/remis
+    des_tr = {}  # desinfeccion taxi/remis
     des_escolares = {}
     des_tsa = {}
     des_colectivos = {}
@@ -531,7 +542,6 @@ def estadisticas_vehiculos(request):
         escolares = 0
         tsa = 0
         colectivos = 0
-        tpp = 0
 
         desinfecciones_vehiculos = Desinfeccion.objects.filter(fecha_realizacion__year=year).values_list(
             "vehiculo__tipo_vehiculo", "vehiculo__tipo_tpp")
@@ -550,7 +560,6 @@ def estadisticas_vehiculos(request):
         des_tr[str(year)] = tr
         des_colectivos[str(year)] = colectivos
         des_escolares[str(year)] = escolares
-
 
     # desinfecciones vehiculos
 
