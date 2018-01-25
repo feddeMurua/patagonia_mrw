@@ -20,7 +20,7 @@ from libreta_curso import forms as lc_f
 import collections
 import numpy as np
 import json
-
+from .choices import PLAGAS
 
 '''
 ABASTECEDORES
@@ -517,7 +517,7 @@ def pago_diferido(request, pk):
 
 
 @login_required(login_url='login')
-def estadisticas_vehiculos(request):
+def estadisticas_TD(request):
     rango_form = dp_f.RangoFechaForm
     anio = timezone.now().year
     years = range(anio, anio - 5, -1)
@@ -561,7 +561,7 @@ def estadisticas_vehiculos(request):
         des_colectivos[str(year)] = colectivos
         des_escolares[str(year)] = escolares
 
-    # desinfecciones vehiculos
+    # DESINFECCION DE VEHICULOS
 
     ord_des_tsa = collections.OrderedDict(sorted(des_tsa.items()))
     ord_des_tr = collections.OrderedDict(sorted(des_tr.items()))
@@ -574,6 +574,19 @@ def estadisticas_vehiculos(request):
     datos_des_colectivos = ord_des_colectivos.values()
     datos_des_escolares = ord_des_escolares.values()
 
+
+    #CONTROL DE PLAGAS
+
+    controles = ControlDePlaga.objects.filter(fecha_hoy__year=2018).values_list('tipo_plaga')
+
+    ctr_anual = collections.Counter(controles)
+
+    total_general = sum(ctr_anual.values())
+
+    for k, v in ctr_anual.items():
+        ctr_anual[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+    
+
     context = {
         'rango_form': rango_form,
         # mascotas
@@ -582,10 +595,11 @@ def estadisticas_vehiculos(request):
         'promedio_colectivos': int(np.average(datos_des_colectivos)),
         'promedio_escolares': int(np.average(datos_des_escolares)),
         # datos y etiquetas
-        'lista_labels': json.dumps([label_categoria_des]),
+        'lista_labels': json.dumps([label_categoria_des, ctr_anual.keys()]),
         'lista_datos': json.dumps([{'TSA': datos_des_tsa, 'Taxis/Remiss': datos_des_tr,
                                     'Colectivos': datos_des_colectivos, 'Escolares': datos_des_escolares},
+                                    {'Controles':ctr_anual.values()}
                                 ])
     }
 
-    return render(request, "estadistica/estadisticas_vehiculos.html", context)
+    return render(request, "estadistica/estadisticas_TD.html", context)
