@@ -326,8 +326,7 @@ ESTADÍSTICAS
 @login_required(login_url='login')
 def estadisticas_lc(request):
     rango_form = dp_f.RangoFechaForm
-    anio = timezone.now().year
-    years = range(anio, anio - 5, -1)
+    years = [2018]
     cursos = Curso.objects.filter(fecha__year__gt=years[-1])
     if request.method == 'POST':
         rango_form = dp_f.RangoFechaForm(request.POST)

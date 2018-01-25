@@ -154,7 +154,7 @@ def alta_reinspeccion(request):
     if request.method == 'POST':
         form = ReinspeccionForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        if form.is_valid() & len(request.session['productos']):
+        if form.is_valid():
             reinspeccion = form.save()
             carga_productos(request, reinspeccion)
             monto = get_monto(reinspeccion)

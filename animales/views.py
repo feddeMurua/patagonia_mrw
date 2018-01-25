@@ -569,8 +569,7 @@ def alta_tramite_nopatentado(request):
 @login_required(login_url='login')
 def estadisticas_animales(request):
     rango_form = dp_f.RangoFechaForm
-    anio = timezone.now().year
-    years = range(anio, anio - 5, -1)
+    years = [2018]
     if request.method == 'POST':
         rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
@@ -648,8 +647,7 @@ def estadisticas_animales(request):
 @login_required(login_url='login')
 def estadisticas_mascotas(request):
     rango_form = dp_f.RangoFechaForm
-    anio = timezone.now().year
-    years = range(anio, anio - 5, -1)
+    years = [2018]
     if request.method == 'POST':
         rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
