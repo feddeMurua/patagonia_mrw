@@ -27,37 +27,22 @@
                     <thead>
                         <tr>
                             <td>Item</td>
-                            <td>Importe</td>
+                            <td align="center">Importe</td>
+                            <td align="center">Porcentaje</td>
                         </tr>
                     </thead>
                     <tbody>
                         {% for key, value in dict.items %}
                             <tr>
                                 <td>{{ key }}</td>
-                                <td>${{ value }}</td>
+                                <td align="center">${{ value.0 }}</td>
+                                <td align="center">{{ value.1 }}%</td>
                             </tr>
                         {% endfor %}
                         <tr>
-                            <td colspan="2"><b>Total general en el año: ${{ total_general}}</b></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-1 tabla-porcentajes">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <td>Porcentajes</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for p in porcentajes %}
-                            <tr>
-                                <td>{{ p }}%</td>
-                            </tr>
-                        {% endfor %}
-                        <tr>
-                            <td><b>100%</b></td>
+                            <td><b>Total general en el año:</b></td>
+                            <td align="center"><b>${{total_general}}</b></td>
+                            <td align="center"><b>100%</b></td>
                         </tr>
                     </tbody>
                 </table>

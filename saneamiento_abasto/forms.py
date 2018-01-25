@@ -187,10 +187,8 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
 
 class PagoDiferidoForm(forms.ModelForm):
     class Meta:
-        model = PagoDiferido
-        exclude = ['control']
-        fields = '__all__'
-
+        model = PagoDiferido        
+        fields = ['fecha_pago']
 
 class PagoCCForm(forms.ModelForm):
     class Meta:
