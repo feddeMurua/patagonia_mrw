@@ -33,7 +33,7 @@ class CursoForm(forms.ModelForm):
     def clean_fecha(self):
         fecha = self.cleaned_data['fecha']
         if fecha < timezone.now().date() + relativedelta(days=7):
-            raise forms.ValidationError('Debe haber al menos una semana de diferencia entre la fecha de inicio'
+            raise forms.ValidationError('Debe haber al menos una semana de diferencia entre la fecha de inicio '
                                         'seleccionada y la fecha actual')
         return fecha
 
