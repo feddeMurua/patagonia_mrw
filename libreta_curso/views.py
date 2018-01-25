@@ -20,6 +20,7 @@ import json
 import numpy as np
 import collections
 from desarrollo_patagonia import factories
+from parte_diario_caja.models import DetalleMovimiento, MovimientoDiario
 
 
 '''
@@ -370,9 +371,7 @@ def estadisticas_lc(request):
         aprobados_curso[str(year)] = aprobados
         desaprobados_curso[str(year)] = desaprobados
 
-
         cursos_anuales[str(year)] = Curso.objects.filter(fecha__year=year).count()
-
 
         # acumuladores
         blancas = 0
@@ -393,6 +392,14 @@ def estadisticas_lc(request):
         libretas_amarillas[str(year)] = amarillas
         libretas_celestes[str(year)] = celestes
 
+
+        # LIBRETAS POR SERVICIO
+
+        detalles = DetalleMovimiento.objects.filter(movimiento__fecha__year=2018).values_list('servicio') #detalles que tienen alta libreta
+
+        libretas_servicio= collections.Counter(detalles)
+
+        
     # CALIFICACIONES
 
     ord_s_c_curso = collections.OrderedDict(sorted(s_c_curso.items()))
@@ -437,6 +444,8 @@ def estadisticas_lc(request):
     datos_amarilla = ord_libretas_amarillas.values()
     datos_celeste = ord_libretas_celestes.values()
 
+
+
     '''
     CONTEXTO
     '''
@@ -456,10 +465,11 @@ def estadisticas_lc(request):
         'promedio_amarilla': int(np.average(datos_amarilla)),
         'promedio_celeste': int(np.average(datos_celeste)),
         # datos y etiquetas
-        'lista_labels': json.dumps([label_cursos, label_year, label_curso_anios, label_libretas_anios]),
+        'lista_labels': json.dumps([label_cursos, label_year, label_curso_anios, label_libretas_anios, libretas_servicio.keys()]),
         'lista_datos': json.dumps([{'Inscripciones': datos_inscripciones}, {'Cursos': datos_cursos_anuales},
                                    {'Sin calificar': datos_sc, 'Aprobados': datos_aprobados, 'Desaprobados': datos_desaprobados},
-                                   {'Blancas': datos_blanca, 'Amarillas': datos_amarilla, 'Celestes': datos_celeste}])
+                                   {'Blancas': datos_blanca, 'Amarillas': datos_amarilla, 'Celestes': datos_celeste},
+                                   {'Servicio Libretas':libretas_servicio.values()}])
     }
 
     return render(request, "estadistica/estadisticas_lc.html", context)
