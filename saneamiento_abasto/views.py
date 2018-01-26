@@ -585,7 +585,7 @@ def estadisticas_TD(request):
 
     for k, v in ctr_anual.items():
         ctr_anual[k] = (v, float("{0:.2f}".format(v*100/total_general)))
-    
+
 
     context = {
         'rango_form': rango_form,
@@ -603,3 +603,34 @@ def estadisticas_TD(request):
     }
 
     return render(request, "estadistica/estadisticas_TD.html", context)
+
+
+@login_required(login_url='login')
+def estadisticas_reinspeccion(request):
+
+    reinspecciones = ReinspeccionProducto.objects.filter(reinspeccion__fecha__year=2018).values_list('producto__nombre', 'kilo_producto')
+    dict_reinspeccion_prod = {}
+
+    for prod, valor in reinspecciones:
+        total = dict_reinspeccion_prod.get(prod, 0) + valor
+        dict_reinspeccion_prod[prod] = total
+
+    total_general = sum(dict_reinspeccion_prod.values())
+    ord_dict_reinspeccion_prod = collections.OrderedDict(sorted(dict_reinspeccion_prod.iteritems(), key=lambda (k, v): (k, v)))  # Ordena los servicios por importe
+
+    label_reinspeccion = ord_dict_reinspeccion_prod.keys()  # indistinto para los datos (tienen la misma clave)
+    datos_reinspecciones = ord_dict_reinspeccion_prod.values()
+
+    for k, v in ord_dict_reinspeccion_prod.items():
+        ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+
+    context = {
+        'dict': ord_dict_reinspeccion_prod,
+        'total_general': total_general,
+        # datos y etiquetas
+        'lista_labels': json.dumps([label_reinspeccion]),
+        'lista_datos': json.dumps([{'Servicios': datos_reinspecciones}])
+    }
+
+
+    return render(request, "estadistica/estadisticas_reinspeccion.html", context)

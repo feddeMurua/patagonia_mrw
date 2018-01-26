@@ -25,7 +25,7 @@ class ReinspeccionProducto(models.Model):
     reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s" % self.producto.nombre
+        return "%s || %s" % (self.producto.nombre, self.reinspeccion)
 
     def to_json(self):
         return {
