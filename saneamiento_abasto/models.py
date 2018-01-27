@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.timezone import now
 from django.core.validators import MinValueValidator
 from solo.models import SingletonModel
+from parte_diario_caja import models as pd_m
 from personas import models as m
 from .choices import *
 
@@ -148,7 +149,8 @@ class PagoDiferido(models.Model):
     fecha_pago = models.CharField(max_length=15, choices=PAGO_DIFERIDO)
     control = models.ForeignKey('ControlDePlaga', on_delete=models.CASCADE)
 
-    def detalles(self, servicio, control):
+    def detalles(self, nombre_servicio, control):
+        servicio = pd_m.Servicio.objects.get(nombre=nombre_servicio)
         self.monto = servicio.importe
         self.control = control
         self.save()

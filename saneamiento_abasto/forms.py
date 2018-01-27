@@ -190,6 +190,7 @@ class PagoDiferidoForm(forms.ModelForm):
         model = PagoDiferido        
         fields = ['fecha_pago']
 
+
 class PagoCCForm(forms.ModelForm):
     class Meta:
         model = PagoCC

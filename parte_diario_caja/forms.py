@@ -35,10 +35,6 @@ class MovimientoDiarioForm(forms.ModelForm):
 
 
 class DetalleMovimientoDiarioForm(forms.ModelForm):
-    movimiento = forms.ModelChoiceField(queryset=MovimientoDiario.objects.filter(fecha=timezone.now().date()),
-                                        widget=AddAnotherWidgetWrapper(forms.Select, reverse_lazy('caja:nueva_factura')),
-                                        label="Factura")
-
     class Meta:
         model = DetalleMovimiento
         fields = ['movimiento']

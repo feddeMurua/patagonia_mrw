@@ -9,7 +9,7 @@ from .forms import *
 from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
-from parte_diario_caja import models as pd_m
+from parte_diario_caja import views as pd_v
 from desarrollo_patagonia import forms as dp_f
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -224,7 +224,8 @@ def alta_libreta(request):
     if request.method == 'POST':
         form = LibretaForm(request.POST, request.FILES)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        if form.is_valid() & detalle_mov_form.is_valid():
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        if form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
                 libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
@@ -233,15 +234,23 @@ def alta_libreta(request):
             cursos = get_cursos(libreta.persona.pk)
             if cursos:
                 libreta.curso = cursos[-1]
-            libreta.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(pd_m.Servicio.objects.get(nombre="Alta de libreta sanitaria"), libreta)
-            log_crear(request.user.id, libreta, 'Libreta Sanitaria')
-            return redirect('libretas:lista_libretas')
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    libreta.save()
+                    pd_v.movimiento_previo(request, detalle_mov_form, "Alta de libreta sanitaria", libreta,
+                                           'Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
+            else:
+                if mov_form.is_valid():
+                    libreta.save()
+                    pd_v.nuevo_movimiento(request, mov_form, "Alta de libreta sanitaria", libreta, 'Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
     else:
         form = LibretaForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
+                                                         'mov_form': mov_form})
 
 
 class DetalleLibreta(LoginRequiredMixin, DetailView):
@@ -271,7 +280,7 @@ def modificacion_libreta(request, pk):
                 libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
             else:
                 libreta.fecha_vencimiento = timezone.now().date() + relativedelta(months=int(request.POST['meses']))
-                libreta.save()
+            libreta.save()
             log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
@@ -298,6 +307,7 @@ def renovacion_libreta(request, pk):
     if request.method == 'POST':
         form = RenovacionLibretaForm(request.POST, instance=libreta)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if form.is_valid() & detalle_mov_form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
@@ -307,15 +317,24 @@ def renovacion_libreta(request, pk):
             cursos = get_cursos(libreta.persona.pk)
             if cursos:
                 libreta.curso = cursos[-1]
-            libreta.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(pd_m.Servicio.objects.get(nombre="Renovacion de libreta sanitaria"), libreta)
-            log_crear(request.user.id, libreta, 'Renovacion de Libreta Sanitaria')
-            return redirect('libretas:lista_libretas')
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    libreta.save()
+                    pd_v.movimiento_previo(request, detalle_mov_form, "Renovacion de libreta sanitaria", libreta,
+                                           'Renovacion de Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
+            else:
+                if mov_form.is_valid():
+                    libreta.save()
+                    pd_v.nuevo_movimiento(request, mov_form, "Renovacion de libreta sanitaria", libreta,
+                                          'Renovacion de Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
     else:
         form = RenovacionLibretaForm(instance=libreta)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form})
+        mov_form = pd_f.MovimientoDiarioForm
+        return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
+                                                             'mov_form': mov_form})
 
 
 '''
@@ -326,7 +345,7 @@ ESTADÍSTICAS
 @login_required(login_url='login')
 def estadisticas_lc(request):
     rango_form = dp_f.RangoFechaForm
-    years = [2018]
+    years = [timezone.now().year]
     cursos = Curso.objects.filter(fecha__year__gt=years[-1])
     if request.method == 'POST':
         rango_form = dp_f.RangoFechaForm(request.POST)

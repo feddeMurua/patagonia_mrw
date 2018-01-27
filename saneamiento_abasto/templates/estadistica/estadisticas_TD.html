@@ -12,18 +12,39 @@
         <li><a href="#tabs-2">Control de plagas</a></li>
     </ul>
     <div id="tabs-1">
-      <p><strong>Promedio HISTÓRICO de TSA: {{promedio_tsa}}</strong></p>
-      <p><strong>Promedio HISTÓRICO de Taxi/Remis: {{promedio_tr}}</strong></p>
-      <p><strong>Promedio HISTÓRICO de Colectivos: {{promedio_colectivos}}</strong></p>
-      <p><strong>Promedio HISTÓRICO de Escolares: {{promedio_escolares}}</strong></p>
-      <div class="chartAreaWrapper">
-        <canvas height="40"></canvas>
-      </div>
+        <p><strong>Promedio HISTÓRICO de TSA: {{promedio_tsa}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Taxi/Remis: {{promedio_tr}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Colectivos: {{promedio_colectivos}}</strong></p>
+        <p><strong>Promedio HISTÓRICO de Escolares: {{promedio_escolares}}</strong></p>
+        <div class="chartAreaWrapper">
+            <canvas height="40"></canvas>
+        </div>
     </div>
     <div id="tabs-2">
-      <div class="chartAreaWrapper">
-        <canvas height="40"></canvas>
-      </div>
+        <div class="row">
+            <div class="col-md-5 tabla-datos">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td align="center">Plaga</td>
+                            <td align="center">Cant. controles</td>
+                            <td align="center">Porcentaje</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in ctr_anual.items %}
+                            <tr>
+                                <td align="center">{{ key.0 }}</td>
+                                <td align="center">{{ value.0 }}</td>
+                                <td align="center">{{ value.1 }}%</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-7">
+                <canvas class="doughnut"></canvas>
+            </div>
+        </div>
     </div>
-
 {% endblock %}
