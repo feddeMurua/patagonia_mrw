@@ -153,32 +153,53 @@ def alta_reinspeccion(request):
     if request.method == 'POST':
         form = ReinspeccionForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        servicio = 'Reinspeccion Veterinaria'
         if form.is_valid():
-            reinspeccion = form.save()
-            carga_productos(request, reinspeccion)
-            monto = get_monto(reinspeccion)
-            if request.POST['optradio'] == 'normal':
-                if detalle_mov_form.is_valid():
-                    detalle_mov = detalle_mov_form.save(commit=False)
-                    detalle_mov.importe = monto
-                    detalle_mov.descripcion = 'Reinspeccion Veterinaria'
-                    detalle_mov.save()
+            if request.POST['radio_tipo_pago'] == 'normal':
+                if request.POST['optradio'] == 'previa':
+                    if detalle_mov_form.is_valid():
+                        reinspeccion = form.save()
+                        monto = carga_productos(request, reinspeccion)
+                        detalle_mov = detalle_mov_form.save(commit=False)
+                        detalle_mov.descripcion = servicio + " | N° " + str(reinspeccion.id)
+                        detalle_mov.importe = monto
+                        detalle_mov.servicio = servicio
+                        detalle_mov.save()
+                        log_crear(request.user.id, reinspeccion, servicio)
+                        return redirect('reinspecciones:lista_reinspecciones')
+                else:
+                    if mov_form.is_valid():
+                        reinspeccion = form.save()
+                        monto = carga_productos(request, reinspeccion)
+                        mov = mov_form.save()
+                        detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
+                        detalle_mov.descripcion = servicio + " | N° " + str(reinspeccion.id)
+                        detalle_mov.importe = monto
+                        detalle_mov.servicio = servicio
+                        detalle_mov.save()
+                        log_crear(request.user.id, reinspeccion, servicio)
+                        return redirect('reinspecciones:lista_reinspecciones')
             else:
+                reinspeccion = form.save()
+                monto = carga_productos(request, reinspeccion)
                 cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
                 detalle = DetalleCC(detalle=reinspeccion, monto=monto, cc=cc)
                 detalle.save()
                 cc.saldo += monto
                 cc.save()
-            log_crear(request.user.id, reinspeccion, 'Reinspeccion')
-            return redirect('reinspecciones:lista_reinspecciones')
+                log_crear(request.user.id, reinspeccion, servicio)
+                return redirect('reinspecciones:lista_reinspecciones')
     else:
         if 'productos' in request.session:
             del request.session['productos']
         request.session['productos'] = []
         form = ReinspeccionForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'producto_form': producto_form,
-                                                                   'detalle_mov_form': detalle_mov_form})
+                                                                   'detalle_mov_form': detalle_mov_form,
+                                                                   'mov_form': mov_form})
 
 
 def get_monto(reinspeccion):
@@ -231,6 +252,18 @@ def carga_productos(request, reinspeccion):
         prod = Producto.objects.get(nombre=producto['producto']['nombre'])
         item = ReinspeccionProducto(producto=prod, kilo_producto=producto['kilo_producto'], reinspeccion=reinspeccion)
         item.save()
+    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
+    precios = ReinspeccionPrecios.objects.get()
+
+    total_kg = 0
+    monto = precios.precio_min
+
+    for r in reinspeccion_prod:
+        total_kg += r.kilo_producto
+    if total_kg > precios.kg_min:
+        monto += total_kg * precios.precio_kg
+
+    return monto
 
 
 @login_required(login_url='login')
@@ -458,7 +491,7 @@ def alta_control_plaga(request):
         pago_diferido_form = PagoDiferidoForm(request.POST)
         if form.is_valid():
             servicio = "Fumigacion, desinfeccion, desratizacion"
-            if request.POST['optradio'] == 'normal':
+            if request.POST['radio_tipo_pago'] == 'normal':
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         control_plaga = form.save()
@@ -621,11 +654,10 @@ def estadisticas_TD(request):
 
     total_general = sum(ctr_anual.values())
 
-    prueba = {}
+    dict = {}
     for k, v in ctr_anual.items():
-        prueba[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+        dict[k] = (v, float("{0:.2f}".format(v*100/total_general)))
 
-    print(datos_des_tr)
     context = {
         'rango_form': rango_form,
         # mascotas
@@ -633,7 +665,7 @@ def estadisticas_TD(request):
         'promedio_tr': int(np.average(datos_des_tr)),
         'promedio_colectivos': int(np.average(datos_des_colectivos)),
         'promedio_escolares': int(np.average(datos_des_escolares)),
-        'ctr_anual': prueba,
+        'ctr_anual': dict,
         # datos y etiquetas
         'lista_labels': json.dumps([label_categoria_des, ctr_anual.keys()]),
         'lista_datos': json.dumps([{'TSA': datos_des_tsa, 'Taxis/Remiss': datos_des_tr,
@@ -643,3 +675,46 @@ def estadisticas_TD(request):
     }
 
     return render(request, "estadistica/estadisticas_TD.html", context)
+
+
+@login_required(login_url='login')
+def estadisticas_reinspeccion(request):
+    rango_form = dp_f.RangoFechaForm
+    years = [timezone.now().year]
+    if request.method == 'POST':
+        rango_form = dp_f.RangoFechaForm(request.POST)
+        if rango_form.is_valid():
+            fecha_desde = rango_form.cleaned_data['fecha_desde']
+            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
+            anio_desde = fecha_desde.year
+            anio_hasta = fecha_hasta.year
+            years = range(anio_hasta, anio_desde - 1, -1)
+
+    reinspecciones = ReinspeccionProducto.objects.filter(reinspeccion__fecha__year__lte=years[0],
+                                                         reinspeccion__fecha__year__gte=years[-1]).values_list(
+        'producto__nombre', 'kilo_producto')
+    dict_reinspeccion_prod = {}
+
+    for prod, valor in reinspecciones:
+        total = dict_reinspeccion_prod.get(prod, 0) + valor
+        dict_reinspeccion_prod[prod] = total
+
+    total_general = sum(dict_reinspeccion_prod.values())
+    ord_dict_reinspeccion_prod = collections.OrderedDict(sorted(dict_reinspeccion_prod.iteritems(), key=lambda (k, v): (k, v)))  # Ordena los servicios por importe
+
+    label_reinspeccion = ord_dict_reinspeccion_prod.keys()  # indistinto para los datos (tienen la misma clave)
+    datos_reinspecciones = ord_dict_reinspeccion_prod.values()
+
+    for k, v in ord_dict_reinspeccion_prod.items():
+        ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+
+    context = {
+        'rango_form': rango_form,
+        'dict': ord_dict_reinspeccion_prod,
+        'total_general': total_general,
+        # datos y etiquetas
+        'lista_labels': json.dumps([label_reinspeccion]),
+        'lista_datos': json.dumps([{'Productos': datos_reinspecciones}])
+    }
+
+    return render(request, "estadistica/estadisticas_reinspeccion.html", context)

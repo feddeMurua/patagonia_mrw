@@ -26,7 +26,7 @@ class ReinspeccionProducto(models.Model):
     reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s" % self.producto.nombre
+        return "%s || %s" % (self.producto.nombre, self.reinspeccion)
 
     def to_json(self):
         return {
@@ -88,7 +88,7 @@ class CuentaCorriente(models.Model):
     abastecedor = models.OneToOneField('Abastecedor', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return "Cuenta: %s" % self.pk
+        return "Cuenta: %s - %s" % (self.pk, self.abastecedor)
 
 
 class PagoCC(models.Model):

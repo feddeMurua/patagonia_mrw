@@ -12,6 +12,7 @@
         <li><a href="#tabs-2">Cursos Dictados por Año</a></li>
         <li><a href="#tabs-3">Calificaciones por Curso</a></li>
         <li><a href="#tabs-4">Libretas por Curso</a></li>
+        <li><a href="#tabs-5">Libretas por Servicio</a></li>
     </ul>
     <div id="tabs-1">
         <p><strong>Promedio de Alumnos Inscriptos por Curso: {{promedio_inscriptos}}</strong></p>
@@ -37,6 +38,11 @@
         <p><strong>Promedio HISTÓRICO de libretas blancas: {{promedio_blanca}}</strong></p>
         <p><strong>Promedio HISTÓRICO de libretas amarillas: {{promedio_amarilla}}</strong></p>
         <p><strong>Promedio HISTÓRICO de libretras celestes: {{promedio_celeste}}</strong></p>
+        <div class="chartAreaWrapper">
+          <canvas height="35"></canvas>
+        </div>
+    </div>
+    <div id="tabs-5">        
         <div class="chartAreaWrapper">
           <canvas height="35"></canvas>
         </div>

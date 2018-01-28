@@ -1,0 +1,41 @@
+{% extends "base/base_estadisticas.html" %}
+{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Estadisticas Reinspecciones Veterinarias{% endblock %}
+
+{% block header-title %}Estadisticas de Reinspecciones Veterinarias{% endblock %}
+
+{% block tabs %}
+    <ul>
+        <li><a href="#tabs-1">Reinspecciones</a></li>
+    </ul>
+    <div id="tabs-1">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td align="center">Producto</td>
+                    <td align="center">Toneladas</td>
+                    <td align="center">Porcentaje</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in dict.items %}
+                    <tr>
+                        <td align="center">{{ key }}</td>
+                        <td align="center">{{ value.0 }}</td>
+                        <td align="center">{{ value.1 }}%</td>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td align="center"><b>Total General</b></td>
+                        <td align="center"><b>{{ total_general }}</b></td>
+                        <td align="center"><b>100%</b></td>
+                    </tr>
+            </tbody>
+        </table>
+        <div class="chartAreaWrapper">
+            <canvas height="40"></canvas>
+        </div>
+    </div>
+{% endblock %}

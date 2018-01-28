@@ -45,3 +45,11 @@ function hideNroCheque() {
         nro_cheque.prop('required', false);
     }
 }
+
+function requireNone() {
+    movimiento.prop('required', false);
+    titular.prop('required', false);
+    nro_ingreso.prop('required', false);
+    forma_pago.prop('required', false);
+    nro_cheque.prop('required', false);
+}

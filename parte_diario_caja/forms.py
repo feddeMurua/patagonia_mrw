@@ -35,6 +35,8 @@ class MovimientoDiarioForm(forms.ModelForm):
 
 
 class DetalleMovimientoDiarioForm(forms.ModelForm):
+    movimiento = forms.ModelChoiceField(queryset=MovimientoDiario.objects.filter(fecha=timezone.now().date()))
+
     class Meta:
         model = DetalleMovimiento
         fields = ['movimiento']

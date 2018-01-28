@@ -74,22 +74,16 @@
             <div class="form-section">
                 Seleccione la Forma de Pago
                 <br>
-                <div id="radio_options">
+                <div id="radio_pago">
                     <div class="radio">
-                        <label><input type="radio" name="optradio" value="cc" checked>Cuenta Corriente</label>
+                        <label><input type="radio" name="radio_tipo_pago" value="cc" checked>Cuenta Corriente</label>
                     </div>
                     <div class="radio">
-                        <label><input type="radio" name="optradio" value="normal">Pago Normal</label>
+                        <label><input type="radio" name="radio_tipo_pago" value="normal">Pago Normal</label>
                     </div>
                 </div>
                 <div class="pago_normal">
-                    <div class="form-group">
-                        <label>Factura *</label>
-                        {{ detalle_mov_form.movimiento }}
-                    </div>
-                    {% if form.non_field_errors%}
-                        <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
-                    {% endif %}
+                    {% include 'caja/cuadro_facturacion.html' %}
                 </div>
             </div>
 
@@ -206,12 +200,12 @@
                     });
             });
 
-            forma_pago = $("input[name='optradio']:checked").val();
-            hideFields();
+            tipo_pago = $("input[name='radio_tipo_pago']:checked").val();
+            hideTipoPago();
 
-            $('#radio_options').change(function(){
-                forma_pago = $("input[name='optradio']:checked").val();
-                hideFields();
+            $('#radio_pago').change(function(){
+                tipo_pago = $("input[name='radio_tipo_pago']:checked").val();
+                hideTipoPago();
             });
         });
 
@@ -262,13 +256,13 @@
         var pago_normal = $('.pago_normal'),
         movimiento = $('#id_movimiento');
 
-        function hideFields() {
-            if (forma_pago == 'cc') {
+        function hideTipoPago() {
+            if (tipo_pago == 'cc') {
                 pago_normal.addClass('hidden');
-                movimiento.prop('required', false);
+                requireNone();
             } else {
                 pago_normal.removeClass('hidden');
-                movimiento.prop('required', true);
+                hideFields();
             }
         }
     </script>
