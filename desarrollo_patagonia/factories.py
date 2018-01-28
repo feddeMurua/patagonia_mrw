@@ -24,13 +24,26 @@ for x in xrange(45):
 for x in xrange(45):
     vehiculos = factories.VehiculoFactory()
 
-
 for x in xrange(85):
     desinfecciones = factories.DesinfeccionFactory()
 
+for x in xrange(50):
+    mascotas = factories.MascotaFactory()
+
+for x in xrange(50):
+    patentes = factories.PatenteFactory()
+
+for x in xrange(50):
+    esterilizacion = factories.EsterilizacionFactory()
+
+for x in xrange(50):
+    retiro_entrega = factories.RetiroEntregaAnimalFactory()
+
+for x in xrange(50):
+    analisis = factories.AnalisisFactory()
 '''
 
-'''
+
 class DesinfeccionFactory(factory.django.DjangoModelFactory):
     fecha_realizacion = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     proximo_vencimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
@@ -109,7 +122,7 @@ class PersonaFactory(factory.django.DjangoModelFactory):
 
 
 class InscripcionFactory(factory.django.DjangoModelFactory):
-    fecha_inscripcion = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    fecha_inscripcion = '2018-01-28'
     modificado = False
     calificacion = factory.fuzzy.FuzzyChoice(['Aprobado', 'Desaprobado', 'Sin Calificar'])
     porcentaje_asistencia = factory.fuzzy.FuzzyFloat(0.0)
@@ -128,7 +141,8 @@ class LibretaFactory(factory.django.DjangoModelFactory):
     fecha_examen_clinico = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     profesional_examen_clinico = factory.fuzzy.FuzzyText(length=25)
     lugar_examen_clinico = factory.fuzzy.FuzzyText(length=25)
-    fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    #fecha = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
+    fecha = '2018-01-31'
     tipo_libreta = factory.fuzzy.FuzzyChoice(['Blanca', 'Amarilla', 'Celeste'])
     fecha_vencimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
 
@@ -207,7 +221,7 @@ class VehiculoFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = sa.Vehiculo
-'''
+
 
 '''
 class TipoServicioFactory(factory.django.DjangoModelFactory):

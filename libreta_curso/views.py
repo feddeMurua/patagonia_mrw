@@ -326,6 +326,7 @@ ESTADÍSTICAS
 
 @login_required(login_url='login')
 def estadisticas_lc(request):
+    '''
     rango_form = dp_f.RangoFechaForm
     years = [2018]
     cursos = Curso.objects.filter(fecha__year__gt=years[-1])
@@ -338,138 +339,45 @@ def estadisticas_lc(request):
             anio_hasta = fecha_hasta.year
             years = range(anio_hasta, anio_desde - 1, -1)
             cursos = Curso.objects.filter(fecha__gte=fecha_desde, fecha__lte=fecha_hasta)
+    '''
 
-    # diccionario de datos
-    aprobados_curso = {}
-    desaprobados_curso = {}
-    s_c_curso = {}
+    # CALIFICACIONES CURSOS
+
+    cursos_anio = Inscripcion.objects.filter(curso__fecha__year=2018).values_list("calificacion")
+    calificaciones = collections.Counter(cursos_anio) # Cantidad tipo de calificaciones
+
+    # CURSOS EN EL AÑO
 
     cursos_anuales = {}
-
-    libretas_blancas = {}
-    libretas_amarillas = {}
-    libretas_celestes = {}
-
-    for year in years:
-
-        # acumuladores
-        s_c = 0
-        aprobados = 0
-        desaprobados = 0
-
-        cursos_anio = Inscripcion.objects.filter(curso__fecha__year=year).values_list("calificacion")
-
-        for nota in cursos_anio:
-            if nota[0] == "Sin Calificar":
-                s_c += 1
-            elif nota[0] == "Aprobado":
-                aprobados += 1
-            else:
-                desaprobados += 1
-
-        s_c_curso[str(year)] = s_c
-        aprobados_curso[str(year)] = aprobados
-        desaprobados_curso[str(year)] = desaprobados
-
-        cursos_anuales[str(year)] = Curso.objects.filter(fecha__year=year).count()
-
-        # acumuladores
-        blancas = 0
-        amarillas = 0
-        celestes = 0
-
-        libretras_anio = LibretaSanitaria.objects.filter(fecha__year=year).values_list("tipo_libreta")
-
-        for color in libretras_anio:
-            if color[0] == "Blanca":
-                blancas += 1
-            elif color[0] == "Amarilla":
-                amarillas += 1
-            else:
-                celestes += 1
-
-        libretas_blancas[str(year)] = blancas
-        libretas_amarillas[str(year)] = amarillas
-        libretas_celestes[str(year)] = celestes
-
-
-        # LIBRETAS POR SERVICIO
-
-        detalles = DetalleMovimiento.objects.filter(movimiento__fecha__year=2018).values_list('servicio') #detalles que tienen alta libreta
-
-        libretas_servicio= collections.Counter(detalles)
-
-        
-    # CALIFICACIONES
-
-    ord_s_c_curso = collections.OrderedDict(sorted(s_c_curso.items()))
-    ord_aprobados = collections.OrderedDict(sorted(aprobados_curso.items()))
-    ord_desaprobados = collections.OrderedDict(sorted(desaprobados_curso.items()))
-
-    label_curso_anios = ord_s_c_curso.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_sc = ord_s_c_curso.values()
-    datos_aprobados = ord_aprobados.values()
-    datos_desaprobados = ord_desaprobados.values()
-
-    # CURSOS POR AÑO
-
+    cursos_anuales[str(2018)] = Curso.objects.filter(fecha__year=2018).count() # Cantidad de cursos en el año
     ord_cursos_anuales = collections.OrderedDict(sorted(cursos_anuales.items()))
 
-    label_year = ord_cursos_anuales.keys()
-    datos_cursos_anuales = ord_cursos_anuales.values()
+    # TIPOS DE LIBRETAS
+
+    libretas_anio = LibretaSanitaria.objects.filter(fecha__year=2018).values_list("tipo_libreta")
+    colores_libreta = collections.Counter(libretas_anio) # Cantidad tipo de color de libreta
+
+    # SERVICIOS DE LIBRETAS
+
+    detalles = DetalleMovimiento.objects.filter(movimiento__fecha__year=2018).values_list('servicio') # Detalles que tienen alta libreta
+    libretas_servicio= collections.Counter(detalles) # Cantidad tipo detalle de serivio libreta
 
     # INSCRIPCIONES A CURSO
 
-    inscripciones = {}  # inscripciones por curso
-
-    for curso in cursos:
-        inscripciones[str(curso.fecha)] = Inscripcion.objects.filter(curso__fecha=curso.fecha).count()
-
-    ord_inscripciones = collections.OrderedDict(sorted(inscripciones.items()))
-
-    label_cursos = ord_inscripciones.keys()
-    if cursos:
-        datos_inscripciones = ord_inscripciones.values()
-    else:
-        datos_inscripciones = 0
-
-    # LIBRETAS POR TIPO
-
-    ord_libretas_blancas = collections.OrderedDict(sorted(libretas_blancas.items()))
-    ord_libretas_amarillas = collections.OrderedDict(sorted(libretas_amarillas.items()))
-    ord_libretas_celestes = collections.OrderedDict(sorted(libretas_celestes.items()))
-
-    label_libretas_anios = ord_libretas_blancas.keys() # indistinto para los datos (tienen la misma clave)
-    datos_blanca = ord_libretas_blancas.values()
-    datos_amarilla = ord_libretas_amarillas.values()
-    datos_celeste = ord_libretas_celestes.values()
+    inscripciones = Inscripcion.objects.filter(fecha_inscripcion__year=2018).values_list("curso__fecha")
+    inscripciones_cursos = collections.Counter(inscripciones) # Cantidad inscripciones por curso
 
 
-
-    '''
-    CONTEXTO
-    '''
+    #CONTEXTO
 
     context = {
-        'rango_form': rango_form,
-        # inscripciones
-        'promedio_inscriptos': int(np.average(datos_inscripciones)),
-        # cursos
-        'promedio_anual': int(np.average(datos_cursos_anuales)),
-        # calificaciones
-        'promedio_sc': int(np.average(datos_sc)),
-        'promedio_aprobados': int(np.average(datos_aprobados)),
-        'promedio_desaprobados': int(np.average(datos_desaprobados)),
-        # libretas
-        'promedio_blanca': int(np.average(datos_blanca)),
-        'promedio_amarilla': int(np.average(datos_amarilla)),
-        'promedio_celeste': int(np.average(datos_celeste)),
         # datos y etiquetas
-        'lista_labels': json.dumps([label_cursos, label_year, label_curso_anios, label_libretas_anios, libretas_servicio.keys()]),
-        'lista_datos': json.dumps([{'Inscripciones': datos_inscripciones}, {'Cursos': datos_cursos_anuales},
-                                   {'Sin calificar': datos_sc, 'Aprobados': datos_aprobados, 'Desaprobados': datos_desaprobados},
-                                   {'Blancas': datos_blanca, 'Amarillas': datos_amarilla, 'Celestes': datos_celeste},
-                                   {'Servicio Libretas':libretas_servicio.values()}])
+        'lista_labels': json.dumps([calificaciones.keys(), ord_cursos_anuales.keys(), colores_libreta.keys() libretas_servicio.keys(), inscripciones_cursos.keys()]),
+        'lista_datos': json.dumps([{'Calificaciones':calificaciones.values()},
+                                   {'Cursos:'ord_cursos_anuales.values()},
+                                   {'Colores Libretas': colores_libreta.values()},
+                                   {'Servicio Libretas':libretas_servicio.values()},
+                                   {'Inscripciones':inscripciones_cursos.values()}])
     }
 
     return render(request, "estadistica/estadisticas_lc.html", context)
