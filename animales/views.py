@@ -11,7 +11,7 @@ from .models import *
 from personas import forms as f
 from django.views.generic import DetailView
 from parte_diario_caja import forms as pd_f
-from parte_diario_caja import models as pd_m
+from parte_diario_caja import views as pd_v
 from desarrollo_patagonia.utils import *
 from django.utils import timezone
 from dateutil.relativedelta import *
@@ -38,25 +38,30 @@ def alta_analisis(request):
         formset = AltaPorcinoFormSet(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         servicio_form = pd_f.ListaServicios(request.POST, tipo='Analisis de Triquinosis')
-        if form.is_valid() & formset.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        if form.is_valid() & formset.is_valid() & servicio_form.is_valid():
             analisis = form.save()
-
-            # logica formset
-
             for form in formset.forms:
                 porcino_item = form.save(commit=False)
                 porcino_item.analisis = analisis
                 porcino_item.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(servicio_form.cleaned_data['servicio'], analisis)
-            log_crear(request.user.id, analisis, 'Analisis de Triquinosis')
-            return redirect('analisis:lista_analisis')
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    pd_v.movimiento_previo(request, detalle_mov_form, servicio_form.cleaned_data['servicio'].nombre,
+                                           analisis, 'Analisis de Triquinosis')
+                    return redirect('analisis:lista_analisis')
+            else:
+                if mov_form.is_valid():
+                    pd_v.nuevo_movimiento(request, mov_form, servicio_form.cleaned_data['servicio'].nombre, analisis,
+                                          'Analisis de Triquinosis')
+                    return redirect('analisis:lista_analisis')
     else:
         form = AltaAnalisisForm
         formset = AltaPorcinoFormSet
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         servicio_form = pd_f.ListaServicios(tipo='Analisis de Triquinosis')
-    return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'can_delete': True,
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'mov_form': mov_form,
                                                            'detalle_mov_form': detalle_mov_form,
                                                            'servicio_form': servicio_form})
 
@@ -312,21 +317,28 @@ def alta_patente(request):
         form = PatenteForm(request.POST)
         mascota_form = MascotaForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if form.is_valid() & mascota_form.is_valid() & detalle_mov_form.is_valid():
             patente = form.save(commit=False)
             patente.mascota = mascota_form.save()
             patente.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
-            patente.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(pd_m.Servicio.objects.get(nombre="Registro/patente anual"), patente)
-            log_crear(request.user.id, patente, 'Patente')
-            return redirect('patentes:lista_patentes')
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    patente.save()
+                    pd_v.movimiento_previo(request, detalle_mov_form, "Registro/patente anual", patente, 'Patente')
+                    return redirect('patentes:lista_patentes')
+            else:
+                if mov_form.is_valid():
+                    patente.save()
+                    pd_v.nuevo_movimiento(request, mov_form, "Registro/patente anual", patente, 'Patente')
+                    return redirect('patentes:lista_patentes')
     else:
         form = PatenteForm
         mascota_form = MascotaForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
     return render(request, "patente/patente_form.html", {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'mascota_form': mascota_form})
+                                                         'mascota_form': mascota_form, 'mov_form': mov_form})
 
 
 class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
@@ -368,21 +380,26 @@ def reno_dup_patente(request, pk):
     patente = Patente.objects.get(pk=pk)
     if request.method == 'POST':
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        if detalle_mov_form.is_valid():
-            detalle_mov = detalle_mov_form.save(commit=False)
-            if request.POST['radio'] == 'renovacion':
-                patente.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
-                patente.save()
-                servicio = pd_m.Servicio.objects.get(nombre="Renovacion de patente")
-            else:
-                servicio = pd_m.Servicio.objects.get(nombre="Duplicado de patente")
-            detalle_mov.completar(servicio, patente)
-            log_crear(request.user.id, patente, servicio.nombre)
-            return redirect('patentes:lista_patentes')
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        if request.POST['radio'] == 'renovacion':
+            patente.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
+            patente.save()
+            servicio = "Renovacion de patente"
+        else:
+            servicio = "Duplicado de patente"
+        if request.POST['optradio'] == 'previa':
+            if detalle_mov_form.is_valid():
+                pd_v.movimiento_previo(request, detalle_mov_form, servicio, patente, servicio)
+                return redirect('patentes:lista_patentes')
+        else:
+            if mov_form.is_valid():
+                pd_v.nuevo_movimiento(request, mov_form, servicio, patente, servicio)
+                return redirect('patentes:lista_patentes')
     else:
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'patente/patente_reno_dup.html', {'detalle_mov_form': detalle_mov_form, 'patente': patente,
-                                                             'fecha_hoy': timezone.now().date()})
+                                                             'fecha_hoy': timezone.now().date(), 'mov_form': mov_form})
 
 
 class DetallePatente(LoginRequiredMixin, DetailView):
@@ -408,18 +425,27 @@ def alta_control(request):
         form = ControlAntirrabicoForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         servicio_form = pd_f.ListaServicios(request.POST, tipo='Control Antirrabico')
-        if form.is_valid() & detalle_mov_form.is_valid() & servicio_form.is_valid():
-            control = form.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.completar(servicio_form.cleaned_data['servicio'], control)
-            log_crear(request.user.id, control, 'Control Antirrabico')
-            return redirect('controles:lista_controles')
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        if form.is_valid() & servicio_form.is_valid():
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    control = form.save()
+                    pd_v.movimiento_previo(request, detalle_mov_form, servicio_form.cleaned_data['servicio'].nombre,
+                                           control, 'Control Antirrabico')
+                    return redirect('controles:lista_controles')
+            else:
+                if mov_form.is_valid():
+                    control = form.save()
+                    pd_v.nuevo_movimiento(request, mov_form, servicio_form.cleaned_data['servicio'].nombre, control,
+                                          'Control Antirrabico')
+                    return redirect('controles:lista_controles')
     else:
         form = ControlAntirrabicoForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         servicio_form = pd_f.ListaServicios(tipo='Control Antirrabico')
-    return render(request, 'control/control_form.html', {"form": form, 'detalle_mov_form': detalle_mov_form,
-                                                         'servicio_form': servicio_form})
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'control/control_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
+                                                         'servicio_form': servicio_form, 'mov_form': mov_form})
 
 
 @login_required(login_url='login')
@@ -569,7 +595,7 @@ def alta_tramite_nopatentado(request):
 @login_required(login_url='login')
 def estadisticas_animales(request):
     rango_form = dp_f.RangoFechaForm
-    years = [2018]
+    years = [timezone.now().year]
     if request.method == 'POST':
         rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
@@ -640,7 +666,7 @@ def estadisticas_animales(request):
 @login_required(login_url='login')
 def estadisticas_mascotas(request):
     rango_form = dp_f.RangoFechaForm
-    years = [2018]
+    years = [timezone.now().year]
     if request.method == 'POST':
         rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():

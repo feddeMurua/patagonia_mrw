@@ -20,14 +20,6 @@ MOVIMIENTO DIARIO
 '''
 
 
-class AltaFactura(LoginRequiredMixin, CreatePopupMixin, CreateView):
-    model = MovimientoDiario
-    form_class = MovimientoDiarioForm
-    template_name = "caja/factura_form.html"
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-
 @login_required(login_url='login')
 def lista_movimientos(request):
     movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date()).order_by('nro_ingreso')
@@ -53,6 +45,19 @@ def detalle_movimiento(request, pk):
     total = get_total(detalles)
     return render(request, "caja/movimiento_detail.html", {'movimiento': movimiento, 'detalles': detalles,
                                                            'total': total})
+
+
+def movimiento_previo(request, form, servicio, obj, logname):
+    detalle_mov = form.save(commit=False)
+    detalle_mov.completar(Servicio.objects.get(nombre=servicio), obj)
+    log_crear(request.user.id, obj, logname)
+
+
+def nuevo_movimiento(request, form, servicio, obj, logname):
+    mov = form.save()
+    detalle_mov = DetalleMovimiento(movimiento=mov)
+    detalle_mov.completar(Servicio.objects.get(nombre=servicio), obj)
+    log_crear(request.user.id, obj, logname)
 
 
 '''
@@ -171,7 +176,7 @@ def modificacion_servicio(request, pk):
 @login_required(login_url='login')
 def estadisticas_caja(request):
     rango_form = dp_f.RangoFechaForm
-    years = [2018]
+    years = [timezone.now().year]
     if request.method == 'POST':
         rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
@@ -197,6 +202,7 @@ def estadisticas_caja(request):
     for k, v in ord_importe_anual.items():
         ord_importe_anual[k] = (v, float("{0:.2f}".format(v*100/total_general)))
 
+    print(ord_importe_anual)
     context = {
         'rango_form': rango_form,
         'dict': ord_importe_anual,
