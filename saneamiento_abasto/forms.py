@@ -72,21 +72,6 @@ class ReinspeccionProductoForm(forms.ModelForm):
             'kilo_producto': _("Kg de producto")
         }
 
-    def __init__(self, *args, **kwargs):
-        self.reinspeccion_pk = kwargs.pop('reinspeccion_pk', None)
-        super(ReinspeccionProductoForm, self).__init__(*args, **kwargs)
-
-    def clean_producto(self):
-        producto = self.cleaned_data['producto']
-        reinspecciones = ReinspeccionProducto.objects.filter(producto__pk=producto.pk)
-        if reinspecciones:
-            reinspeccion_pk = int(self.reinspeccion_pk)
-            for reinspeccion in reinspecciones:
-                if reinspeccion.pk == reinspeccion_pk:
-                    raise forms.ValidationError(_('Este producto ya se encuentra cargado en la reinspeccion'),
-                                                code='invalid')
-        return producto
-
 
 class ModificacionReinspeccionProductoForm(forms.ModelForm):
     class Meta:
