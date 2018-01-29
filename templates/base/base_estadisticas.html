@@ -28,6 +28,9 @@
                     <button type="submit" class="btn btn-primary">
                         <span class="glyphicon glyphicon-search"></span> Buscar
                     </button>
+                    {% if rango_form.non_field_errors%}
+                        <div class="alert alert-danger" role="alert">{{rango_form.non_field_errors}}</div>
+                    {% endif %}
                 </div>
                 <div class="panel-body">
                     <div id="tabs" style="overflow:scroll;">

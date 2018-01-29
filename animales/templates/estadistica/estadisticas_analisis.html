@@ -8,19 +8,19 @@
 
 {% block tabs %}
     <ul>
-        <li><a href="#tabs-1">Análisis por Año</a></li>
-        <li><a href="#tabs-2">Categorías de Análisis por Año</a></li>
+        <li><a href="#tabs-1">Análisis de Triquinosis</a></li>
+        <li><a href="#tabs-2">Categorías de Análisis</a></li>
     </ul>
     <div id="tabs-1">
-        <p><strong>Promedio de análisis por año: {{promedio_analisis}}</strong></p>
+        <p><strong>Promedio de análisis: {{promedio_analisis}}</strong></p>
         <div class="chartAreaWrapper">
           <canvas height="35"></canvas>
         </div>
     </div>
     <div id="tabs-2">
-      <p><strong>Promedio HISTÓRICO de porkers: {{promedio_porkers}}</strong></p>
-      <p><strong>Promedio HISTÓRICO de lechones: {{promedio_lechones}}</strong></p>
-      <p><strong>Promedio HISTÓRICO de adultos: {{promedio_adultos}}</strong></p>
+      <p><strong>Promedio de porkers: {{promedio_porkers}}</strong></p>
+      <p><strong>Promedio de lechones: {{promedio_lechones}}</strong></p>
+      <p><strong>Promedio de adultos: {{promedio_adultos}}</strong></p>
       <div class="chartAreaWrapper">
         <canvas height="35"></canvas>
       </div>

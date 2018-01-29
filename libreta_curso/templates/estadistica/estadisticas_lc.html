@@ -9,7 +9,7 @@
 {% block tabs %}
     <ul>
         <li><a href="#tabs-1">Alumnos Inscriptos por Curso</a></li>
-        <li><a href="#tabs-2">Cursos Dictados por Año</a></li>
+        <li><a href="#tabs-2">Cursos Dictados</a></li>
         <li><a href="#tabs-3">Calificaciones por Curso</a></li>
         <li><a href="#tabs-4">Libretas por Curso</a></li>
         <li><a href="#tabs-5">Libretas por Servicio</a></li>
@@ -21,30 +21,28 @@
         </div>
     </div>
     <div id="tabs-2">
-        <p><strong>Promedio de Cursos dictados por Año: {{promedio_anual}}</strong></p>
+        <p><strong>Promedio de Cursos dictados: {{promedio_anual}}</strong></p>
         <div class="chartAreaWrapper">
           <canvas height="35"></canvas>
         </div>
     </div>
     <div id="tabs-3">
-        <p><strong>Promedio HISTÓRICO de aprobados: {{promedio_aprobados}}</strong></p>
-        <p><strong>Promedio HISTÓRICO de desaprobados: {{promedio_desaprobados}}</strong></p>
-        <p><strong>Promedio HISTÓRICO sin calificación: {{promedio_sc}}</strong></p>
+        <p><strong>Promedio de aprobados: {{promedio_aprobados}}</strong></p>
+        <p><strong>Promedio de desaprobados: {{promedio_desaprobados}}</strong></p>
+        <p><strong>Promedio de alumnos sin calificación: {{promedio_sc}}</strong></p>
         <div class="chartAreaWrapper">
           <canvas height="35"></canvas>
         </div>
     </div>
     <div id="tabs-4">
-        <p><strong>Promedio HISTÓRICO de libretas blancas: {{promedio_blanca}}</strong></p>
-        <p><strong>Promedio HISTÓRICO de libretas amarillas: {{promedio_amarilla}}</strong></p>
-        <p><strong>Promedio HISTÓRICO de libretras celestes: {{promedio_celeste}}</strong></p>
+        <p><strong>Promedio de libretas blancas: {{promedio_blanca}}</strong></p>
+        <p><strong>Promedio de libretas amarillas: {{promedio_amarilla}}</strong></p>
+        <p><strong>Promedio de libretras celestes: {{promedio_celeste}}</strong></p>
         <div class="chartAreaWrapper">
           <canvas height="35"></canvas>
         </div>
     </div>
     <div id="tabs-5">        
-        <div class="chartAreaWrapper">
-          <canvas height="35"></canvas>
-        </div>
+        <canvas class="doughnut"></canvas>
     </div>
 {% endblock %}

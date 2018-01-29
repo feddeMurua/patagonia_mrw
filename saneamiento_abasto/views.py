@@ -589,16 +589,13 @@ def pago_diferido(request, pk):
 
 @login_required(login_url='login')
 def estadisticas_TD(request):
-    rango_form = dp_f.RangoFechaForm
+    rango_form = dp_f.RangoAnioForm
     years = [timezone.now().year]
     if request.method == 'POST':
-        rango_form = dp_f.RangoFechaForm(request.POST)
+        rango_form = dp_f.RangoAnioForm(request.POST)
         if rango_form.is_valid():
-            fecha_desde = rango_form.cleaned_data['fecha_desde']
-            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
-            anio_desde = fecha_desde.year
-            anio_hasta = fecha_hasta.year
-            years = range(anio_hasta, anio_desde - 1, -1)
+            years = range(int(rango_form.cleaned_data['anio_hasta']),
+                          int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
     des_tr = {}  # desinfeccion taxi/remis
     des_escolares = {}
@@ -679,16 +676,13 @@ def estadisticas_TD(request):
 
 @login_required(login_url='login')
 def estadisticas_reinspeccion(request):
-    rango_form = dp_f.RangoFechaForm
+    rango_form = dp_f.RangoAnioForm
     years = [timezone.now().year]
     if request.method == 'POST':
-        rango_form = dp_f.RangoFechaForm(request.POST)
+        rango_form = dp_f.RangoAnioForm(request.POST)
         if rango_form.is_valid():
-            fecha_desde = rango_form.cleaned_data['fecha_desde']
-            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
-            anio_desde = fecha_desde.year
-            anio_hasta = fecha_hasta.year
-            years = range(anio_hasta, anio_desde - 1, -1)
+            years = range(int(rango_form.cleaned_data['anio_hasta']),
+                          int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
     reinspecciones = ReinspeccionProducto.objects.filter(reinspeccion__fecha__year__lte=years[0],
                                                          reinspeccion__fecha__year__gte=years[-1]).values_list(

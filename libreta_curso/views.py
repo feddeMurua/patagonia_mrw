@@ -309,7 +309,7 @@ def renovacion_libreta(request, pk):
         form = RenovacionLibretaForm(request.POST, instance=libreta)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
-        if form.is_valid() & detalle_mov_form.is_valid():
+        if form.is_valid():
             libreta = form.save(commit=False)
             if libreta.tipo_libreta != 'Celeste':
                 libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
@@ -412,11 +412,14 @@ def estadisticas_lc(request):
         libretas_celestes[str(year)] = celestes
 
 
-        # LIBRETAS POR SERVICIO
+    # LIBRETAS POR SERVICIO
 
-        detalles = DetalleMovimiento.objects.filter(movimiento__fecha__year=2018).values_list('servicio') #detalles que tienen alta libreta
+    detalles = DetalleMovimiento.objects.filter(movimiento__fecha__year__lte=years[0],
+                                                movimiento__fecha__year__gte=years[-1],
+                                                servicio__in=['Alta de libreta sanitaria',
+                                                              'Renovacion de libreta sanitaria']).values_list('servicio')  # detalles que tienen alta libreta
 
-        libretas_servicio= collections.Counter(detalles)
+    libretas_servicio = collections.Counter(detalles)
 
         
     # CALIFICACIONES
@@ -462,12 +465,6 @@ def estadisticas_lc(request):
     datos_blanca = ord_libretas_blancas.values()
     datos_amarilla = ord_libretas_amarillas.values()
     datos_celeste = ord_libretas_celestes.values()
-
-
-
-    '''
-    CONTEXTO
-    '''
 
     context = {
         'rango_form': rango_form,
