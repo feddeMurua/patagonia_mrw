@@ -201,7 +201,6 @@ def alta_reinspeccion(request):
                                                                    'detalle_mov_form': detalle_mov_form,
                                                                    'mov_form': mov_form})
 
-
 def get_monto(reinspeccion):
     reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
     precios = ReinspeccionPrecios.objects.get()
@@ -648,7 +647,6 @@ def estadisticas_TD(request):
                                               fecha_hoy__year__gte=years[-1]).values_list('tipo_plaga')
 
     ctr_anual = collections.Counter(controles)
-
     total_general = sum(ctr_anual.values())
 
     dict = {}

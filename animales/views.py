@@ -657,13 +657,6 @@ def estadisticas_animales(request):
                                                                   'Adulto': datos_adulto}])
     }
 
-    '''
-        #Para cargar con el factory
-
-        for x in xrange(50):
-            analisis = factories.AnalisisFactory()
-        '''
-
     return render(request, "estadistica/estadisticas_analisis.html", context)
 
 
@@ -813,21 +806,5 @@ def estadisticas_mascotas(request):
                                     'Fel. Hembras': datos_esterilizacion_fel_hembra},
                                    {'Entregados': datos_entrega, 'Retirados': datos_retiro}])
     }
-
-    '''
-    #Para cargar con el factory
-
-    for x in xrange(50):
-        mascotas = factories.MascotaFactory()
-
-    for x in xrange(50):
-        patentes = factories.PatenteFactory()
-
-    for x in xrange(50):
-        esterilizacion = factories.EsterilizacionFactory()
-
-    for x in xrange(50):
-        retiro_entrega = factories.RetiroEntregaAnimalFactory()
-    '''
 
     return render(request, "estadistica/estadisticas_mascotas.html", context)

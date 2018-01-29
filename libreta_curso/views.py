@@ -421,7 +421,7 @@ def estadisticas_lc(request):
 
     libretas_servicio = collections.Counter(detalles)
 
-        
+
     # CALIFICACIONES
 
     ord_s_c_curso = collections.OrderedDict(sorted(s_c_curso.items()))
@@ -461,7 +461,7 @@ def estadisticas_lc(request):
     ord_libretas_amarillas = collections.OrderedDict(sorted(libretas_amarillas.items()))
     ord_libretas_celestes = collections.OrderedDict(sorted(libretas_celestes.items()))
 
-    label_libretas_anios = ord_libretas_blancas.keys() # indistinto para los datos (tienen la misma clave)
+    label_libretas_anios = ord_libretas_blancas.keys()  # indistinto para los datos (tienen la misma clave)
     datos_blanca = ord_libretas_blancas.values()
     datos_amarilla = ord_libretas_amarillas.values()
     datos_celeste = ord_libretas_celestes.values()
@@ -485,7 +485,7 @@ def estadisticas_lc(request):
         'lista_datos': json.dumps([{'Inscripciones': datos_inscripciones}, {'Cursos': datos_cursos_anuales},
                                    {'Sin calificar': datos_sc, 'Aprobados': datos_aprobados, 'Desaprobados': datos_desaprobados},
                                    {'Blancas': datos_blanca, 'Amarillas': datos_amarilla, 'Celestes': datos_celeste},
-                                   {'Servicio Libretas':libretas_servicio.values()}])
+                                   {'Servicio Libretas': libretas_servicio.values()}])
     }
 
     return render(request, "estadistica/estadisticas_lc.html", context)
