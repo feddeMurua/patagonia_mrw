@@ -6,5 +6,7 @@ urlpatterns = [
     url(r'^nuevo$', alta_esterilizacion, name='nueva_esterilizacion'),
     url(r'^borrar/(?P<pk>\d+)$', baja_esterilizacion, name='borrar_esterilizacion'),
     url(r'^nuevo/noPatentado$', alta_esterilizacion_nopatentado, name='nueva_esterilizacion_nopatentado'),
-    url(r'^consentimiento/(?P<pk_esterilizacion>\d+)$', PdfConsentimiento.as_view(), name='pdf_consentimiento')
+    url(r'^consentimiento/(?P<pk_esterilizacion>\d+)$', PdfConsentimiento.as_view(), name='pdf_consentimiento'),
+    url(r'^calendario/$', inicio_calendario, name='calendario'),
+    url(r'^calendario/(?P<pYear>\d+)/(?P<pMonth>\d+)/$', calendar, name='calendario'),
  ]

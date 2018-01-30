@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from personas import models as m
 from .choices import *
 from django.core.validators import MinValueValidator
-
+from django.core.urlresolvers import reverse
 
 class Analisis(models.Model):
     fecha = models.DateField(default=now)
@@ -138,3 +138,11 @@ class Patente(models.Model):
 
     def __str__(self):
         return "Chapa: %s - %s" % (self.pk, self.persona)
+
+
+class ContestEvent(models.Model):
+    date_of_event = models.DateField()
+    name = models.CharField(max_length=50)
+
+    def get_relative_url(self):
+        return reverse("esterilizacion:calendario")

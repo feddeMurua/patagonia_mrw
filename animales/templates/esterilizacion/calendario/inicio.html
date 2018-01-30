@@ -1,0 +1,64 @@
+<style>
+#calendar table {
+    width: 100%;
+}
+
+#calendar table tr th {
+    text-align: center;
+    font-size: 16px;
+    background-color: #316497;
+    color: #99ccff;
+}
+
+#calendar table tr td {
+    width: 10%;
+    border: 1px solid #555;
+    vertical-align: top;
+    height: 120px;
+    padding: 2px;
+}
+
+#calendar td.noday {
+    background-color: #eee;
+}
+
+#calendar td.filled {
+    background-color: #99ccff;
+}
+
+#calendar td.today {
+    border: 4px solid #316497;
+}
+
+#calendar .dayNumber {
+    font-size: 16px !important;
+    font-weight: bold;
+}
+
+#calendar a {
+    font-size: 10px;
+}
+
+</style>
+<h1>Calendario</h1>
+<table width="100%">
+    <tr>
+        <td width="20%" align="left">
+          &lt;&lt; <a href="{% url 'esterilizacion:calendario' pYear=PreviousYear pMonth=PreviousMonth %}">{{PreviousMonthName}} {{PreviousYear}}</a>
+        </td>
+        <td width="20%" align="left">
+          &lt;&lt; <a href="{% url 'esterilizacion:calendario' pYear=YearBeforeThis pMonth=Month %}">{{MonthName}} {{YearBeforeThis}}</a>
+        </td>
+        <td width="20%" align="center"><a href="{% url 'esterilizacion:calendario' %}">Today</a></td>
+        <td width="20%" align="right">
+          <a href="{% url 'esterilizacion:calendario' pYear=YearAfterThis pMonth=Month %}">{{MonthName}} {{YearAfterThis}}</a> &gt;&gt;
+        </td>
+        <td width="20%" align="right">
+          <a href="{% url 'esterilizacion:calendario' pYear=NextYear pMonth=NextMonth %}">{{NextMonthName}} {{NextYear}}</a> &gt;&gt;
+        </td>
+    </tr>
+</table>
+<br>
+<div id="calendar">
+  {{Calendar}}
+</div>

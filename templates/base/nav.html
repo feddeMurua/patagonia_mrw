@@ -59,6 +59,9 @@
                 <li><a href="{% url 'est_pdc:estadisticas_caja' %}"><span>Estadísticas</span></a></li>
             </ul>
         </li>
+        <li><a href="{% url 'esterilizacion:calendario' %}">Calendario</a>
+
+
         <li class="pull-right"><a href="#">Usuario: {{ user.get_username }}</a>
             <ul>
                 {% if user.is_staff %}

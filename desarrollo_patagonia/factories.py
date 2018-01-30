@@ -43,7 +43,7 @@ for x in xrange(50):
     analisis = factories.AnalisisFactory()
 '''
 
-
+'''
 class DesinfeccionFactory(factory.django.DjangoModelFactory):
     fecha_realizacion = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
     proximo_vencimiento = factory.fuzzy.FuzzyDate(datetime.date(2000, 1, 1))
@@ -222,7 +222,7 @@ class VehiculoFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = sa.Vehiculo
 
-
+'''
 '''
 class TipoServicioFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=50)

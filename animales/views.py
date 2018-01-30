@@ -19,6 +19,11 @@ from desarrollo_patagonia import forms as dp_f
 import json
 import collections
 import numpy as np
+from django.utils.html import conditional_escape as esc
+from django.utils.safestring import mark_safe
+from itertools import groupby
+from calendar import HTMLCalendar, monthrange
+import datetime
 
 
 '''
@@ -200,7 +205,6 @@ def alta_disposicion(request, pk):
 ESTERILIZACION
 '''
 
-
 @login_required(login_url='login')
 def lista_esterilizaciones(request):
     return render(request, 'esterilizacion/esterilizacion_list.html', {'listado': Esterilizacion.objects.all()})
@@ -275,6 +279,101 @@ def baja_esterilizacion(request, pk):
     log_eliminar(request.user.id, esterilizacion, 'Turno para Esterilizacion')
     esterilizacion.delete()
     return HttpResponse()
+
+
+# CODIGO CALENDARIO
+
+
+class ContestCalendar(HTMLCalendar):
+
+    def __init__(self, pContestEvents):
+        super(ContestCalendar, self).__init__()
+        self.contest_events = self.group_by_day(pContestEvents)
+
+    def formatday(self, day, weekday):
+        if day != 0:
+            cssclass = self.cssclasses[weekday]
+            if datetime.date.today() == datetime.date(self.year, self.month, day):
+                cssclass += ' today'
+            if day in self.contest_events:
+                cssclass += ' filled'
+                body = []
+                for contest in self.contest_events[day]:
+                    body.append('<a href="%s">' % contest.get_relative_url())
+                    body.append(esc(contest.name))
+                    body.append('</a><br/>')
+                return self.day_cell(cssclass, '<div class="dayNumber">%d</div> %s' % (day, ''.join(body)))
+            return self.day_cell(cssclass, '<div class="dayNumber">%d</div>' % day)
+        return self.day_cell('noday', '&nbsp;')
+
+    def formatmonth(self, year, month):
+        self.year, self.month = year, month
+        return super(ContestCalendar, self).formatmonth(year, month)
+
+    def group_by_day(self, pContestEvents):
+        field = lambda contest: contest.date_of_event.day
+        return dict(
+            [(day, list(items)) for day, items in groupby(pContestEvents, field)]
+        )
+
+    def day_cell(self, cssclass, body):
+        return '<td class="%s">%s</td>' % (cssclass, body)
+
+
+def named_month(pMonthNumber):
+    """
+    Return the name of the month, given the month number
+    """
+    return datetime.date(1900, pMonthNumber, 1).strftime('%B')
+
+
+def inicio_calendario(request):
+    """
+    Show calendar of events this month
+    """
+    lToday = datetime.datetime.now()
+    return calendar(request, lToday.year, lToday.month)
+
+
+def calendar(request, pYear, pMonth):
+    """
+    Show calendar of events for specified month and year
+    """
+    lYear = int(pYear)
+    lMonth = int(pMonth)
+    lCalendarFromMonth = datetime.date(lYear, lMonth, 1)
+    lCalendarToMonth = datetime.date(lYear, lMonth, monthrange(lYear, lMonth)[1])
+    lContestEvents = ContestEvent.objects.filter(date_of_event__gte=lCalendarFromMonth, date_of_event__lte=lCalendarToMonth)
+    lCalendar = ContestCalendar(lContestEvents).formatmonth(lYear, lMonth)
+    lPreviousYear = lYear
+    lPreviousMonth = lMonth - 1
+    if lPreviousMonth == 0:
+        lPreviousMonth = 12
+        lPreviousYear = lYear - 1
+    lNextYear = lYear
+    lNextMonth = lMonth + 1
+    if lNextMonth == 13:
+        lNextMonth = 1
+        lNextYear = lYear + 1
+    lYearAfterThis = lYear + 1
+    lYearBeforeThis = lYear - 1
+
+    return render(request, 'esterilizacion/calendario/inicio.html', {'Calendar' : mark_safe(lCalendar),
+                                                       'Month' : lMonth,
+                                                       'MonthName' : named_month(lMonth),
+                                                       'Year' : lYear,
+                                                       'PreviousMonth' : lPreviousMonth,
+                                                       'PreviousMonthName' : named_month(lPreviousMonth),
+                                                       'PreviousYear' : lPreviousYear,
+                                                       'NextMonth' : lNextMonth,
+                                                       'NextMonthName' : named_month(lNextMonth),
+                                                       'NextYear' : lNextYear,
+                                                       'YearBeforeThis' : lYearBeforeThis,
+                                                       'YearAfterThis' : lYearAfterThis,
+                                                   })
+
+
+# FIN CODIGO COMENTARIO
 
 
 '''
