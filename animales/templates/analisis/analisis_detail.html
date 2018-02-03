@@ -55,5 +55,6 @@
 {% endblock %}
 
 {% block btn-footer %}
+    <a href="{% url 'analisis:pdf_analisis' analisis.pk %}" class="btn btn-warning" role="button">Imprimir Comprobante</a>
     <a href="{% url 'analisis:lista_analisis' %}" class="btn btn-primary">Regresar</a>
 {% endblock %}

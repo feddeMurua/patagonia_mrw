@@ -1,0 +1,74 @@
+{% extends "easy_pdf/base.html" %}
+{% load staticfiles %}
+
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 12px;
+        }
+        table {
+            margin: 0 auto;
+            width: 50%;
+            border: 1px solid black;
+        }
+        td, th {
+            text-align: center;
+            border: 1px solid;
+        }
+        .titulo {
+            text-align: center;
+        }
+        .fecha, .firma {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <p class="titulo"><b><u>ANALISIS DE TRICHINELOSIS (Digestión Enzimática)</u></b></p>
+            <p>
+                Fecha: {{ analisis.fecha }}<br>
+                Análisis solicitado por: {{ analisis.interesado.apellido }}, {{ analisis.interesado.nombre }}<br>
+                DNI N°: {{ analisis.interesado.dni }} / Domicilio: {{ analisis.interesado.domicilio }} / Teléfono:
+                {{ analisis.interesado.telefono }}<br>
+                Procedencia de/los animal/es: {{ analisis.procedencia }}<br>
+                Cantidad de animales: {{ porcinos|length }}
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th><b>Precinto</b></th>
+                        <th><b>Categoria</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for porcino in porcinos %}
+                        <tr>
+                            <td>{{ porcino.precinto }}</td>
+                            <td>{{ porcino.categoria_porcino }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>
+                <b>Resultado: {{ analisis.resultado }}</b>
+            </p>
+            <p class="fecha">Rawson, Chubut {% now "SHORT_DATE_FORMAT" %}</p>
+            <p>
+                REALIZADO EL ANALISIS DE 12 (doce) grs. de muestra correspondiente al/los animales previamente listados
+                {% if analisis.resultado == 'Negativo' %} NO {% endif %} se han detectado larvas en la muestra procesada
+                mediante digestión enzimática.<br>
+                <b><u>ACLARACION:</u></b> EL ANALISIS NO AUTORIZA LA COMERCIALIZACION DEL/LOS CERDO/S NI CERTIFICA LA
+                AUSENCIA DE OTRAS ENFERMEDADES QUE PUDIERA/N SUFRIR O TRANSMITIR.
+            </p>
+            <br><br>
+            <p class="firma">
+                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
+                            Sello y Firma
+            </p>
+        </div>
+    </div>
+{% endblock %}

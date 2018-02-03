@@ -1,0 +1,163 @@
+{% extends "easy_pdf/base.html" %}
+{% load staticfiles %}
+
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 9px;
+        }
+        .titulo {
+            text-align: center;
+            font-size: 16px;
+        }
+        table {
+            margin: 0 auto;
+            border: 1px solid black;
+            width: 75%;
+        }
+        td, th {
+            text-align: center;
+            border: 1px solid;
+        }
+        .panel {
+            padding: 15px;
+            border: 1px solid black;
+            width: 75%;
+        }
+        .fecha, .firma {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p class="titulo"><b>Municipalidad de Rawson</b></p>
+                    <p>Planilla de arqueo diario N°: {{ datos.arqueo.nro_planilla }}<br>
+                    Arqueo del dia {{ datos.arqueo.fecha.date }}<br>
+                    Hora: {{ datos.arqueo.fecha.time }}</p>
+                </div>
+                <div class="panel-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><b>TIPO DE VALOR</b></th>
+                                <th><b>VALOR</b></th>
+                                <th><b>CANT.</b></th>
+                                <th><b>SUB TOTAL</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Billetes de quinientos</td>
+                                <td>$500,00</td>
+                                <td>{{ datos.arqueo.quinientos }}</td>
+                                <td>${{ datos.quinientos }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de doscientos</td>
+                                <td>$200,00</td>
+                                <td>{{ datos.arqueo.doscientos }}</td>
+                                <td>${{ datos.doscientos }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de cien</td>
+                                <td>$100,00</td>
+                                <td>{{ datos.arqueo.cien }}</td>
+                                <td>${{ datos.cien }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de cincuenta</td>
+                                <td>$50,00</td>
+                                <td>{{ datos.arqueo.b_cincuenta }}</td>
+                                <td>${{ datos.b_cincuenta }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de veinte</td>
+                                <td>$20,00</td>
+                                <td>{{ datos.arqueo.veinte }}</td>
+                                <td>${{ datos.veinte }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de diez</td>
+                                <td>$10,00</td>
+                                <td>{{ datos.arqueo.diez }}</td>
+                                <td>${{ datos.diez }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de cinco</td>
+                                <td>$5,00</td>
+                                <td>{{ datos.arqueo.cinco }}</td>
+                                <td>${{ datos.cinco }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de dos</td>
+                                <td>$2,00</td>
+                                <td>{{ datos.arqueo.b_dos }}</td>
+                                <td>${{ datos.b_dos }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de dos</td>
+                                <td>$2,00</td>
+                                <td>{{ datos.arqueo.m_dos }}</td>
+                                <td>${{ datos.m_dos }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de uno</td>
+                                <td>$1,00</td>
+                                <td>{{ datos.arqueo.uno }}</td>
+                                <td>${{ datos.uno }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de cincuenta</td>
+                                <td>$0,50</td>
+                                <td>{{ datos.arqueo.m_cincuenta }}</td>
+                                <td>${{ datos.m_cincuenta }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de veinticinco</td>
+                                <td>$0,25</td>
+                                <td>{{ datos.arqueo.veinticinco }}</td>
+                                <td>${{ datos.veinticinco }}</td>
+                            </tr>
+                            <tr>
+                                <td>Débito/Crédito</td>
+                                <td></td>
+                                <td>{{ datos.arqueo.tarjeta_cant }}</td>
+                                <td>${{ datos.arqueo.tarjeta_sub }}</td>
+                            </tr>
+                            <tr>
+                                <td>Cheques</td>
+                                <td></td>
+                                <td>{{ datos.arqueo.cheques_cant }}</td>
+                                <td>${{ datos.arqueo.cheques_sub }}</td>
+                            </tr>
+                            <tr>
+                                <td>TOTAL INGRESOS VARIOS</td>
+                                <td></td>
+                                <td></td>
+                                <td>${{ datos.arqueo.imp_total_sistema }} </td>
+                            </tr>
+                            <tr>
+                                <td><b>TOTAL GENERAL</b></td>
+                                <td></td>
+                                <td></td>
+                                <td>${{ datos.arqueo.total_manual }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <p>
+                        _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _                         _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
+                                Verificó este arqueo                                           Sello y Firma
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

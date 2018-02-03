@@ -41,7 +41,6 @@ for x in xrange(50):
 
 for x in xrange(50):
     analisis = factories.AnalisisFactory()
-'''
 
 
 class DesinfeccionFactory(factory.django.DjangoModelFactory):
@@ -223,7 +222,6 @@ class VehiculoFactory(factory.django.DjangoModelFactory):
         model = sa.Vehiculo
 
 
-'''
 class TipoServicioFactory(factory.django.DjangoModelFactory):
     nombre = factory.fuzzy.FuzzyText(length=50)
 

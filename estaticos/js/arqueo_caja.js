@@ -11,18 +11,18 @@ $('.sub_valor_manual').each(function() {
 });
 
 function updateSubs() {
-    $('#efectivo_1').text($('#id_billetes_quinientos').val() * 500);
-    $('#efectivo_2').text($('#id_billetes_doscientos').val() * 200);
-    $('#efectivo_3').text($('#id_billetes_cien').val() * 100);
-    $('#efectivo_4').text($('#id_billetes_cincuenta').val() * 50);
-    $('#efectivo_5').text($('#id_billetes_veinte').val() * 20);
-    $('#efectivo_6').text($('#id_billetes_diez').val() * 10);
-    $('#efectivo_7').text($('#id_billetes_cinco').val() * 5);
-    $('#efectivo_8').text($('#id_billetes_dos').val() * 2);
-    $('#efectivo_9').text($('#id_monedas_dos').val() * 2);
-    $('#efectivo_10').text($('#id_monedas_uno').val() * 1);
-    $('#efectivo_11').text($('#id_monedas_cincuenta').val() * 0.50);
-    $('#efectivo_12').text($('#id_monedas_veinticinco').val() * 0.25);
+    $('#efectivo_1').text($('#id_quinientos').val() * 500);
+    $('#efectivo_2').text($('#id_doscientos').val() * 200);
+    $('#efectivo_3').text($('#id_cien').val() * 100);
+    $('#efectivo_4').text($('#id_b_cincuenta').val() * 50);
+    $('#efectivo_5').text($('#id_veinte').val() * 20);
+    $('#efectivo_6').text($('#id_diez').val() * 10);
+    $('#efectivo_7').text($('#id_cinco').val() * 5);
+    $('#efectivo_8').text($('#id_b_dos').val() * 2);
+    $('#efectivo_9').text($('#id_m_dos').val() * 2);
+    $('#efectivo_10').text($('#id_uno').val() * 1);
+    $('#efectivo_11').text($('#id_m_cincuenta').val() * 0.50);
+    $('#efectivo_12').text($('#id_veinticinco').val() * 0.25);
     updateTotal();
 }
 

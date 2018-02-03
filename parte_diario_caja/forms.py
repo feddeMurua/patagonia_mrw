@@ -56,24 +56,24 @@ class ArqueoEfectivoForm(forms.ModelForm):
 
     class Meta:
         model = ArqueoDiario
-        exclude = ['fecha', 'debito_credito_cant', 'debito_credito_sub', 'cheques_cant', 'cheques_sub',
+        exclude = ['fecha', 'tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub',
                    'mov_efectivo_sis', 'sub_efectivo_sis', 'mov_tarjeta_sis', 'mov_tarjeta_sis', 'sub_tarjeta_sis',
                    'mov_cheque_sis', 'sub_cheque_sis', 'mov_total_sistema', 'imp_total_sistema']
         fields = '__all__'
         labels = {
             'nro_planilla': _("N° de planilla"),
-            'billetes_quinientos': _("Billetes de quinientos ($500,00)"),
-            'billetes_doscientos': _("Billetes de Doscientos ($200,00)"),
-            'billetes_cien': _("Billetes de cien ($100,00)"),
-            'billetes_cincuenta': _("Billetes de cincuenta ($50,00)"),
-            'billetes_veinte': _("Billetes de veinte ($20,00)"),
-            'billetes_diez': _("Billetes de diez ($10,00)"),
-            'billetes_cinco': _("Billetes de cinco ($5,00)"),
-            'billetes_dos': _("Billetes de dos ($2,00)"),
-            'monedas_dos': _("Monedas de dos ($2,00)"),
-            'monedas_uno': _("Monedas de uno ($1,00)"),
-            'monedas_cincuenta': _("Monedas de cincuenta ctvs ($0,50)"),
-            'monedas_veinticinco': _("Monedas de veinticinco ctvs. ($0,25)"),
+            'quinientos': _("Billetes de quinientos ($500,00)"),
+            'doscientos': _("Billetes de Doscientos ($200,00)"),
+            'cien': _("Billetes de cien ($100,00)"),
+            'b_cincuenta': _("Billetes de cincuenta ($50,00)"),
+            'veinte': _("Billetes de veinte ($20,00)"),
+            'diez': _("Billetes de diez ($10,00)"),
+            'cinco': _("Billetes de cinco ($5,00)"),
+            'b_dos': _("Billetes de dos ($2,00)"),
+            'm_dos': _("Monedas de dos ($2,00)"),
+            'uno': _("Monedas de uno ($1,00)"),
+            'm_cincuenta': _("Monedas de cincuenta ctvs ($0,50)"),
+            'veinticinco': _("Monedas de veinticinco ctvs. ($0,25)"),
             'total_manual': _("Total de recuento manual")
         }
 
@@ -82,7 +82,7 @@ class ArqueoOtrosForm(forms.ModelForm):
 
     class Meta:
         model = ArqueoDiario
-        fields = ['debito_credito_cant', 'debito_credito_sub', 'cheques_cant', 'cheques_sub']
+        fields = ['tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub']
 
 
 class ServicioForm(forms.ModelForm):

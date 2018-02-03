@@ -1,11 +1,20 @@
 {% extends "easy_pdf/base.html" %}
 {% load staticfiles %}
+{% load staticfiles bootstrap3 %}
 
 {% block extra_style %}
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <style>
-        .tarjeta {
+        body {
+            font-size: 10px;
+        }
+        table {
+            margin: 0 auto;
             border: 1px solid black;
+        }
+        tr {
+            text-align: center;
+            border: 1px solid;
         }
     </style>
 {% endblock %}
@@ -13,7 +22,7 @@
 {% block content %}
     <div id="content">
         <div class="main">
-            <table class="tarjeta">
+            <table>
                 <tr>
                     <td>
                         <p align="center"><strong>Municipalidad de Rawson</strong></p>
@@ -22,38 +31,40 @@
                             <tr>
                                 <td>
                                     <p>TARJETA DE SANIDAD</p>
-                                    <img class="foto" src="{{ libreta.foto.url }}" height="96" width="96">
+                                    {% if libreta.foto %}
+                                        <img class="foto" src="{{ libreta.foto.url }}" height="96" width="96">
+                                    {% endif %}
                                 </td>
                                 <td>
                                     <table>
                                         <tr>
                                             <td>Apellido:</td>
-                                            <td>{{ libreta.persona.apellido }}</td>
+                                            <td><b>{{ libreta.persona.apellido }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>Nombres:</td>
-                                            <td>{{ libreta.persona.nombre }}</td>
+                                            <td><b>{{ libreta.persona.nombre }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>D.N.I:</td>
-                                            <td>{{ libreta.persona.dni }}</td>
+                                            <td><b>{{ libreta.persona.dni }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>Nacionalidad:</td>
-                                            <td>{{ libreta.persona.nacionalidad }}</td>
+                                            <td><b>{{ libreta.persona.nacionalidad }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>Fecha de Nacimiento:</td>
-                                            <td>{{ libreta.persona.fecha_nacimiento }}</td>
+                                            <td><b>{{ libreta.persona.fecha_nacimiento }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>Domicilio:</td>
-                                            <td>{{ libreta.persona.domicilio }}</td>
+                                            <td><b>{{ libreta.persona.domicilio }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>Realizo curso:</td>
                                             {% if libreta.curso %}
-                                                <td>SI - {{ libreta.curso.fecha_inicio }}</td>
+                                                <td>SI - <b>{{ libreta.curso.fecha_inicio }}</b></td>
                                             {% else %}
                                                 <td>NO</td>
                                             {% endif %}
@@ -68,9 +79,9 @@
                         <br>
                         <p>En la Direccion de Veterinaria, Saneamiento y Abasto consta que el interesado hallase
                         exento de enfermedades contagiosas, segun CERTIFICADO, expedido por el/la Dr./Dra.
-                        {{ libreta.profesional_examen_clinico }}.<br>
-                        La presente vence el {{ libreta.fecha_vencimiento }}<br>
-                        Rawson, Chubut - {% now "jS F Y H:i" %}</p>
+                        <b>{{ libreta.profesional_examen_clinico }}</b>.<br>
+                        La presente vence el <b>{{ libreta.fecha_vencimiento }}</b><br>
+                        Rawson, Chubut - {% now "l j F Y" %}</p>
                         <img src="{% static 'images/rawson.png' %}" height="96" width="96">
                     </td>
                 </tr>

@@ -22,9 +22,8 @@
                 {% endfor %}
             </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary">
-            <span class="glyphicon glyphicon-search"></span> Buscar
-        </button>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+        <a class="btn btn-warning" href="{% url 'caja:parte_diario_pdf' %}"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
     </form>
 {% endblock %}
 

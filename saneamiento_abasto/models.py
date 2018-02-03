@@ -110,6 +110,7 @@ class Vehiculo(models.Model):
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=TIPO_VEHICULO, default='TPP')
+    nro = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
     tipo_tpp = models.CharField(max_length=15, blank=True, null=True, choices=TIPO_TPP)
     disposicion_resolucion = models.CharField(max_length=50, blank=True, null=True, unique=True)
     categoria = models.CharField(max_length=50, choices=CATEGORIA, blank=True, null=True)
@@ -131,7 +132,7 @@ class Desinfeccion(models.Model):
 
 
 class ControlDePlaga(models.Model):
-    fecha_hoy = models.DateField(default=now)
+    fecha = models.DateField(default=now)
     responsable = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="responsable_propietario")
     funcionario_actuante = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, related_name="funcionario")
     tipo_plaga = models.CharField(max_length=50, choices=PLAGAS)
@@ -141,7 +142,7 @@ class ControlDePlaga(models.Model):
     pagado = models.BooleanField(default=True)
 
     def __str__(self):
-        return "%s - %s - %s" % (self.fecha_hoy, self.responsable, self.tipo_plaga)
+        return "%s - %s - %s" % (self.fecha, self.responsable, self.tipo_plaga)
 
 
 class PagoDiferido(models.Model):

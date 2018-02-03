@@ -100,7 +100,8 @@ class VehiculoForm(forms.ModelForm):
         labels = {
             'tipo_vehiculo': _("Tipo de vehiculo"),
             'tipo_tpp': _("Tipo de transporte"),
-            'disposicion_resolucion': _("Resolucion")
+            'disposicion_resolucion': _("Resolucion"),
+            'nro': _('N°')
         }
 
 

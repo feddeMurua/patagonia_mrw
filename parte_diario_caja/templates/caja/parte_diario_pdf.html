@@ -1,0 +1,89 @@
+{% extends "easy_pdf/base.html" %}
+{% load staticfiles %}
+
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 9px;
+        }
+        .titulo {
+            text-align: center;
+            font-size: 20px;
+        }
+        table {
+            margin: 0 auto;
+            border: 1px solid black;
+        }
+        td, th {
+            text-align: center;
+            border: 1px solid;
+        }
+        .fecha, .firma {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <p class="titulo"><b>Parte Diario de Caja - Ingresos Varios<br>
+            Fecha de Rendicion {{ fecha_maniana }}</b></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th><b>N° INGRESO</b></th>
+                        <th><b>TITULAR</b></th>
+                        <th><b>FORMA DE PAGO</b></th>
+                        <th><b>N° CHEQUE</b></th>
+                        <th><b>IMPORTE</b></th>
+                        <th><b>DETALLE</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detalle in detalles %}
+                        <tr>
+                            <td>{{ detalle.movimiento.nro_ingreso }}</td>
+                            <td>{{ detalle.movimiento.titular }}</td>
+                            <td>{{ detalle.movimiento.forma_pago }}</td>
+                            {% if detalle.movimiento.forma_pago == 'Cheque' %}
+                                <td>{{ detalle.movimiento.nro_cheque }}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td>{{ detalle.importe }}</td>
+                            <td>{{ detalle.descripcion }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <table class="subtotales">
+                <tbody>
+                    <tr>
+                        <td>Subtotal Efectivo</td>
+                        <td>${{ subtotales.efectivo }}</td>
+                    </tr>
+                    <tr>
+                        <td>Subtotal Tarjeta</td>
+                        <td>${{ subtotales.tarjeta }}</td>
+                    </tr>
+                    <tr>
+                        <td>Subtotal Cheque</td>
+                        <td>${{ subtotales.cheque }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>TOTAL GENERAL</b></td>
+                        <td><b>${{ total }}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <p class="firma">
+                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
+                            Sello y Firma
+            </p>
+        </div>
+    </div>
+{% endblock %}

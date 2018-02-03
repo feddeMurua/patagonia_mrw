@@ -15,10 +15,10 @@ from desarrollo_patagonia import forms as dp_f
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from desarrollo_patagonia.utils import *
 from django.views.generic.detail import DetailView
+from easy_pdf.views import PDFTemplateView
 from django.utils import timezone
 from desarrollo_patagonia import factories
 import collections
-import numpy as np
 import json
 
 '''
@@ -201,6 +201,18 @@ def alta_reinspeccion(request):
                                                                    'detalle_mov_form': detalle_mov_form,
                                                                    'mov_form': mov_form})
 
+
+class PdfReinspeccion(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'reinspeccion/reinspeccion_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk):
+        return super(PdfReinspeccion, self).get_context_data(
+            reinspeccion=Vehiculo.objects.get(pk=pk)
+        )
+
+
 def get_monto(reinspeccion):
     reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
     precios = ReinspeccionPrecios.objects.get()
@@ -363,6 +375,17 @@ def modificacion_vehiculo(request, pk):
         else:
             form = ModificarTPPForm(instance=vehiculo)
             return render(request, 'vehiculo/tpp_update.html', {'form': form})
+
+
+class PdfVehiculo(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'vehiculo/vehiculo_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk):
+        return super(PdfVehiculo, self).get_context_data(
+            vehiculo=Vehiculo.objects.get(pk=pk)
+        )
 
 
 '''
@@ -602,8 +625,6 @@ def estadisticas_TD(request):
     des_colectivos = {}
 
     for year in years:
-
-        # acumuladores
         tr = 0
         escolares = 0
         tsa = 0
@@ -628,7 +649,6 @@ def estadisticas_TD(request):
         des_escolares[str(year)] = escolares
 
     # DESINFECCION DE VEHICULOS
-
     ord_des_tsa = collections.OrderedDict(sorted(des_tsa.items()))
     ord_des_tr = collections.OrderedDict(sorted(des_tr.items()))
     ord_des_colectivos = collections.OrderedDict(sorted(des_colectivos.items()))
@@ -640,27 +660,17 @@ def estadisticas_TD(request):
     datos_des_colectivos = ord_des_colectivos.values()
     datos_des_escolares = ord_des_escolares.values()
 
-
     # CONTROL DE PLAGAS
-
-    controles = ControlDePlaga.objects.filter(fecha_hoy__year__lte=years[0],
-                                              fecha_hoy__year__gte=years[-1]).values_list('tipo_plaga')
-
-    ctr_anual = collections.Counter(controles)
+    ctr_anual = to_counter(ControlDePlaga, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1]},
+                           ['tipo_plaga'])
     total_general = sum(ctr_anual.values())
-
-    dict = {}
+    dic = {}
     for k, v in ctr_anual.items():
-        dict[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+        dic[k] = (v, float("{0:.2f}".format(v*100/total_general)))
 
     context = {
         'rango_form': rango_form,
-        # mascotas
-        'promedio_tsa': int(np.average(datos_des_tsa)),
-        'promedio_tr': int(np.average(datos_des_tr)),
-        'promedio_colectivos': int(np.average(datos_des_colectivos)),
-        'promedio_escolares': int(np.average(datos_des_escolares)),
-        'ctr_anual': dict,
+        'ctr_anual': dic,
         # datos y etiquetas
         'lista_labels': json.dumps([label_categoria_des, ctr_anual.keys()]),
         'lista_datos': json.dumps([{'TSA': datos_des_tsa, 'Taxis/Remiss': datos_des_tr,
@@ -668,7 +678,6 @@ def estadisticas_TD(request):
                                    {'Controles': ctr_anual.values()}
                                    ])
     }
-
     return render(request, "estadistica/estadisticas_TD.html", context)
 
 
@@ -686,7 +695,6 @@ def estadisticas_reinspeccion(request):
                                                          reinspeccion__fecha__year__gte=years[-1]).values_list(
         'producto__nombre', 'kilo_producto')
     dict_reinspeccion_prod = {}
-
     for prod, valor in reinspecciones:
         total = dict_reinspeccion_prod.get(prod, 0) + valor
         dict_reinspeccion_prod[prod] = total
@@ -708,5 +716,4 @@ def estadisticas_reinspeccion(request):
         'lista_labels': json.dumps([label_reinspeccion]),
         'lista_datos': json.dumps([{'Productos': datos_reinspecciones}])
     }
-
     return render(request, "estadistica/estadisticas_reinspeccion.html", context)

@@ -44,7 +44,7 @@ class InscripcionForm(forms.ModelForm):
         model = Inscripcion
         fields = ['persona', 'observaciones']
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 13, 'cols': 20}),
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
             'persona': AddAnotherWidgetWrapper(
                 forms.Select,
                 reverse_lazy('personas:nueva_persona_fisica'),

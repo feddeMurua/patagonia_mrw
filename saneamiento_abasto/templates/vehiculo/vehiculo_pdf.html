@@ -1,0 +1,45 @@
+{% extends "easy_pdf/base.html" %}
+{% load staticfiles %}
+
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 14px;
+        }
+        .fecha, .firma {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <p><b>REGISTRO DE
+                {% if vehiculo.tipo_vehiculo == 'TSA' %}
+                    TRANSPORTE DE SUSTANCIAS ALIMENTICIAS
+                {% else %}
+                    TRANSPORTE PÚBLICO DE PASAJEROS
+                {% endif %} N° {{ vehiculo.nro }}<br>
+                {% if vehiculo.titular.cuit %}
+                    RAZON COMERCIAL:
+                {% else %}
+                    PROPIETARIO:
+                {% endif %} {{ vehiculo.titular }}<br>
+                MARCA: {{ vehiculo.marca }}<br>
+                DOMINIO: {{ vehiculo.dominio }}<br>
+                {% if vehiculo.tipo_vehiculo == 'TSA' %}
+                    RESOLUCION: N° {{ vehiculo.disposicion_resolucion }}<br>
+                {% else %}
+                    DISPOSICION: N° {{ vehiculo.disposicion_resolucion }}
+                {% endif %}<br>
+            </b></p>
+            <br>
+            <p class="firma">
+                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
+                            Sello y Firma
+            </p>
+        </div>
+    </div>
+{% endblock %}

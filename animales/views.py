@@ -102,6 +102,19 @@ def detalle_analisis(request, pk):
     return render(request, 'analisis/analisis_detail.html', {'analisis': analisis, 'porcinos': porcinos})
 
 
+class PdfAnalisis(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'analisis/analisis_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk):
+        analisis = Analisis.objects.get(pk=pk)
+        return super(PdfAnalisis, self).get_context_data(
+            analisis=analisis,
+            porcinos=Porcino.objects.filter(analisis=analisis)
+        )
+
+
 '''
 SOLICITUD/HABILITACION CRIADERO DE CERDOS
 '''
@@ -171,10 +184,8 @@ class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
     redirect_field_name = 'next'
 
     def get_context_data(self, pk):
-        solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
         return super(PdfSolicitud, self).get_context_data(
-            pagesize="A4",
-            solicitud=solicitud
+            solicitud=SolicitudCriaderoCerdos.objects.get(pk=pk)
         )
 
 
@@ -225,7 +236,6 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
                 edad_mascota = int(edad_mascota/12)
                 tiempo_edad = 'AÑOS'
         return super(PdfConsentimiento, self).get_context_data(
-            pagesize="A4",
             esterilizacion=esterilizacion,
             tiempo_edad=tiempo_edad,
             edad_mascota=edad_mascota
@@ -347,10 +357,8 @@ class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
     redirect_field_name = 'next'
 
     def get_context_data(self, pk):
-        patente = Patente.objects.get(pk=pk)
         return super(PdfCarnet, self).get_context_data(
-            pagesize="A4",
-            patente=patente
+            patente=Patente.objects.get(pk=pk)
         )
 
 
@@ -462,10 +470,8 @@ class PdfInfraccion(LoginRequiredMixin, PDFTemplateView):
     redirect_field_name = 'next'
 
     def get_context_data(self, pk_control):
-        control = ControlAntirrabico.objects.get(pk=pk_control)
         return super(PdfInfraccion, self).get_context_data(
-            pagesize="A4",
-            control=control
+            control=ControlAntirrabico.objects.get(pk=pk_control)
         )
 
 
@@ -602,61 +608,25 @@ def estadisticas_animales(request):
             years = range(int(rango_form.cleaned_data['anio_hasta']),
                           int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
+    # CANTIDAD DE ANALISIS
     todos_analisis = {}
-    porker_analisis = {}
-    lechon_analisis = {}
-    adulto_analisis = {}
-
     for year in years:
         todos_analisis[str(year)] = Analisis.objects.filter(fecha__year=year).count()
-
-        # acumuladores
-        porker = 0
-        lechon = 0
-        adulto = 0
-
-        categorias_analisis = Analisis.objects.filter(fecha__year=year).values_list("categoria")
-
-        for categoria in categorias_analisis:
-            if categoria[0] == "Porker":
-                porker += 1
-            elif categoria[0] == "Lechon":
-                lechon += 1
-            else:
-                adulto += 1
-
-        porker_analisis[str(year)] = porker
-        lechon_analisis[str(year)] = lechon
-        adulto_analisis[str(year)] = adulto
-
     ord_analisis = collections.OrderedDict(sorted(todos_analisis.items()))
-
     label_analisis = ord_analisis.keys()
     datos_analisis = ord_analisis.values()
 
-    # Categorías análisis
-
-    ord_porker_analisis = collections.OrderedDict(sorted(porker_analisis.items()))
-    ord_lechon_analisis = collections.OrderedDict(sorted(lechon_analisis.items()))
-    ord_adulto_analisis = collections.OrderedDict(sorted(adulto_analisis.items()))
-
-    label_categoria_analisis = ord_adulto_analisis.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_porker = ord_porker_analisis.values()
-    datos_lechon = ord_lechon_analisis.values()
-    datos_adulto = ord_adulto_analisis.values()
+    # CATEGORIAS DE ANALISIS
+    analisis_categorias = to_counter(Porcino, {'analisis__fecha__year__lte': years[0],
+                                               'analisis__fecha__year__gte': years[-1]}, ['categoria_porcino'])
 
     context = {
         'rango_form': rango_form,
         'promedio_analisis': int(np.average(datos_analisis)),
-        'promedio_porkers': int(np.average(datos_porker)),
-        'promedio_lechones': int(np.average(datos_lechon)),
-        'promedio_adultos': int(np.average(datos_adulto)),
         # datos y etiquetas
-        'lista_labels': json.dumps([label_analisis, label_categoria_analisis]),
-        'lista_datos': json.dumps([{'Analisis': datos_analisis}, {'Porker': datos_porker, 'Lechon': datos_lechon,
-                                                                  'Adulto': datos_adulto}])
+        'lista_labels': json.dumps([label_analisis, analisis_categorias.keys()]),
+        'lista_datos': json.dumps([{'Analisis': datos_analisis}, {'Categorias': analisis_categorias.values()}])
     }
-
     return render(request, "estadistica/estadisticas_analisis.html", context)
 
 
@@ -670,141 +640,23 @@ def estadisticas_mascotas(request):
             years = range(int(rango_form.cleaned_data['anio_hasta']),
                           int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
-    patente_can_macho = {}
-    patente_can_hembra = {}
-    patente_fel_macho = {}
-    patente_fel_hembra = {}
-    esterilizacion_can_macho = {}
-    esterilizacion_can_hembra = {}
-    esterilizacion_fel_macho = {}
-    esterilizacion_fel_hembra = {}
-    entrega_animales = {}
-    retiro_animales = {}
+    # PATENTAMIENTO
+    tipo_patente = to_counter(Patente, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1]},
+                              ['mascota__categoria_mascota', 'mascota__sexo'])
 
-    for year in years:
-
-        # acumuladores
-        can_macho = 0
-        can_hembra = 0
-        fel_macho = 0
-        fel_hembra = 0
-
-        patentes_caninos = Patente.objects.filter(fecha__year=year).values_list(
-            "mascota__categoria_mascota", "mascota__sexo")
-
-        for patente in patentes_caninos:
-            if (patente[0] == 'CANINA') and (patente[1] == 'Macho'):
-                can_macho += 1
-            elif (patente[0] == 'CANINA') and (patente[1] == 'Hembra'):
-                can_hembra += 1
-            elif (patente[0] == 'FELINA') and (patente[1] == 'Macho'):
-                fel_macho += 1
-            else:
-                fel_hembra += 1
-
-        patente_can_macho[str(year)] = can_macho
-        patente_can_hembra[str(year)] = can_hembra
-        patente_fel_macho[str(year)] = fel_macho
-        patente_fel_hembra[str(year)] = fel_hembra
-
-        # acumuladores
-        can_macho = 0
-        can_hembra = 0
-        fel_macho = 0
-        fel_hembra = 0
-
-        esterilizaciones = Esterilizacion.objects.filter(turno__year=year).values_list(
-            "mascota__categoria_mascota", "mascota__sexo")
-
-        for esterilizacion in esterilizaciones:
-            if (esterilizacion[0] == 'CANINA') and (esterilizacion[1] == 'Macho'):
-                can_macho += 1
-            elif (esterilizacion[0] == 'CANINA') and (esterilizacion[1] == 'Hembra'):
-                can_hembra += 1
-            elif (esterilizacion[0] == 'FELINA') and (esterilizacion[1] == 'Macho'):
-                fel_macho += 1
-            else:
-                fel_hembra += 1
-
-        esterilizacion_can_macho[str(year)] = can_macho
-        esterilizacion_can_hembra[str(year)] = can_hembra
-        esterilizacion_fel_macho[str(year)] = fel_macho
-        esterilizacion_fel_hembra[str(year)] = fel_hembra
-
-        # acumuladores
-        entregas = 0
-        retiros = 0
-
-        animales_anio = RetiroEntregaAnimal.objects.filter(fecha__year=year).values_list("tramite")
-
-        for animal in animales_anio:
-            if animal[0] == "ENTREGA":
-                entregas += 1
-            elif animal[0] == "RETIRO":
-                retiros += 1
-
-        entrega_animales[str(year)] = entregas
-        retiro_animales[str(year)] = retiros
-
-    # patentamiento
-
-    ord_patente_can_macho = collections.OrderedDict(sorted(patente_can_macho.items()))
-    ord_patente_can_hembra = collections.OrderedDict(sorted(patente_can_hembra.items()))
-    ord_patente_fel_macho = collections.OrderedDict(sorted(patente_fel_macho.items()))
-    ord_patente_fel_hembra = collections.OrderedDict(sorted(patente_fel_hembra.items()))
-
-    label_categoria_patente = ord_patente_can_macho.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_can_macho = ord_patente_can_macho.values()
-    datos_can_hembra = ord_patente_can_hembra.values()
-    datos_fel_macho = ord_patente_fel_macho.values()
-    datos_fel_hembra = ord_patente_fel_hembra.values()
-
-    # esterilizacion
-
-    ord_esterilizacion_can_macho = collections.OrderedDict(sorted(esterilizacion_can_macho.items()))
-    ord_esterilizacion_can_hembra = collections.OrderedDict(sorted(esterilizacion_can_hembra.items()))
-    ord_esterilizacion_fel_macho = collections.OrderedDict(sorted(esterilizacion_fel_macho.items()))
-    ord_esterilizacion_fel_hembra = collections.OrderedDict(sorted(esterilizacion_fel_hembra.items()))
-
-    label_categoria_esterilizacion = ord_esterilizacion_can_macho.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_esterilizacion_can_macho = ord_esterilizacion_can_macho.values()
-    datos_esterilizacion_can_hembra = ord_esterilizacion_can_hembra.values()
-    datos_esterilizacion_fel_macho = ord_esterilizacion_fel_macho.values()
-    datos_esterilizacion_fel_hembra = ord_esterilizacion_fel_hembra.values()
+    # ESTERILIZACION
+    tipo_esterilizacion = to_counter(Esterilizacion, {'turno__year__lte': years[0], 'turno__year__gte': years[-1]},
+                                     ['mascota__categoria_mascota', 'mascota__sexo'])
 
     # RETIRO Y ENTREGA DE ANIMALES
-
-    ord_entrega_animales = collections.OrderedDict(sorted(entrega_animales.items()))
-    ord_retiro_animales = collections.OrderedDict(sorted(retiro_animales.items()))
-
-    label_animales_anios = ord_entrega_animales.keys()  # indistinto para los datos (tienen la misma clave)
-    datos_entrega = ord_entrega_animales.values()
-    datos_retiro = ord_retiro_animales.values()
+    tramites = to_counter(RetiroEntregaAnimal, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1]},
+                          ['tramite'])
 
     context = {
         'rango_form': rango_form,
-        # mascotas
-        'promedio_can_macho': int(np.average(datos_can_macho)),
-        'promedio_can_hembra': int(np.average(datos_can_hembra)),
-        'promedio_fel_macho': int(np.average(datos_fel_macho)),
-        'promedio_fel_hembra': int(np.average(datos_fel_hembra)),
-        # esterilizacion
-        'promedio_esterilizacion_can_macho': int(np.average(datos_esterilizacion_can_macho)),
-        'promedio_esterlizacion_can_hembra': int(np.average(datos_esterilizacion_can_hembra)),
-        'promedio_esterlizacion_fel_macho': int(np.average(datos_esterilizacion_fel_macho)),
-        'promedio_esterlizacion_fel_hembra': int(np.average(datos_esterilizacion_fel_hembra)),
-        # retiros y entrega
-        'promedio_entrega': int(np.average(datos_entrega)),
-        'promedio_retiro': int(np.average(datos_retiro)),
-        # datos y etiquetas
-        'lista_labels': json.dumps([label_categoria_patente, label_categoria_esterilizacion, label_animales_anios]),
-        'lista_datos': json.dumps([{'Can. Machos': datos_can_macho, 'Can. Hembras': datos_can_hembra,
-                                    'Fel. Machos': datos_fel_macho, 'Fel. Hembras': datos_fel_hembra},
-                                   {'Can. Machos': datos_esterilizacion_can_macho,
-                                    'Can. Hembras': datos_esterilizacion_can_hembra,
-                                    'Fel. Machos': datos_esterilizacion_fel_macho,
-                                    'Fel. Hembras': datos_esterilizacion_fel_hembra},
-                                   {'Entregados': datos_entrega, 'Retirados': datos_retiro}])
+        'lista_labels': json.dumps([tipo_patente.keys(), tipo_esterilizacion.keys(), tramites.keys()]),
+        'lista_datos': json.dumps([{'Tipo Patente': tipo_patente.values},
+                                   {'Tipo Esterilizacion': tipo_esterilizacion.values()},
+                                   {'Tramites': tramites.values()}])
     }
-
     return render(request, "estadistica/estadisticas_mascotas.html", context)

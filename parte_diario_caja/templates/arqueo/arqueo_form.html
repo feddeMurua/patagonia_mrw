@@ -26,7 +26,7 @@
                             <span class="help-block">{{ error }}</span>
                         {% endfor %}
                     </div>
-                    <div class="col-md-6" id="container-form-left">
+                    <div class="col-md-7" id="container-form-left">
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Recuento manual</h3>
@@ -52,8 +52,8 @@
                                         {% endfor %}
                                         <tr>
                                             <td>Débito/Crédito</td>
-                                            <td>{{ form_otros.debito_credito_cant|add_class:'form-control' }}</td>
-                                            <td>{{ form_otros.debito_credito_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
+                                            <td>{{ form_otros.tarjeta_cant|add_class:'form-control' }}</td>
+                                            <td>{{ form_otros.tarjeta_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Cheques</td>
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6" id="container-form-right">
+                    <div class="col-md-5" id="container-form-right">
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Recuento de sistema</h3>
