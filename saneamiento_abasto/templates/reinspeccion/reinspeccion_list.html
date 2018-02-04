@@ -11,7 +11,7 @@
 {% block btn-nuevo %}
     <a href="{% url 'reinspecciones:nueva_reinspeccion' %}" class="btn btn-primary btn-create">Nueva Reinspeccion</a>
     {% if user.is_staff %}
-        <a href="{% url 'reinspecciones:precios_reinspeccion' %}" class="btn btn-info">Precios vigentes</a>
+        <a href="{% url 'reinspecciones:precios_reinspeccion' %}" class="btn btn-info">Precios Vigentes</a>
     {% endif %}
 {% endblock %}
 
@@ -33,7 +33,7 @@
                 <td>{{ reinspeccion.num_certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
                 <td>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-edit"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
                 </td>
             </tr>
         {% endfor %}

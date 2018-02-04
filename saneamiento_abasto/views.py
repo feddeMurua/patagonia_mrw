@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
-from calendar import monthrange
+import calendar
+import locale
 from personas import forms as f
 from .forms import *
 from .choices import *
@@ -101,40 +102,60 @@ def lista_cc(request):
 
 
 @login_required(login_url='login')
-def pagos_cc(request, pk):
-    cuenta = CuentaCorriente.objects.get(pk=pk)
-    return render(request, 'cuentaCorriente/cc_pagos_list.html', {'listado': PagoCC.objects.filter(cc=cuenta), 'cuenta': cuenta})
-
-
-@login_required(login_url='login')
-def realizar_pago_cc(request, pk):
-    cuenta = CuentaCorriente.objects.get(pk=pk)
-    if request.method == 'POST':
-        form = PagoCCForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        if form.is_valid() & detalle_mov_form.is_valid():
-            pago = form.save(commit=False)
-            pago.cc = cuenta
-            pago.save()
-            cuenta.saldo -= pago.monto
-            cuenta.save()
-            detalle_mov = detalle_mov_form.save(commit=False)
-            detalle_mov.importe = pago.monto
-            detalle_mov.descripcion = 'Pago en Cuenta Corriente'
-            detalle_mov.save()
-            return HttpResponseRedirect(reverse('cuentas_corrientes:pagos_cc', kwargs={'pk': pk}))
-    else:
-        form = PagoCCForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-    return render(request, 'cuentaCorriente/cc_pago_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                                 'pk': pk})
-
-
-@login_required(login_url='login')
 def detalle_cc(request, pk):
     cuenta = CuentaCorriente.objects.get(pk=pk)
-    detalles = DetalleCC.objects.filter(cc=cuenta)
-    return render(request, 'cuentaCorriente/cc_detail.html', {'cuenta': cuenta, 'detalles': detalles})
+    if request.method == 'POST':
+        mes, anio = request.POST['periodo'].split("/")
+        return HttpResponseRedirect(reverse('cuentas_corrientes:pdf_certificado', kwargs={'pk': pk, 'mes': mes,
+                                                                                          'anio': anio}))
+    return render(request, 'cuentaCorriente/cc_detail.html', {'cuenta': cuenta,
+                                                              'detalles': DetalleCC.objects.filter(cc=cuenta)})
+
+
+def get_monto(reinspeccion):
+    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
+    precios = ReinspeccionPrecios.objects.get()
+
+    total_kg = 0
+    monto = precios.precio_min
+
+    for r in reinspeccion_prod:
+        total_kg += r.kilo_producto
+
+    if total_kg > precios.kg_min:
+        monto += total_kg * precios.precio_kg
+
+    return monto
+
+
+def agrupar_reinspecciones(cc, mes, anio):
+    reinspecciones = []
+    detalles = DetalleCC.objects.filter(cc=cc, reinspeccion__fecha__month=mes, reinspeccion__fecha__year=anio)\
+        .order_by('reinspeccion__fecha')
+    for detalle in detalles:
+        productos = ReinspeccionProducto.objects.filter(reinspeccion=detalle.reinspeccion)
+        reinspecciones.append({'reinspeccion': detalle.reinspeccion, 'subtotal': get_monto(detalle.reinspeccion),
+                               'kilos_reinspeccion': sum(producto.kilo_producto for producto in productos),
+                               'productos': productos})
+    return reinspecciones
+
+
+class PdfCertificado(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'cuentaCorriente/certificado_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk, mes, anio):
+        cc = CuentaCorriente.objects.get(pk=pk)
+        locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
+        reinspecciones = agrupar_reinspecciones(cc, mes, anio)
+        return super(PdfCertificado, self).get_context_data(
+            cc=cc,
+            reinspecciones=reinspecciones,
+            periodo=calendar.month_name[int(mes)] + " " + str(anio),
+            total_kilos=sum(item['kilos_reinspeccion'] for item in reinspecciones),
+            total_monto=sum(item['subtotal'] for item in reinspecciones)
+        )
 
 
 '''
@@ -182,12 +203,10 @@ def alta_reinspeccion(request):
                         return redirect('reinspecciones:lista_reinspecciones')
             else:
                 reinspeccion = form.save()
-                monto = carga_productos(request, reinspeccion)
+                carga_productos(request, reinspeccion)
                 cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
-                detalle = DetalleCC(detalle=reinspeccion, monto=monto, cc=cc)
+                detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
                 detalle.save()
-                cc.saldo += monto
-                cc.save()
                 log_crear(request.user.id, reinspeccion, servicio)
                 return redirect('reinspecciones:lista_reinspecciones')
     else:
@@ -200,33 +219,6 @@ def alta_reinspeccion(request):
     return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'producto_form': producto_form,
                                                                    'detalle_mov_form': detalle_mov_form,
                                                                    'mov_form': mov_form})
-
-
-class PdfReinspeccion(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'reinspeccion/reinspeccion_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        return super(PdfReinspeccion, self).get_context_data(
-            reinspeccion=Vehiculo.objects.get(pk=pk)
-        )
-
-
-def get_monto(reinspeccion):
-    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
-    precios = ReinspeccionPrecios.objects.get()
-
-    total_kg = 0
-    monto = precios.precio_min
-
-    for r in reinspeccion_prod:
-        total_kg += r.kilo_producto
-
-    if total_kg > precios.kg_min:
-        monto += total_kg * precios.precio_kg
-
-    return monto
 
 
 def existe_producto(request, producto):
@@ -402,7 +394,7 @@ def get_vencimiento(fecha_realizacion):
     if fecha_realizacion.day <= 15:
         return proximo_vencimiento.replace(day=15)
     else:
-        return proximo_vencimiento.replace(day=monthrange(proximo_vencimiento.year, proximo_vencimiento.month)[1])
+        return proximo_vencimiento.replace(day=calendar.monthrange(proximo_vencimiento.year, proximo_vencimiento.month)[1])
 
 
 def get_estado(desinfecciones):

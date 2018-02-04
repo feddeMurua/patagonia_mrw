@@ -14,7 +14,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 
 DATEINPUT = partial(forms.DateInput, {'class': 'datepicker'})
-TIMEINPUT = partial(forms.TimeInput, {'class': 'timepicker'})
 
 
 class AbastecedorForm(forms.ModelForm):
@@ -22,6 +21,10 @@ class AbastecedorForm(forms.ModelForm):
         model = Abastecedor
         exclude = ['cc']
         fields = '__all__'
+
+
+class ListaAbastecedoresForm(forms.Form):
+    abastecedor = forms.ModelChoiceField(queryset=Abastecedor.objects.all())
 
 
 class ReinspeccionForm(forms.ModelForm):
@@ -33,7 +36,7 @@ class ReinspeccionForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['fecha', 'cc']
         labels = {
-            'num_certificado': _("N° de certificado")
+            'certificado': _("N° de certificado")
         }
 
 
@@ -42,14 +45,6 @@ class ModificacionReinspeccionForm(forms.ModelForm):
         model = Reinspeccion
         exclude = ['fecha', 'abastecedor', 'cc']
         fields = '__all__'
-
-    def clean_turno(self):
-        turno = self.cleaned_data['turno']
-        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(22, 0):
-            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 22:00 hs.')
-        elif turno.date() < timezone.now().date():
-            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
-        return turno
 
 
 class AltaProductoForm(forms.ModelForm):
@@ -68,15 +63,6 @@ class ReinspeccionProductoForm(forms.ModelForm):
                 reverse_lazy('reinspecciones:alta_producto'),
             )
         }
-        labels = {
-            'kilo_producto': _("Kg de producto")
-        }
-
-
-class ModificacionReinspeccionProductoForm(forms.ModelForm):
-    class Meta:
-        model = ReinspeccionProducto
-        fields = ['kilo_producto']
         labels = {
             'kilo_producto': _("Kg de producto")
         }
@@ -175,12 +161,3 @@ class PagoDiferidoForm(forms.ModelForm):
     class Meta:
         model = PagoDiferido        
         fields = ['fecha_pago']
-
-
-class PagoCCForm(forms.ModelForm):
-    class Meta:
-        model = PagoCC
-        fields = ['monto']
-        labels = {
-            'monto': _("Monto a cancelar")
-        }

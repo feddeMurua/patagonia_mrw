@@ -4,47 +4,43 @@
 
 {% block title %}Cuentas Corrientes{% endblock %}
 
+{% block more-stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/MonthPicker.css' %}"/>
+{% endblock %}
+
 {% block header-title %}Detalle de la Cuenta Corriente{% endblock %}
 
 {% block url-volver %}{% url 'cuentas_corrientes:lista_cc' %}{% endblock %}
 
 {% block detail %}
-    <table class="table table-information">
-        <tbody>
-            <tr>
-                <td>Abastecedor:</td>
-                <td>{{ cuenta.abastecedor }}</td>
-            </tr>
-            <tr>
-                <td>Saldo actual:</td>
-                <td>${{ cuenta.saldo }}</td>
-            </tr>
-        </tbody>
-    </table>
     {% if detalles %}
         <div class="container-fluid container-list col-md-12" id="tbl-detalles">
             <div class="row">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
-                        <div class="row">
-                            <div class="col col-xs-6">
-                                <h3 class="panel-title">Detalles de la cuenta corriente</h3>
-                            </div>
-                        </div>
+                        <h3 class="panel-title">Detalles de la cuenta corriente - Abastecedor: {{ cuenta.abastecedor }}</h3>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-bordered table-hover table-list">
+                        <table class="table table-bordered table-list">
                             <thead>
                                 <tr>
-                                    <th>Descripcion</th>
-                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Turno</th>
+                                    <th>Precintado</th>
+                                    <th>Certificado</th>
+                                    <th><em class="glyphicon glyphicon-cog"></em></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for detalle in detalles %}
-                                    <tr align="center">
-                                        <td>{{ detalle.detalle }}</td>
-                                        <td>${{ detalle.monto }}</td>
+                                    <tr>
+                                        <td>{{ detalle.reinspeccion.fecha }}</td>
+                                        <td>{{ detalle.reinspeccion.turno }}</td>
+                                        <td>{{ detalle.reinspeccion.precintado }}</td>
+                                        <td>{{ detalle.reinspeccion.certificado }}</td>
+                                        <td>
+                                            <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -54,8 +50,41 @@
             </div>
         </div>
     {% endif %}
+
+    <div id="generar_certificado" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Certificado de Deuda</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Periodo *</label><br>
+                            <input id="my_picker" name="periodo" type="text" required=""/>
+                        </div>
+                        <input type="submit" class="btn btn-primary" id="btn-confirmar" value="Confirmar"/>
+                        <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block btn-footer %}
     <a href="{% url 'cuentas_corrientes:lista_cc' %}" class="btn btn-primary" role="button">Regresar</a>
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#generar_certificado">Generar Certificado de Deuda</button>
+{% endblock %}
+
+{% block more-scripts %}
+    <script src="{% static 'js/MonthPicker.js' %}"></script>
+    <script>
+        $('#my_picker').MonthPicker({
+            Button: false,
+            MaxMonth: 0
+        });
+    </script>
 {% endblock %}

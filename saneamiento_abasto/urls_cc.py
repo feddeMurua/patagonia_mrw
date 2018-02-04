@@ -3,7 +3,6 @@ from .views import *
 
 urlpatterns = [
     url(r'^$', lista_cc, name='lista_cc'),
-    url(r'^pagos/(?P<pk>\d+)$', pagos_cc, name='pagos_cc'),
-    url(r'^realizar_pago/(?P<pk>\d+)$', realizar_pago_cc, name='realizar_pago_cc'),
-    url(r'^detalle/(?P<pk>\d+)$', detalle_cc, name='detalle_cc')
+    url(r'^detalle/(?P<pk>\d+)$', detalle_cc, name='detalle_cc'),
+    url(r'^pdf/(?P<pk>\d+)/(?P<mes>\d+)/(?P<anio>\d+)$', PdfCertificado.as_view(), name='pdf_certificado'),
 ]

@@ -2,7 +2,8 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from easy_pdf.views import PDFTemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
@@ -14,6 +15,7 @@ from desarrollo_patagonia import forms as dp_f
 from dateutil.relativedelta import *
 import collections
 import json
+import datetime
 
 '''
 MOVIMIENTO DIARIO
@@ -27,7 +29,13 @@ def lista_movimientos(request):
     if request.method == 'POST':
         fecha_form = DatePickerForm(request.POST)
         if fecha_form.is_valid():
-            movimientos = MovimientoDiario.objects.filter(fecha=fecha_form.cleaned_data['fecha']).order_by('nro_ingreso')
+            if request.POST.get("buscar"):
+                movimientos = MovimientoDiario.objects.filter(fecha=fecha_form.cleaned_data['fecha']).order_by(
+                    'nro_ingreso')
+            elif request.POST.get("imprimir"):
+                fecha = fecha_form.cleaned_data['fecha']
+                return HttpResponseRedirect(reverse('caja:parte_diario_pdf',
+                                                    kwargs={'anio': fecha.year, 'mes': fecha.month, 'dia': fecha.day}))
     return render(request, 'caja/caja_list.html', {'listado': movimientos, 'fecha_form': fecha_form})
 
 
@@ -65,6 +73,7 @@ def get_subtotales(detalles):
                 subtotales['tarjeta'] += sub
             else:
                 subtotales['cheque'] += sub
+    return subtotales
 
 
 class PdfParteDiario(LoginRequiredMixin, PDFTemplateView):
@@ -72,10 +81,12 @@ class PdfParteDiario(LoginRequiredMixin, PDFTemplateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
-    def get_context_data(self):
-        detalles = DetalleMovimiento.objects.filter(movimiento__fecha=timezone.now().date()).order_by('movimiento__nro_ingreso')
+    def get_context_data(self, anio, mes, dia):
+        fecha = datetime.date(int(anio), int(mes), int(dia))
+        detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha).order_by('movimiento__nro_ingreso')
+        print(detalles)
         return super(PdfParteDiario, self).get_context_data(
-            fecha_maniana=timezone.now().date() + relativedelta(days=1),
+            fecha_maniana=fecha + relativedelta(days=1),
             detalles=detalles,
             subtotales=get_subtotales(detalles),
             total=sum(detalle.importe for detalle in detalles)

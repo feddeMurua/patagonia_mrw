@@ -12,7 +12,6 @@
     <thead>
         <tr>
             <th>Abastecedor</th>
-            <th>Saldo</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
@@ -20,10 +19,8 @@
         {% for cuenta in listado %}
             <tr>
                 <td>{{ cuenta.abastecedor }}</td>
-                <td>${{ cuenta.saldo }}</td>
                 <td>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Ver Detalles" href="{% url 'cuentas_corrientes:detalle_cc' cuenta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-success" data-toggle="tooltip" title="Cancelar saldo" href="{% url 'cuentas_corrientes:pagos_cc' cuenta.pk %}"><em class="glyphicon glyphicon-usd"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Reinspecciones" href="{% url 'cuentas_corrientes:detalle_cc' cuenta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                 </td>
             </tr>
         {% endfor %}

@@ -50,7 +50,7 @@ class Reinspeccion(models.Model):
     turno = models.CharField(max_length=10, choices=TURNO_REINSPECCION)
     inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField()
-    num_certificado = models.BigIntegerField()
+    certificado = models.IntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -75,29 +75,18 @@ CUENTAS CORRIENTES
 
 
 class DetalleCC(models.Model):
-    detalle = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
-    monto = models.FloatField()
+    reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
     cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s, Saldo: %s" % (self.detalle, self.monto)
+        return "%s" % self.reinspeccion
 
 
 class CuentaCorriente(models.Model):
-    saldo = models.FloatField(default=0)
     abastecedor = models.OneToOneField('Abastecedor', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return "Cuenta: %s - %s" % (self.pk, self.abastecedor)
-
-
-class PagoCC(models.Model):
-    fecha = models.DateField(default=now)
-    monto = models.FloatField(validators=[MinValueValidator(0)])
-    cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s" % self.fecha
 
 
 '''

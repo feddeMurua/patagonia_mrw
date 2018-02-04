@@ -14,8 +14,7 @@ table th {
     width: auto !important;
 }
 
-.table tr th,
-.table tr td {
+th, td {
     text-align: center;
 }
 
