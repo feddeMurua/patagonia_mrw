@@ -1,0 +1,24 @@
+.container-form {
+    margin: 35px auto 35px auto;
+}
+
+.btn-cancelar {
+    margin-left: 5px;
+}
+
+.add-related img {
+    margin-top: 8px;
+    max-width: 85px;
+    max-height: 85px;
+}
+
+.js #menu-bar {
+    display: none;
+}
+
+h3.panel-title {
+    font-size: 21px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
