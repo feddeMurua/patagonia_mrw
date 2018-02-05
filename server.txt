@@ -1,0 +1,12 @@
+Configuracion de Nginx: 
+	- Ruta: /etc/nginx/sites-available/patagonia_mrw 
+	- Luego de cada modificacion ejecutar: "sudo systemctl reload nginx"
+
+Comando de ejecucucion de servidor: 
+	"gunicorn --bind unix:/tmp/patagonia_mrw.socket desarrollo_patagonia.wsgi:application"
+
+Configuracion del servicio:
+	- Ruta: /etc/systemd/system/gunicorn-patagonia_mrw.service
+	- Luego de cada modificacion ejecutar:
+		-"sudo systemctl reenable gunicorn-patagonia_mrw"
+		-"sudo systemctl reload-or-restart gunicorn-patagonia_mrw"
