@@ -1,3 +1,0 @@
-- Esterilizacion: Comprobante de turno
-- Control antirrabico: Acta de Infraccion
-- Control de Plaga: Impresion de Actuacion

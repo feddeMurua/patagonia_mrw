@@ -1,0 +1,13 @@
+Django==1.11.10
+django-bootstrap3
+django-addanother
+django-polymorphic
+django-widget-tweaks
+factory-boy
+numpy
+django-solo
+python-dateutil
+gunicorn
+Pillow
+WeasyPrint
+django-easy-pdf==0.2.0-dev1

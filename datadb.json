@@ -341,120 +341,6 @@
   }
 },
 {
-  "model": "personas.personagenerica",
-  "pk": 1,
-  "fields": {
-    "polymorphic_ctype": 28,
-    "nombre": "Lucas Matias",
-    "domicilio": 1,
-    "telefono": "2804-221411",
-    "email": "mzkzrrw@gmail.com"
-  }
-},
-{
-  "model": "personas.personagenerica",
-  "pk": 2,
-  "fields": {
-    "polymorphic_ctype": 27,
-    "nombre": "La Anonima",
-    "domicilio": 2,
-    "telefono": "2804-481505",
-    "email": ""
-  }
-},
-{
-  "model": "personas.personagenerica",
-  "pk": 3,
-  "fields": {
-    "polymorphic_ctype": 30,
-    "nombre": "Esteban",
-    "domicilio": 3,
-    "telefono": "2804-126439",
-    "email": ""
-  }
-},
-{
-  "model": "personas.personagenerica",
-  "pk": 4,
-  "fields": {
-    "polymorphic_ctype": 30,
-    "nombre": "Carlos",
-    "domicilio": 4,
-    "telefono": "2804-127693",
-    "email": ""
-  }
-},
-{
-  "model": "personas.personagenerica",
-  "pk": 5,
-  "fields": {
-    "polymorphic_ctype": 30,
-    "nombre": "Hugo",
-    "domicilio": 5,
-    "telefono": "2804-484981",
-    "email": ""
-  }
-},
-{
-  "model": "personas.personajuridica",
-  "pk": 2,
-  "fields": {
-    "cuit": "30-50673003-8"
-  }
-},
-{
-  "model": "personas.personafisica",
-  "pk": 1,
-  "fields": {
-    "apellido": "Castro",
-    "fecha_nacimiento": "1987-04-23",
-    "dni": "32887740",
-    "nacionalidad": 1,
-    "obra_social": "SEROS",
-    "documentacion_retirada": false,
-    "rubro": "Informatica"
-  }
-},
-{
-  "model": "personas.personafisica",
-  "pk": 3,
-  "fields": {
-    "apellido": "Mendez",
-    "fecha_nacimiento": "1986-10-04",
-    "dni": "30761298",
-    "nacionalidad": 1,
-    "obra_social": "",
-    "documentacion_retirada": false,
-    "rubro": ""
-  }
-},
-{
-  "model": "personas.personafisica",
-  "pk": 4,
-  "fields": {
-    "apellido": "Paez",
-    "fecha_nacimiento": "1989-04-01",
-    "dni": "35974240",
-    "nacionalidad": 1,
-    "obra_social": "",
-    "documentacion_retirada": false,
-    "rubro": ""
-  }
-},
-{
-  "model": "personas.personafisica",
-  "pk": 5,
-  "fields": {
-    "apellido": "Iba\u00f1ez",
-    "fecha_nacimiento": "1960-10-04",
-    "dni": "13735021",
-    "nacionalidad": 1,
-    "obra_social": "",
-    "documentacion_retirada": false,
-    "rubro": ""
-  }
-},
-{
   "model": "personas.rolactuante",
   "pk": 1,
   "fields": {
@@ -466,34 +352,6 @@
   "pk": 2,
   "fields": {
     "nombre": "Medico"
-  }
-},
-{
-  "model": "personas.personalpropio",
-  "pk": 3,
-  "fields": {
-    "rol_actuante": [
-      1
-    ]
-  }
-},
-{
-  "model": "personas.personalpropio",
-  "pk": 4,
-  "fields": {
-    "rol_actuante": [
-      2
-    ]
-  }
-},
-{
-  "model": "personas.personalpropio",
-  "pk": 5,
-  "fields": {
-    "rol_actuante": [
-      1,
-      2
-    ]
   }
 },
 {
@@ -765,7 +623,7 @@
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$36000$BJMRYq9yMR8b$rdrwGtYLZgf8/KrXARtsXoY2hABt7ZV+6krbCH8DZsk=",
-    "last_login": "2018-01-24T23:18:35.087Z",
+    "last_login": "2018-02-07T14:22:55.299Z",
     "is_superuser": true,
     "username": "matty",
     "first_name": "",
