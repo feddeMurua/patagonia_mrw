@@ -5,8 +5,6 @@ from django import forms
 from .models import *
 from django.utils import timezone
 import re
-from django_addanother.widgets import AddAnotherWidgetWrapper
-from django.core.urlresolvers import reverse_lazy
 
 regex_alfanumerico = re.compile(r"^[a-zñA-ZÑ0-9]+((\s[a-zñA-ZÑ0-9]+)+)?$")
 

@@ -15,19 +15,18 @@ class CustomPasswordChangeView(PasswordChangeView):
 
 @login_required(login_url='login')
 def lista_usuarios(request):
-    listado_usuarios = User.objects.filter(is_superuser=False)
-    return render(request, 'usuarios/usuario_list.html', {'usuarios': listado_usuarios})
+    return render(request, 'usuarios/usuario_list.html', {'listado': User.objects.filter(is_superuser=False)})
 
 
 @login_required(login_url='login')
 def alta_usuario(request):
     if request.method == 'POST':
-        form = AltaUsuarioForm(request.POST)
+        form = UsuarioForm(request.POST)
         if form.is_valid():
             log_crear(request.user.id, form.save(), 'Usuario')
             return redirect('lista_usuarios')
     else:
-        form = AltaUsuarioForm
+        form = UsuarioForm
     return render(request, 'usuarios/usuario_form.html', {'form': form})
 
 
@@ -43,10 +42,10 @@ def baja_usuario(request, pk):
 def modificar_usuario(request, pk):
     usuario = User.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ModificacionUsuarioForm(request.POST, instance=usuario)
+        form = UsuarioForm(request.POST, instance=usuario)
         if form.is_valid():
             log_modificar(request.user.id, form.save(), 'Usuario')
             return redirect('lista_usuarios')
     else:
-        form = ModificacionUsuarioForm(instance=usuario)
+        form = UsuarioForm(instance=usuario)
     return render(request, 'usuarios/usuario_form.html', {'form': form})

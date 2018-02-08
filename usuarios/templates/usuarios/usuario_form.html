@@ -7,7 +7,7 @@
 
 {% block header-title %}Alta/Modificacion de Usuario{% endblock %}
 
-{% block url-volver %}{% url 'inicio' %}{% endblock %}
+{% block url-volver %}{% url 'lista_usuarios' %}{% endblock %}
 
 {% block content %}
     <div class="container container-form">
@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url 'inicio' %}">Cancelar</a>
+    <a class="btn btn-danger btn-cancelar" href="{% url 'lista_usuarios' %}">Cancelar</a>
 {% endblock %}
 
 {% block more-scripts %}
