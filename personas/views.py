@@ -15,11 +15,9 @@ def lista_contribuyentes(request):
     return render(request, 'persona/contribuyente_list.html', {'listado': PersonaGenerica.objects.all()})
 
 
-class AltaPersonaFisica(LoginRequiredMixin, CreatePopupMixin, View):
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def post(self, request):
+@login_required(login_url='login')
+def alta_p_fisica(request):
+    if request.method == 'POST':
         form = AltaPersonaFisicaForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
         if form.is_valid() & domicilio_form.is_valid():
@@ -28,14 +26,11 @@ class AltaPersonaFisica(LoginRequiredMixin, CreatePopupMixin, View):
             persona.save()
             log_crear(request.user.id, persona, 'Persona Física')
             return redirect('personas:lista_contribuyentes')
-        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_contribuyentes'})
-
-    def get(self, request):
+    else:
         form = AltaPersonaFisicaForm
         domicilio_form = DomicilioForm
-        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_contribuyentes'})
+    return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                         'url_return': 'personas:lista_contribuyentes'})
 
 
 @login_required(login_url='login')
@@ -70,11 +65,9 @@ class DetallePersonaFisica(LoginRequiredMixin, DetailView):
     redirect_field_name = 'next'
 
 
-class AltaPersonaJuridica(LoginRequiredMixin, CreatePopupMixin, View):
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def post(self, request):
+@login_required(login_url='login')
+def alta_p_juridica(request):
+    if request.method == 'POST':
         form = AltaPersonaJuridicaForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
         if form.is_valid() & domicilio_form.is_valid():
@@ -83,14 +76,11 @@ class AltaPersonaJuridica(LoginRequiredMixin, CreatePopupMixin, View):
             persona.save()
             log_crear(request.user.id, persona, 'Persona Jurídica')
             return redirect('personas:lista_contribuyentes')
-        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_contribuyentes'})
-
-    def get(self, request):
+    else:
         form = AltaPersonaJuridicaForm
         domicilio_form = DomicilioForm
-        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_contribuyentes'})
+    return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                         'url_return': 'personas:lista_contribuyentes'})
 
 
 class DetallePersonaJuridica(LoginRequiredMixin, DetailView):
@@ -130,27 +120,23 @@ def lista_personal_propio(request):
     return render(request, 'persona/personal_propio_list.html', {'listado': PersonalPropio.objects.all()})
 
 
-class AltaPersonalPropio(LoginRequiredMixin, CreatePopupMixin, View):
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def post(self, request):
+@login_required(login_url='login')
+def alta_p_propio(request):
+    if request.method == 'POST':
         form = AltaPersonalPropioForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
         if form.is_valid() & domicilio_form.is_valid():
             persona = form.save(commit=False)
             persona.domicilio = domicilio_form.save()
             persona.save()
+            form.save_m2m()
             log_crear(request.user.id, persona, 'Personal Propio')
             return redirect('personas:lista_personal_propio')
-        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_personal_propio'})
-
-    def get(self, request):
+    else:
         form = AltaPersonalPropioForm
         domicilio_form = DomicilioForm
-        return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
-                                                             'url_return': 'personas:lista_personal_propio'})
+    return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
+                                                         'url_return': 'personas:lista_personal_propio'})
 
 
 @login_required(login_url='login')

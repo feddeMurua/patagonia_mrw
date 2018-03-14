@@ -56,7 +56,6 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
     class Meta:
         model = PersonaFisica
         exclude = ['documentacion_retirada', 'domicilio']
-        fields = '__all__'
         widgets = {
             'nacionalidad': AddAnotherWidgetWrapper(
                 forms.Select,
@@ -145,7 +144,6 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
     class Meta:
         model = PersonaJuridica
         exclude = ['domicilio']
-        fields = '__all__'
 
     def clean_cuit(self):
         cuit = self.cleaned_data['cuit']
@@ -163,7 +161,6 @@ class ModificacionPersonaJuridicaForm(forms.ModelForm):
     class Meta:
         model = PersonaJuridica
         exclude = ['nombre', 'cuit']
-        fields = '__all__'
 
 
 class AltaPersonalPropioForm(forms.ModelForm):
@@ -172,7 +169,6 @@ class AltaPersonalPropioForm(forms.ModelForm):
     class Meta:
         model = PersonalPropio
         exclude = ['documentacion_retirada', 'domicilio']
-        fields = '__all__'
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']

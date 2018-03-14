@@ -49,7 +49,7 @@ class Reinspeccion(models.Model):
     fecha = models.DateField(default=now)
     turno = models.CharField(max_length=10, choices=TURNO_REINSPECCION)
     inspectores = models.ManyToManyField(m.PersonalPropio)
-    precintado = models.IntegerField()
+    precintado = models.IntegerField(null=True, blank=True)
     certificado = models.IntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
 

@@ -66,7 +66,7 @@
                             <div class="panel-footer">
                                 <div class="form-group">
                                     <label>{{ form.total_manual.label }}</label>
-                                    {{ form.total_manual|add_class:'form-control'|add_class:'sub_manual' }}
+                                    {{ form.total_manual|add_class:'form-control'|add_class:'sub_manual'|attr:'readonly' }}
                                     {% for error in form.total_manual.errors %}
                                         <span class="help-block">{{ error }}</span>
                                     {% endfor %}
