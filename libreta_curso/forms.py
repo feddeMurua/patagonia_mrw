@@ -21,7 +21,6 @@ class CursoForm(forms.ModelForm):
 
     class Meta:
         model = Curso
-        fields = '__all__'
         exclude = ['finalizado']
 
     def clean_lugar(self):
@@ -93,7 +92,6 @@ class LibretaForm(forms.ModelForm):
     class Meta:
         model = LibretaSanitaria
         exclude = ['fecha', 'curso', 'fecha_vencimiento']
-        fields = '__all__'
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
             'persona': AddAnotherWidgetWrapper(
@@ -144,7 +142,6 @@ class RenovacionLibretaForm(forms.ModelForm):
     class Meta:
         model = LibretaSanitaria
         exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento']
-        fields = '__all__'
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }

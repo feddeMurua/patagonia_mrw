@@ -24,7 +24,6 @@ class MovimientoDiarioForm(forms.ModelForm):
     class Meta:
         model = MovimientoDiario
         exclude = ['fecha']
-        fields = '__all__'
         labels = {
             'nro_ingreso': _("N° de ingresos varios"),
             'forma_pago': _("Forma de pago"),
@@ -57,7 +56,6 @@ class ArqueoEfectivoForm(forms.ModelForm):
         exclude = ['fecha', 'tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub',
                    'mov_efectivo_sis', 'sub_efectivo_sis', 'mov_tarjeta_sis', 'mov_tarjeta_sis', 'sub_tarjeta_sis',
                    'mov_cheque_sis', 'sub_cheque_sis', 'mov_total_sistema', 'imp_total_sistema']
-        fields = '__all__'
         labels = {
             'nro_planilla': _("N° de planilla"),
             'quinientos': _("Billetes de quinientos ($500,00)"),

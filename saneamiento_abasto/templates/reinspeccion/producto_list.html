@@ -17,6 +17,12 @@
             <th>Peso</th>
         </tr>
     </thead>
+    <tfoot>
+        <tr style="background-color:#d6d7d8">
+            <td><b>TOTAL</b></td>
+            <td><b>{{ total_kg }} Kg</b></td>
+        </tr>
+    </tfoot>
     <tbody>
         {% for producto in listado %}
             <tr>

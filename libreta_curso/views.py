@@ -360,7 +360,7 @@ def estadisticas_lc(request):
 
     # CALIFICACIONES POR CURSO
     calificaciones = to_counter(Inscripcion, {'curso__fecha__year__lte': years[0], 'curso__fecha__year__gte': years[-1],
-                                              'curso_finalizado': True}, ['calificacion'])
+                                              'curso__finalizado': True}, ['calificacion'])
 
     # LIBRETAS POR TIPO
     libretas_tipo = to_counter(LibretaSanitaria, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1]},

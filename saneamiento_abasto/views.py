@@ -271,8 +271,10 @@ def carga_productos(request, reinspeccion):
 
 @login_required(login_url='login')
 def lista_productos(request, reinspeccion_pk):
+    productos = ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk)
+    total_kg = sum(producto.kilo_producto for producto in productos)
     return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
-                                                               'listado': ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk)})
+                                                               'listado': productos, 'total_kg': total_kg})
 
 
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):

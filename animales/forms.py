@@ -135,7 +135,6 @@ class MascotaForm(forms.ModelForm):
     class Meta:
         model = Mascota
         exclude = ['baja']
-        fields = '__all__'
         labels = {
             'categoria_mascota': _("Categoria de la mascota"),
 
@@ -249,7 +248,6 @@ class EsterilizacionPatenteForm(forms.ModelForm):
     class Meta:
         model = Esterilizacion
         exclude = ['interesado', 'mascota']
-        fields = '__all__'
         labels = {
             'anticonceptivos': _("Cantidad de anticonceptivos aplicados"),
             'partos': _("Cantidad de partos"),
@@ -276,7 +274,6 @@ class EsterilizacionNuevoForm(forms.ModelForm):
     class Meta:
         model = Esterilizacion
         exclude = ['mascota']
-        fields = '__all__'
         labels = {
             'anticonceptivos': _("Cantidad de anticonceptivos aplicados"),
             'partos': _("Cantidad de partos"),

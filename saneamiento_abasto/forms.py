@@ -20,7 +20,6 @@ class AbastecedorForm(forms.ModelForm):
     class Meta:
         model = Abastecedor
         exclude = ['cc']
-        fields = '__all__'
 
 
 class ListaAbastecedoresForm(forms.Form):
@@ -33,7 +32,6 @@ class ReinspeccionForm(forms.ModelForm):
 
     class Meta:
         model = Reinspeccion
-        fields = '__all__'
         exclude = ['fecha', 'cc']
         labels = {
             'certificado': _("N° de certificado")
@@ -44,7 +42,6 @@ class ModificacionReinspeccionForm(forms.ModelForm):
     class Meta:
         model = Reinspeccion
         exclude = ['fecha', 'abastecedor', 'cc']
-        fields = '__all__'
 
 
 class AltaProductoForm(forms.ModelForm):
@@ -82,7 +79,6 @@ class VehiculoForm(forms.ModelForm):
     class Meta:
         model = Vehiculo
         exclude = ['rubro_vehiculo']
-        fields = '__all__'
         labels = {
             'tipo_vehiculo': _("Tipo de vehiculo"),
             'tipo_tpp': _("Tipo de transporte"),
@@ -95,7 +91,6 @@ class ModificarTSAForm(forms.ModelForm):
     class Meta:
         model = Vehiculo
         exclude = ['titular', 'tipo_vehiculo', 'rubro_vehiculo']
-        fields = '__all__'
         labels = {
             'disposicion_resolucion': _("Disposicion")
         }
@@ -105,7 +100,6 @@ class ModificarTPPForm(forms.ModelForm):
     class Meta:
         model = Vehiculo
         exclude = ['titular', 'tipo_vehiculo', 'categoria', 'rubro_vehiculo']
-        fields = '__all__'
         labels = {
             'disposicion_resolucion': _("Resolucion")
         }
@@ -125,7 +119,6 @@ class ControlDePlagaForm(forms.ModelForm):
     class Meta:
         model = ControlDePlaga
         exclude = ['fecha_hoy', 'pagado']
-        fields = '__all__'
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }
@@ -144,7 +137,6 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
     class Meta:
         model = ControlDePlaga
         exclude = ['fecha_hoy', 'responsable', 'funcionario_actuante', 'pagado']
-        fields = '__all__'
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }

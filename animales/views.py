@@ -655,7 +655,7 @@ def estadisticas_mascotas(request):
     context = {
         'rango_form': rango_form,
         'lista_labels': json.dumps([tipo_patente.keys(), tipo_esterilizacion.keys(), tramites.keys()]),
-        'lista_datos': json.dumps([{'Tipo Patente': tipo_patente.values},
+        'lista_datos': json.dumps([{'Tipo Patente': tipo_patente.values()},
                                    {'Tipo Esterilizacion': tipo_esterilizacion.values()},
                                    {'Tramites': tramites.values()}])
     }
