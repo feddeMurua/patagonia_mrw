@@ -1,0 +1,31 @@
+Cursos de Manipulación de alimentos
+===================================
+Se presentará una pantalla que contendrá un listado con todos los *Cursos*
+que se encuentren registrados en el sistema hasta la fecha.
+
+Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular cada *Curso*.
+
+Estas funcionalidades son:
+:ref:`Alta Curso <alta-curso>`
+
+.. _alta-curso:
+
+  Alta de Curso
+  +++++++++++++
+
+  Si el usuario desea crear un nuevo *Curso*, deberá presion el botón ``Nuevo Curso``.
+
+  A continuación el sistema lo redirigirá a la siguiente pantalla:
+
+
+  En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo *Curso*.
+
+  .. ATTENTION::
+      El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
+      En este punto, las posibles causas de errores son:
+
+          - Uno o más campos obligatorios vacíos.
+          - Uno o más campos con un formato incorrecto.
+
+  Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de cursos.
+    
