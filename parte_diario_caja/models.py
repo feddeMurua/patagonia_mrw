@@ -49,6 +49,12 @@ class DetalleMovimiento(models.Model):
         self.servicio = str(servicio)
         self.save()
 
+    def completar_monto(self, importe, servicio, obj):
+        self.descripcion = servicio + " | N° " + str(obj.id)
+        self.importe = importe
+        self.servicio = servicio
+        self.save()
+
 
 class ArqueoDiario(models.Model):
     fecha = models.DateTimeField(default=timezone.now)

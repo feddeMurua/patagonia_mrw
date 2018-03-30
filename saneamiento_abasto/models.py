@@ -46,12 +46,13 @@ class Producto(models.Model):
 
 
 class Reinspeccion(models.Model):
-    fecha = models.DateField(default=now)
+    fecha = models.DateField()
     turno = models.CharField(max_length=10, choices=TURNO_REINSPECCION)
     inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField(null=True, blank=True)
     certificado = models.IntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
+    total_kg = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "%s - %s" % (self.fecha, self.abastecedor)

@@ -27,12 +27,13 @@ class ListaAbastecedoresForm(forms.Form):
 
 
 class ReinspeccionForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DATEINPUT(), label="Fecha de realizacion")
     inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Inspector'))
 
     class Meta:
         model = Reinspeccion
-        exclude = ['fecha', 'cc']
+        exclude = ['total_kg']
         labels = {
             'certificado': _("N° de certificado")
         }
@@ -41,7 +42,7 @@ class ReinspeccionForm(forms.ModelForm):
 class ModificacionReinspeccionForm(forms.ModelForm):
     class Meta:
         model = Reinspeccion
-        exclude = ['fecha', 'abastecedor', 'cc']
+        exclude = ['fecha', 'abastecedor', 'total_kg']
 
 
 class AltaProductoForm(forms.ModelForm):

@@ -6,7 +6,13 @@
 
 {% block header-title %}Reinspeccion: Lista de Productos{% endblock %}
 
-{% block url-volver %}{% url 'reinspecciones:lista_reinspecciones' %}{% endblock %}
+{% block url-volver %}
+    {% if id_return %}
+        {% url url_return id_return %}
+    {% else %}
+        {% url url_return %}
+    {% endif %}
+{% endblock %}
 
 {% block panel-title %}Productos{% endblock %}
 
@@ -20,7 +26,7 @@
     <tfoot>
         <tr style="background-color:#d6d7d8">
             <td><b>TOTAL</b></td>
-            <td><b>{{ total_kg }} Kg</b></td>
+            <td><b>{{ total_kg }},0 Kg</b></td>
         </tr>
     </tfoot>
     <tbody>

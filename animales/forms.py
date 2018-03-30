@@ -174,7 +174,7 @@ class PatenteForm(forms.ModelForm):
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
             'persona': AddAnotherWidgetWrapper(
                 forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
+                reverse_lazy('personas:nueva_persona_fisica')
             )
         }
 

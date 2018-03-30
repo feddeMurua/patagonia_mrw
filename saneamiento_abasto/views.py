@@ -113,17 +113,11 @@ def detalle_cc(request, pk):
 
 
 def get_monto(reinspeccion):
-    reinspeccion_prod = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)
     precios = ReinspeccionPrecios.objects.get()
-
-    total_kg = 0
     monto = precios.precio_min
 
-    for r in reinspeccion_prod:
-        total_kg += r.kilo_producto
-
-    if total_kg > precios.kg_min:
-        monto += total_kg * precios.precio_kg
+    if reinspeccion.total_kg > precios.kg_min:
+        monto += reinspeccion.total_kg * precios.precio_kg
 
     return monto
 
@@ -135,7 +129,6 @@ def agrupar_reinspecciones(cc, mes, anio):
     for detalle in detalles:
         productos = ReinspeccionProducto.objects.filter(reinspeccion=detalle.reinspeccion)
         reinspecciones.append({'reinspeccion': detalle.reinspeccion, 'subtotal': get_monto(detalle.reinspeccion),
-                               'kilos_reinspeccion': sum(producto.kilo_producto for producto in productos),
                                'productos': productos})
     return reinspecciones
 
@@ -153,7 +146,7 @@ class PdfCertificado(LoginRequiredMixin, PDFTemplateView):
             cc=cc,
             reinspecciones=reinspecciones,
             periodo=calendar.month_name[int(mes)] + " " + str(anio),
-            total_kilos=sum(item['kilos_reinspeccion'] for item in reinspecciones),
+            total_kilos=sum(item['reinspeccion'].total_kg for item in reinspecciones),
             total_monto=sum(item['subtotal'] for item in reinspecciones)
         )
 
@@ -181,24 +174,18 @@ def alta_reinspeccion(request):
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         reinspeccion = form.save()
-                        monto = carga_productos(request, reinspeccion)
+                        importe = carga_productos(request, reinspeccion)
                         detalle_mov = detalle_mov_form.save(commit=False)
-                        detalle_mov.descripcion = servicio + " | N° " + str(reinspeccion.id)
-                        detalle_mov.importe = monto
-                        detalle_mov.servicio = servicio
-                        detalle_mov.save()
+                        detalle_mov.completar_monto(importe, servicio, reinspeccion)
                         log_crear(request.user.id, reinspeccion, servicio)
                         return redirect('reinspecciones:lista_reinspecciones')
                 else:
                     if mov_form.is_valid():
                         reinspeccion = form.save()
-                        monto = carga_productos(request, reinspeccion)
+                        importe = carga_productos(request, reinspeccion)
                         mov = mov_form.save()
                         detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
-                        detalle_mov.descripcion = servicio + " | N° " + str(reinspeccion.id)
-                        detalle_mov.importe = monto
-                        detalle_mov.servicio = servicio
-                        detalle_mov.save()
+                        detalle_mov.completar_monto(importe, servicio, reinspeccion)
                         log_crear(request.user.id, reinspeccion, servicio)
                         return redirect('reinspecciones:lista_reinspecciones')
             else:
@@ -266,15 +253,24 @@ def carga_productos(request, reinspeccion):
     if total_kg > precios.kg_min:
         monto += total_kg * precios.precio_kg
 
+    reinspeccion.total_kg = total_kg
+    reinspeccion.save()
     return monto
 
 
 @login_required(login_url='login')
 def lista_productos(request, reinspeccion_pk):
-    productos = ReinspeccionProducto.objects.filter(reinspeccion__pk=reinspeccion_pk)
-    total_kg = sum(producto.kilo_producto for producto in productos)
+    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
+    referer = request.META.get('HTTP_REFERER')
+    if 'detalle' in referer:
+        url_return = 'cuentas_corrientes:detalle_cc'
+    else:
+        url_return = 'reinspecciones:lista_reinspecciones'
     return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
-                                                               'listado': productos, 'total_kg': total_kg})
+                                                               'total_kg': reinspeccion.total_kg,
+                                                               'url_return': url_return,
+                                                               'id_return': referer.split('/')[-1],
+                                                               'listado': ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)})
 
 
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):

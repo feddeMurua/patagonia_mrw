@@ -28,6 +28,7 @@
                                     <th>Turno</th>
                                     <th>Precintado</th>
                                     <th>Certificado</th>
+                                    <th>Total Kg</th>
                                     <th><em class="glyphicon glyphicon-cog"></em></th>
                                 </tr>
                             </thead>
@@ -36,8 +37,13 @@
                                     <tr>
                                         <td>{{ detalle.reinspeccion.fecha }}</td>
                                         <td>{{ detalle.reinspeccion.turno }}</td>
-                                        <td>{{ detalle.reinspeccion.precintado }}</td>
+                                        {% if reinspeccion.precintado %}
+                                            <td>{{ reinspeccion.precintado }}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
                                         <td>{{ detalle.reinspeccion.certificado }}</td>
+                                        <td>{{ detalle.reinspeccion.total_kg }},0 Kg</td>
                                         <td>
                                             <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
                                         </td>
