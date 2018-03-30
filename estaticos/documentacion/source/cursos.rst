@@ -95,3 +95,8 @@ Inscripciones del Curso
     :align: center
 
   En esta parte al usuario se le presentará un listado con todas las inscripciones asociado al *Curso*.
+
+  .. toctree::
+     :maxdepth: 1
+
+     inscripcioncurso

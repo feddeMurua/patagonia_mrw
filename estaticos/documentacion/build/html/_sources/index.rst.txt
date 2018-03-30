@@ -11,8 +11,9 @@ Welcome to Patagonia's documentation!
 
    pantallaprincipal
    personas
-   libretacurso   
+   libretacurso
    abasto
+   usuarios
 
 
 

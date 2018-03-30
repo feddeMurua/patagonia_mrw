@@ -12,7 +12,7 @@ Inscripciones
 
    - :ref:`Eliminar Inscripción <eliminar-inscripcion>`
    - :ref:`Modificar Inscripción <modificar-inscripcion>`
-   - :ref:`Imprimir Inscripción <imprimir-inscripcion>`
+   - Imprimir Inscripción (PROXIMAMENTE)
 
    Además, si el usuario desea Registrar una nueva *Inscripción*:
 
@@ -31,32 +31,31 @@ Eliminar Inscripción
   .. image:: _static/baja_inscripcion.png
      :align: center
 
-  En esta parte el usuario deberá decidir si confirma la eliminación del *inscripcion* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
+  En esta parte el usuario deberá decidir si confirma la eliminación de la *Inscripción* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
 
 
-Modificar inscripcion
------------------------
+.. _modificar-inscripcion:
 
-   Si el usuario desea modificar los datos de un *inscripcion*, deberá seleccionar en la columna de **acciones** asociado al *inscripcion* y presionar el ícono ``Modificar``.
+Modificar Inscripción
+---------------------
+
+   Si el usuario desea modificar los datos de una *Inscripción*, deberá seleccionar en la columna de **acciones** asociado a la *Inscripción* y presionar el ícono ``Modificar``.
 
    Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:
 
    .. image:: _static/mod_inscripcion.png
       :align: center
 
-   En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados al *inscripcion*.
+   En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados a la *Inscripción*.
 
    .. ATTENTION::
 
-       Se puede observar  al igual que en la sección *Nueva Persona Física*, un botón verde con la leyenda ``Agregar`` en el campo *Localidad*, en el formulario del domicilio, el cual es utilizado para
-       agregar una nueva localidad si no se encuentran registrada en el sistema. Además;
-       El sistema recopilará los datos registrados del inscripcion y los mostrará para modificarlos, además, siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
+       El sistema recopilará los datos registrados de la Inscripción y los mostrará para modificarlos, además, siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
        En este punto, las posibles causas de errores son:
 
-           - Uno o más campos obligatorios vacíos.
            - Uno o más campos con un formato incorrecto.
 
-   Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos del *inscripcion* seleccionado.
+   Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos de la *Inscripción* seleccionada.
 
 
 .. _nueva-inscripcion:
@@ -64,22 +63,22 @@ Modificar inscripcion
 Nueva Inscripción
 -----------------
 
- Si el usuario desea crear una nueva *Persona Física*, deberá presionar el botón ``Nueva Persona Física``.
+ Si el usuario desea crear una nueva *Inscripción*, deberá presionar el botón ``Nueva Inscripción``.
 
- A continuación, el sistema lo redirigirá a la siguiente pantalla. En esta parte, al usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta una nueva *Persona Física*.
+ A continuación, el sistema lo redirigirá a la siguiente pantalla. En esta parte, al usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta una nueva *Inscripción*.
 
- .. image:: _static/alta_personafisica.png
+ .. image:: _static/alta_inscripcion.png
     :align: center
 
 
  .. ATTENTION::
 
-     Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Nacionalidad*, así como en la sección domicilio en el campo *Localidad*, el cual es utilizado para
-     agregar una nueva nacionalidad o localidad respectivamente si no se encuentran registradas en el sistema. Además;
+     Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Persona*, el cual es utilizado para
+     agregar una nueva persona respectivamente si no se encuentra registrada en el sistema. Además;
      El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
      En este punto, las posibles causas de errores son:
 
          - Uno o más campos obligatorios vacíos.
          - Uno o más campos con un formato incorrecto.
 
- Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de inscripcions.
+ Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de inscripciones.
