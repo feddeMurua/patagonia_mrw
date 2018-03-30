@@ -7,6 +7,11 @@
 
 {% block more-stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/parsley.css' %}"/>
+    <style>
+        tr th, td {
+            text-align: center;
+        }
+    </style>
 {% endblock %}
 
 {% block header-title %}Alta/Modificacion de Reinspeccion{% endblock %}
@@ -19,6 +24,10 @@
             {% csrf_token %}
             <div class="form-section">
                 <div class="form-group">
+                    <label>Fecha de realización *</label>
+                    {{ form.fecha|add_class:'form-control' }}
+                </div>
+                <div class="form-group">
                     <label>Turno *</label>
                     {{ form.turno }}
                 </div>
@@ -27,7 +36,7 @@
                     {{ form.inspectores }}
                 </div>
                 <div class="form-group">
-                    <label>Precintado *</label>
+                    <label>Precintado</label>
                     {{ form.precintado|add_class:'form-control' }}
                 </div>
                 <div class="form-group">
@@ -58,7 +67,7 @@
                         <div class="container-fluid container-table">
                             <table class="table table-list table-bordered table-striped" id="table-list">
                                 <thead>
-                                    <tr align="center">
+                                    <tr>
                                         <th>Producto</th>
                                         <th>Peso</th>
                                         <th><em class="glyphicon glyphicon-cog"></em></th>
@@ -90,7 +99,8 @@
             <div class="form-navigation">
                 <button type="button" class="previous btn btn-info pull-left">&lt; Anterior</button>
                 <button type="button" class="next btn btn-info pull-right">Siguiente &gt;</button>
-                <input type="submit" class="btn btn-success pull-right" value="Finalizar">
+                <input type="submit" class="btn btn-success pull-right" value="Finalizar"
+                       onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
                 <span class="clearfix"></span>
             </div>
         </form>
@@ -104,7 +114,8 @@
                     <h4 class="modal-title">Nuevo producto</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="productoForm" data-url="{% url 'reinspecciones:agregar_producto' %}">
+                    <form action="" id="productoForm" data-url="{% url 'reinspecciones:agregar_producto' %}"
+                          data-accion="">
                         {% csrf_token %}
                         {{ producto_form.media }}
                         <div class="form-group">
@@ -115,7 +126,9 @@
                             <label>{{ producto_form.kilo_producto.label }}</label>
                             {{ producto_form.kilo_producto|add_class:"form-control" }}
                         </div>
-                        <input type="submit" class="btn btn-default" id="btn-confirmar" value="Confirmar"/>
+                        <input type="hidden" name="action" id="action"/>
+                        <input type="submit" class="btn btn-default" name="add" value="Confirmar y Agregar otro"/>
+                        <input type="submit" class="btn btn-default" name="confirm" value="Confirmar"/>
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cerrar">
                     </form>
                 </div>
@@ -186,12 +199,17 @@
         });
 
         $(document).ready(function(){
+            var action;
+            $(":submit").click(function() { $("#action").val(this.name); });
+
             $("#productoForm").submit(function(e) {
                 e.preventDefault();
                 $.post($(this).data('url'), $(this).serialize())
                     .done(function(data) {
                         if(data['success']) {
-                            $('#agregar_producto').modal('hide');
+                            if ($("#action").val() == 'confirm') {
+                                $('#agregar_producto').modal('hide');
+                            }
                             refresh_table(data['productos']);
                             document.getElementById("productoForm").reset();
                         } else {
@@ -265,5 +283,9 @@
                 hideFields();
             }
         }
+
+        $.datepicker.setDefaults({
+            maxDate: new Date()
+        });
     </script>
 {% endblock %}

@@ -13,12 +13,13 @@
         }
         table {
             margin: 0 auto;
-            border: 1px solid black;
             width: 100%;
+        }
+        .tabla-reinspeccion {
+            border: 1px solid black;
         }
         td, th {
             text-align: center;
-
         }
         .firma {
             text-align: right;
@@ -82,14 +83,47 @@
                     <br><br>
                 {% endfor %}
             {% endif %}
-            <p><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ total_kilos }}<br>
+            <p><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ total_kilos }} Kg<br>
             MONTO A ABONAR: ${{ total_monto }}</b></p>
-            <br>
             <p>
                 Nota: El presente certificado deberá ser abonado dentro de los cinco (5) dias habiles de ser notificado,
                 caso contrario se incrementará el valor del mismo a razon del 2% mensual, Ordenanza Impositiva Vigente
                 N° 7.351
             </p>
+            <table>
+                <tbody>
+                    <tr style="height:75px; vertical-align:bottom">
+                        <td></td>
+                        <td><b>Dr. ANDRES MOYANO</b></td>
+                        <td><b>Dr. HUGO IBAÑEZ</b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Med. Veterinario</td>
+                        <td>DIRECTOR</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Veterinaria, Saneamiento y Abasto</td>
+                        <td>Veterinaria, Saneamiento y Abasto</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Municipalidad de Rawson</td>
+                        <td>Municipalidad de Rawson</td>
+                    </tr>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td>................................</td>
+                        <td>........../........../..........</td>
+                        <td>Ingreso N°: _ _ _ _ _ _ _ _ _ _ </td>
+                    </tr>
+                    <tr>
+                        <td>Aclaracion</td>
+                        <td>Fecha</td>
+                        <td>Fecha: _ _ _ _ _ _ _ _ _ _ _ _ _</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
