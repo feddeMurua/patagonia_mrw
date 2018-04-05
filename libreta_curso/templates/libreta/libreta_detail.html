@@ -58,6 +58,6 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'libretas:pdf_libreta' object.pk %}" class="btn btn-warning" role="button">Imprimir Tarjeta</a>
+    <a href="{% url 'libretas:pdf_libreta' object.pk %}" target="_blank" class="btn btn-warning" role="button">Imprimir Tarjeta</a>
     <a href="{% url 'libretas:lista_libretas' %}" class="btn btn-primary" role="button">Regresar</a>
 {% endblock %}

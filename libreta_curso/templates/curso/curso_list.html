@@ -35,7 +35,7 @@
                     {% endif %}
                     {% if not curso.finalizado and fecha_hoy >= curso.fecha %}
                         <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="{% url 'cursos:cierre_curso' curso.pk %}"><em class="glyphicon glyphicon-education"></em></a>
-                        <a class="btn btn-primary" data-toggle="tooltip" title="Planilla de Asistencia" href="{% url 'cursos:pdf_asistencia' curso.pk%}"><em class="glyphicon glyphicon-th-list"></em></a>
+                        <a class="btn btn-primary" data-toggle="tooltip" title="Planilla de Asistencia" target="_blank" href="{% url 'cursos:pdf_asistencia' curso.pk%}"><em class="glyphicon glyphicon-th-list"></em></a>
                     {% endif %}
                     {% if curso.finalizado%}
                         <a class="btn btn-warning" data-toggle="tooltip" title="Listado de Aprobados" href="{% url 'cursos:pdf_aprobados' curso.pk%}" target="_blank"><em class="glyphicon glyphicon-sort-by-alphabet"></em></a>

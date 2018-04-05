@@ -31,7 +31,7 @@
                 <td>${{ arqueo.total_manual }}</td>
                 <td>
                     <a class="btn btn-info" data-toggle="tooltip" title="Detalle" href="{% url 'arqueo:detalle_arqueo' arqueo.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir arqueo" href="{% url 'arqueo:arqueo_pdf' arqueo.pk %}"><em class="glyphicon glyphicon-print"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir arqueo" target="_blank" href="{% url 'arqueo:arqueo_pdf' arqueo.pk %}"><em class="glyphicon glyphicon-print"></em></a>
                 </td>
             </tr>
         {% endfor %}
