@@ -10,7 +10,10 @@ Welcome to Patagonia's documentation!
    :maxdepth: 2
 
    pantallaprincipal
+   personas
    libretacurso
+   abasto
+   usuarios
 
 
 
