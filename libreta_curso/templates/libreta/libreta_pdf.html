@@ -9,6 +9,8 @@
         }
         table {
             margin: 0 auto;
+        }
+        .tabla-principal {
             border: 1px solid black;
         }
         tr {
@@ -21,7 +23,7 @@
 {% block content %}
     <div id="content">
         <div class="main">
-            <table>
+            <table class="tabla-principal">
                 <tr>
                     <td>
                         <p align="center"><strong>Municipalidad de Rawson</strong></p>
@@ -80,8 +82,23 @@
                         exento de enfermedades contagiosas, segun CERTIFICADO, expedido por el/la Dr./Dra.
                         <b>{{ libreta.profesional_examen_clinico }}</b>.<br>
                         La presente vence el <b>{{ libreta.fecha_vencimiento }}</b><br>
-                        Rawson, Chubut - {% now "l j F Y" %}</p>
-                        <img src="{% static 'images/rawson.png' %}" height="96" width="96">
+                        Rawson, Chubut - {% now "l j F Y" %}</p><br>
+                        <table align="right">
+                            <tbody>
+                                <tr>
+                                    <td>SANDRA GERMILLAC</td>
+                                </tr>
+                                <tr>
+                                    <td>Dpto. Administrativo</td>
+                                </tr>
+                                <tr>
+                                    <td>Abasto, Saneamiento y Veterinaria</td>
+                                </tr>
+                                <tr>
+                                    <td>Municipalidad de Rawson</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
             </table>

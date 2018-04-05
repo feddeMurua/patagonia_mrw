@@ -1,13 +1,29 @@
 {% extends "easy_pdf/base.html" %}
 
 {% block extra_style %}
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 14px;
+        }
+        table {
+            margin: 0 auto;
+            border: 1px solid black;
+            width: 100%;
+        }
+        td, th {
+            text-align: center;
+        }
+        .firma {
+            text-align: right;
+        }
+    </style>
 {% endblock %}
 
 {% block page_header %}
     <div id="page-header">
         <div class="header">
-            <p>Detalle de Inscripción</p>
+            <p>Comprobante de Inscripción a Curso</p>
         </div>
     </div>
 {% endblock %}
@@ -23,6 +39,10 @@
                 <tr>
                     <td>Fecha de Inscripción:</td>
                     <td>{{ inscripcion.fecha_inscripcion }}</td>
+                </tr>
+                <tr>
+                    <td>Fecha de Inicio de Curso</td>
+                    <td>{{ inscripcion.curso.fecha }}</td>
                 </tr>
                 <tr>
                     <td>Observaciones:</td>

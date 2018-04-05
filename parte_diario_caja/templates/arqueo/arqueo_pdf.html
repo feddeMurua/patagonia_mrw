@@ -13,19 +13,24 @@
         }
         table {
             margin: 0 auto;
+            width: 100%;
+        }
+        .tabla-arqueo {
             border: 1px solid black;
-            width: 75%;
+        }
+        .tabla-arqueo td, .tabla-arqueo th {
+            text-align: center;
+            border: 1px solid black;
         }
         td, th {
             text-align: center;
-            border: 1px solid;
         }
         .panel {
             padding: 15px;
             border: 1px solid black;
             width: 75%;
         }
-        .fecha, .firma {
+        .fecha {
             text-align: right;
         }
     </style>
@@ -42,7 +47,7 @@
                     Hora: {{ datos.arqueo.fecha.time }}</p>
                 </div>
                 <div class="panel-body">
-                    <table>
+                    <table class="tabla-arqueo">
                         <thead>
                             <tr>
                                 <th><b>TIPO DE VALOR</b></th>
@@ -151,12 +156,20 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer">
-                    <p>
-                        _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _                         _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
-                                Verificó este arqueo                                           Sello y Firma
-                    </p>
-                </div>
+                <table>
+                    <tbody>
+                        <tr  style="height:50px; vertical-align:bottom">
+                            <td>................................</td>
+                            <td></td>
+                            <td>................................</td>
+                        </tr>
+                        <tr>
+                            <td>Verificó este arqueo</td>
+                            <td></td>
+                            <td>Sello y firma</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

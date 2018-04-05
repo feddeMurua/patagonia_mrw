@@ -9,17 +9,22 @@
         }
         table {
             margin: 0 auto;
-            width: 50%;
+            width: 100%;
+        }
+        .tabla-porcinos {
+            border: 1px solid black;
+        }
+        .tabla-porcinos td, .tabla-porcinos th {
+            text-align: center;
             border: 1px solid black;
         }
         td, th {
             text-align: center;
-            border: 1px solid;
         }
         .titulo {
             text-align: center;
         }
-        .fecha, .firma {
+        .fecha {
             text-align: right;
         }
     </style>
@@ -37,7 +42,7 @@
                 Procedencia de/los animal/es: {{ analisis.procedencia }}<br>
                 Cantidad de animales: {{ porcinos|length }}
             </p>
-            <table>
+            <table class="tabla-porcinos">
                 <thead>
                     <tr>
                         <th><b>Precinto</b></th>
@@ -65,10 +70,20 @@
                 AUSENCIA DE OTRAS ENFERMEDADES QUE PUDIERA/N SUFRIR O TRANSMITIR.
             </p>
             <br><br>
-            <p class="firma">
-                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
-                            Sello y Firma
-            </p>
+            <table>
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td></td>
+                        <td></td>
+                        <td>................................</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Sello y firma</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

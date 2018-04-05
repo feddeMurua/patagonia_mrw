@@ -8,6 +8,22 @@
     </div>
 {% endblock %}
 
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 14px;
+        }
+        table {
+            margin: 0 auto;
+            width: 100%;
+        }
+        td, th {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <div id="content">
         <div class="main">
@@ -35,12 +51,22 @@
                 el cirujano deba suspender la cirugia o intervención programada, o variar la técnica escogida
                 previamente.<br>
                 Que no obstante lo expuesto presta su conformidad para la realizacion de la cirugia, para lo cual
-                firma al pie de la presente.<br><br><br>
+                firma al pie de la presente.
             </p>
-            <p align="right">
-                _________________________________<br>
-                Firma del Propietario/Responsable<br>
-            </p>
+            <table>
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td></td>
+                        <td></td>
+                        <td>................................</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Sello y firma</td>
+                    </tr>
+                </tbody>
+            </table>
             <p>
                 Turno: {{ esterilizacion.turno }}<br><br>
                 Atiende: _________________________<br>

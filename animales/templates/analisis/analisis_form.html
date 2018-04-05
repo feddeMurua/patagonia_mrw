@@ -29,20 +29,20 @@
                 <h3 class="panel-title">Porcinos</h3>
             </div>
             <div class="panel-body">
-              <fieldset id="fieldset_porcinos">
-                {% for form in formset.forms %}
-                  {% for field in form.visible_fields %}
-                    <div class="form-group">
-                      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                      {{ field|add_class:'form-control' }}
-                      {% for error in field.errors %}
-                        <span style="color:red;" class="help-block">{{ error }}</span>
-                      {% endfor %}
-                    </div>
-                  {% endfor %}
-                {% endfor %}
-              </fieldset>
-              {{ formset.management_form }}
+                <fieldset id="fieldset_porcinos">
+                    {% for form in formset.forms %}
+                        {% for field in form.visible_fields %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field|add_class:'form-control' }}
+                                {% for error in field.errors %}
+                                    <span style="color:red;" class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </fieldset>
+                {{ formset.management_form }}
             </div>
         </div>
     </div>
@@ -54,30 +54,17 @@
 
 {% block more-scripts %}
     <script src="{% static 'js/jquery.formset.js' %}"></script>
-
     <script>
-      $('#fieldset_porcinos').formset({
+        $('#fieldset_porcinos').formset({
             addText: 'Agregar otro elemento',
             deleteText: 'Eliminar'
-      });
-    </script>
+        });
 
-    <script>
         var h = $('#container-form-left').height();
         $('#container-form-right').css('height', h - 20 + 'px');
 
         $.datepicker.setDefaults({
             maxDate: new Date()
-        });
-
-        var False = false, True = true;
-        if (!{{ can_delete }}) {
-            $('.add-form-form').addClass('hidden');
-            $('.delete-form-form').addClass('hidden');
-        }
-
-        $(document).ready(function(){
-            $('.well').find('.delete-form-form').first().prop('disabled', true);
         });
     </script>
 {% endblock %}

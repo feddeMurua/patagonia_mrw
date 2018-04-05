@@ -9,15 +9,17 @@
         }
         table {
             margin: 0 auto;
-            border: 1px solid black;
             width: 100%;
+        }
+        .tabla-alumnos {
+            border: 1px solid black;
+        }
+        .tabla-alumnos td, .tabla-alumnos th {
+            text-align: center;
+            border: 1px solid black;
         }
         td, th {
             text-align: center;
-            border: 1px solid;
-        }
-        .firma {
-            text-align: right;
         }
     </style>
 {% endblock %}
@@ -25,9 +27,10 @@
 {% block content %}
     <div id="content">
         <div class="main">
+            <h3 align="center">PLANILLA DE ASISTENCIA</h3><br>
             <h3>Fecha de inicio del Curso: {{ curso.fecha }} </h3>
             <h3>Fecha de la clase: {% now "SHORT_DATE_FORMAT" %}</h3>
-            <table>
+            <table class="tabla-alumnos">
                 <thead>
                     <tr>
                         <th>Apellido y Nombre</th>
@@ -43,11 +46,20 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <br>
-            <p class="firma">
-                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
-                            Sello y Firma
-            </p>
+            <table>
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td></td>
+                        <td></td>
+                        <td>................................</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Sello y firma</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

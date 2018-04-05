@@ -37,33 +37,29 @@ def alta_analisis(request):
         form = AltaAnalisisForm(request.POST)
         formset = AltaPorcinoFormSet(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        servicio_form = pd_f.ListaServicios(request.POST, tipo='Analisis de Triquinosis')
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
-        if form.is_valid() & formset.is_valid() & servicio_form.is_valid():
+        if form.is_valid() & formset.is_valid():
             analisis = form.save()
+            servicio = 'Analisis de triquinosis'
             for form in formset.forms:
                 porcino_item = form.save(commit=False)
                 porcino_item.analisis = analisis
                 porcino_item.save()
             if request.POST['optradio'] == 'previa':
                 if detalle_mov_form.is_valid():
-                    pd_v.movimiento_previo(request, detalle_mov_form, servicio_form.cleaned_data['servicio'].nombre,
-                                           analisis, 'Analisis de Triquinosis')
+                    pd_v.movimiento_previo(request, detalle_mov_form, servicio, analisis, servicio)
                     return redirect('analisis:lista_analisis')
             else:
                 if mov_form.is_valid():
-                    pd_v.nuevo_movimiento(request, mov_form, servicio_form.cleaned_data['servicio'].nombre, analisis,
-                                          'Analisis de Triquinosis')
+                    pd_v.nuevo_movimiento(request, mov_form, servicio, analisis, servicio)
                     return redirect('analisis:lista_analisis')
     else:
         form = AltaAnalisisForm
         formset = AltaPorcinoFormSet
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        servicio_form = pd_f.ListaServicios(tipo='Analisis de Triquinosis')
         mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'mov_form': mov_form,
-                                                           'detalle_mov_form': detalle_mov_form,
-                                                           'servicio_form': servicio_form})
+                                                           'detalle_mov_form': detalle_mov_form})
 
 
 @login_required(login_url='login')
