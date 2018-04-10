@@ -7,8 +7,12 @@
         body {
             font-size: 14px;
         }
-        .fecha, .firma {
-            text-align: right;
+        table {
+            margin: 0 auto;
+            width: 100%;
+        }
+        td {
+            text-align: center;
         }
     </style>
 {% endblock %}
@@ -36,10 +40,20 @@
                 {% endif %}<br>
             </b></p>
             <br>
-            <p class="firma">
-                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
-                            Sello y Firma
-            </p>
+            <table>
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td></td>
+                        <td></td>
+                        <td>................................</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Sello y firma</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

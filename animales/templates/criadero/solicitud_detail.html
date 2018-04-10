@@ -87,6 +87,6 @@
 {% endblock %}
 
 {% block btn-footer %}
+    <a href="{% url 'criadero:pdf_solicitud' solicitud.pk%}" target="_blank" class="btn btn-warning">Imprimir</a>
     <a href="{% url 'criadero:lista_solicitudes' %}" class="btn btn-primary">Regresar</a>
-    <a href="{% url 'criadero:pdf_solicitud' solicitud.pk%}" class="btn btn-warning">Imprimir</a>
 {% endblock %}

@@ -24,15 +24,11 @@
                 </div>
                 <div class="panel-footer">
                     <input type="submit" class="btn btn-primary" value="Guardar cambios">
-                    <a class="btn btn-danger btn-cancelar" href="{% url 'inicio' %}">Cancelar</a>
+                    <a class="btn btn-danger btn-cancelar" href="{% url 'lista_usuarios' %}">Cancelar</a>
                 </div>
             </div>
         </form>
     </div>
-{% endblock %}
-
-{% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url 'lista_usuarios' %}">Cancelar</a>
 {% endblock %}
 
 {% block more-scripts %}

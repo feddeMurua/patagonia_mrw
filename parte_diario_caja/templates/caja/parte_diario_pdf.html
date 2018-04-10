@@ -13,13 +13,18 @@
         }
         table {
             margin: 0 auto;
+            width: 100%;
+        }
+        .detalles, .subtotales {
+            border: 1px solid black;
+        }
+        .detalles th {
             border: 1px solid black;
         }
         td, th {
             text-align: center;
-            border: 1px solid;
         }
-        .fecha, .firma {
+        .val-sub {
             text-align: right;
         }
     </style>
@@ -30,7 +35,7 @@
         <div class="main">
             <p class="titulo"><b>Parte Diario de Caja - Ingresos Varios<br>
             Fecha de Rendicion {{ fecha_maniana }}</b></p>
-            <table>
+            <table class="detalles">
                 <thead>
                     <tr>
                         <th><b>N° INGRESO</b></th>
@@ -63,27 +68,50 @@
                 <tbody>
                     <tr>
                         <td>Subtotal Efectivo</td>
-                        <td>${{ subtotales.efectivo }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>$</td>
+                        <td class="val-sub">{{ subtotales.efectivo }}</td>
                     </tr>
                     <tr>
                         <td>Subtotal Tarjeta</td>
-                        <td>${{ subtotales.tarjeta }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>$</td>
+                        <td class="val-sub">{{ subtotales.tarjeta }}</td>
                     </tr>
                     <tr>
                         <td>Subtotal Cheque</td>
-                        <td>${{ subtotales.cheque }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>$</td>
+                        <td class="val-sub">{{ subtotales.cheque }}</td>
                     </tr>
                     <tr>
                         <td><b>TOTAL GENERAL</b></td>
-                        <td><b>${{ total }}</b></td>
+                        <td></td>
+                        <td></td>
+                        <td><b>$</b></td>
+                        <td class="val-sub"><b>{{ total }}</b></td>
                     </tr>
                 </tbody>
             </table>
-            <br>
-            <p class="firma">
-                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
-                            Sello y Firma
-            </p>
+            <table class="firma">
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>................................</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Sello y firma</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
