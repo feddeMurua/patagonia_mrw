@@ -30,6 +30,20 @@ class ReinspeccionForm(forms.ModelForm):
     fecha = forms.DateField(widget=DATEINPUT(), label="Fecha de realizacion")
     inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Inspector'))
+    total_kg = forms.IntegerField(required=True, label="Total de Kg inspeccionados")
+
+    class Meta:
+        model = Reinspeccion
+        fields = '__all__'
+        labels = {
+            'certificado': _("N° de certificado")
+        }
+
+
+class ReinspeccionCCForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DATEINPUT(), label="Fecha de realizacion")
+    inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
+        rol_actuante__nombre='Inspector'))
 
     class Meta:
         model = Reinspeccion

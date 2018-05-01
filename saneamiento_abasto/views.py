@@ -163,49 +163,96 @@ def lista_reinspeccion(request):
 
 @login_required(login_url='login')
 def alta_reinspeccion(request):
-    producto_form = ReinspeccionProductoForm
     if request.method == 'POST':
         form = ReinspeccionForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         servicio = 'Reinspeccion Veterinaria'
         if form.is_valid():
-            if request.POST['radio_tipo_pago'] == 'normal':
-                if request.POST['optradio'] == 'previa':
-                    if detalle_mov_form.is_valid():
-                        reinspeccion = form.save()
-                        importe = carga_productos(request, reinspeccion)
-                        detalle_mov = detalle_mov_form.save(commit=False)
-                        detalle_mov.completar_monto(importe, servicio, reinspeccion)
-                        log_crear(request.user.id, reinspeccion, servicio)
-                        return redirect('reinspecciones:lista_reinspecciones')
-                else:
-                    if mov_form.is_valid():
-                        reinspeccion = form.save()
-                        importe = carga_productos(request, reinspeccion)
-                        mov = mov_form.save()
-                        detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
-                        detalle_mov.completar_monto(importe, servicio, reinspeccion)
-                        log_crear(request.user.id, reinspeccion, servicio)
-                        return redirect('reinspecciones:lista_reinspecciones')
+            reinspeccion = form.save()
+            importe = calculo_importe(reinspeccion.total_kg)
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    detalle_mov = detalle_mov_form.save(commit=False)
+                    detalle_mov.completar_monto(importe, servicio, reinspeccion)
+                    log_crear(request.user.id, reinspeccion, servicio)
+                    return redirect('reinspecciones:lista_reinspecciones')
             else:
-                reinspeccion = form.save()
-                carga_productos(request, reinspeccion)
-                cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
-                detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
-                detalle.save()
-                log_crear(request.user.id, reinspeccion, servicio)
-                return redirect('reinspecciones:lista_reinspecciones')
+                if mov_form.is_valid():
+                    mov = mov_form.save()
+                    detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
+                    detalle_mov.completar_monto(importe, servicio, reinspeccion)
+                    log_crear(request.user.id, reinspeccion, servicio)
+                    return redirect('reinspecciones:lista_reinspecciones')
+    else:
+        form = ReinspeccionForm
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
+                                                                   'mov_form': mov_form})
+
+
+def calculo_importe(total_kg):
+    precios = ReinspeccionPrecios.objects.get()
+    monto = precios.precio_min
+    if total_kg > precios.kg_min:
+        monto += total_kg * precios.precio_kg
+    return monto
+
+
+@login_required(login_url='login')
+def carga_productos(request, reinspeccion_pk):
+    producto_form = ReinspeccionProductoForm
+    mensaje = ''
+    productos = []
+    if request.method == 'POST':
+        productos = request.session['productos']
+        total_kg = sum(item['kilo_producto'] for item in productos)
+        reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
+        if 'productos' in request.session:
+            productos = request.session['productos']
+        if total_kg != reinspeccion.total_kg:
+            mensaje = 'La cantidad ingresada no coincide con el peso registrado. Por favor revise el detalle.'
+        else:
+            for producto in request.session['productos']:
+                prod = Producto.objects.get(nombre=producto['producto']['nombre'])
+                item = ReinspeccionProducto(producto=prod, kilo_producto=producto['kilo_producto'],
+                                            reinspeccion=reinspeccion)
+                item.save()
+            return redirect('reinspecciones:lista_reinspecciones')
     else:
         if 'productos' in request.session:
             del request.session['productos']
         request.session['productos'] = []
-        form = ReinspeccionForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'producto_form': producto_form,
-                                                                   'detalle_mov_form': detalle_mov_form,
-                                                                   'mov_form': mov_form})
+    return render(request, 'reinspeccion/carga_productos.html', {'producto_form': producto_form, 'mensaje': mensaje,
+                                                                 'reinspeccion': Reinspeccion.objects.get(pk=reinspeccion_pk),
+                                                                 'productos': productos})
+
+
+@login_required(login_url='login')
+def alta_reinspeccion_cc(request):
+    producto_form = ReinspeccionProductoForm
+    productos = []
+    if request.method == 'POST':
+        form = ReinspeccionCCForm(request.POST)
+        servicio = 'Reinspeccion Veterinaria'
+        if 'productos' in request.session:
+            productos = request.session['productos']
+        if form.is_valid():
+            reinspeccion = form.save()
+            alta_productos(request, reinspeccion)
+            cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
+            detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
+            detalle.save()
+            log_crear(request.user.id, reinspeccion, servicio)
+            return redirect('reinspecciones:lista_reinspecciones')
+    else:
+        if 'productos' in request.session:
+            del request.session['productos']
+        request.session['productos'] = []
+        form = ReinspeccionCCForm
+    return render(request, 'reinspeccion/reinspeccion_cc_form.html', {'form': form, 'producto_form': producto_form,
+                                                                      'productos': productos})
 
 
 def existe_producto(request, producto):
@@ -237,7 +284,7 @@ def eliminar_producto(request, nombre):
     return JsonResponse({'productos': request.session['productos']})
 
 
-def carga_productos(request, reinspeccion):
+def alta_productos(request, reinspeccion):
     for producto in request.session['productos']:
         prod = Producto.objects.get(nombre=producto['producto']['nombre'])
         item = ReinspeccionProducto(producto=prod, kilo_producto=producto['kilo_producto'], reinspeccion=reinspeccion)
