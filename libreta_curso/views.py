@@ -18,7 +18,6 @@ from dateutil.relativedelta import *
 from django.utils import timezone
 import json
 import collections
-from desarrollo_patagonia import factories
 from parte_diario_caja.models import DetalleMovimiento
 
 
@@ -86,7 +85,7 @@ def cierre_de_curso(request, id_curso):
 
 
 class PdfAsistencia(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'curso/asistencia_pdf.html'
+    template_name = 'curso/planilla_asistencia_pdf.html'
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 

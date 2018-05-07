@@ -17,15 +17,11 @@
             </tr>
                 <tr>
                     <td>Recomendaciones:</td>
-                    {% if object.recomendaciones %}
-                        <td>{{ object.recomendaciones }}</td>
-                    {% endif %}
+                    <td>{{ object.recomendaciones|default_if_not:"" }}</td>
                 </tr>
             <tr>
                 <td>Fecha próxima visita:</td>
-                {% if object.fecha_prox_visita %}
-                    <td>{{ object.fecha_prox_visita }}</td>
-                {% endif %}
+                <td>{{ object.fecha_prox_visit|default_if_not:"" }}</td>
             </tr>
         </tbody>
     </table>

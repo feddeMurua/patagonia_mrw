@@ -1,24 +1,24 @@
 from django.utils.translation import ugettext as _
 
 Categorias = (
-    ('Productor', _("Productor")),
-    ('Particular', _("Particular")),
+    ('PRODUCTOR', _("PRODUCTOR")),
+    ('PARTICULAR', _("PARTICULAR")),
 )
 
 Resultados = (
-    ('Negativo', _("Negativo")),
-    ('Positivo', _("Positivo")),
+    ('NEGATIVO', _("NEGATIVO")),
+    ('POSITIVO', _("POSITIVO")),
 )
 
 Categoria_Porcino = (
-    ('Lechon', _("Lechon")),
-    ('Porker', _("Porker")),
-    ('Adulto', _("Adulto"))
+    ('LECHON', _("LECHON")),
+    ('PORKER', _("PORKER")),
+    ('ADULTO', _("ADULTO"))
 )
 
 Sexo = (
-    ('Macho', _("Macho")),
-    ('Hembra', _("Hembra")),
+    ('MACHO', _("MACHO")),
+    ('HEMBRA', _("HEMBRA")),
 )
 
 Categoria_Criadero = (
@@ -29,17 +29,11 @@ Categoria_Criadero = (
 )
 
 Categoria_Mascota = (
-    ('CANINA', _("CANINA")),
-    ('FELINA', _("FELINA"))
+    ('CANINO', _("CANINO")),
+    ('FELINO', _("FELINO"))
 )
 
 Tramites = (
     ('ENTREGA', _("ENTREGA")),
     ('RETIRO', _("RETIRO"))
-)
-
-TipoPago = (
-    ('efectivo', _("efectivo")),
-    ('tarjeta', _("tarjeta")),
-    ('cheque', _("cheque")),
 )

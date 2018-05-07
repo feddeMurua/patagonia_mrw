@@ -22,6 +22,7 @@
             <th>Persona</th>
             <th>Fecha de inscripción</th>
             <th>Observaciones</th>
+            <th>Rubro</th>
             {% if curso.finalizado %}
                 <th>Porcentaje de asistencia</th>
                 <th>Calificación</th>
@@ -35,6 +36,7 @@
                 <td>{{ inscripcion.persona }}</td>
                 <td>{{ inscripcion.fecha_inscripcion }}</td>
                 <td>{{ inscripcion.observaciones }}</td>
+                <td>{{ inscripcion.rubro|default_if_none:"" }}</td>
                 {% if curso.finalizado %}
                     <td>{{ inscripcion.porcentaje_asistencia }}%</td>
                     <td>{{ inscripcion.nota_curso }}</td>

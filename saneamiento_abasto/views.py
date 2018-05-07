@@ -15,10 +15,11 @@ from parte_diario_caja import views as pd_v
 from desarrollo_patagonia import forms as dp_f
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from desarrollo_patagonia.utils import *
-from django.views.generic.detail import DetailView
+from django.views.generic import DetailView, CreateView
 from easy_pdf.views import PDFTemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django_addanother.views import CreatePopupMixin
 from django.utils import timezone
-from desarrollo_patagonia import factories
 import collections
 import json
 
@@ -169,7 +170,9 @@ def alta_reinspeccion(request):
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         servicio = 'Reinspeccion Veterinaria'
         if form.is_valid():
-            reinspeccion = form.save()
+            reinspeccion = form.save(commit=False)
+            reinspeccion.detalles = False
+            reinspeccion.save()
             importe = calculo_importe(reinspeccion.total_kg)
             if request.POST['optradio'] == 'previa':
                 if detalle_mov_form.is_valid():
@@ -219,6 +222,8 @@ def carga_productos(request, reinspeccion_pk):
                 item = ReinspeccionProducto(producto=prod, kilo_producto=producto['kilo_producto'],
                                             reinspeccion=reinspeccion)
                 item.save()
+            reinspeccion.detalles = True
+            reinspeccion.save()
             return redirect('reinspecciones:lista_reinspecciones')
     else:
         if 'productos' in request.session:
@@ -647,7 +652,7 @@ def pago_diferido(request, pk):
 
 
 @login_required(login_url='login')
-def estadisticas_TD(request):
+def estadisticas_td(request):
     rango_form = dp_f.RangoAnioForm
     years = [timezone.now().year]
     if request.method == 'POST':

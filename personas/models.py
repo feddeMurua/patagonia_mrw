@@ -78,7 +78,6 @@ class PersonaFisica(PersonaGenerica):
     nacionalidad = models.ForeignKey('Nacionalidad', on_delete=models.CASCADE)
     obra_social = models.CharField(max_length=50, blank=True)
     documentacion_retirada = models.BooleanField(default=False)
-    rubro = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         apellido = "%s, " % self.apellido

@@ -53,6 +53,7 @@ class Reinspeccion(models.Model):
     certificado = models.IntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
     total_kg = models.IntegerField(null=True, blank=True)
+    detalles = models.BooleanField(default=True)
 
     def __str__(self):
         return "%s - %s" % (self.fecha, self.abastecedor)

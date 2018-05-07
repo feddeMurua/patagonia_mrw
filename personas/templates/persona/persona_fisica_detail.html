@@ -13,69 +13,119 @@
 {% block url-volver %}{% url 'personas:lista_contribuyentes' %}{% endblock %}
 
 {% block detail %}
-    <table class="table table-information">
-        <tbody>
-            <tr>
-                <td>Apellido y Nombre:</td>
-                <td>{{ object.apellido }}, {{ object.nombre }}</td>
-            </tr>
-            <tr>
-                <td>DNI:</td>
-                <td>{{ object.dni }}</td>
-            </tr>
-            <tr>
-                <td>CUIL:</td>
-                <td>{{ object.cuil }}</td>
-            </tr>
-            <tr>
-                <td>Fecha de Nacimiento:</td>
-                <td>{{ object.fecha_nacimiento }}</td>
-            </tr>
-            <tr>
-                <td>Nacionalidad:</td>
-                <td>{{ object.nacionalidad }}</td>
-            </tr>
-            <tr>
-                <td>Obra Social:</td>
-                <td>{{ object.obra_social }}</td>
-            </tr>
-            <tr>
-                <td>Domicilio:</td>
-                <td>{{ object.domicilio }}</td>
-            </tr>
-            <tr>
-                <td>Teléfono:</td>
-                <td>{{ object.telefono }}</td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td>{{ object.email }}</td>
-            </tr>
-            <tr>
-                <td>Rubro:</td>
-                <td>{{ object.rubro }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a data-toggle="tab" href="#home">Datos personales</a></li>
+        <li><a data-toggle="tab" href="#menu1">Cursos/Libretas</a></li>
+        <li><a data-toggle="tab" href="#menu2">Mascotas</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <table class="table table-information">
+                <tbody>
+                    <tr>
+                        <td>Apellido y Nombre:</td>
+                        <td>{{ persona.apellido }}, {{ persona.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td>DNI:</td>
+                        <td>{{ persona.dni }}</td>
+                    </tr>
+                    <tr>
+                        <td>CUIL:</td>
+                        <td>{{ persona.cuil }}</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha de Nacimiento:</td>
+                        <td>{{ persona.fecha_nacimiento }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nacionalidad:</td>
+                        <td>{{ persona.nacionalidad }}</td>
+                    </tr>
+                    <tr>
+                        <td>Obra Social:</td>
+                        <td>{{ persona.obra_social }}</td>
+                    </tr>
+                    <tr>
+                        <td>Domicilio:</td>
+                        <td>{{ persona.domicilio }}</td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono:</td>
+                        <td>{{ persona.telefono }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td>{{ persona.email }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <table class="table information">
+                <tbody>
+                    <tr>
+                        <td>Curso aprobado:</td>
+                        {% if libreta %}
+                            <td>{{ libreta.curso.fecha }}</td>
+                        {% else %}
+                            <td>NO</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Rubro:</td>
+                        {% if inscripcion %}
+                            <td>{{ inscripcion.rubro }}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Observaciones:</td>
+                        <td>{{ libreta.observaciones }}</td>
+                    </tr>
+                    <tr>
+                        <td>Tipo de libreta:</td>
+                        <td>{{ libreta.tipo_libreta }}</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha de vencimiento:</td>
+                        <td>{{ libreta.fecha_vencimiento }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <table class="table table-mascotas">
+                <thead>
+                    <tr>
+                        <th>N° Patente</th>
+                        <th>Fecha de vencimiento</th>
+                        <th>Nombre de mascota</th>
+                        <th>Tipo de mascota</th>
+                        <th>Esterilizado</th>
+                    </tr>
+                </thead>
+                <tbody align="center">
+                    {% for patente in patentes %}
+                        <tr>
+                            <td>{{ patente.pk }}</td>
+                            <td>{{ patente.fecha_vencimiento }}</td>
+                            <td>{{ patente.mascota.nombre }}</td>
+                            <td>{{ patente.mascota.categoria_mascota }}</td>
+                            {% if patente.mascota.esterilizado %}
+                                <td>SI</td>
+                            {% else %}
+                                <td>NO</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
 
 {% block btn-footer %}
     <a href="{% url 'personas:lista_contribuyentes' %}" class="btn btn-primary">Regresar</a>
-{% endblock %}
-
-{% block more-scripts %}
-    <script src="{% static 'js/paging.js' %}"></script>
-    <script>
-        $(document).ready(function(){
-            $("#hidden-panel").hide();
-
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $("#buscar").click(function(){
-                $("#hidden-panel").slideToggle("slow");
-            });
-
-            $('.table-list').paging({limit:3});
-        });
-    </script>
 {% endblock %}

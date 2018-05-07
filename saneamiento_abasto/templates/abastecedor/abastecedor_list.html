@@ -25,9 +25,7 @@
         {% for abastecedor in listado %}
             <tr>
                 <td>
-                    {% if abastecedor.responsable.apellido %}
-                        {{ abastecedor.responsable.apellido }},
-                    {% endif %}
+                    {{ abastecedor.responsable.apellido|default_if_not:"" }}
                     {{ abastecedor.responsable.nombre }}
                 </td>
                 <td>{{ abastecedor.responsable.dni }}{{ abastecedor.responsable.cuit }}</td>

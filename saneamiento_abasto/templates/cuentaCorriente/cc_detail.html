@@ -37,11 +37,7 @@
                                     <tr>
                                         <td>{{ detalle.reinspeccion.fecha }}</td>
                                         <td>{{ detalle.reinspeccion.turno }}</td>
-                                        {% if reinspeccion.precintado %}
-                                            <td>{{ reinspeccion.precintado }}</td>
-                                        {% else %}
-                                            <td></td>
-                                        {% endif %}
+                                        <td>{{ reinspeccion.precintado|default_if_not:"" }}</td>
                                         <td>{{ detalle.reinspeccion.certificado }}</td>
                                         <td>{{ detalle.reinspeccion.total_kg }},0 Kg</td>
                                         <td>

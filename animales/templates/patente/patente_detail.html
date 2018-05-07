@@ -9,88 +9,111 @@
 {% block url-volver %}{% url 'patentes:lista_patentes' %}{% endblock %}
 
 {% block detail %}
-    <div class="panel panel-heading">Fecha de emision: {{ object.fecha }}</div>
-    <div class="panel panel-default col-md-6">
-        <div class="panel-heading">Datos de la persona</div>
-        <div class="panel-body">
-            <table class="table table-information">
-                <tbody>
-                    <tr>
-                        <td>Apellido:</td>
-                        <td>{{ object.persona.apellido }}</td>
-                    </tr>
-                    <tr>
-                        <td>Nombre:</td>
-                        <td>{{ object.persona.nombre }}</td>
-                    </tr>
-                    <tr>
-                        <td>DNI:</td>
-                        <td>{{ object.persona.dni }}</td>
-                    </tr>
-                    <tr>
-                        <td>Domicilio:</td>
-                        <td>{{ object.persona.domicilio }}</td>
-                    </tr>
-                    <tr>
-                        <td>Teléfono:</td>
-                        <td>{{ object.persona.telefono }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="col-xs-12 col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Datos de la Persona</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-information">
+                    <tbody>
+                        <tr>
+                            <td>Apellido:</td>
+                            <td>{{ object.persona.apellido }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nombre</td>
+                            <td>{{ object.persona.nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td>DNI:</td>
+                            <td>{{ object.persona.dni }}</td>
+                        </tr>
+                        <tr>
+                            <td>Domicilio:</td>
+                            <td>{{ object.persona.domicilio }}</td>
+                        </tr>
+                        <tr>
+                            <td>Teléfono:</td>
+                            <td>{{ object.persona.telefono }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <div class="panel panel-default col-md-6">
-        <div class="panel-heading">Datos del animal</div>
-        <div class="panel-body">
-            <table class="table table-information">
-                <tbody>
-                    <tr>
-                        <td>Nombre:</td>
-                        <td>{{ object.mascota.nombre }}</td>
-                    </tr>
-                    <tr>
-                        <td>Pelaje:</td>
-                        <td>{{ object.mascota.pelaje }}</td>
-                    </tr>
-                    <tr>
-                        <td>Raza:</td>
-                        <td>{{ object.mascota.raza }}</td>
-                    </tr>
-                    <tr>
-                        <td>Fecha Nacimiento:</td>
-                        <td>{{ object.mascota.fecha_nacimiento }}</td>
-                    </tr>
-                    <tr>
-                        <td>Sexo:</td>
-                        <td>{{ object.mascota.sexo }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="col-xs-12 col-md-4">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">Datos de la Mascota</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-information">
+                    <tbody>
+                        <tr>
+                            <td>Nombre:</td>
+                            <td>{{ object.mascota.nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td>Pelaje:</td>
+                            <td>{{ object.mascota.pelaje }}</td>
+                        </tr>
+                        <tr>
+                            <td>Raza:</td>
+                            <td>{{ object.mascota.raza }}</td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de nacimiento:</td>
+                            <td>{{ object.mascota.fecha_nacimiento }}</td>
+                        </tr>
+                        <tr>
+                            <td>Sexo:</td>
+                            <td>{{ object.mascota.sexo }}</td>
+                        </tr>
+                        <tr>
+                            <td>Esterilizado:</td>
+                            {% if object.mascota.esterilizado %}
+                                <td>SI</td>
+                            {% else %}
+                                <td>NO</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <br>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <table class="table table-information">
-                <tbody>
-                    <tr>
-                        <td>Ultima entrega de Garrapaticida</td>
-                        {% if object.fecha_garrapaticida %}
-                            <td>{{ object.fecha_garrapaticida }}</td>
-                        {% endif %}
-                    </tr>
-                    <tr>
-                        <td>Ultima entrega de Antiparasitario</td>
-                        {% if object.fecha_antiparasitario %}
-                            <td>{{ object.fecha_antiparasitario }}</td>
-                        {% endif %}
-                    </tr>
-                    <tr>
-                        <td>Observaciones:</td>
-                        <td>{{ object.observaciones }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="col-xs-12 col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Otros Datos</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Número de patente</td>
+                            <td>{{ object.nro_patente }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ultimo garrapaticida:</td>
+                            {% if object.fecha_garrapaticida %}
+                                <td>{{ object.fecha_garrapaticida }}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Ultimo antiparasitario:</td>
+                            {% if object.fecha_antiparasitario %}
+                                <td>{{ object.fecha_antiparasitario }}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Observaciones:</td>
+                            <td>{{ object.observaciones }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}

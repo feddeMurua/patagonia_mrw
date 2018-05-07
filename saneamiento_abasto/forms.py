@@ -4,14 +4,10 @@ from django import forms
 from functools import partial
 from .models import *
 from django.utils.translation import ugettext as _
-import datetime
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django_addanother.views import CreatePopupMixin
 
 DATEINPUT = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -34,7 +30,7 @@ class ReinspeccionForm(forms.ModelForm):
 
     class Meta:
         model = Reinspeccion
-        fields = '__all__'
+        exclude = ['detalles']
         labels = {
             'certificado': _("N° de certificado")
         }

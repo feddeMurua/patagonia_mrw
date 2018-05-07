@@ -27,9 +27,7 @@
         {% for cliente in listado %}
             <tr>
                 <td>
-                    {% if cliente.apellido %}
-                        {{ cliente.apellido }},
-                    {% endif %}
+                    {{ cliente.apellido|default_if_none:"" }}
                     {{ cliente.nombre }}
                 </td>
                 <td>{{ cliente.dni }}{{ cliente.cuit }}</td>

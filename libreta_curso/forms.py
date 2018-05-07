@@ -41,7 +41,7 @@ class InscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
-        fields = ['persona', 'observaciones']
+        fields = ['persona', 'observaciones', 'rubro']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
             'persona': AddAnotherWidgetWrapper(

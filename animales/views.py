@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from easy_pdf.views import PDFTemplateView
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from .forms import *
 from .models import *
 from personas import forms as f
@@ -247,6 +247,7 @@ def alta_esterilizacion(request):
             esterilizacion = esterilizacion_form.save(commit=False)
             patente = form.cleaned_data['patente']
             esterilizacion.interesado = patente.persona
+            Mascota.objects.filter(id=patente.mascota.id).update(esterilizado=True)
             esterilizacion.mascota = patente.mascota
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal Patentado')
@@ -265,7 +266,9 @@ def alta_esterilizacion_nopatentado(request):
         mascota_form = MascotaForm(request.POST)
         if form.is_valid() & mascota_form.is_valid():
             esterilizacion = form.save(commit=False)
-            esterilizacion.mascota = mascota_form.save()
+            mascota = mascota_form.save()
+            Mascota.objects.filter(id=mascota.id).update(esterilizado=True)
+            esterilizacion.mascota = mascota
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal no Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
@@ -297,47 +300,50 @@ def lista_patente(request):
 def retiro_garrapaticida(request, pk):
     patente = Patente.objects.get(pk=pk)
     if patente.fecha_garrapaticida and (timezone.now().date() - patente.fecha_garrapaticida).days <= 7:
-        return HttpResponse("Aun no han pasado 7 dias desde el último retiro")
+        return JsonResponse({'msg': "Aun no han pasado 7 dias desde el último retiro", 'error': True})
     else:
         patente.fecha_garrapaticida = timezone.now()
         patente.save()
         log_modificar(request.user.id, patente, 'Entrega de Garrapaticida')
-        return HttpResponse("El retiro de garrapaticida se registro correctamente")
+        return JsonResponse({'msg': "El retiro de garrapaticida se registro correctamente", 'error': False})
 
 
 @login_required(login_url='login')
 def retiro_antiparasitario(request, pk):
     patente = Patente.objects.get(pk=pk)
     if patente.fecha_antiparasitario and ((timezone.now().date() - patente.fecha_antiparasitario).days / 30) <= 6:
-        return HttpResponse("Aun no han pasado 6 meses desde el último retiro")
+        return JsonResponse({'msg': "Aun no han pasado 6 meses desde el último retiro", 'error': True})
     else:
         patente.fecha_antiparasitario = timezone.now()
         patente.save()
         log_modificar(request.user.id, patente, 'Entrega de Antiparasitario')
-        return HttpResponse("El retiro de antiparasitario se registro correctamente")
+        return JsonResponse({'msg': "El retiro de antiparasitario se registro correctamente", 'error': False})
 
 
 @login_required(login_url='login')
 def alta_patente(request):
     if request.method == 'POST':
-        form = PatenteForm(request.POST)
         mascota_form = MascotaForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
-        if form.is_valid() & mascota_form.is_valid() & detalle_mov_form.is_valid():
-            patente = form.save(commit=False)
-            patente.mascota = mascota_form.save()
-            patente.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
-            if request.POST['optradio'] == 'previa':
-                if detalle_mov_form.is_valid():
-                    patente.save()
-                    pd_v.movimiento_previo(request, detalle_mov_form, "Registro/patente anual", patente, 'Patente')
-                    return redirect('patentes:lista_patentes')
-            else:
-                if mov_form.is_valid():
-                    patente.save()
-                    pd_v.nuevo_movimiento(request, mov_form, "Registro/patente anual", patente, 'Patente')
-                    return redirect('patentes:lista_patentes')
+        if mascota_form.is_valid():
+            mascota = mascota_form.save(commit=False)
+            form = PatenteForm(request.POST, categoria=mascota.categoria_mascota)
+            if form.is_valid():
+                mascota.save()
+                patente = form.save(commit=False)
+                patente.mascota = mascota
+                patente.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
+                if request.POST['optradio'] == 'previa':
+                    if detalle_mov_form.is_valid():
+                        patente.save()
+                        pd_v.movimiento_previo(request, detalle_mov_form, "Registro/patente anual", patente, 'Patente')
+                        return redirect('patentes:lista_patentes')
+                else:
+                    if mov_form.is_valid():
+                        patente.save()
+                        pd_v.nuevo_movimiento(request, mov_form, "Registro/patente anual", patente, 'Patente')
+                        return redirect('patentes:lista_patentes')
     else:
         form = PatenteForm
         mascota_form = MascotaForm
@@ -372,7 +378,7 @@ def modificacion_patente(request, pk):
     if request.method == 'POST':
         form = ModificacionPatenteForm(request.POST, instance=patente)
         if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Patente')
+            log_modificar(request.user.id, form.save(), 'Patente')
             return redirect('patentes:lista_patentes')
     else:
         form = ModificacionPatenteForm(instance=patente)
@@ -499,7 +505,7 @@ def alta_visita(request, pk_control):
 @login_required(login_url='login')
 def baja_visita(request, pk):
     visita = Visita.objects.get(pk=pk)
-    log_crear(request.user.id, visita, 'Visita de Control')
+    log_eliminar(request.user.id, visita, 'Visita de Control')
     visita.delete()
     return HttpResponse()
 
