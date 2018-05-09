@@ -9,8 +9,8 @@
 {% block url-volver %}{% url 'abastecedores:lista_abastecedores' %}{% endblock %}
 
 {% block extra-buttons %}
-    <a class="btn btn-primary" href="{% url 'abastecedores:nuevo_abastecedor_particular' %}">Nuevo abastecedor - PARTICULAR</a>
-    <a class="btn btn-primary" href="{% url 'abastecedores:nuevo_abastecedor_empresa' %}">Nuevo abastecedor - EMPRESA</a>
+    <a class="btn btn-info" href="{% url 'abastecedores:nuevo_abastecedor_particular' %}">Nuevo abastecedor - PARTICULAR</a>
+    <a class="btn btn-warning" href="{% url 'abastecedores:nuevo_abastecedor_empresa' %}">Nuevo abastecedor - EMPRESA</a>
 {% endblock %}
 
 {% block btn-cancelar %}

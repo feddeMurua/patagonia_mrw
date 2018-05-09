@@ -7,7 +7,7 @@ from .forms import *
 from desarrollo_patagonia.utils import *
 from libreta_curso import models as lc_m
 from animales import models as a_m
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 

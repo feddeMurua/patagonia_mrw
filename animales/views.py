@@ -20,6 +20,12 @@ import json
 import collections
 import numpy as np
 
+import os
+from django.conf import settings
+from django.template import Context
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 
 '''
 ANALISIS

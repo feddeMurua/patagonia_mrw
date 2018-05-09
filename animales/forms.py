@@ -11,8 +11,8 @@ import datetime
 from django.utils import timezone
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
+
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
-TimeInput = partial(forms.TimeInput, {'class': 'timepicker'})
 
 regex_alfabetico = re.compile(r"^[a-zñA-ZÑ]+((\s[a-zñA-ZÑ]+)+)?$")
 regex_alfanumerico = re.compile(r"^[a-zñA-ZÑ0-9]+((\s[a-zñA-ZÑ0-9]+)+)?$")
@@ -27,10 +27,6 @@ class AltaAnalisisForm(forms.ModelForm):
         model = Analisis
         fields = '__all__'
         widgets = {
-            'interesado': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
-            ),
             'procedencia': AddAnotherWidgetWrapper(
                 forms.Select,
                 reverse_lazy('personas:nueva_localidad'),
@@ -79,12 +75,6 @@ class SolicitudForm(forms.ModelForm):
     class Meta:
         model = SolicitudCriaderoCerdos
         fields = ['interesado', 'categoria_criadero']
-        widgets = {
-            'interesado': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
-            )
-        }
 
 
 class AplazoSolicitudForm(forms.ModelForm):
@@ -175,11 +165,7 @@ class PatenteForm(forms.ModelForm):
 
         }
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
-            'persona': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica')
-            )
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
 
     def __init__(self, *args, **kwargs):
@@ -203,13 +189,6 @@ class ModificacionPatenteForm(forms.ModelForm):
             'nro_patente': _("N° de patente"),
 
         }
-        widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
-            'persona': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
-            )
-        }
 
     def clean_nro_patente(self):
         nro_patente = self.cleaned_data['nro_patente']
@@ -226,15 +205,7 @@ class ControlAntirrabicoForm(forms.ModelForm):
         model = ControlAntirrabico
         fields = '__all__'
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
-            'mordido': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
-            ),
-            'responsable': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
-            )
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
 
     def clean_fecha_suceso(self):

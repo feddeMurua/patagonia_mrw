@@ -7,7 +7,7 @@ Calificaciones = (
 )
 
 Tipo_Libreta = (
-    ('Blanca', _("Blanca")),
-    ('Amarilla', _("Amarilla")),
-    ('Celeste', _("Celeste")),
+    ('Blanca', _("BLANCA")),
+    ('Amarilla', _("AMARILLA")),
+    ('Celeste', _("CELESTE")),
 )

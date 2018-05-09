@@ -1,69 +1,71 @@
 {% extends "easy_pdf/base.html" %}
 
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 12px;
+        }
+        .titulo {
+            text-align: center;
+            font-size: 14px;
+        }
+        .panel-carnet {
+            border: 1px solid black;
+            width: 75%;
+        }
+        .tabla-datos {
+            margin: 0px 30px;
+        }
+        .derecha {
+            text-align: right;
+            margin-right: 30px;
+        }
+        .cel-der {
+            text-align: right;
+        }
+        .logo {
+            width: 20%;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <div id="content">
         <div class="main">
-            <div class="panel panel-default">
-                <div class="panel-header">
-                    Fecha de Emision de Patente: {{ patente.fecha }}
-                </div>
-                <div class="panel-body">
-                    <div class="row panel panel-default col-md-6">
-                        <div class="panel-header">
-                            Datos del Propietario
-                        </div>
-                        <div class="panel-body">
-                            <table>
-                                <tr>
-                                    <td>Apellido y Nombre:</td>
-                                    <td>{{ patente.persona.apellido }}, {{ patente.persona.nombre }}</td>
-                                </tr>
-                                <tr>
-                                    <td>DNI:</td>
-                                    <td>{{ patente.persona.dni }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Domicilio:</td>
-                                    <td>{{ patente.persona.domicilio }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Telefono:</td>
-                                    <td>{{ patente.persona.telefono }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row panel panel-default col-md-6">
-                        <div class="panel-header">
-                            Datos de la Mascota
-                        </div>
-                        <div class="panel-body">
-                            <table>
-                                <tr>
-                                    <td>Nombre:</td>
-                                    <td>{{ patente.mascota.nombre }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Pelaje:</td>
-                                    <td>{{ patente.mascota.pelaje }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Raza:</td>
-                                    <td>{{ patente.mascota.raza }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Sexo:</td>
-                                    <td>{{ patente.mascota.sexo }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Fecha de Nacimiento:</td>
-                                    <td>{{ patente.mascota.fecha_nacimiento }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    Observaciones: {{ patente.observaciones }}
-                </div>
+            <div class="panel-carnet">
+                <img class="logo" src="file:///home/matty/Desarrollo/patagonia_mrw/estaticos/images/rawson.png">
+                <p class="titulo"><b>DIRECCION DE VETERINARIA</b></p>
+                <p class="titulo"><b>Municipalidad de Rawson</b></p>
+                <p class="derecha">Fecha de Registro: {{ patente.fecha }}</p>
+                <table class="tabla-datos">
+                    <tbody>
+                        <tr>
+                            <td colspan="3"><b>Registro {{ patente.mascota.categoria_mascota }} N°: {{ patente.nro_patente }}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Propietario: {{ patente.persona.apellido }}, {{ patente.persona.nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Domicilio: {{ patente.persona.domicilio }}</td>
+                            <td class="cel-der">Teléfono: {{ patente.persona.telefono }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Datos de la Mascota</b></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre: {{ patente.mascota.nombre }}</td>
+                            <td>Pelaje: {{ patente.mascota.pelaje }}</td>
+                            <td class="cel-der">Sexo: {{ patente.mascota.sexo }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Raza: {{ patente.mascota.raza }}</td>
+                            <td class="cel-der">F. Nac.: {{ patente.mascota.nacimiento_fecha|default_if_none:"__________" }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-left:30px;">VALIDEZ 1 (UNO) AÑO</p>
+                <p class="derecha">Firma .................................</p>
             </div>
         </div>
     </div>

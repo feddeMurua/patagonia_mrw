@@ -244,7 +244,9 @@ def alta_reinspeccion_cc(request):
         if 'productos' in request.session:
             productos = request.session['productos']
         if form.is_valid():
-            reinspeccion = form.save()
+            reinspeccion = form.save(commit=False)
+            reinspeccion.detalles = True
+            reinspeccion.save()
             alta_productos(request, reinspeccion)
             cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
             detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
