@@ -10,7 +10,7 @@ from .choices import *
 
 
 class Abastecedor(models.Model):
-    responsable = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
+    responsable = models.OneToOneField(m.PersonaGenerica, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         super(Abastecedor, self).save(*args, **kwargs)
