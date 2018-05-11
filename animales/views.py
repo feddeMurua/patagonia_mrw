@@ -253,7 +253,6 @@ def alta_esterilizacion(request):
             esterilizacion = esterilizacion_form.save(commit=False)
             patente = form.cleaned_data['patente']
             esterilizacion.interesado = patente.persona
-            Mascota.objects.filter(id=patente.mascota.id).update(esterilizado=True)
             esterilizacion.mascota = patente.mascota
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal Patentado')
@@ -272,9 +271,7 @@ def alta_esterilizacion_nopatentado(request):
         mascota_form = MascotaForm(request.POST)
         if form.is_valid() & mascota_form.is_valid():
             esterilizacion = form.save(commit=False)
-            mascota = mascota_form.save()
-            Mascota.objects.filter(id=mascota.id).update(esterilizado=True)
-            esterilizacion.mascota = mascota
+            esterilizacion.mascota = mascota_form.save()
             esterilizacion.save()
             log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal no Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
@@ -290,6 +287,17 @@ def baja_esterilizacion(request, pk):
     log_eliminar(request.user.id, esterilizacion, 'Turno para Esterilizacion')
     esterilizacion.delete()
     return HttpResponse()
+
+
+@login_required(login_url='login')
+def confirmar_esterilizacion(request, pk):
+    print("entre")
+    mascota = Esterilizacion.objects.get(pk=pk).mascota
+    mascota.esterilizado = True
+    mascota.save()
+    log_crear(request.user.id, mascota, 'Confirmacion de Esterilizacion')
+    return HttpResponse()
+
 
 
 '''
@@ -336,6 +344,7 @@ def alta_patente(request):
             mascota = mascota_form.save(commit=False)
             form = PatenteForm(request.POST, categoria=mascota.categoria_mascota)
             if form.is_valid():
+                mascota.esterilizado = False
                 mascota.save()
                 patente = form.save(commit=False)
                 patente.mascota = mascota
