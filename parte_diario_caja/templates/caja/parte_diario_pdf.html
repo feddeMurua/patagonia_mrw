@@ -52,11 +52,7 @@
                             <td>{{ detalle.movimiento.nro_ingreso }}</td>
                             <td>{{ detalle.movimiento.titular }}</td>
                             <td>{{ detalle.movimiento.forma_pago }}</td>
-                            {% if detalle.movimiento.forma_pago == 'Cheque' %}
-                                <td>{{ detalle.movimiento.nro_cheque }}</td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
+                            <td>{{ detalle.movimiento.nro_cheque|default_if_none:"" }}</td>
                             <td>${{ detalle.importe }}</td>
                             <td>{{ detalle.descripcion }}</td>
                         </tr>

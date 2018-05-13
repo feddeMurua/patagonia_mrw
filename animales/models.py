@@ -82,21 +82,13 @@ class AplazoSolicitud(models.Model):
 class Esterilizacion(models.Model):
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.SET_NULL, null=True)
-    anticonceptivos = models.IntegerField(validators=[MinValueValidator(0)], blank=True)
-    partos = models.IntegerField(validators=[MinValueValidator(0)], blank=True)
-    ultimo_celo = models.DateField(blank=True)
+    anticonceptivos = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
+    partos = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
+    ultimo_celo = models.DateField(null=True, blank=True)
     turno = models.DateTimeField()
 
     def __str__(self):
         return "%s" % self.interesado
-
-
-'''
-class Turno(models.Model):
-    id = models.IntegerField(primary_key=True)
-    fecha_hora = models.DateTimeField()
-    esterilizacion = models.ForeignKey('Esterilizacion', on_delete=models.CASCADE)
-'''
 
 
 class RetiroEntregaAnimal(models.Model):
@@ -122,12 +114,14 @@ class Mascota(models.Model):
     sexo = models.CharField(max_length=15, choices=Sexo)
     nacimiento_fecha = models.DateField(blank=True, null=True)
     baja = models.BooleanField(default=False)
+    esterilizado = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s - %s - %s" % (self.nombre, self.raza, self.pelaje)
+        return "%s - %s" % (self.nombre, self.categoria_mascota)
 
 
 class Patente(models.Model):
+    nro_patente = models.BigIntegerField(validators=[MinValueValidator(0)])
     fecha = models.DateField(default=now)
     fecha_vencimiento = models.DateField()
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)

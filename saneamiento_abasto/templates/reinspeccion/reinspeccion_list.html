@@ -11,6 +11,7 @@
 {% block btn-nuevo %}
     <a href="{% url 'reinspecciones:nueva_reinspeccion' %}" class="btn btn-primary btn-create">Nueva Reinspeccion</a>
     {% if user.is_staff %}
+        <a href="{% url 'reinspecciones:nueva_reinspeccion_cc' %}" class="btn btn-success">Nueva Reinspeccion a Cuenta Corriente</a>
         <a href="{% url 'reinspecciones:precios_reinspeccion' %}" class="btn btn-info">Precios Vigentes</a>
     {% endif %}
 {% endblock %}
@@ -32,16 +33,15 @@
             <tr>
                 <td>{{ reinspeccion.fecha }}</td>
                 <td>{{ reinspeccion.turno }}</td>
-                {% if reinspeccion.precintado %}
-                    <td>{{ reinspeccion.precintado }}</td>
-                {% else %}
-                    <td></td>
-                {% endif %}
+                <td>{{ reinspeccion.precintado|default_if_none:"" }}</td>
                 <td>{{ reinspeccion.certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
                 <td>{{ reinspeccion.total_kg }},0 Kg</td>
                 <td>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                    {% if not reinspeccion.detalles %}
+                        <a class="btn btn-default" data-toggle="tooltip" title="Carga de Productos" href="{% url 'reinspecciones:carga_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    {% endif %}
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Lista de Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
                 </td>
             </tr>
         {% endfor %}

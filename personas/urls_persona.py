@@ -5,7 +5,7 @@ urlpatterns = [
     url(r'^contribuyentes', lista_contribuyentes, name='lista_contribuyentes'),
 
     url(r'^fisicas/nueva$', alta_p_fisica, name='nueva_persona_fisica'),
-    url(r'^fisicas/(?P<pk>\d+)$', DetallePersonaFisica.as_view(), name='detalle_persona_fisica'),
+    url(r'^fisicas/(?P<pk>\d+)$', detalle_persona_fisica, name='detalle_persona_fisica'),
     url(r'^fisicas/borrar/(?P<pk>\d+)$', baja_persona_fisica, name='borrar_persona_fisica'),
     url(r'^fisicas/editar/(?P<pk>\d+)$', modificacion_persona_fisica, name='modificar_persona_fisica'),
 

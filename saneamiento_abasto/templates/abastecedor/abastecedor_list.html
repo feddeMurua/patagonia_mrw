@@ -24,12 +24,7 @@
     <tbody>
         {% for abastecedor in listado %}
             <tr>
-                <td>
-                    {% if abastecedor.responsable.apellido %}
-                        {{ abastecedor.responsable.apellido }},
-                    {% endif %}
-                    {{ abastecedor.responsable.nombre }}
-                </td>
+                <td>{{ abastecedor.responsable.apellido }} {{ abastecedor.responsable.nombre }}</td>
                 <td>{{ abastecedor.responsable.dni }}{{ abastecedor.responsable.cuit }}</td>
                 <td>{{ abastecedor.responsable.domicilio }}</td>
                 <td>

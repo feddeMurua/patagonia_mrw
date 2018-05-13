@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import *
 from desarrollo_patagonia.utils import *
+from libreta_curso import models as lc_m
+from animales import models as a_m
 from django.views.generic import DetailView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
@@ -58,11 +60,16 @@ def modificacion_persona_fisica(request, pk):
                                                          'url_return': 'personas:lista_contribuyentes'})
 
 
-class DetallePersonaFisica(LoginRequiredMixin, DetailView):
-    model = PersonaFisica
-    template_name = "persona/persona_fisica_detail.html"
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+@login_required(login_url='login')
+def detalle_persona_fisica(request, pk):
+    persona = PersonaFisica.objects.get(pk=pk)
+    libreta = lc_m.LibretaSanitaria.objects.filter(persona=persona).last()
+    inscripcion = None
+    if libreta:
+        inscripcion = lc_m.Inscripcion.objects.filter(curso=libreta.curso).last()
+    patentes = a_m.Patente.objects.filter(persona=persona)
+    return render(request, "persona/persona_fisica_detail.html", {"persona": persona, "libreta": libreta,
+                                                                  "inscripcion": inscripcion, "patentes": patentes})
 
 
 @login_required(login_url='login')

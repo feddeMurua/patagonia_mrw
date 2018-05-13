@@ -7,8 +7,6 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from .models import *
 from django.utils.translation import ugettext as _
-from django_addanother.widgets import AddAnotherWidgetWrapper
-from django.core.urlresolvers import reverse_lazy
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -41,13 +39,9 @@ class InscripcionForm(forms.ModelForm):
 
     class Meta:
         model = Inscripcion
-        fields = ['persona', 'observaciones']
+        fields = ['persona', 'observaciones', 'rubro']
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
-            'persona': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
-            )
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
 
     def __init__(self, *args, **kwargs):
@@ -93,11 +87,7 @@ class LibretaForm(forms.ModelForm):
         model = LibretaSanitaria
         exclude = ['fecha', 'curso', 'fecha_vencimiento']
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
-            'persona': AddAnotherWidgetWrapper(
-                forms.Select,
-                reverse_lazy('personas:nueva_persona_fisica'),
-            )
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
         labels = {
             'profesional_examen_clinico': _("Médico clínico"),

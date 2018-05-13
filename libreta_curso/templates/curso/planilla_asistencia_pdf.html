@@ -1,0 +1,69 @@
+{% extends "easy_pdf/base.html" %}
+{% load staticfiles %}
+
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: landscape;
+        }
+        body {
+            font-size: 8px;
+        }
+        table {
+            margin: 0;
+            width: 100%;
+        }
+        .tabla-alumnos {
+            border: 1px solid black;
+        }
+        .tabla-alumnos td, .tabla-alumnos th {
+            text-align: center;
+            border: 1px solid black;
+        }
+        td, th {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <h3>PLANILLA DE ASISTENCIA</h3>
+            <h3>{% now "SHORT_DATE_FORMAT" %}</h3>
+            <table class="tabla-alumnos">
+                <thead>
+                    <tr>
+                        <th>Apellido y Nombre</th>
+                        <th>N° de doc.</th>
+                        <th>Dia 1</th>
+                        <th>Dia 2</th>
+                        <th>Dia 3</th>
+                        <th>Dia 4</th>
+                        <th>Dia 5</th>
+                        <th>Domicilio</th>
+                        <th>Teléfono</th>
+                        <th>Rubro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inscripcion in inscripciones %}
+                    <tr>
+                        <td>{{ inscripcion.persona.apellido }}, {{ inscripcion.persona.nombre }}</td>
+                        <td>{{ inscripcion.persona.dni }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ inscripcion.persona.domicilio }}</td>
+                        <td>{{ inscripcion.persona.telefono }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

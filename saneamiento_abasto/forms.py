@@ -4,14 +4,10 @@ from django import forms
 from functools import partial
 from .models import *
 from django.utils.translation import ugettext as _
-import datetime
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django_addanother.views import CreatePopupMixin
 
 DATEINPUT = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -27,6 +23,20 @@ class ListaAbastecedoresForm(forms.Form):
 
 
 class ReinspeccionForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DATEINPUT(), label="Fecha de realizacion")
+    inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
+        rol_actuante__nombre='Inspector'))
+    total_kg = forms.IntegerField(required=True, label="Total de Kg inspeccionados")
+
+    class Meta:
+        model = Reinspeccion
+        exclude = ['detalles']
+        labels = {
+            'certificado': _("N° de certificado")
+        }
+
+
+class ReinspeccionCCForm(forms.ModelForm):
     fecha = forms.DateField(widget=DATEINPUT(), label="Fecha de realizacion")
     inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Inspector'))
