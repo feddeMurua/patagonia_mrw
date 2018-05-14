@@ -274,3 +274,41 @@ class LocalidadForm(forms.ModelForm):
                 reverse_lazy('personas:nueva_provincia'),
             )
         }
+
+    def clean(self):
+        cleaned_data = super(LocalidadForm, self).clean()
+        nombre = cleaned_data.get("nombre")
+        provincia = cleaned_data.get("provincia")
+        if nombre and provincia:
+            if Localidad.objects.get(nombre__iexact=nombre, provincia=provincia):
+                self.add_error('nombre', forms.ValidationError('La localidad ingresada ya se encuentra registrada en el'
+                                                               'sistema para la provincia seleccionada'))
+
+
+class ProvinciaForm(forms.ModelForm):
+
+    class Meta:
+        model = Provincia
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super(ProvinciaForm, self).clean()
+        nombre = cleaned_data.get("nombre")
+        nacionalidad = cleaned_data.get("nacionalidad")
+        if nombre and nacionalidad:
+            if Provincia.objects.get(nombre__iexact=nombre, nacionalidad=nacionalidad):
+                self.add_error('nombre', forms.ValidationError('La provincia ingresada ya se encuentra registrada en el'
+                                                               'sistema para el pais seleccionado'))
+
+
+class NacionalidadForm(forms.ModelForm):
+
+    class Meta:
+        model = Nacionalidad
+        fields = '__all__'
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if Nacionalidad.objects.get(nombre__iexact=nombre):
+            raise forms.ValidationError('El pais ingresado ya se encuentra registrado en el sistema')
+        return nombre

@@ -20,12 +20,6 @@ import json
 import collections
 import numpy as np
 
-import os
-from django.conf import settings
-from django.template import Context
-from django.template.loader import get_template
-from xhtml2pdf import pisa
-
 
 '''
 ANALISIS
@@ -299,7 +293,6 @@ def confirmar_esterilizacion(request, pk):
     return HttpResponse()
 
 
-
 '''
 PATENTES
 '''
@@ -318,7 +311,7 @@ def retiro_garrapaticida(request, pk):
     else:
         patente.fecha_garrapaticida = timezone.now()
         patente.save()
-        log_modificar(request.user.id, patente, 'Entrega de Garrapaticida')
+        log_crear(request.user.id, patente, 'Entrega de Garrapaticida')
         return JsonResponse({'msg': "El retiro de garrapaticida se registro correctamente", 'error': False})
 
 
@@ -330,7 +323,7 @@ def retiro_antiparasitario(request, pk):
     else:
         patente.fecha_antiparasitario = timezone.now()
         patente.save()
-        log_modificar(request.user.id, patente, 'Entrega de Antiparasitario')
+        log_crear(request.user.id, patente, 'Entrega de Antiparasitario')
         return JsonResponse({'msg': "El retiro de antiparasitario se registro correctamente", 'error': False})
 
 

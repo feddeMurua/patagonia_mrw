@@ -171,6 +171,7 @@ def alta_reinspeccion(request):
         servicio = 'Reinspeccion Veterinaria'
         if form.is_valid():
             reinspeccion = form.save(commit=False)
+            reinspeccion.fecha = timezone.now().date()
             reinspeccion.detalles = False
             reinspeccion.save()
             importe = calculo_importe(reinspeccion.total_kg)
@@ -224,6 +225,7 @@ def carga_productos(request, reinspeccion_pk):
                 item.save()
             reinspeccion.detalles = True
             reinspeccion.save()
+            log_modificar(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
             return redirect('reinspecciones:lista_reinspecciones')
     else:
         if 'productos' in request.session:
@@ -240,7 +242,6 @@ def alta_reinspeccion_cc(request):
     productos = []
     if request.method == 'POST':
         form = ReinspeccionCCForm(request.POST)
-        servicio = 'Reinspeccion Veterinaria'
         if 'productos' in request.session:
             productos = request.session['productos']
         if form.is_valid():
@@ -251,7 +252,7 @@ def alta_reinspeccion_cc(request):
             cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
             detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
             detalle.save()
-            log_crear(request.user.id, reinspeccion, servicio)
+            log_crear(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
             return redirect('reinspecciones:lista_reinspecciones')
     else:
         if 'productos' in request.session:
@@ -273,6 +274,7 @@ def existe_producto(request, producto):
 def agregar_producto(request):
     form = ReinspeccionProductoForm(request.POST)
     success = True
+    total_kg = 0
     if form.is_valid():
         producto = form.save(commit=False)
         if existe_producto(request, producto):
@@ -280,7 +282,9 @@ def agregar_producto(request):
         else:
             request.session['productos'].append(producto.to_json())
             request.session.modified = True
-    return JsonResponse({'success': success, 'productos': request.session['productos']})
+            total_kg = sum(item['kilo_producto'] for item in request.session['productos'])
+
+    return JsonResponse({'success': success, 'productos': request.session['productos'], 'total_kg': total_kg})
 
 
 @login_required(login_url='login')
@@ -288,7 +292,8 @@ def eliminar_producto(request, nombre):
     productos = request.session['productos']
     productos[:] = [p for p in productos if p.get('producto').get('nombre') != nombre]
     request.session['productos'] = productos
-    return JsonResponse({'productos': request.session['productos']})
+    total_kg = sum(item['kilo_producto'] for item in request.session['productos'])
+    return JsonResponse({'productos': request.session['productos'], 'total_kg': total_kg})
 
 
 def alta_productos(request, reinspeccion):
@@ -609,7 +614,7 @@ def modificacion_control_plaga(request, pk):
     if request.method == 'POST':
         form = ModificacionControlDePlagaForm(request.POST, instance=control_plaga)
         if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Control de Plagas')
+            log_modificar(request.user.id, form.save(), 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')
     else:
         form = ModificacionControlDePlagaForm(instance=control_plaga)
@@ -663,7 +668,7 @@ def estadisticas_td(request):
             years = range(int(rango_form.cleaned_data['anio_hasta']),
                           int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
-    des_tr = {}  # desinfeccion taxi/remis
+    des_tr = {}
     des_escolares = {}
     des_tsa = {}
     des_colectivos = {}

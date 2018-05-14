@@ -1,5 +1,4 @@
 {% extends "base/base_detail.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Patentes{% endblock %}
@@ -15,7 +14,7 @@
                 <h3 class="panel-title">Datos de la Persona</h3>
             </div>
             <div class="panel-body">
-                <table class="table table-information">
+                <table class="table table-striped table-information">
                     <tbody>
                         <tr>
                             <td>Apellido:</td>
@@ -48,7 +47,7 @@
                 <h3 class="panel-title">Datos de la Mascota</h3>
             </div>
             <div class="panel-body">
-                <table class="table table-information">
+                <table class="table table-striped table-information">
                     <tbody>
                         <tr>
                             <td>Nombre:</td>
@@ -97,15 +96,11 @@
                         </tr>
                         <tr>
                             <td>Ultimo garrapaticida:</td>
-                            {% if object.fecha_garrapaticida %}
-                                <td>{{ object.fecha_garrapaticida }}</td>
-                            {% endif %}
+                            <td>{{ object.fecha_garrapaticida|default_if_none:"" }}</td>
                         </tr>
                         <tr>
                             <td>Ultimo antiparasitario:</td>
-                            {% if object.fecha_antiparasitario %}
-                                <td>{{ object.fecha_antiparasitario }}</td>
-                            {% endif %}
+                            <td>{{ object.fecha_antiparasitario|default_if_none:"" }}</td>
                         </tr>
                         <tr>
                             <td>Observaciones:</td>

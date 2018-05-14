@@ -304,7 +304,7 @@
                             if ($("#action").val() == 'confirm') {
                                 $('#agregar_producto').modal('hide');
                             }
-                            refresh_table(data['productos']);
+                            refresh_table(data);
                             refresh_resumen(data['productos']);
                             document.getElementById("productoForm").reset();
                         } else {
@@ -314,7 +314,8 @@
             });
         });
 
-        function refresh_table(productos){
+        function refresh_table(data){
+            productos = data['productos']
             var $tbody = $("#table-list tbody");
             $tbody.children().remove();
             for(var i = 0; i < productos.length; i++){
@@ -326,6 +327,11 @@
                     "</tr>";
                 $tbody.append(row);
             }
+            var total = "<tr align='center'>" +
+                            "<td><b>Total</b></td>" +
+                            "<td colspan='2'>" + data['total_kg'] + " Kg</td>" +
+                        "</tr>";
+            $tbody.append(total);
         }
 
         function refresh_resumen(productos){
@@ -360,7 +366,7 @@
                     success: function(data) {
                         swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
                             function(){
-                                refresh_table(data['productos']);
+                                refresh_table(data);
                             }
                         );
                     },
