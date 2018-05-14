@@ -239,6 +239,10 @@ class ListaPatentesForm(forms.Form):
     patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)
 
 
+class ListaPatentesEsterilizacionForm(forms.Form):
+    patente = forms.ModelChoiceField(queryset=Patente.objects.filter(mascota__esterilizado=False), required=True)
+
+
 class EsterilizacionPatenteForm(forms.ModelForm):
     ultimo_celo = forms.DateField(widget=DateInput(), required=False)
 

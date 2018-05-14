@@ -10,7 +10,7 @@ Contribuyentes
 
   Estas funcionalidades son:
 
-   - :ref:`Detalle Contribuyente <detalle-contribuyente>`
+   - :ref:`Detalle del Contribuyente <detalle-contribuyente>`
    - :ref:`Modificar Contribuyente <modificar-contribuyente>`
    - :ref:`Eliminar Contribuyente <eliminar-contribuyente>`
 

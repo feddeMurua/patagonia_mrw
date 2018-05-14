@@ -241,7 +241,7 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
 @login_required(login_url='login')
 def alta_esterilizacion(request):
     if request.method == 'POST':
-        form = ListaPatentesForm(request.POST)
+        form = ListaPatentesEsterilizacionForm(request.POST)
         esterilizacion_form = EsterilizacionPatenteForm(request.POST)
         if form.is_valid() & esterilizacion_form.is_valid():
             esterilizacion = esterilizacion_form.save(commit=False)
@@ -252,7 +252,7 @@ def alta_esterilizacion(request):
             log_crear(request.user.id, esterilizacion, 'Turno para Esterilizacion de Animal Patentado')
             return redirect('esterilizacion:lista_esterilizaciones')
     else:
-        form = ListaPatentesForm
+        form = ListaPatentesEsterilizacionForm
         esterilizacion_form = EsterilizacionPatenteForm
     return render(request, 'esterilizacion/esterilizacion_turno.html', {'form': form,
                                                                         'esterilizacion_form': esterilizacion_form})

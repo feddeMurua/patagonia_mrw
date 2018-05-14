@@ -3,7 +3,7 @@ Personal Propio
   Se presentará una pantalla que contendrá un listado con todos el *Personal Propio*
   que se encuentren registrados en el sistema hasta la fecha.
 
-  .. image::_static/listado_pp.png
+  .. image:: _static/listado_pp.png
     :align: center
 
   Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular cada *Persona*.
@@ -28,7 +28,7 @@ Nueva Persona
 
   A continuación el sistema lo redirigirá a la siguiente pantalla:
 
-  .. image::_static/alta_personafisica.png
+  .. image:: _static/alta_personafisica.png
      :align: center
 
   En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta una nueva *Persona*.
@@ -55,7 +55,7 @@ Detalle de Persona
 
    Una vez realizado el paso anterior aparecerá la siguiente vista emergente:
 
-   .. image::_static/detalle_personalpropio.png
+   .. image:: _static/detalle_personalpropio.png
       :align: center
 
    En esta parte el usuario podrá observar la información adicional de la *Persona*. Si desea volver al listado inicial, presionará el botón ``Regresar``.
@@ -70,7 +70,7 @@ Modificar Persona
 
    Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:
 
-   .. image::_static/mod_personalpropio.png
+   .. image:: _static/mod_personalpropio.png
       :align: center
 
    En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados a la *Persona*.
@@ -97,7 +97,7 @@ Eliminar Persona
 
    Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
 
-   .. image::_static/baja_personalpropio.png
+   .. image:: _static/baja_personalpropio.png
       :align: center
 
    En esta parte el usuario deberá decidir si confirma la eliminación de la *Persona* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
