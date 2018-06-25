@@ -1,7 +1,5 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles %}
-{% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block title %}Nuevo Arqueo Diario de Caja{% endblock %}
 
@@ -115,8 +113,9 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <input type="submit" class="btn btn-primary" value="Aceptar">
-                    <a class="btn btn-danger btn-cancelar" href="{% url 'arqueo:lista_arqueos' %}">Cancelar</a>
+                    <input type="submit" class="btn btn-primary" value="Aceptar"
+                           onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
+                    {% block btn-cancelar %}{% endblock %}
                 </div>
             </div>
         </form>

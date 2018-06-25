@@ -10,8 +10,9 @@
 {% block no-particles %}{% endblock %}
 
 {% block content %}
-    <div class="container container-detalle">
-        <div class="panel panel-primary">
+    <div class="container-fluid container-list col-md-12">
+        <div class="panel panel-info panel-table">
+            {% block panel-heading %}{% endblock %}
             <div class="panel-body">{% block detail %}{% endblock %}</div>
             <div class="panel-footer">{% block btn-footer %}{% endblock %}</div>
         </div>

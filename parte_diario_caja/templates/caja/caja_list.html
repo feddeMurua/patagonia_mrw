@@ -1,16 +1,23 @@
 {% extends "base/base_listado.html" %}
-{% load staticfiles %}
-{% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block title %}Parte Diario de Caja{% endblock %}
+
+{% block more-stylesheets %}
+    <style>
+        #id_fecha {
+            text-align: center;
+            width: 50%;
+        }
+    </style>
+{% endblock %}
 
 {% block header-title %}Parte Diario de Caja{% endblock %}
 
 {% block panel-title %}Movimientos diarios{% endblock %}
 
 {% block btn-nuevo %}
-    <form class="form-inline" method="post" style="margin: 0px">
+    <form class="form-inline" method="post" style="margin: 0px" target="_blank">
         {% csrf_token %}
         {{ fecha_form.media }}
         {% for field in fecha_form %}
@@ -54,12 +61,8 @@
 
 {% block more-scripts %}
     <script>
-        $('#id_fecha').datetimepicker({
-            timepicker: false,
-            format: 'd/m/Y',
-            maxDate: new Date(),
-            disabledWeekDays:[0]
+        $.datepicker.setDefaults({
+            maxDate: new Date()
         });
-        $.datetimepicker.setLocale('es');
     </script>
 {% endblock %}

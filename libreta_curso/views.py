@@ -19,6 +19,8 @@ from django.utils import timezone
 import json
 import collections
 from parte_diario_caja.models import DetalleMovimiento
+from base64 import b64decode
+from django.core.files.base import ContentFile
 
 
 '''
@@ -56,13 +58,13 @@ def baja_curso(request, pk):
 def modificacion_curso(request, pk):
     curso = Curso.objects.get(pk=pk)
     if request.method == 'POST':
-        form = CursoForm(request.POST, instance=curso)
+        form = ModificacionCursoForm(request.POST, instance=curso)
         if form.is_valid():
             log_modificar(request.user.id, form.save(), 'Curso de Manipulacion de Alimentos')
             return redirect('cursos:lista_cursos')
     else:
-        form = CursoForm(instance=curso)
-    return render(request, 'curso/curso_form.html', {'form': form})
+        form = ModificacionCursoForm(instance=curso)
+    return render(request, 'curso/curso_form.html', {'form': form, 'modificacion': True})
 
 
 @login_required(login_url='login')
@@ -93,7 +95,8 @@ class PdfAsistencia(LoginRequiredMixin, PDFTemplateView):
         curso = Curso.objects.get(pk=pk)
         return super(PdfAsistencia, self).get_context_data(
             curso=curso,
-            inscripciones=Inscripcion.objects.filter(curso=curso)
+            inscripciones=Inscripcion.objects.filter(curso=curso),
+            title='Planilla de asistencia a curso N°'
         )
 
 
@@ -106,7 +109,8 @@ class PdfAprobados(LoginRequiredMixin, PDFTemplateView):
         curso = Curso.objects.get(pk=pk)
         return super(PdfAprobados, self).get_context_data(
             curso=curso,
-            inscripciones=Inscripcion.objects.filter(curso=curso, calificacion="Aprobado")
+            inscripciones=Inscripcion.objects.filter(curso=curso, calificacion="Aprobado"),
+            title='Planilla de aprobados de curso N°'
         )
 
 
@@ -189,8 +193,10 @@ class PdfInscripcion(LoginRequiredMixin, PDFTemplateView):
     redirect_field_name = 'next'
 
     def get_context_data(self, pk):
+        inscripcion = Inscripcion.objects.get(pk=pk)
         return super(PdfInscripcion, self).get_context_data(
-            inscripcion=Inscripcion.objects.get(pk=pk)
+            inscripcion=inscripcion,
+            title='Comprobante de inscripcion a curso N° ' + str(inscripcion.curso.pk)
         )
 
 
@@ -214,6 +220,12 @@ def lista_libreta(request):
                                                          'fecha_hoy': timezone.now()})
 
 
+def img_to_base64(data,usr):
+    formato, imgstr = data.split(';base64,')
+    ext = formato.split('/')[-1]
+    return ContentFile(b64decode(imgstr), name=usr + '.' + ext)  # You can save this as file instance.
+
+
 @login_required(login_url='login')
 def alta_libreta(request):
     if request.method == 'POST':
@@ -229,6 +241,8 @@ def alta_libreta(request):
             cursos = get_cursos(libreta.persona.pk)
             if cursos:
                 libreta.curso = cursos[-1]
+            if request.POST['foto']:
+                libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
             if request.POST['optradio'] == 'previa':
                 if detalle_mov_form.is_valid():
                     libreta.save()
@@ -271,27 +285,16 @@ def modificacion_libreta(request, pk):
         form = ModificacionLibretaForm(request.POST, instance=libreta)
         if form.is_valid():
             libreta = form.save(commit=False)
-            if libreta.tipo_libreta != 'Celeste':
-                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(years=1)
-            else:
-                libreta.fecha_vencimiento = timezone.now().date() + relativedelta(months=int(request.POST['meses']))
+            if request.POST['foto'] == 'borrar':
+                libreta.foto = None
+            elif request.POST['foto'] == 'borrar':
+                libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
             libreta.save()
             log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = ModificacionLibretaForm(instance=libreta)
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'modificacion': True})
-
-
-class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'libreta/libreta_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        return super(PdfLibreta, self).get_context_data(
-            libreta=LibretaSanitaria.objects.get(pk=pk)
-        )
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'libreta': libreta, 'modificacion': True})
 
 
 @login_required(login_url='login')
@@ -310,6 +313,10 @@ def renovacion_libreta(request, pk):
             cursos = get_cursos(libreta.persona.pk)
             if cursos:
                 libreta.curso = cursos[-1]
+            if request.POST['foto'] == 'borrar':
+                libreta.foto = None
+            elif request.POST['foto'] == 'borrar':
+                libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
             if request.POST['optradio'] == 'previa':
                 if detalle_mov_form.is_valid():
                     libreta.save()
@@ -327,7 +334,19 @@ def renovacion_libreta(request, pk):
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
         return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                             'mov_form': mov_form})
+                                                             'mov_form': mov_form, 'libreta': libreta})
+
+
+class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'libreta/libreta_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk):
+        return super(PdfLibreta, self).get_context_data(
+            libreta=LibretaSanitaria.objects.get(pk=pk),
+            title='Libreta sanitaria N°'
+        )
 
 
 '''

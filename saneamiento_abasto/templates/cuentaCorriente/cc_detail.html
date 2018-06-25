@@ -1,59 +1,63 @@
-{% extends "base/base_detail.html" %}
-{% load staticfiles %}
+{% extends "base/base_listado.html" %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Cuentas Corrientes{% endblock %}
 
 {% block more-stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/MonthPicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
+    <style>
+        .modal-dialog {
+            max-width: 100%;
+            width: auto !important;
+            display: inline-block;
+        }
+
+        .modal.in {
+             text-align: center;
+        }
+    </style>
 {% endblock %}
 
 {% block header-title %}Detalle de la Cuenta Corriente{% endblock %}
 
 {% block url-volver %}{% url 'cuentas_corrientes:lista_cc' %}{% endblock %}
 
-{% block detail %}
-    {% if detalles %}
-        <div class="container-fluid container-list col-md-12" id="tbl-detalles">
-            <div class="row">
-                <div class="panel panel-default panel-table">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Detalles de la cuenta corriente - Abastecedor: {{ cuenta.abastecedor }}</h3>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-bordered table-list">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Turno</th>
-                                    <th>Precintado</th>
-                                    <th>Certificado</th>
-                                    <th>Total Kg</th>
-                                    <th><em class="glyphicon glyphicon-cog"></em></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for detalle in detalles %}
-                                    <tr>
-                                        <td>{{ detalle.reinspeccion.fecha }}</td>
-                                        <td>{{ detalle.reinspeccion.turno }}</td>
-                                        <td>{{ reinspeccion.precintado|default_if_not:"" }}</td>
-                                        <td>{{ detalle.reinspeccion.certificado }}</td>
-                                        <td>{{ detalle.reinspeccion.total_kg }},0 Kg</td>
-                                        <td>
-                                            <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+{% block panel-title %}Reinspecciones en cuenta corriente{% endblock %}
 
-    <div id="generar_certificado" class="modal fade" role="dialog">
+{% block btn-nuevo %}
+    {% if listado %}
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#generar_certificado">Certificado de Deuda</button>
+        <a class="btn btn-success" href="{% url 'cuentas_corrientes:cancelar_deuda_cc' pk %}">Cancelar Deuda</a>
+    {% endif %}
+{% endblock %}
+
+{% block tabla %}
+    <thead align="center">
+        <tr>
+            <th>Fecha</th>
+            <th>Turno</th>
+            <th>Precintado</th>
+            <th>Certificado</th>
+            <th>Total Kg</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+    </thead>
+    <tbody align="center">
+        {% for detalle in listado %}
+            <tr>
+                <td>{{ detalle.reinspeccion.fecha }}</td>
+                <td>{{ detalle.reinspeccion.turno }}</td>
+                <td>{{ reinspeccion.precintado }}</td>
+                <td>{{ detalle.reinspeccion.certificado }}</td>
+                <td>{{ detalle.reinspeccion.total_kg }},0 Kg</td>
+                <td>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+    <div id="generar_certificado" class="modal fade" role="dialog" style="position:absolute;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -65,7 +69,7 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <label>Periodo *</label><br>
-                            <input id="my_picker" name="periodo" type="text" required=""/>
+                            <input id="id_periodo" name="periodo" type="text" required="" style="text-align:center;"/>
                         </div>
                         <input type="submit" class="btn btn-primary" id="btn-confirmar" value="Confirmar"/>
                         <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
@@ -76,17 +80,16 @@
     </div>
 {% endblock %}
 
-{% block btn-footer %}
-    <a href="{% url 'cuentas_corrientes:lista_cc' %}" class="btn btn-primary" role="button">Regresar</a>
-    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#generar_certificado">Generar Certificado de Deuda</button>
-{% endblock %}
-
 {% block more-scripts %}
-    <script src="{% static 'js/MonthPicker.js' %}"></script>
+    <script src="{% static 'js/moment.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'js/es-us.js' %}"></script>
     <script>
-        $('#my_picker').MonthPicker({
-            Button: false,
-            MaxMonth: 0
+        $(function () {
+            $('#id_periodo').datetimepicker({
+                format: 'MM/YYYY',
+                locale: 'es-us'
+            });
         });
     </script>
 {% endblock %}

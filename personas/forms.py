@@ -49,7 +49,7 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
 
     class Meta:
         model = PersonaFisica
-        exclude = ['documentacion_retirada', 'domicilio']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social']
         widgets = {
             'nacionalidad': AddAnotherWidgetWrapper(
                 forms.Select,
@@ -118,6 +118,9 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
     class Meta:
         model = PersonaJuridica
         exclude = ['domicilio']
+        labels = {
+            'nombre': _("Razon social")
+        }
 
     def clean_cuit(self):
         cuit = self.cleaned_data['cuit']
@@ -142,7 +145,8 @@ class AltaPersonalPropioForm(forms.ModelForm):
 
     class Meta:
         model = PersonalPropio
-        exclude = ['documentacion_retirada', 'domicilio']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
+                  'rol_actuante']
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
@@ -169,12 +173,6 @@ class DomicilioForm(forms.ModelForm):
     class Meta:
         model = Domicilio
         fields = '__all__'
-        labels = {
-            'calle_entre1': _("Entre"),
-            'calle_entre2': _("Entre"),
-            'nro': _("N°"),
-            'dpto': _("Departamento")
-        }
         widgets = {
             'localidad': AddAnotherWidgetWrapper(
                 forms.Select,

@@ -1,7 +1,5 @@
 {% extends "base/base.html" %}
-{% load staticfiles %}
-{% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_estadisticas.css' %}"/>
@@ -11,10 +9,10 @@
 
 {% block content %}
     <div class="container-fluid container-form">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="panel panel-default">
-                <div class="panel-heading form-inline" align="right">
+        <div class="panel panel-info">
+            <div class="panel-heading" align="right">
+                <form class="form-inline" method="post" style="margin: 0px">
+                    {% csrf_token %}
                     {{ rango_form.media }}
                     {% for field in rango_form %}
                         <div class="form-group">
@@ -31,14 +29,14 @@
                     {% if rango_form.non_field_errors%}
                         <div class="alert alert-danger" role="alert">{{rango_form.non_field_errors}}</div>
                     {% endif %}
-                </div>
-                <div class="panel-body">
-                    <div id="tabs" style="overflow:scroll;">
-                        {% block tabs %}{% endblock %}
-                    </div>
+                </form>
+            </div>
+            <div class="panel-body">
+                <div id="tabs" style="overflow:scroll;">
+                    {% block tabs %}{% endblock %}
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 {% endblock %}
 

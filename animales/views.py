@@ -107,7 +107,8 @@ class PdfAnalisis(LoginRequiredMixin, PDFTemplateView):
         analisis = Analisis.objects.get(pk=pk)
         return super(PdfAnalisis, self).get_context_data(
             analisis=analisis,
-            porcinos=Porcino.objects.filter(analisis=analisis)
+            porcinos=Porcino.objects.filter(analisis=analisis),
+            title='Analisis N°'
         )
 
 
@@ -181,7 +182,8 @@ class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
 
     def get_context_data(self, pk):
         return super(PdfSolicitud, self).get_context_data(
-            solicitud=SolicitudCriaderoCerdos.objects.get(pk=pk)
+            solicitud=SolicitudCriaderoCerdos.objects.get(pk=pk),
+            title='Solicitud N°'
         )
 
 
@@ -234,7 +236,8 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
         return super(PdfConsentimiento, self).get_context_data(
             esterilizacion=esterilizacion,
             tiempo_edad=tiempo_edad,
-            edad_mascota=edad_mascota
+            edad_mascota=edad_mascota,
+            title='Esterilizacion N°'
         )
 
 
@@ -254,7 +257,7 @@ def alta_esterilizacion(request):
     else:
         form = ListaPatentesEsterilizacionForm
         esterilizacion_form = EsterilizacionPatenteForm
-    return render(request, 'esterilizacion/esterilizacion_turno.html', {'form': form,
+    return render(request, 'esterilizacion/esterilizacion_patentada.html', {'form': form,
                                                                         'esterilizacion_form': esterilizacion_form})
 
 
@@ -272,7 +275,7 @@ def alta_esterilizacion_nopatentado(request):
     else:
         form = EsterilizacionNuevoForm
         mascota_form = MascotaForm
-    return render(request, 'esterilizacion/esterilizacion_form.html', {'form': form, 'mascota_form': mascota_form})
+    return render(request, 'esterilizacion/esterilizacion_no_patentada.html', {'form': form, 'mascota_form': mascota_form})
 
 
 @login_required(login_url='login')
@@ -367,8 +370,10 @@ class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
     redirect_field_name = 'next'
 
     def get_context_data(self, pk):
+        patente = Patente.objects.get(pk=pk)
         return super(PdfCarnet, self).get_context_data(
-            patente=Patente.objects.get(pk=pk)
+            patente=patente,
+            title='Patente N°: ' + str(patente.nro_patente)
         )
 
 
@@ -471,17 +476,6 @@ def baja_control(request, pk):
     return HttpResponse()
 
 
-class PdfInfraccion(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'control/infraccion_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk_control):
-        return super(PdfInfraccion, self).get_context_data(
-            control=ControlAntirrabico.objects.get(pk=pk_control)
-        )
-
-
 @login_required(login_url='login')
 def lista_visitas_control(request, pk_control):
     lista_visitas = Visita.objects.filter(control__pk=pk_control)
@@ -543,66 +537,55 @@ def lista_retiro_entrega(request):
 
 @login_required(login_url='login')
 def alta_tramite(request):
-    if 'tramite' in request.session:
-        del request.session['tramite']
     if request.method == 'POST':
         form = RetiroEntregaForm(request.POST)
+        patentes_form = ListaPatentesForm(request.POST)
+        personas_form = f.ListaPersonasGenericasForm(request.POST)
+        mascota_form = MascotaForm(request.POST)
         if form.is_valid():
             retiro_entrega = form.save(commit=False)
-            request.session['tramite'] = retiro_entrega.to_json()
-            if retiro_entrega.patentado:
-                return redirect('retiros_entregas:nuevo_tramite_patentado')
+            if 'patentado' in request.POST and patentes_form.is_valid():
+                patente = patentes_form.cleaned_data['patente']
+                retiro_entrega.interesado = patente.persona
+                retiro_entrega.mascota = patente.mascota
+                if retiro_entrega.tramite == 'RETIRO':
+                    retiro_entrega.mascota.baja = True
+                    retiro_entrega.mascota.save()
+                retiro_entrega.save()
+                log_crear(request.user.id, retiro_entrega, 'Retiro/Entrega de Animal Patentado')
+                patente.delete()
+                return redirect('retiros_entregas:lista_retiro_entrega')
             else:
-                return redirect('retiros_entregas:nuevo_tramite_nopatentado')
+                mascota = mascota_form.save()
+                retiro_entrega.mascota = mascota
+                retiro_entrega.interesado = form.cleaned_data['persona']
+                if retiro_entrega.tramite == 'RETIRO':
+                    mascota.baja = True
+                    mascota.save()
+                retiro_entrega.save()
+                log_crear(request.user.id, retiro_entrega, 'Nuevo Retiro/Entrega de Animal no Patentado')
+                return redirect('retiros_entregas:lista_retiro_entrega')
     else:
         form = RetiroEntregaForm
-    return render(request, 'retiroEntrega/retiroEntrega_tramite.html', {'form': form})
-
-
-@login_required(login_url='login')
-def alta_tramite_patentado(request):
-    if request.method == 'POST':
-        tramite = request.session['tramite']
-        form = ListaPatentesForm(request.POST)
-        if form.is_valid():
-            patente = form.cleaned_data['patente']
-            retiro_entrega = RetiroEntregaAnimal(tramite=tramite['tramite'], observaciones=tramite['observaciones'],
-                                                 patentado=tramite['patentado'], interesado=patente.persona,
-                                                 mascota=patente.mascota)
-            if retiro_entrega.tramite == 'RETIRO':
-                retiro_entrega.mascota.baja = True
-                retiro_entrega.mascota.save()
-            retiro_entrega.save()
-            log_crear(request.user.id, retiro_entrega, 'Retiro/Entrega de Animal Patentado')
-            patente.delete()
-            return redirect('retiros_entregas:lista_retiro_entrega')
-    else:
-        form = ListaPatentesForm
-    return render(request, 'retiroEntrega/retiroEntrega_patentado.html', {'form': form})
-
-
-@login_required(login_url='login')
-def alta_tramite_nopatentado(request):
-    if request.method == 'POST':
-        form = f.ListaPersonasGenericasForm(request.POST)
-        mascota_form = MascotaForm(request.POST)
-        if form.is_valid() and mascota_form.is_valid():
-            mascota = mascota_form.save()
-            tramite = request.session['tramite']
-            retiro_entrega = RetiroEntregaAnimal(tramite=tramite['tramite'], observaciones=tramite['observaciones'],
-                                                 patentado=tramite['patentado'], mascota=mascota,
-                                                 interesado=form.cleaned_data['persona'])
-            if retiro_entrega.tramite == 'RETIRO':
-                mascota.baja = True
-                mascota.save()
-            retiro_entrega.save()
-            log_crear(request.user.id, retiro_entrega, 'Nuevo Retiro/Entrega de Animal no Patentado')
-            return redirect('retiros_entregas:lista_retiro_entrega')
-    else:
-        form = f.ListaPersonasGenericasForm
+        patentes_form = ListaPatentesForm
+        personas_form = f.ListaPersonasGenericasForm
         mascota_form = MascotaForm
-    return render(request, 'retiroEntrega/retiroEntrega_noPatentado.html', {'form': form,
-                                                                            'mascota_form': mascota_form})
+    return render(request, 'retiroEntrega/retiroEntrega_tramite.html', {'form': form, 'patentes_form': patentes_form,
+                                                                        'personas_form': personas_form,
+                                                                        'mascota_form': mascota_form})
+
+
+@login_required(login_url='login')
+def modificacion_tramite(request, pk):
+    tramite = RetiroEntregaAnimal.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ModificacionRetiroEntregaForm(request.POST, instance=tramite)
+        if form.is_valid():
+            log_modificar(request.user.id, form.save(), 'Retiro/Entrega de Animal')
+            return redirect('retiros_entregas:lista_retiro_entrega')
+    else:
+        form = ModificacionRetiroEntregaForm(instance=tramite)
+    return render(request, 'retiroEntrega/retiroEntrega_modificacion.html', {'form': form})
 
 
 @login_required(login_url='login')

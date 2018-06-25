@@ -88,7 +88,7 @@
                 <h3 class="panel-title">Otros Datos</h3>
             </div>
             <div class="panel-body">
-                <table class="table">
+                <table class="table table-striped">
                     <tbody>
                         <tr>
                             <td>Número de patente</td>
@@ -114,5 +114,6 @@
 {% endblock %}
 
 {% block btn-footer %}
+    <a href="{% url 'patentes:carnet_pdf' object.pk %}" class="btn btn-warning" target="_blank" >Imprimir carnet</a>
     <a href="{% url 'patentes:lista_patentes' %}" class="btn btn-primary">Regresar</a>
 {% endblock %}

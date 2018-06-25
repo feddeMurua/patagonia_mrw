@@ -1,5 +1,4 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Vehiculos{% endblock %}
@@ -24,7 +23,7 @@
         categoria = $('#id_categoria'),
         rubro = $('#id_rubro_vehiculo');
 
-        categoria.on('change', setOptionsSelect);
+        categoria.change(setOptionsSelect);
         setOptionsSelect();
 
         function setOptionsSelect() {

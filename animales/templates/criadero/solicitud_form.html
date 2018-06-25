@@ -14,16 +14,48 @@
                 <h3 class="panel-title">Domicilio del Criadero</h3>
             </div>
             <div class="panel-body">
-                {% for field in domicilio_form %}
-                    <div class="form-group">
-                        <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
-                        {{ field|add_class:'form-control' }}
-                        {% for error in field.errors %}
-                          <span class="help-block">{{error}}</span>
-                        {% endfor %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Chacra *</label>
+                            {{ domicilio_form.chacra|add_class:'form-control' }}
+                        </div>
                     </div>
-
-                {% endfor %}
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Parcela</label>
+                            {{ domicilio_form.parcela|add_class:'form-control' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Sector</label>
+                            {{ domicilio_form.sector|add_class:'form-control' }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Circunscripción</label>
+                            {{ domicilio_form.circunscripcion|add_class:'form-control' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Ruta</label>
+                            {{ domicilio_form.ruta|add_class:'form-control' }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>KM</label>
+                            {{ domicilio_form.km|add_class:'form-control' }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

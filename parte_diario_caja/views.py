@@ -84,12 +84,12 @@ class PdfParteDiario(LoginRequiredMixin, PDFTemplateView):
     def get_context_data(self, anio, mes, dia):
         fecha = datetime.date(int(anio), int(mes), int(dia))
         detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha).order_by('movimiento__nro_ingreso')
-        print(detalles)
         return super(PdfParteDiario, self).get_context_data(
             fecha_maniana=fecha + relativedelta(days=1),
             detalles=detalles,
             subtotales=get_subtotales(detalles),
-            total=sum(detalle.importe for detalle in detalles)
+            total=sum(detalle.importe for detalle in detalles),
+            title='Parte diario del dia ' + str(fecha.strftime('%d/%m/%Y'))
         )
 
 
@@ -153,9 +153,9 @@ def alta_arqueo(request):
 
 
 def calculo_arqueo(arqueo):
-    return {'quinientos': arqueo.quinientos * 500, 'doscientos': arqueo.doscientos * 200, 'cien': arqueo.cien * 100,
-            'b_cincuenta': arqueo.b_cincuenta * 50, 'veinte': arqueo.veinte * 20, 'diez': arqueo.diez * 10,
-            'cinco': arqueo.cinco * 5, 'b_dos': arqueo.b_dos * 2, 'm_dos': arqueo.m_dos * 2, 'uno': arqueo.uno,
+    return {'mil': arqueo.mil, 'quinientos': arqueo.quinientos * 500, 'doscientos': arqueo.doscientos * 200,
+            'cien': arqueo.cien * 100, 'b_cincuenta': arqueo.b_cincuenta * 50, 'veinte': arqueo.veinte * 20,
+            'diez': arqueo.diez * 10, 'cinco': arqueo.cinco * 5, 'm_dos': arqueo.m_dos * 2, 'uno': arqueo.uno,
             'm_cincuenta': arqueo.m_cincuenta * 0.50, 'veinticinco': arqueo.veinticinco * 0.25, 'arqueo': arqueo}
 
 
@@ -169,9 +169,12 @@ class PdfArqueo(LoginRequiredMixin, PDFTemplateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
-    def get_context_data(self, pk):
+    def get_context_data(self, planilla):
+        arqueo = ArqueoDiario.objects.get(nro_planilla=planilla)
         return super(PdfArqueo, self).get_context_data(
-            datos=calculo_arqueo(ArqueoDiario.objects.get(pk=pk))
+            datos=calculo_arqueo(arqueo),
+            title='Arqueo de efectivo del dia ' + str(arqueo.fecha.strftime('%d/%m/%Y') + ' / N° de planilla')
+
         )
 
 

@@ -1,5 +1,4 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Vehiculos{% endblock %}
@@ -27,7 +26,7 @@
         categoria = $('#id_categoria'),
         rubro = $('#id_rubro_vehiculo');
 
-        tipo_vehiculo.on('change', hideFields);
+        tipo_vehiculo.change(hideFields);
         hideFields();
 
         function hideFields() {
@@ -47,7 +46,7 @@
             }
         }
 
-        categoria.on('change', setOptionsSelect);
+        categoria.change(setOptionsSelect);
         setOptionsSelect();
 
         function setOptionsSelect() {

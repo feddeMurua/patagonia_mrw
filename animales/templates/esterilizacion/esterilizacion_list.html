@@ -8,7 +8,8 @@
 {% block panel-title %}Turnos{% endblock %}
 
 {% block btn-nuevo %}
-    <a href="{% url 'esterilizacion:nueva_esterilizacion' %}" class="btn btn-sm btn-primary btn-create">Nuevo Turno</a>
+    <a href="{% url 'esterilizacion:nueva_esterilizacion' %}" class="btn btn-sm btn-primary btn-create">Nuevo Turno - Mascota patentada</a>
+    <a href="{% url 'esterilizacion:nueva_esterilizacion_nopatentado' %}" class="btn btn-sm btn-info btn-create" >Nuevo Turno - Mascota no patentada</a>
 {% endblock %}
 
 {% block tabla %}

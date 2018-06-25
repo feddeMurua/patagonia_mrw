@@ -1,0 +1,79 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles bootstrap3 widget_tweaks %}
+
+{% block title %}Esterilización de Mascotas{% endblock %}
+
+{% block more-stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
+{% endblock %}
+
+{% block header-title %}Alta de Esterilización{% endblock %}
+
+{% block url-volver %}{% url 'esterilizacion:lista_esterilizaciones' %}{% endblock %}
+
+{% block form-left %}
+    <div class="form-group">
+        <label>{{ form.interesado.label }} *</label>
+        {{ form.interesado|add_class:'form-control' }}
+        {% for error in form.interesado.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label>{{ form.turno.label }} *</label>
+        {{ form.turno|add_class:'form-control' }}
+        {% for error in form.turno.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block extra-form %}
+    {% include 'mascota/cuadro_mascota.html' %}
+{% endblock %}
+
+{% block form-right %}
+    <div class="col-xs-12 col-md-5" id="container-form-right">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Otros datos de la Mascota</h3>
+            </div>
+            <div class="panel-body">
+                {% for field in form %}
+                    {% if field.label != 'Interesado' and field.label != 'Turno' %}
+                        <div class="form-group">
+                            <label>{{ field.label }} {%if field.field.required %}*{%endif%}</label>
+                            {{ field|add_class:'form-control' }}
+                            {% for error in field.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'esterilizacion:lista_esterilizaciones' %}">Cancelar</a>
+{% endblock %}
+
+{% block more-scripts %}
+    <script src="{% static 'js/moment.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'js/es-us.js' %}"></script>
+    <script>
+        $(function () {
+            $('#id_turno').datetimepicker({
+                format: 'DD/MM/YYYY [-] HH:mm',
+                locale: 'es-us',
+                sideBySide: true,
+                daysOfWeekDisabled: [0],
+                minDate: moment(),
+                stepping: 30,
+                enabledHours: [8,9,10,11,12]
+            });
+        });
+    </script>
+{% endblock %}

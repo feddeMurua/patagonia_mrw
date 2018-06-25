@@ -122,7 +122,7 @@ class ControlDePlagaForm(forms.ModelForm):
 
     class Meta:
         model = ControlDePlaga
-        exclude = ['fecha_hoy', 'pagado']
+        exclude = ['fecha', 'pagado']
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }
@@ -140,7 +140,7 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
 
     class Meta:
         model = ControlDePlaga
-        exclude = ['fecha_hoy', 'responsable', 'funcionario_actuante', 'pagado']
+        exclude = ['fecha', 'responsable', 'funcionario_actuante', 'pagado']
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }

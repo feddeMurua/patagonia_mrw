@@ -30,7 +30,9 @@
                 <td>{{ solicitud.estado }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'criadero:detalle_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'criadero:borrar_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    {% if not solicitud.estado == "Aprobada" %}
+                        <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'criadero:borrar_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                    {% endif %}
                     {% if not solicitud.estado == 'Aprobada' %}
                         <a class="btn btn-info" data-toggle="tooltip" title="Aplazar" href="{% url 'criadero:aplazo_solicitud' solicitud.pk %}"><em class="glyphicon glyphicon-remove"></em></a>
                         <a class="btn btn-success" data-toggle="tooltip" title="Registrar disposicion" href="{% url 'criadero:nueva_disposicion' solicitud.pk %}"><em class="glyphicon glyphicon-ok"></em></a>

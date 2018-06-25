@@ -1,5 +1,4 @@
 {% extends "base/base_listado.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Control de Plagas{% endblock %}
@@ -25,7 +24,7 @@
     <tbody>
         {% for control in listado %}
             <tr>
-                <td>{{ control.fecha_hoy }}</td>
+                <td>{{ control.fecha }}</td>
                 <td>{{ control.responsable }}</td>
                 <td>{{ control.funcionario_actuante }}</td>
                 <td>{{ control.tipo_plaga }}</td>

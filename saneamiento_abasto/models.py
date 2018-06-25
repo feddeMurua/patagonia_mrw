@@ -79,6 +79,7 @@ CUENTAS CORRIENTES
 class DetalleCC(models.Model):
     reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
     cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
+    pagado = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s" % self.reinspeccion

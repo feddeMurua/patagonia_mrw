@@ -1,5 +1,4 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Cursos de Manipulacion de Alimentos{% endblock %}
@@ -13,9 +12,17 @@
 {% endblock %}
 
 {% block more-scripts %}
-    <script>
-        $.datepicker.setDefaults({
-            minDate: "+7d"
-        });
-    </script>
+    {% if not modificacion %}
+        <script>
+            $.datepicker.setDefaults({
+                minDate: "+7d"
+            });
+        </script>
+    {% else %}
+        <script>
+            $.datepicker.setDefaults({
+                minDate: "+1d"
+            });
+        </script>
+    {% endif %}
 {% endblock %}
