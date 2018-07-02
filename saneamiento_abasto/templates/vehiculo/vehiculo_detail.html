@@ -62,6 +62,6 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a class="btn btn-info" data-toggle="tooltip" title="Imprimir comprobante" href="{% url 'vehiculo:vehiculo_pdf' object.pk %}" target="_blank"><em class="glyphicon glyphicon-print"></em></a>
-    <a href="{% url 'vehiculo:lista_vehiculos' %}" class="btn btn-primary" role="button">Regresar</a>
+    <a class="btn btn-warning" href="{% url 'vehiculo:vehiculo_pdf' object.nro %}" target="_blank">Imprimir comprobante</a>
+    <a class="btn btn-primary" href="{% url 'vehiculo:lista_vehiculos' %}" role="button">Regresar</a>
 {% endblock %}

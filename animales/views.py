@@ -220,8 +220,8 @@ class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
-    def get_context_data(self, pk_esterilizacion):
-        esterilizacion = Esterilizacion.objects.get(pk=pk_esterilizacion)
+    def get_context_data(self, pk):
+        esterilizacion = Esterilizacion.objects.get(pk=pk)
         tiempo_edad = None
         edad_mascota = None
         if esterilizacion.mascota.nacimiento_fecha:

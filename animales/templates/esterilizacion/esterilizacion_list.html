@@ -15,7 +15,8 @@
 {% block tabla %}
     <thead>
         <tr>
-            <th>Turno</th>
+            <th>Dia</th>
+            <th>Hora</th>
             <th>Interesado</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -23,7 +24,8 @@
     <tbody>
         {% for esterilizacion in listado %}
             <tr>
-                <td>{{ esterilizacion.turno }}</td>
+                <td>{{ esterilizacion.turno.date }}</td>
+                <td>{{ esterilizacion.turno|time:"H:i" }}</td>
                 <td>{{ esterilizacion.interesado }}</td>
                 <td>
                     {% if not esterilizacion.mascota.esterilizado %}

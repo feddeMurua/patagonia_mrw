@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'easy_pdf',
     'polymorphic',
     'django_addanother',
-    'solo'
+    'solo',
+    'sslserver'
 ]
 
 MIDDLEWARE = [

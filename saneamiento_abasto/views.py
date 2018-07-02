@@ -205,7 +205,8 @@ class PdfCertificado(LoginRequiredMixin, PDFTemplateView):
             reinspecciones=reinspecciones,
             periodo=calendar.month_name[int(mes)] + " " + str(anio),
             total_kilos=sum(item['reinspeccion'].total_kg for item in reinspecciones),
-            total_monto=sum(item['subtotal'] for item in reinspecciones)
+            total_monto=sum(item['subtotal'] for item in reinspecciones),
+            title='Certificado de deuda - ' + str(cc.abastecedor.responsable.nombre) + ' / Periodo: ' + str(mes)
         )
 
 
@@ -489,9 +490,9 @@ class PdfVehiculo(LoginRequiredMixin, PDFTemplateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
-    def get_context_data(self, pk):
+    def get_context_data(self, nro):
         return super(PdfVehiculo, self).get_context_data(
-            vehiculo=Vehiculo.objects.get(pk=pk)
+            vehiculo=Vehiculo.objects.get(nro=nro)
         )
 
 
