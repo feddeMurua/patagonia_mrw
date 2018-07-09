@@ -125,7 +125,7 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
             if PersonaJuridica.objects.filter(cuit=cuit).exists():
                 raise forms.ValidationError('Ya existe una empresa con este CUIT')
 
-            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuit):
+            if not re.match(r"^[0-9]{2}-[0-9]{7,8}-[0-9]$", cuit):
                 raise forms.ValidationError('CUIT inválido, por favor siga este formato XX-YYYYYYYY-Z')
         return cuit
 
