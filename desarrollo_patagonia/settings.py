@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'polymorphic',
     'django_addanother',
     'solo',
-    'sslserver'
+    #'sslserver'
 ]
 
 MIDDLEWARE = [
