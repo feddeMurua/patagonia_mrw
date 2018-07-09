@@ -109,9 +109,9 @@ Gestión de Usuarios
   permisos que posea el mismo.
 
   Estas funcionalidades son:
-  	- Entrar al Sistema
-  	- Cambiar la contraseña
-  	- Cerrar Sesión
+    - Entrar al Sistema
+    - Cambiar la contraseña
+    - Cerrar Sesión
 
   En caso de ser administrador:
     - Todas las funcionalidades anteriores.

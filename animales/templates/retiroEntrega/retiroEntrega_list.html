@@ -1,5 +1,4 @@
 {% extends "base/base_listado.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Retiros/Entregas{% endblock %}
@@ -20,6 +19,7 @@
             <th>Mascota</th>
             <th>Trámite</th>
             <th>Observaciones</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +30,9 @@
                 <td>{{ tramite.mascota }}</td>
                 <td>{{ tramite.tramite }}</td>
                 <td>{{ tramite.observaciones }}</td>
+                <td>
+                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'retiros_entregas:modificar_tramite' tramite.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                </td>
             </tr>
         {% endfor %}
     </tbody>

@@ -1,5 +1,4 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Persona{% endblock %}
@@ -22,6 +21,10 @@
     <script>
         $.datepicker.setDefaults({
             maxDate: new Date()
+        });
+
+        $(function(){
+            $("#id_documentacion_retirada").checkboxradio();
         });
     </script>
 {% endblock %}

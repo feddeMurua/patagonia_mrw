@@ -207,6 +207,10 @@ class ControlAntirrabicoForm(forms.ModelForm):
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
+        labels = {
+            'responsable': _("Responsable del animal"),
+
+        }
 
     def clean_fecha_suceso(self):
         fecha_suceso = self.cleaned_data['fecha_suceso']
@@ -235,8 +239,22 @@ class RetiroEntregaForm(forms.ModelForm):
         }
 
 
+class ModificacionRetiroEntregaForm(forms.ModelForm):
+
+    class Meta:
+        model = RetiroEntregaAnimal
+        fields = ['observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
+        }
+
+
 class ListaPatentesForm(forms.Form):
     patente = forms.ModelChoiceField(queryset=Patente.objects.all(), required=True)
+
+
+class ListaPatentesEsterilizacionForm(forms.Form):
+    patente = forms.ModelChoiceField(queryset=Patente.objects.filter(mascota__esterilizado=False), required=True)
 
 
 class EsterilizacionPatenteForm(forms.ModelForm):

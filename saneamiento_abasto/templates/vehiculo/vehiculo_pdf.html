@@ -36,7 +36,7 @@
                 {% if vehiculo.tipo_vehiculo == 'TSA' %}
                     RESOLUCION: N° {{ vehiculo.disposicion_resolucion }}<br>
                 {% else %}
-                    DISPOSICION: N° {{ vehiculo.disposicion_resolucion }}
+                    DISPOSICION N°: {{ vehiculo.disposicion_resolucion|default_if_none:"" }}
                 {% endif %}<br>
             </b></p>
             <br>

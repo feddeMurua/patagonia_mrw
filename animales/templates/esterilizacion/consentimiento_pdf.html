@@ -1,8 +1,8 @@
 {% extends "easy_pdf/base.html" %}
 
 {%block page_header%}
-    <div align="center" id="page-header">
-        <p>CONSENTIMIENTO INFORMADO PARA CIRUGIA</p>        
+    <div id="page-header">
+        <p><b><u>CONSENTIMIENTO INFORMADO PARA CIRUGIA</u></b></p>
     </div>
 {% endblock %}
 
@@ -66,7 +66,8 @@
                 </tbody>
             </table>
             <p>
-                Turno: {{ esterilizacion.turno }}<br><br>
+                Dia: {{ esterilizacion.turno.date }}<br>
+                Hora: {{ esterilizacion.turno|time:"H:i" }}<br><br>
                 Atiende: _________________________<br>
             </p>
             <p class="consentimiento-footer" align="center">

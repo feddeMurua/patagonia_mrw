@@ -23,14 +23,13 @@ class ListaAbastecedoresForm(forms.Form):
 
 
 class ReinspeccionForm(forms.ModelForm):
-    fecha = forms.DateField(widget=DATEINPUT(), label="Fecha de realizacion")
     inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Inspector'))
     total_kg = forms.IntegerField(required=True, label="Total de Kg inspeccionados")
 
     class Meta:
         model = Reinspeccion
-        exclude = ['detalles']
+        exclude = ['fecha', 'detalles']
         labels = {
             'certificado': _("N° de certificado")
         }
@@ -47,12 +46,6 @@ class ReinspeccionCCForm(forms.ModelForm):
         labels = {
             'certificado': _("N° de certificado")
         }
-
-
-class ModificacionReinspeccionForm(forms.ModelForm):
-    class Meta:
-        model = Reinspeccion
-        exclude = ['fecha', 'abastecedor', 'total_kg']
 
 
 class AltaProductoForm(forms.ModelForm):
@@ -129,7 +122,7 @@ class ControlDePlagaForm(forms.ModelForm):
 
     class Meta:
         model = ControlDePlaga
-        exclude = ['fecha_hoy', 'pagado']
+        exclude = ['fecha', 'pagado']
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }
@@ -147,7 +140,7 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
 
     class Meta:
         model = ControlDePlaga
-        exclude = ['fecha_hoy', 'responsable', 'funcionario_actuante', 'pagado']
+        exclude = ['fecha', 'responsable', 'funcionario_actuante', 'pagado']
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }

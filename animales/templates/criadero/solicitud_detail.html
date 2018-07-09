@@ -1,5 +1,4 @@
 {% extends "base/base_detail.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Detalle de solicitud{% endblock %}
@@ -52,41 +51,35 @@
         </tbody>
     </table>
     {% if aplazos %}
-        <div class="container-fluid container-list col-md-12" id="tbl-aplazos">
-            <div class="row">
-                <div class="panel panel-default panel-table">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col col-xs-6">
-                                <h3 class="panel-title">Aplazos de Solicitud</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-bordered table-hover table-list">
-                            <thead>
-                                <tr>
-                                    <th>Fecha de Aplazo</th>
-                                    <th>Motivo de Aplazo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for aplazo in aplazos %}
-                                    <tr align="center">
-                                        <td>{{ aplazo.fecha_aplazo }}</td>
-                                        <td>{{ aplazo.motivo_aplazo }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+                <h3 class="panel-title">Aplazos de Solicitud</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-listado">
+                    <thead>
+                        <tr>
+                            <th>Fecha de Aplazo</th>
+                            <th>Motivo de Aplazo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for aplazo in aplazos %}
+                            <tr align="center">
+                                <td>{{ aplazo.fecha_aplazo }}</td>
+                                <td>{{ aplazo.motivo_aplazo }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     {% endif %}
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'criadero:pdf_solicitud' solicitud.pk%}" target="_blank" class="btn btn-warning">Imprimir</a>
+    {% if not solicitud.estado == "Aprobada" %}
+        <a href="{% url 'criadero:pdf_solicitud' solicitud.pk%}" target="_blank" class="btn btn-warning">Imprimir</a>
+    {% endif %}
     <a href="{% url 'criadero:lista_solicitudes' %}" class="btn btn-primary">Regresar</a>
 {% endblock %}

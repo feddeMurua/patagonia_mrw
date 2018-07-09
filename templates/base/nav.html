@@ -1,78 +1,110 @@
 {% load staticfiles %}
-{% load staticfiles bootstrap3%}
 
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}"/>
+    <script type="text/javascript" src="{% static 'js/navbar.js' %}"></script>
 </head>
 
 <body>
-    <ul id="menu-bar">
-        <li><a href="#">Personas</a>
-            <ul>
-                <li><a href="{% url 'personas:lista_contribuyentes' %}"><span>Contribuyentes</span></a></li>
-                <li><a href="{% url 'personas:lista_personal_propio' %}"><span>Personal Propio</span></a></li>
-            </ul>
-        </li>
-        <li><a href="#">Cursos/Libretas</a>
-            <ul>
-                <li><a href="{% url 'cursos:lista_cursos' %}"><span>Curso de Manipulación de Alimentos</span></a></li>
-                <li><a href="{% url 'libretas:lista_libretas' %}"><span>Libreta Sanitaria</span></a></li>
-                <li><a href="{% url 'est_lc:estadisticas_lc' %}"><span>Estadísticas</span></a></li>
-            </ul>
-        </li>
-        <li><a href="#">Analisis/Controles</a>
-            <ul>
-                <li><a href="{% url 'analisis:lista_analisis' %}"><span>Análisis de Triquinosis</span></a></li>
-                <li><a href="{% url 'criadero:lista_solicitudes' %}"><span>Habilitación de Criadero de Cerdos</span></a></li>
-                <li><a href="{% url 'controles:lista_controles' %}"><span>Control Antirrábico</span></a></li>
-                <li><a href="{% url 'est_am:estadisticas_animales' %}"><span>Estadísticas</span></a></li>
-            </ul>
-        </li>
-        <li><a href="#">Mascotas</a>
-            <ul>
-                <li><a href="{% url 'patentes:lista_patentes' %}"><span>Patentamiento</span></a></li>
-                <li><a href="{% url 'esterilizacion:lista_esterilizaciones' %}"><span>Esterilización</span></a></li>
-                <li><a href="{% url 'retiros_entregas:lista_retiro_entrega' %}"><span>Retiros y Entregas</span></a></li>
-                <li><a href="{% url 'est_am:estadisticas_mascotas' %}"><span>Estadísticas</span></a></li>
-            </ul>
-        </li>
-        <li><a href="#">Abasto</a>
-            <ul>
-                <li><a href="{% url 'abastecedores:lista_abastecedores' %}"><span>Abastecedores</span></a></li>
-                <li><a href="{% url 'reinspecciones:lista_reinspecciones' %}"><span>Reinspecciones</span></a></li>
-                <li><a href="{% url 'cuentas_corrientes:lista_cc' %}"><span>Cuentas Corrientes</span></a></li>
-                <li><a href="{% url 'est_ab:estadisticas_reinspeccion' %}"><span>Estadísticas</span></a></li>
-            </ul>
-        </li>
-        <li><a href="#">Transportes/Desinfecciones</a>
-            <ul>
-                <li><a href="{% url 'vehiculo:lista_vehiculos' %}"><span>Vehículos</span></a></li>
-                <li><a href="{% url 'controles_plagas:lista_controles_plagas' %}"><span>Control de Plagas</span></a></li>
-                <li><a href="{% url 'est_ab:estadisticas_TD' %}"><span>Estadísticas</span></a></li>
-            </ul>
-        </li>
-        <li><a href="#">Caja</a>
-            <ul>
-                <li><a href="{% url 'caja:lista_movimientos' %}"><span>Parte Diario</span></a></li>
-                <li><a href="{% url 'arqueo:lista_arqueos' %}"><span>Arqueo Diario de Efectivo</span></a></li>
-                <li><a href="{% url 'est_pdc:estadisticas_caja' %}"><span>Estadísticas</span></a></li>
-            </ul>
-        </li>
-        <li class="pull-right"><a href="#">Usuario: {{ user.get_username }}</a>
-            <ul>
-                {% if user.is_staff %}
-                    <li><a href="{% url 'lista_usuarios' %}">Menú de Usuarios</a></li>
-                    <li><a href="{% url 'event_log:lista_eventos' %}">Seguimiento de Eventos de Usuarios</a></li>
-                    <li><a href="{% url 'servicios:lista_servicios' %}">Administración de Servicios</a></li>
-                {% endif %}
-                <li><a href="{% url 'cambio_password' %}">Cambiar Contraseña</a></li>
-                <li><a href="{% url 'logout' %}">Salir</a></li>
-            </ul>
-        </li>
-    </ul>
-
-    <script src="{% static 'js/jquery.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.js' %}"></script>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <nav class="ddmenu" id="ddmenu">
+        <ul>
+            <li><span class="top-heading"><a href="{% url 'inicio' %}"><em class="glyphicon glyphicon-home"></em></a></span></li>
+            <li><span class="top-heading">Personas</span>
+                <div class="dropdown">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% url 'personas:lista_contribuyentes' %}">Contribuyentes</a></li>
+                            <li><a href="{% url 'personas:lista_personal_propio' %}">Personal Propio</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><span class="top-heading">Cursos/Libretas</span>
+                <div class="dropdown">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% url 'cursos:lista_cursos' %}">Curso de Manipulación de Alimentos</a></li>
+                            <li><a href="{% url 'libretas:lista_libretas' %}">Libreta Sanitaria</a></li>
+                            <li><a href="{% url 'est_lc:estadisticas_lc' %}">Estadísticas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><span class="top-heading">Analisis/Controles</span>
+                <div class="dropdown">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% url 'analisis:lista_analisis' %}">Análisis de Triquinosis</a></li>
+                            <li><a href="{% url 'criadero:lista_solicitudes' %}">Habilitación de Criadero de Cerdos</a></li>
+                            <li><a href="{% url 'controles:lista_controles' %}">Control Antirrábico</a></li>
+                            <li><a href="{% url 'est_am:estadisticas_animales' %}">Estadísticas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><span class="top-heading">Mascotas</span>
+                <div class="dropdown">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% url 'patentes:lista_patentes' %}">Patentamiento</a></li>
+                            <li><a href="{% url 'esterilizacion:lista_esterilizaciones' %}">Esterilización</a></li>
+                            <li><a href="{% url 'retiros_entregas:lista_retiro_entrega' %}">Retiros y Entregas</a></li>
+                            <li><a href="{% url 'est_am:estadisticas_mascotas' %}">Estadísticas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><span class="top-heading">Abasto</span>
+                <div class="dropdown right-aligned">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% url 'abastecedores:lista_abastecedores' %}">Abastecedores</a></li>
+                            <li><a href="{% url 'reinspecciones:lista_reinspecciones' %}">Reinspecciones</a></li>
+                            <li><a href="{% url 'cuentas_corrientes:lista_cc' %}">Cuentas Corrientes</a></li>
+                            <li><a href="{% url 'est_ab:estadisticas_reinspeccion' %}">Estadísticas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><span class="top-heading">Transportes/Desinfecciones</span>
+                <div class="dropdown right-aligned">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% url 'vehiculo:lista_vehiculos' %}">Vehículos</a></li>
+                            <li><a href="{% url 'controles_plagas:lista_controles_plagas' %}">Control de Plagas</a></li>
+                            <li><a href="{% url 'est_ab:estadisticas_TD' %}">Estadísticas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><span class="top-heading">Caja</span>
+                <div class="dropdown right-aligned">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% url 'caja:lista_movimientos' %}">Parte Diario</a></li>
+                            <li><a href="{% url 'arqueo:lista_arqueos' %}">Arqueo Diario de Efectivo</a></li>
+                            <li><a href="{% url 'est_pdc:estadisticas_caja' %}">Estadísticas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><span class="top-heading">Usuario</span>
+                <div class="dropdown right-aligned">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><b><u>{{ user.get_username }}</u></b></li>
+                            {% if user.is_staff %}
+                                <li><a href="{% url 'lista_usuarios' %}">Menú de Usuarios</a></li>
+                                <li><a href="{% url 'event_log:lista_eventos' %}">Seguimiento de Eventos de Usuarios</a></li>
+                                <li><a href="{% url 'servicios:lista_servicios' %}">Administración de Servicios</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'cambio_password' %}">Cambiar Contraseña</a></li>
+                            <li><a href="{% url 'logout' %}">Salir</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
 </body>

@@ -131,4 +131,4 @@ class Patente(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):
-        return "Chapa: %s - %s" % (self.pk, self.persona)
+        return "Chapa: %s - %s" % (self.nro_patente, self.persona)

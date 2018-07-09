@@ -35,6 +35,33 @@ class CursoForm(forms.ModelForm):
         return fecha
 
 
+class ModificacionCursoForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DateInput())
+
+    class Meta:
+        model = Curso
+        exclude = ['finalizado']
+
+    def clean_lugar(self):
+        lugar = self.cleaned_data['lugar']
+        if not regex_alfanumerico.match(lugar):
+            raise forms.ValidationError('El nombre del lugar solo puede contener letras/numeros y/o espacios')
+        return lugar
+
+    def clean_fecha(self):
+        fecha = self.cleaned_data['fecha']
+        if fecha < timezone.now().date() + relativedelta(days=1):
+            raise forms.ValidationError('La fecha seleccionada debe ser posterior al dia de hoy')
+        return fecha
+
+    def clean_cupo(self):
+        cupo = self.cleaned_data['cupo']
+        inscriptos = len(Inscripcion.objects.filter(curso=self.instance))
+        if cupo < inscriptos:
+            raise forms.ValidationError('El cupo no puede ser menor a la cantidad de alumnos previamiente inscriptos')
+        return cupo
+
+
 class InscripcionForm(forms.ModelForm):
 
     class Meta:
@@ -85,7 +112,7 @@ class LibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        exclude = ['fecha', 'curso', 'fecha_vencimiento']
+        exclude = ['fecha', 'curso', 'fecha_vencimiento', 'foto']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
@@ -120,7 +147,7 @@ class ModificacionLibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        fields = ['observaciones', 'foto']
+        fields = ['observaciones']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
@@ -131,7 +158,7 @@ class RenovacionLibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento']
+        exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento', 'foto']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }

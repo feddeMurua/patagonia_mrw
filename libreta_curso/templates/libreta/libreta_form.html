@@ -1,11 +1,9 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles %}
-{% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block title %}Libretas Sanitarias{% endblock %}
 
-{% block header-title %}Alta/Modificacion de Libreta{% endblock %}
+{% block header-title %}Alta/Renovacion de Libreta{% endblock %}
 
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
 
@@ -13,6 +11,22 @@
     <div class="form-group meses-group">
         <label>Meses de validez *</label>
         <input type="number" name="meses" class="form-control" id="meses_validez" min="1" max="6">
+    </div>
+    <div class="form-group">
+        <label>Foto</label><br>
+        {% if libreta.foto %}
+            <img id="old-img" src="{{ libreta.foto.url }}" style="max-width:320px; max-height:240px">
+        {% endif %}
+        <video width="320" height="240" autoplay hidden></video>
+        <canvas style="display:none;"></canvas>
+        <img id="foto-img" src="">
+        <input style="display:none;" id="img-base64" name="foto" value="">
+        <div style="margin-top:10px;">
+            <button type="button" class="btn btn-default" id="nueva-foto">Nueva fotografia</button>
+            <button type="button" class="btn btn-default {% if not libreta.foto %}hidden{% endif %}" id="eliminar-foto">Eliminar fotografia</button>
+            <button type="button" class="btn btn-primary hidden" id="tomar-foto">Aceptar</button>
+            <button type="button" class="btn btn-danger hidden" id="cancelar-foto">Cancelar</button>
+        </div>
     </div>
 {% endblock %}
 
@@ -29,6 +43,7 @@
 {% endblock %}
 
 {% block more-scripts %}
+    <script src="{% static 'js/webrtc.js' %}"></script>
     <script>
         $.datepicker.setDefaults({
             maxDate: new Date()
@@ -36,7 +51,7 @@
 
         var tipo_libreta = $('#id_tipo_libreta'),
         meses_validez = $('#meses_validez');
-        tipo_libreta.on('change', hideMeses);
+        tipo_libreta.change(hideMeses);
         hideMeses();
 
         function hideMeses() {

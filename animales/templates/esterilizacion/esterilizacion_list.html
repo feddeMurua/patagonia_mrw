@@ -1,5 +1,4 @@
 {% extends "base/base_listado.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Esterilización de Mascotas{% endblock %}
@@ -9,13 +8,15 @@
 {% block panel-title %}Turnos{% endblock %}
 
 {% block btn-nuevo %}
-    <a href="{% url 'esterilizacion:nueva_esterilizacion' %}" class="btn btn-sm btn-primary btn-create">Nuevo Turno</a>
+    <a href="{% url 'esterilizacion:nueva_esterilizacion' %}" class="btn btn-sm btn-primary btn-create">Nuevo Turno - Mascota patentada</a>
+    <a href="{% url 'esterilizacion:nueva_esterilizacion_nopatentado' %}" class="btn btn-sm btn-info btn-create" >Nuevo Turno - Mascota no patentada</a>
 {% endblock %}
 
 {% block tabla %}
     <thead>
         <tr>
-            <th>Turno</th>
+            <th>Dia</th>
+            <th>Hora</th>
             <th>Interesado</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -23,7 +24,8 @@
     <tbody>
         {% for esterilizacion in listado %}
             <tr>
-                <td>{{ esterilizacion.turno }}</td>
+                <td>{{ esterilizacion.turno.date }}</td>
+                <td>{{ esterilizacion.turno|time:"H:i" }}</td>
                 <td>{{ esterilizacion.interesado }}</td>
                 <td>
                     {% if not esterilizacion.mascota.esterilizado %}

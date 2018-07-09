@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from polymorphic.models import PolymorphicModel
+from django.core.validators import MinValueValidator
 
 
 class Localidad(models.Model):
@@ -48,6 +49,7 @@ class DomicilioRural(models.Model):
     sector = models.CharField(max_length=3, null=True, blank=True)
     circunscripcion = models.CharField(max_length=3, null=True, blank=True)
     ruta = models.CharField(max_length=25, null=True, blank=True)
+    km = models.IntegerField(validators=[MinValueValidator(1)], null=True, blank=True)
 
     def __str__(self):
         return "Chacra N°: %s" % self.chacra

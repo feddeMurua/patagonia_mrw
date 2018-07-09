@@ -1,7 +1,5 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles %}
-{% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block title %}Reinspeccion{% endblock %}
 
@@ -97,6 +95,10 @@
                                             <td><a class="btn btn-danger btn-eliminar" onclick="confirmBaja('{{ producto.producto.nombre }}')" data-toggle="tooltip" title="Eliminar"><em class='glyphicon glyphicon-trash'></em></a></td>
                                         </tr>
                                     {% endfor %}
+                                    <tr align='center'>
+                                        <td><b>Total</b></td>
+                                        <td colspan='2'>{% if productos %}{{ total_kg }} Kg{% else %}0,0 Kg{% endif %}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -144,7 +146,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-5">
-                            <div class="panel panel-info">
+                            <div class="panel panel-warning">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Productos</h3>
                                 </div>
@@ -202,7 +204,7 @@
                             {{ producto_form.kilo_producto|add_class:"form-control" }}
                         </div>
                         <input type="hidden" name="action" id="action"/>
-                        <input type="submit" class="btn btn-info" name="add" value="Confirmar y Agregar otro"/>
+                        <input type="submit" class="btn btn-info" name="add" value="Confirmar y Agregar otro" style="margin-top:0;"/>
                         <input type="submit" class="btn btn-primary" name="confirm" value="Confirmar"/>
                         <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
                     </form>
@@ -304,7 +306,7 @@
                             if ($("#action").val() == 'confirm') {
                                 $('#agregar_producto').modal('hide');
                             }
-                            refresh_table(data['productos']);
+                            refresh_table(data);
                             refresh_resumen(data['productos']);
                             document.getElementById("productoForm").reset();
                         } else {
@@ -314,18 +316,24 @@
             });
         });
 
-        function refresh_table(productos){
+        function refresh_table(data){
+            productos = data['productos']
             var $tbody = $("#table-list tbody");
             $tbody.children().remove();
             for(var i = 0; i < productos.length; i++){
                 var producto = productos[i]['producto']['nombre']
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
-                        "<td>" + productos[i]['kilo_producto'] + " Kg</td>" +
+                        "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
                         "<td><a class='btn btn-danger btn-eliminar' onclick='confirmBaja(\"" + producto + "\")' data-toggle='tooltip' title='Eliminar'><em class='glyphicon glyphicon-trash'></em></a></td>" +
                     "</tr>";
                 $tbody.append(row);
             }
+            var total = "<tr align='center'>" +
+                            "<td><b>Total</b></td>" +
+                            "<td colspan='2'>" + data['total_kg'] + ",0 Kg</td>" +
+                        "</tr>";
+            $tbody.append(total);
         }
 
         function refresh_resumen(productos){
@@ -335,7 +343,7 @@
                 var producto = productos[i]['producto']['nombre']
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
-                        "<td>" + productos[i]['kilo_producto'] + " Kg</td>" +
+                        "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
                     "</tr>";
                 $tbody.append(row);
             }
@@ -360,7 +368,7 @@
                     success: function(data) {
                         swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
                             function(){
-                                refresh_table(data['productos']);
+                                refresh_table(data);
                             }
                         );
                     },

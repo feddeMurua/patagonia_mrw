@@ -1,5 +1,4 @@
 {% extends "base/base_detail.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Control de Plagas{% endblock %}
@@ -17,11 +16,11 @@
             </tr>
                 <tr>
                     <td>Recomendaciones:</td>
-                    <td>{{ object.recomendaciones|default_if_not:"" }}</td>
+                    <td>{{ object.recomendaciones|default_if_none:"" }}</td>
                 </tr>
             <tr>
                 <td>Fecha próxima visita:</td>
-                <td>{{ object.fecha_prox_visit|default_if_not:"" }}</td>
+                <td>{{ object.fecha_prox_visit|default_if_none:"" }}</td>
             </tr>
         </tbody>
     </table>

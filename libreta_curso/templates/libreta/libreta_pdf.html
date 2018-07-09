@@ -4,18 +4,40 @@
 {% block extra_style %}
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <style>
+        @page {
+            margin: 30px;
+        }
         body {
             font-size: 10px;
         }
         table {
-            margin: 0 auto;
+            table-layout: fixed;
+            width: 100%;
         }
         .tabla-principal {
-            border: 1px solid black;
+            border: 2px solid black;
         }
-        tr {
+        .firma tr, .tit, .td-foto {
             text-align: center;
-            border: 1px solid;
+        }
+        .cara1 {
+            border-right: 2px solid black;
+        }
+        .cara2 {
+            padding: 0px 10px 0px 10px;
+            border-left: 2px solid black;
+        }
+        .tit, .t-foto {
+            font-size: 12px;
+        }
+        .firma td, .tit {
+            line-height: 0.3;
+        }
+        .firma-vacio, .td-foto {
+            width: 35%;
+        }
+        .cara1, .td-foto {
+            vertical-align: text-top;
         }
     </style>
 {% endblock %}
@@ -25,13 +47,15 @@
         <div class="main">
             <table class="tabla-principal">
                 <tr>
-                    <td>
-                        <p align="center"><strong>Municipalidad de Rawson</strong></p>
-                        <p align="center">Capital de la Provincia del Chubut</p>
+                    <td class="cara1">
+                        <div class="tit">
+                            <p><b>Municipalidad de Rawson</b></p>
+                            <p>Capital de la Provincia del Chubut</p>
+                        </div>
                         <table>
                             <tr>
-                                <td>
-                                    <p>TARJETA DE SANIDAD</p>
+                                <td class="td-foto">
+                                    <p class="t-foto">TARJETA DE SANIDAD</p>
                                     {% if libreta.foto %}
                                         <img class="foto" src="{{ libreta.foto.url }}" height="96" width="96">
                                     {% endif %}
@@ -39,65 +63,56 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>Apellido:</td>
-                                            <td><b>{{ libreta.persona.apellido }}</b></td>
+                                            <td>Apellido: <b>{{ libreta.persona.apellido }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>Nombres:</td>
-                                            <td><b>{{ libreta.persona.nombre }}</b></td>
+                                            <td>Nombres: <b>{{ libreta.persona.nombre }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>D.N.I:</td>
-                                            <td><b>{{ libreta.persona.dni }}</b></td>
+                                            <td>D.N.I: <b>{{ libreta.persona.dni }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>Nacionalidad:</td>
-                                            <td><b>{{ libreta.persona.nacionalidad }}</b></td>
+                                            <td>Nacionalidad: <b>{{ libreta.persona.nacionalidad }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>Fecha de Nacimiento:</td>
-                                            <td><b>{{ libreta.persona.fecha_nacimiento }}</b></td>
+                                            <td>Fecha de nacimiento: <b>{{ libreta.persona.fecha_nacimiento|date:"SHORT_DATE_FORMAT" }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>Domicilio:</td>
-                                            <td><b>{{ libreta.persona.domicilio }}</b></td>
+                                            <td>Domicilio: <b>{{ libreta.persona.domicilio }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>Realizo curso:</td>
-                                            {% if libreta.curso %}
-                                                <td>SI - <b>{{ libreta.curso.fecha_inicio }}</b></td>
-                                            {% else %}
-                                                <td>NO</td>
-                                            {% endif %}
+                                            <td>Realizo curso:
+                                                {% if libreta.curso %}
+                                                    SI - <b>{{ libreta.curso.fecha_inicio }}</b>
+                                                {% else %}
+                                                    NO
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                     </table>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td>
-                        <p align="center"><strong>Tarjeta de Sanidad N°: {{ libreta.persona.dni }}</strong></p>
-                        <br>
-                        <p>En la Direccion de Veterinaria, Saneamiento y Abasto consta que el interesado hallase
-                        exento de enfermedades contagiosas, segun CERTIFICADO, expedido por el/la Dr./Dra.
-                        <b>{{ libreta.profesional_examen_clinico }}</b>.<br>
-                        La presente vence el <b>{{ libreta.fecha_vencimiento }}</b><br>
-                        Rawson, Chubut - {% now "l j F Y" %}</p><br>
-                        <table align="right">
-                            <tbody>
-                                <tr>
-                                    <td>SANDRA GERMILLAC</td>
-                                </tr>
-                                <tr>
-                                    <td>Dpto. Administrativo</td>
-                                </tr>
-                                <tr>
-                                    <td>Abasto, Saneamiento y Veterinaria</td>
-                                </tr>
-                                <tr>
-                                    <td>Municipalidad de Rawson</td>
-                                </tr>
-                            </tbody>
+                    <td class="cara2">
+                        <p class="tit"><b>Tarjeta de Sanidad N°: {{ libreta.persona.dni }}</b></p><br>
+                        <div class="texto">
+                            <p>En la Direccion de Veterinaria, Saneamiento y Abasto consta que el interesado hallase
+                            exento de enfermedades contagiosas, segun CERTIFICADO, expedido por el/la Dr./Dra.
+                            <b>{{ libreta.profesional_examen_clinico }}</b>.<br>
+                            La presente vence el <b>{{ libreta.fecha_vencimiento }}</b><br>
+                            Rawson, Chubut - {% now "l j F Y" %}</p><br><br><br>
+                        </div>
+                        <table class="firma">
+                            <tr>
+                                <td class="firma-vacio"></td>
+                                <td>
+                                    <p><b>SANDRA GERMILLAC</b></p>
+                                    <p><b>Dpto. Administrativo</b></p>
+                                    <p><b>Abasto, Saneamiento y Veterinaria</b></p>
+                                    <p><b>Municipalidad de Rawson</b></p>
+                                </td>
+                            </tr>
                         </table>
                     </td>
                 </tr>

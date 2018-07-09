@@ -8,30 +8,25 @@
         }
         table {
             margin: 0 auto;
-            border: 1px solid black;
             width: 100%;
+        }
+        .tabla-info {
+            border: 1px solid black;
+        }
+        .tabla-info td, .tabla-info th {
+            border: 1px solid black;
         }
         td, th {
             text-align: center;
         }
-        .firma {
-            text-align: right;
-        }
     </style>
-{% endblock %}
-
-{% block page_header %}
-    <div id="page-header">
-        <div class="header">
-            <p>Comprobante de Inscripción a Curso</p>
-        </div>
-    </div>
 {% endblock %}
 
 {% block content %}
     <div id="content">
         <div class="main">
-            <table>
+            <h4 align="center"><u>Comprobante de inscripción a Curso de Manipulación de Alimentos</u></h4>
+            <table class="tabla-info">
                 <tr>
                     <td>Apellido y Nombre:</td>
                     <td>{{ inscripcion.persona.apellido }}, {{ inscripcion.persona.nombre }}</td>
@@ -58,6 +53,20 @@
                         <td>{{ inscripcion.nota_curso }}</td>
                     </tr>
                 {% endif %}
+            </table>
+            <table>
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td></td>
+                        <td></td>
+                        <td>................................</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Sello y firma</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>

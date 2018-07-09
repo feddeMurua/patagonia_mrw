@@ -188,7 +188,7 @@ class AltaLocalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
 
 class AltaProvincia(LoginRequiredMixin, CreatePopupMixin, CreateView):
     model = Provincia
-    fields = '__all__'
+    form_class = ProvinciaForm
     template_name = "domicilio/provincia_form.html"
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
@@ -196,7 +196,7 @@ class AltaProvincia(LoginRequiredMixin, CreatePopupMixin, CreateView):
 
 class AltaNacionalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
     model = Nacionalidad
-    fields = '__all__'
+    form_class = NacionalidadForm
     template_name = "domicilio/nacionalidad_form.html"
     login_url = '/accounts/login/'
     redirect_field_name = 'next'

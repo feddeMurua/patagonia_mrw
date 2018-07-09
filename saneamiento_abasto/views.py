@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 import calendar
+from django.db.models import CharField, Value as V, Sum
+from django.db.models.functions import Concat, ExtractMonth, ExtractYear
 import locale
 from personas import forms as f
 from .forms import *
@@ -22,6 +24,7 @@ from django_addanother.views import CreatePopupMixin
 from django.utils import timezone
 import collections
 import json
+from itertools import groupby
 
 '''
 ABASTECEDORES
@@ -109,8 +112,7 @@ def detalle_cc(request, pk):
         mes, anio = request.POST['periodo'].split("/")
         return HttpResponseRedirect(reverse('cuentas_corrientes:pdf_certificado', kwargs={'pk': pk, 'mes': mes,
                                                                                           'anio': anio}))
-    return render(request, 'cuentaCorriente/cc_detail.html', {'cuenta': cuenta,
-                                                              'detalles': DetalleCC.objects.filter(cc=cuenta)})
+    return render(request, 'cuentaCorriente/cc_detail.html', {'pk': pk, 'listado': DetalleCC.objects.filter(cc=cuenta)})
 
 
 def get_monto(reinspeccion):
@@ -134,6 +136,61 @@ def agrupar_reinspecciones(cc, mes, anio):
     return reinspecciones
 
 
+def agrupar_periodos(cc):
+    detallescc = DetalleCC.objects.filter(cc=cc, pagado=False)\
+        .annotate(periodo=Concat(ExtractMonth('reinspeccion__fecha'), V('-'), ExtractYear('reinspeccion__fecha'),
+                                 output_field=CharField()))\
+        .order_by('periodo')
+    periodos = {}
+    for k, group in groupby(detallescc, lambda x: x.periodo):
+        detalles = list(group)
+        periodos[k] = {'detalles': detalles,
+                       'total_kg': sum(item.reinspeccion.total_kg for item in detalles),
+                       'monto': sum(get_monto(item.reinspeccion) for item in detalles)}
+    return periodos
+
+
+def calcular_deuda(periodos, selected):
+    importe = 0
+    for k in selected:
+        importe += periodos[k]['monto']
+        for detalle in periodos[k]['detalles']:
+            detalle.pagado = True
+            detalle.save()
+    return importe
+
+
+@login_required(login_url='login')
+def cancelar_deuda_cc(request, pk):
+    cc = CuentaCorriente.objects.get(pk=pk)
+    periodos = agrupar_periodos(cc)
+    if request.method == 'POST':
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        selected = request.POST.getlist('pagar')
+        servicio = "Cancelacion de deuda en Cuenta Corriente"
+        if request.POST['optradio'] == 'previa':
+            if detalle_mov_form.is_valid():
+                importe = calcular_deuda(periodos, selected)
+                detalle_mov = detalle_mov_form.save(commit=False)
+                detalle_mov.completar_monto(importe, servicio, cc)
+                log_crear(request.user.id, cc, servicio)
+                return HttpResponseRedirect(reverse('cuentas_corrientes:detalle_cc', args=pk))
+        else:
+            if mov_form.is_valid():
+                importe = calcular_deuda(periodos, selected)
+                mov = mov_form.save()
+                detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
+                detalle_mov.completar_monto(importe, servicio, cc)
+                log_crear(request.user.id, cc, servicio)
+                return HttpResponseRedirect(reverse('cuentas_corrientes:detalle_cc', args=pk))
+    else:
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'cuentaCorriente/cancelar_deuda_cc.html', {'detalle_mov_form': detalle_mov_form, 'pk': pk,
+                                                                      'mov_form': mov_form, 'listado': periodos})
+
+
 class PdfCertificado(LoginRequiredMixin, PDFTemplateView):
     template_name = 'cuentaCorriente/certificado_pdf.html'
     login_url = '/accounts/login/'
@@ -148,7 +205,8 @@ class PdfCertificado(LoginRequiredMixin, PDFTemplateView):
             reinspecciones=reinspecciones,
             periodo=calendar.month_name[int(mes)] + " " + str(anio),
             total_kilos=sum(item['reinspeccion'].total_kg for item in reinspecciones),
-            total_monto=sum(item['subtotal'] for item in reinspecciones)
+            total_monto=sum(item['subtotal'] for item in reinspecciones),
+            title='Certificado de deuda - ' + str(cc.abastecedor.responsable.nombre) + ' / Periodo: ' + str(mes)
         )
 
 
@@ -171,6 +229,7 @@ def alta_reinspeccion(request):
         servicio = 'Reinspeccion Veterinaria'
         if form.is_valid():
             reinspeccion = form.save(commit=False)
+            reinspeccion.fecha = timezone.now().date()
             reinspeccion.detalles = False
             reinspeccion.save()
             importe = calculo_importe(reinspeccion.total_kg)
@@ -208,6 +267,7 @@ def carga_productos(request, reinspeccion_pk):
     producto_form = ReinspeccionProductoForm
     mensaje = ''
     productos = []
+    total_kg = 0
     if request.method == 'POST':
         productos = request.session['productos']
         total_kg = sum(item['kilo_producto'] for item in productos)
@@ -224,6 +284,7 @@ def carga_productos(request, reinspeccion_pk):
                 item.save()
             reinspeccion.detalles = True
             reinspeccion.save()
+            log_modificar(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
             return redirect('reinspecciones:lista_reinspecciones')
     else:
         if 'productos' in request.session:
@@ -231,7 +292,7 @@ def carga_productos(request, reinspeccion_pk):
         request.session['productos'] = []
     return render(request, 'reinspeccion/carga_productos.html', {'producto_form': producto_form, 'mensaje': mensaje,
                                                                  'reinspeccion': Reinspeccion.objects.get(pk=reinspeccion_pk),
-                                                                 'productos': productos})
+                                                                 'productos': productos, 'total_kg': total_kg})
 
 
 @login_required(login_url='login')
@@ -240,7 +301,6 @@ def alta_reinspeccion_cc(request):
     productos = []
     if request.method == 'POST':
         form = ReinspeccionCCForm(request.POST)
-        servicio = 'Reinspeccion Veterinaria'
         if 'productos' in request.session:
             productos = request.session['productos']
         if form.is_valid():
@@ -251,7 +311,7 @@ def alta_reinspeccion_cc(request):
             cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
             detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
             detalle.save()
-            log_crear(request.user.id, reinspeccion, servicio)
+            log_crear(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
             return redirect('reinspecciones:lista_reinspecciones')
     else:
         if 'productos' in request.session:
@@ -273,6 +333,7 @@ def existe_producto(request, producto):
 def agregar_producto(request):
     form = ReinspeccionProductoForm(request.POST)
     success = True
+    total_kg = 0
     if form.is_valid():
         producto = form.save(commit=False)
         if existe_producto(request, producto):
@@ -280,7 +341,9 @@ def agregar_producto(request):
         else:
             request.session['productos'].append(producto.to_json())
             request.session.modified = True
-    return JsonResponse({'success': success, 'productos': request.session['productos']})
+            total_kg = sum(item['kilo_producto'] for item in request.session['productos'])
+
+    return JsonResponse({'success': success, 'productos': request.session['productos'], 'total_kg': total_kg})
 
 
 @login_required(login_url='login')
@@ -288,7 +351,8 @@ def eliminar_producto(request, nombre):
     productos = request.session['productos']
     productos[:] = [p for p in productos if p.get('producto').get('nombre') != nombre]
     request.session['productos'] = productos
-    return JsonResponse({'productos': request.session['productos']})
+    total_kg = sum(item['kilo_producto'] for item in request.session['productos'])
+    return JsonResponse({'productos': request.session['productos'], 'total_kg': total_kg})
 
 
 def alta_productos(request, reinspeccion):
@@ -426,9 +490,9 @@ class PdfVehiculo(LoginRequiredMixin, PDFTemplateView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
 
-    def get_context_data(self, pk):
+    def get_context_data(self, nro):
         return super(PdfVehiculo, self).get_context_data(
-            vehiculo=Vehiculo.objects.get(pk=pk)
+            vehiculo=Vehiculo.objects.get(nro=nro)
         )
 
 
@@ -609,7 +673,7 @@ def modificacion_control_plaga(request, pk):
     if request.method == 'POST':
         form = ModificacionControlDePlagaForm(request.POST, instance=control_plaga)
         if form.is_valid():
-            log_crear(request.user.id, form.save(), 'Control de Plagas')
+            log_modificar(request.user.id, form.save(), 'Control de Plagas')
             return redirect('controles_plagas:lista_controles_plagas')
     else:
         form = ModificacionControlDePlagaForm(instance=control_plaga)
@@ -663,7 +727,7 @@ def estadisticas_td(request):
             years = range(int(rango_form.cleaned_data['anio_hasta']),
                           int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
-    des_tr = {}  # desinfeccion taxi/remis
+    des_tr = {}
     des_escolares = {}
     des_tsa = {}
     des_colectivos = {}

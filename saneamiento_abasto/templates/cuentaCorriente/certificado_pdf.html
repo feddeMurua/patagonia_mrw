@@ -55,7 +55,7 @@
                                     {% for i in item.reinspeccion.inspectores.all %}{{ i.apellido }}, {{ i.nombre }} | {% endfor %}
                                 </td>
                                 <td>{{ item.reinspeccion.turno }}</td>
-                                <td>{{ item.reinspeccion.precintado }}</td>
+                                <td>{{ item.reinspeccion.precintado|default_if_none:"" }}</td>
                                 <td>{{ item.reinspeccion.certificado }}</td>
                                 <td>${{ item.subtotal }}</td>
                             </tr>

@@ -59,6 +59,7 @@ class DetalleMovimiento(models.Model):
 class ArqueoDiario(models.Model):
     fecha = models.DateTimeField(default=timezone.now)
     nro_planilla = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
+    mil = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     quinientos = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     doscientos = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     cien = models.IntegerField(default=0, validators=[MinValueValidator(0)])
@@ -66,7 +67,6 @@ class ArqueoDiario(models.Model):
     veinte = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     diez = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     cinco = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    b_dos = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     m_dos = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     uno = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     m_cincuenta = models.IntegerField(default=0, validators=[MinValueValidator(0)])

@@ -1,5 +1,4 @@
 {% extends "base/base_detail.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Vehiculo{% endblock %}
@@ -54,7 +53,7 @@
                 {% if object.disposicion_resolucion %}
                     <tr>
                         <td>N° de Disposicion:</td>
-                        <td>{{ object.disposicion_resolucion }}</td>
+                        <td>{{ object.disposicion_resolucion|default_if_none:"" }}</td>
                     </tr>
                 {% endif %}
             {% endif %}
@@ -63,5 +62,6 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'vehiculo:lista_vehiculos' %}" class="btn btn-primary" role="button">Regresar</a>
+    <a class="btn btn-warning" href="{% url 'vehiculo:vehiculo_pdf' object.nro %}" target="_blank">Imprimir comprobante</a>
+    <a class="btn btn-primary" href="{% url 'vehiculo:lista_vehiculos' %}" role="button">Regresar</a>
 {% endblock %}

@@ -1,5 +1,4 @@
 {% extends "base/base_detail.html" %}
-{% load staticfiles %}
 {% load staticfiles bootstrap3 %}
 
 {% block title %}Arqueo Diario{% endblock %}
@@ -22,11 +21,16 @@
                 <thead>
                     <tr>
                         <th>Tipo de Valor</th>
-                        <th>Cant. movimientos</th>
+                        <th>Cantidad de Operaciones</th>
                         <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>Billetes de mil</td>
+                        <td>{{ datos.arqueo.mil }}</td>
+                        <td>${{ datos.mil }}</td>
+                    </tr>
                     <tr>
                         <td>Billetes de quinientos</td>
                         <td>{{ datos.arqueo.quinientos }}</td>
@@ -61,11 +65,6 @@
                         <td>Billetes de cinco</td>
                         <td>{{ datos.arqueo.cinco }}</td>
                         <td>${{ datos.cinco }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de dos</td>
-                        <td>{{ datos.arqueo.b_dos }}</td>
-                        <td>${{ datos.b_dos }}</td>
                     </tr>
                     <tr>
                         <td>Monedas de dos</td>
@@ -119,7 +118,7 @@
                 <thead>
                     <tr>
                         <th>Tipo de Valor</th>
-                        <th>Cant. movimientos</th>
+                        <th>Cantidad de Operaciones</th>
                         <th>Subtotal</th>
                     </tr>
                 </thead>
@@ -151,5 +150,6 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'arqueo:lista_arqueos' %}" class="btn btn-primary" role="button">Regresar</a>
+    <a role="button" class="btn btn-warning" href="{% url 'arqueo:arqueo_pdf' datos.arqueo.nro_planilla %}" target="_blank" >Imprimir planilla</a>
+    <a role="button" class="btn btn-primary" href="{% url 'arqueo:lista_arqueos' %}">Regresar</a>
 {% endblock %}

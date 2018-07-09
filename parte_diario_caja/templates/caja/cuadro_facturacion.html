@@ -1,6 +1,4 @@
-{% load staticfiles %}
-{% load staticfiles bootstrap3 %}
-{% load widget_tweaks %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -27,22 +25,22 @@
         </div>
         <div class="nueva">
             <div class="form-group">
-                <label>{{ mov_form.titular.label }}</label>
+                <label>Titular</label>
                 {{ mov_form.titular }}
             </div>
             <div class="form-group">
-                <label>{{ mov_form.nro_ingreso.label }}</label>
+                <label>N° de Ingresos Varios</label>
                 {{ mov_form.nro_ingreso|add_class:'form-control' }}
                 {% for error in mov_form.nro_ingreso.errors %}
                     <span class="help-block">{{ error }}</span>
                 {% endfor %}
             </div>
             <div class="form-group">
-                <label>{{ mov_form.forma_pago.label }}</label>
+                <label>Forma de pago</label>
                 {{ mov_form.forma_pago }}
             </div>
             <div class="form-group">
-                <label>{{ mov_form.nro_cheque.label }}</label>
+                <label>N° de cheque</label>
                 {{ mov_form.nro_cheque|add_class:'form-control' }}
                 {% for error in mov_form.nro_cheque.errors %}
                     <span class="help-block">{{ error }}</span>
