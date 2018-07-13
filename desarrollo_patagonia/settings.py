@@ -147,5 +147,3 @@ LOGIN_REDIRECT_URL = 'inicio/'
 
 MEDIA_URL = '/fotos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'fotos/')
-
-

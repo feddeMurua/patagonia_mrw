@@ -26,7 +26,7 @@
                 <td>Rol Actuante:</td>
                 <td>
                     {% for rol in object.rol_actuante.all %}
-                        <button type="button" class="btn btn-default">{{ rol }}</button>
+                        <button disabled type="button" >{{ rol }}</button>
                     {% endfor %}
                 </td>
             </tr>
