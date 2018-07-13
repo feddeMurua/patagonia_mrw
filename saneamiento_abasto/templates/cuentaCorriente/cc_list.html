@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ cuenta.abastecedor }}</td>
                 <td>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Reinspecciones" href="{% url 'cuentas_corrientes:detalle_cc' cuenta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Periodos" href="{% url 'cuentas_corrientes:periodos_cc' cuenta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                 </td>
             </tr>
         {% endfor %}

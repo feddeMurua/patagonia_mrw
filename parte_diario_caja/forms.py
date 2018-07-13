@@ -56,18 +56,18 @@ class ArqueoEfectivoForm(forms.ModelForm):
                    'mov_cheque_sis', 'sub_cheque_sis', 'mov_total_sistema', 'imp_total_sistema']
         labels = {
             'nro_planilla': _("N° de planilla"),
-            'mil': _("Billetes de mil ($1000,00)"),
-            'quinientos': _("Billetes de quinientos ($500,00)"),
-            'doscientos': _("Billetes de doscientos ($200,00)"),
-            'cien': _("Billetes de cien ($100,00)"),
-            'b_cincuenta': _("Billetes de cincuenta ($50,00)"),
-            'veinte': _("Billetes de veinte ($20,00)"),
-            'diez': _("Billetes de diez ($10,00)"),
-            'cinco': _("Billetes de cinco ($5,00)"),
-            'm_dos': _("Monedas de dos ($2,00)"),
-            'uno': _("Monedas de uno ($1,00)"),
-            'm_cincuenta': _("Monedas de cincuenta ctvs. ($0,50)"),
-            'veinticinco': _("Monedas de veinticinco ctvs. ($0,25)"),
+            'mil': _("Billetes de $1000,00"),
+            'quinientos': _("Billetes de $500,00"),
+            'doscientos': _("Billetes de $200,00"),
+            'cien': _("Billetes de $100,00"),
+            'b_cincuenta': _("Billetes de $50,00"),
+            'veinte': _("Billetes de $20,00"),
+            'diez': _("Billetes de $10,00"),
+            'cinco': _("Billetes de $5,00"),
+            'm_dos': _("Monedas de $2,00"),
+            'uno': _("Monedas de $1,00"),
+            'm_cincuenta': _("Monedas de $0,50"),
+            'veinticinco': _("Monedas de $0,25"),
             'total_manual': _("Total de recuento manual")
         }
 

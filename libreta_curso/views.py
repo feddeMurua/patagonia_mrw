@@ -344,7 +344,6 @@ class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
 
     def get_context_data(self, pk):
         libreta = LibretaSanitaria.objects.get(pk=pk)
-        print(libreta.foto)
         return super(PdfLibreta, self).get_context_data(
             libreta=LibretaSanitaria.objects.get(pk=pk),
             title='Libreta sanitaria N°'

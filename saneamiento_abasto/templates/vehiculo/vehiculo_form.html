@@ -35,12 +35,14 @@
                 tipo_tpp.prop('required', true);
                 disp_res.parent().removeClass('hidden');
                 disp_res.prop('required', false);
+                disp_res.siblings('label').text("Resolucion N°");
                 categoria.parent().addClass('hidden');
                 rubro.parent().addClass('hidden');
             } else {
                 tipo_tpp.parent().addClass('hidden');
                 tipo_tpp.prop('required', false);
                 disp_res.prop('required', true);
+                disp_res.siblings('label').text("Disposicion N° *");
                 categoria.parent().removeClass('hidden');
                 rubro.parent().removeClass('hidden');
             }

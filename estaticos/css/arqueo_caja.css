@@ -1,3 +1,27 @@
 .table tr th {
     text-align: center;
 }
+
+.cant_efectivo_manual, .sub_otros_manual,
+#id_cheques_cant, #id_tarjeta_cant, .sub_manual {
+    text-align: center;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.panel-body {
+    padding-bottom: 0;
+}
+
+#id_nro_planilla {
+    width: 15%;
+    margin-left: 15px;
+}
+
+.sub_manual {
+    width: 31% !important;
+    margin-left: 23px;
+}

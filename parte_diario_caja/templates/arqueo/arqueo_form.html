@@ -17,7 +17,7 @@
             {% csrf_token %}
             <div class="panel panel-primary">
                 <div class="panel-body">
-                    <div class="form-group">
+                    <div class="form-group form-inline" style="margin-left: 15px;">
                         <label>{{ form.nro_planilla.label }} *</label>
                         {{ form.nro_planilla|add_class:'form-control' }}
                         {% for error in form.nro_planilla.errors %}
@@ -62,7 +62,7 @@
                                 </table>
                             </div>
                             <div class="panel-footer">
-                                <div class="form-group">
+                                <div class="form-group form-inline">
                                     <label>{{ form.total_manual.label }}</label>
                                     {{ form.total_manual|add_class:'form-control'|add_class:'sub_manual'|attr:'readonly' }}
                                     {% for error in form.total_manual.errors %}
@@ -82,7 +82,7 @@
                                     <thead>
                                         <tr>
                                             <th>Tipo de Valor</th>
-                                            <th>Cant. de Operaciones</th>
+                                            <th>Operaciones</th>
                                             <th>Subtotal</th>
                                         </tr>
                                     </thead>

@@ -86,7 +86,7 @@ class VehiculoForm(forms.ModelForm):
         labels = {
             'tipo_vehiculo': _("Tipo de vehiculo"),
             'tipo_tpp': _("Tipo de transporte"),
-            'disposicion_resolucion': _("Resolucion"),
+            'disposicion_resolucion': _("Resolucion N°"),
             'nro': _('N°')
         }
 
@@ -105,7 +105,9 @@ class ModificarTPPForm(forms.ModelForm):
         model = Vehiculo
         exclude = ['titular', 'tipo_vehiculo', 'categoria', 'rubro_vehiculo']
         labels = {
-            'disposicion_resolucion': _("Resolucion")
+            'disposicion_resolucion': _("Resolucion"),
+            'tipo_tpp': _('Tipo de transporte'),
+            'nro': _('N°')
         }
 
 

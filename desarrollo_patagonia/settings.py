@@ -53,8 +53,7 @@ INSTALLED_APPS = [
     'easy_pdf',
     'polymorphic',
     'django_addanother',
-    'solo',
-    'sslserver'
+    'solo'
 ]
 
 MIDDLEWARE = [
@@ -148,3 +147,5 @@ LOGIN_REDIRECT_URL = 'inicio/'
 
 MEDIA_URL = '/fotos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'fotos/')
+
+

@@ -4,7 +4,6 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base_listado.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert2.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.css' %}"/>
     {% block more-stylesheets %}{% endblock %}
 {% endblock %}
@@ -44,10 +43,46 @@
             {% block panel-footer %}{% endblock %}
         </div>
     </div>
+
+    <div id="modalBaja" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Eliminar objeto</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <h3>¡Atención!</h3>
+                    <p>Se eliminara el objeto seleccionado</p>
+                    <p>¿Desea continuar?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary btn-confirm-baja" name="confirm" value="Confirmar"/>
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalConfirmBaja" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" onclick="location.reload()">&times;</button>
+                    <h4 class="modal-title">Objeto eliminado</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <p>El objeto se elimino correctamente</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="location.reload()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/sweetalert2.js' %}"></script>
     <script src="{% static 'js/datatables.js' %}"></script>
     <script>
         $(document).ready(function(){
@@ -80,32 +115,19 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('.btn-baja').click(function confirmarBaja() {
+            $('.btn-baja').click(function() {
+                $('#modalBaja').modal();
                 var urlBaja = $(this).data('url');
-                swal({
-                    title: "¿Esta seguro?",
-                    text: "¿Desea eliminar este elemento?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Confirmar",
-                    cancelButtonText: "Cancelar"
-                }).then(function(){
+                $('.btn-confirm-baja').click(function() {
                     $.ajax({
                         url: urlBaja,
                         type: 'POST',
                         beforeSend: function(xhr) {
                             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                         },
-                        success: function(response) {
-                            swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
-                                function(){
-                                    location.reload()
-                                }
-                            );
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            swal('Error de operacion', 'Por favor intente nuevamente', 'error');
+                        success: function() {
+                            $('#modalBaja').modal('hide');
+                            $('#modalConfirmBaja').modal();
                         }
                     });
                 });

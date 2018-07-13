@@ -288,7 +288,6 @@ def baja_esterilizacion(request, pk):
 
 @login_required(login_url='login')
 def confirmar_esterilizacion(request, pk):
-    print("entre")
     mascota = Esterilizacion.objects.get(pk=pk).mascota
     mascota.esterilizado = True
     mascota.save()
@@ -333,6 +332,7 @@ def retiro_antiparasitario(request, pk):
 @login_required(login_url='login')
 def alta_patente(request):
     if request.method == 'POST':
+        form = PatenteForm
         mascota_form = MascotaForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
@@ -498,7 +498,7 @@ def alta_visita(request, pk_control):
             visita.control = ControlAntirrabico.objects.get(pk=pk_control)
             visita.save()
             log_crear(request.user.id, visita, 'Visita de Control')
-            return HttpResponseRedirect(reverse('controles:lista_visitas', args=pk_control))
+            return HttpResponseRedirect(reverse('controles:lista_visitas', args=[pk_control]))
     else:
         form = VisitaForm
     return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})
@@ -519,7 +519,7 @@ def modificacion_visita(request, pk, pk_control):
         form = VisitaForm(request.POST, instance=visita)
         if form.is_valid():
             log_modificar(request.user.id, form.save(), 'Visita de Control')
-            return HttpResponseRedirect(reverse('controles:lista_visitas', args=pk_control))
+            return HttpResponseRedirect(reverse('controles:lista_visitas', args=[pk_control]))
     else:
         form = VisitaForm(instance=visita)
     return render(request, 'control/visita_form.html', {'form': form, 'pk_control': pk_control})

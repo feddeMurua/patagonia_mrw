@@ -107,18 +107,6 @@ class DisposicionForm(forms.ModelForm):
         return fecha_disposicion
 
 
-class TurnoForm(forms.Form):
-    turno = forms.DateTimeField(required=True)
-
-    def clean_turno(self):
-        turno = self.cleaned_data['turno']
-        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(12, 0):
-            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 12:00 hs.')
-        elif turno.date() < timezone.now().date():
-            raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
-        return turno
-
-
 class MascotaForm(forms.ModelForm):
     nacimiento_fecha = forms.DateField(widget=DateInput(), label="Fecha de nacimiento", required=False)
 
@@ -276,8 +264,8 @@ class EsterilizacionPatenteForm(forms.ModelForm):
 
     def clean_turno(self):
         turno = self.cleaned_data['turno']
-        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(12, 0):
-            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 12:00 hs.')
+        if turno.time() < datetime.time(8, 0) or turno.time() > datetime.time(20, 0):
+            raise forms.ValidationError('Debe seleccionar un horario entre las 08:00 y las 20:00 hs.')
         elif turno.date() < timezone.now().date():
             raise forms.ValidationError('La fecha seleccionada no puede ser menor a la fecha actual')
         return turno

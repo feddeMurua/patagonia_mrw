@@ -106,13 +106,18 @@ def lista_cc(request):
 
 
 @login_required(login_url='login')
-def detalle_cc(request, pk):
-    cuenta = CuentaCorriente.objects.get(pk=pk)
-    if request.method == 'POST':
-        mes, anio = request.POST['periodo'].split("/")
-        return HttpResponseRedirect(reverse('cuentas_corrientes:pdf_certificado', kwargs={'pk': pk, 'mes': mes,
-                                                                                          'anio': anio}))
-    return render(request, 'cuentaCorriente/cc_detail.html', {'pk': pk, 'listado': DetalleCC.objects.filter(cc=cuenta)})
+def periodos_cc(request, pk):
+    cc = CuentaCorriente.objects.get(pk=pk)
+    return render(request, 'cuentaCorriente/cc_periodos.html', {'pk': pk, 'listado': agrupar_periodos(cc)})
+
+
+@login_required(login_url='login')
+def detalle_periodo(request, pk, mes, anio):
+    return render(request,
+                  'cuentaCorriente/periodo_detail.html',
+                  {'pk': pk, 'listado': DetalleCC.objects.filter(cc__pk=pk, reinspeccion__fecha__month=mes,
+                                                                 reinspeccion__fecha__year=anio), 'mes': mes,
+                   'anio': anio})
 
 
 def get_monto(reinspeccion):
@@ -137,6 +142,20 @@ def agrupar_reinspecciones(cc, mes, anio):
 
 
 def agrupar_periodos(cc):
+    detallescc = DetalleCC.objects.filter(cc=cc)\
+        .annotate(periodo=Concat(ExtractMonth('reinspeccion__fecha'), V('-'), ExtractYear('reinspeccion__fecha'),
+                                 output_field=CharField()))\
+        .order_by('periodo')
+    periodos = {}
+    for k, group in groupby(detallescc, lambda x: x.periodo):
+        detalles = list(group)
+        periodos[k] = {'detalles': detalles,
+                       'total_kg': sum(item.reinspeccion.total_kg for item in detalles),
+                       'monto': sum(get_monto(item.reinspeccion) for item in detalles)}
+    return periodos
+
+
+def agrupar_periodos_adeudados(cc):
     detallescc = DetalleCC.objects.filter(cc=cc, pagado=False)\
         .annotate(periodo=Concat(ExtractMonth('reinspeccion__fecha'), V('-'), ExtractYear('reinspeccion__fecha'),
                                  output_field=CharField()))\
@@ -163,7 +182,7 @@ def calcular_deuda(periodos, selected):
 @login_required(login_url='login')
 def cancelar_deuda_cc(request, pk):
     cc = CuentaCorriente.objects.get(pk=pk)
-    periodos = agrupar_periodos(cc)
+    periodos = agrupar_periodos_adeudados(cc)
     if request.method == 'POST':
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
@@ -175,7 +194,7 @@ def cancelar_deuda_cc(request, pk):
                 detalle_mov = detalle_mov_form.save(commit=False)
                 detalle_mov.completar_monto(importe, servicio, cc)
                 log_crear(request.user.id, cc, servicio)
-                return HttpResponseRedirect(reverse('cuentas_corrientes:detalle_cc', args=pk))
+                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[pk]))
         else:
             if mov_form.is_valid():
                 importe = calcular_deuda(periodos, selected)
@@ -183,7 +202,7 @@ def cancelar_deuda_cc(request, pk):
                 detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
                 detalle_mov.completar_monto(importe, servicio, cc)
                 log_crear(request.user.id, cc, servicio)
-                return HttpResponseRedirect(reverse('cuentas_corrientes:detalle_cc', args=pk))
+                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[pk]))
     else:
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
@@ -349,10 +368,33 @@ def agregar_producto(request):
 @login_required(login_url='login')
 def eliminar_producto(request, nombre):
     productos = request.session['productos']
-    productos[:] = [p for p in productos if p.get('producto').get('nombre') != nombre]
+    productos[:] = [p for p in productos if p['producto']['nombre'] != nombre]
     request.session['productos'] = productos
     total_kg = sum(item['kilo_producto'] for item in request.session['productos'])
     return JsonResponse({'productos': request.session['productos'], 'total_kg': total_kg})
+
+
+@login_required(login_url='login')
+def modificar_producto(request, nombre, kg):
+    productos = request.session['productos']
+    for item in productos:
+        if item['producto']['nombre'] == nombre:
+            item['kilo_producto'] = int(kg)
+    request.session['productos'] = productos
+    total_kg = sum(item['kilo_producto'] for item in request.session['productos'])
+    return JsonResponse({'productos': request.session['productos'], 'total_kg': total_kg})
+
+
+@login_required(login_url='login')
+def modificar_producto_reinspeccion(request, pk, nombre, kg):
+    reinspeccion = Reinspeccion.objects.get(pk=pk)
+    producto = ReinspeccionProducto.objects.get(reinspeccion=reinspeccion, producto__nombre=nombre)
+    diferencia = producto.kilo_producto - float(kg)
+    producto.kilo_producto = kg
+    producto.save()
+    reinspeccion.total_kg -= diferencia
+    reinspeccion.save()
+    return HttpResponse()
 
 
 def alta_productos(request, reinspeccion):
@@ -377,17 +419,23 @@ def alta_productos(request, reinspeccion):
 
 
 @login_required(login_url='login')
-def lista_productos(request, reinspeccion_pk):
+def lista_productos(request, reinspeccion_pk, pagado):
     reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
     referer = request.META.get('HTTP_REFERER')
+    elem = referer.split('/')
     if 'detalle' in referer:
-        url_return = 'cuentas_corrientes:detalle_cc'
+        url_return = 'cuentas_corrientes:detalle_periodo'
+        id_return = elem[-5]
     else:
         url_return = 'reinspecciones:lista_reinspecciones'
+        id_return = ""
     return render(request, 'reinspeccion/producto_list.html', {'reinspeccion_pk': reinspeccion_pk,
                                                                'total_kg': reinspeccion.total_kg,
                                                                'url_return': url_return,
-                                                               'id_return': referer.split('/')[-1],
+                                                               'id_return': id_return,
+                                                               'mes_return': elem[-3],
+                                                               'anio_return': elem[-2],
+                                                               'pagado': True if pagado == 0 else False,
                                                                'listado': ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)})
 
 
@@ -559,7 +607,7 @@ def nueva_desinfeccion(request, pk_vehiculo):
                     detalle_mov.servicio = str(servicio)
                     detalle_mov.save()
                     log_crear(request.user.id, desinfeccion, 'Desinfeccion')
-                    return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=pk_vehiculo))
+                    return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=[pk_vehiculo]))
             else:
                 if mov_form.is_valid():
                     mov = form.save()
@@ -569,7 +617,7 @@ def nueva_desinfeccion(request, pk_vehiculo):
                     detalle_mov.servicio = str(servicio)
                     detalle_mov.save()
                     log_crear(request.user.id, desinfeccion, 'Desinfeccion')
-                    return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=pk_vehiculo))
+                    return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=[pk_vehiculo]))
 
     else:
         form = DesinfeccionForm
@@ -595,7 +643,7 @@ def modificar_desinfeccion(request, pk_vehiculo, pk):
         form = DesinfeccionForm(request.POST, instance=desinfeccion)
         if form.is_valid():
             log_modificar(request.user.id, form.save(), 'Desinfeccion')
-            return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=pk_vehiculo))
+            return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=[pk_vehiculo]))
     else:
         form = DesinfeccionForm(instance=desinfeccion)
     return render(request, 'desinfeccion/desinfeccion_form.html', {'form': form, 'modificacion': True,

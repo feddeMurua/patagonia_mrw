@@ -42,35 +42,59 @@
             </tr>
         {% endfor %}
     </tbody>
+
+    <div id="modalBeneficio" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Retiro de beneficio</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <p>Se registraraá el retiro del beneficio</p>
+                    <p>¿Desea continuar?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary btn-confirm-beneficio" name="confirm" value="Confirmar"/>
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRealizado" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Beneficio retirado</h4>
+                </div>
+                <div class="modal-body" align="center"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block more-scripts %}
     <script>
-        $(document).ready(function(){
-            $('.btn-beneficio').click(function confirmarRetiro() {
-                var urlBeneficio = $(this).data('url');
-                swal({
-                    title: "¿Esta seguro?",
-                    text: "¿Desea confirmar el retiro de este beneficio?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Confirmar",
-                    cancelButtonText: "Cancelar"
-                }).then(function(){
-                    $.ajax({
-                        url: urlBeneficio,
-                        success: function(data) {
-                            if (data['error']) {
-                                swal('Error', data['msg'], 'error');
-                            } else {
-                                swal('Finalizado', data['msg'], 'success');
-                            }
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            swal("Error de operacion", "Por favor intente nuevamente", "error");
-                        }
-                    });
+        $('.btn-beneficio').click(function () {
+            $('#modalBeneficio').modal();
+            var urlBeneficio = $(this).data('url');
+            $('.btn-confirm-beneficio').click(function() {
+                $.ajax({
+                    url: urlBeneficio,
+                    type: 'POST',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function(data) {
+                        $('#modalBeneficio').modal('hide');
+                        $('#modalRealizado').find('.modal-body').text(data['msg']);
+                        $('#modalRealizado').modal();
+                    }
                 });
             });
         });

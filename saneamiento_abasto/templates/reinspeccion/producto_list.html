@@ -7,7 +7,7 @@
 
 {% block url-volver %}
     {% if id_return %}
-        {% url url_return id_return %}
+        {% url url_return id_return mes_return anio_return %}
     {% else %}
         {% url url_return %}
     {% endif %}
@@ -20,12 +20,14 @@
         <tr>
             <th>Producto</th>
             <th>Peso</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
     <tfoot>
         <tr style="background-color:#d6d7d8">
             <td><b>TOTAL</b></td>
             <td><b>{{ total_kg }},0 Kg</b></td>
+            <td></td>
         </tr>
     </tfoot>
     <tbody>
@@ -33,7 +35,53 @@
             <tr>
                 <td>{{ producto.producto.nombre }}</td>
                 <td>{{ producto.kilo_producto }} Kg</td>
+                <td>
+                    {% if id_return and not pagado %}
+                        <a class='btn btn-warning' onclick="confirmModificar('{{ reinspeccion_pk }}', '{{ producto.producto.nombre }}')" data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </tbody>
+
+    <div id="modalModificar" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modificar cantidad</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <input class="form-control" style="width:45%;text-align:center;" type="number" id="nueva_cant" placeholder="Ingrese un número entero">
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary btn-confirm-modificar" name="confirm" value="Confirmar"/>
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        function confirmModificar(pk, producto) {
+            $('#modalModificar').modal();
+            $('.btn-confirm-modificar').click(function() {
+                var kg = $('#nueva_cant').val();
+                $.ajax({
+                    url: '/reinspecciones/modificar_producto_reinspeccion/' + pk + '/' + producto + '/' + kg,
+                    type: 'POST',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function(data) {
+                        $('#modalModificar').modal('hide');
+                        $('#nueva_cant').val("");
+                        location.reload();
+                    }
+                });
+            });
+        };
+    </script>
 {% endblock %}

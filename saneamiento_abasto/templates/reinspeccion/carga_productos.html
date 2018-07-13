@@ -98,6 +98,44 @@
             </div>
         </div>
     </div>
+
+    <div id="modalBaja" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Eliminar elemento</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <h3>¡Atención!</h3>
+                    <p>Se eliminara el objeto seleccionado</p>
+                    <p>¿Desea continuar?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary btn-confirm-baja" name="confirm" value="Confirmar"/>
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalModificar" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modificar cantidad</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <input class="form-control" style="width:45%;text-align:center;" type="number" id="nueva_cant" placeholder="Ingrese un número entero">
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary btn-confirm-modificar" name="confirm" value="Confirmar"/>
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block more-scripts %}
@@ -132,7 +170,11 @@
                 var row = "<tr align='center'>" +
                             "<td>" + producto + "</td>" +
                             "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
-                            "<td><a class='btn btn-danger btn-eliminar' onclick='confirmBaja(\"" + producto + "\")' data-toggle='tooltip' title='Eliminar'><em class='glyphicon glyphicon-trash'></em></a></td>" +
+                            "<td>" +
+                                "<a class='btn btn-warning' onclick='confirmModificar(\"" + producto + "\")' data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>" +
+                                " " +
+                                "<a class='btn btn-danger btn-eliminar' onclick='confirmBaja(\"" + producto + "\")' data-toggle='tooltip' title='Eliminar'><em class='glyphicon glyphicon-trash'></em></a>" +
+                            "</td>" +
                         "</tr>";
                 $tbody.append(row);
             }
@@ -144,16 +186,8 @@
         }
 
         function confirmBaja(producto) {
-            swal({
-                title: "¿Esta seguro?",
-                text: "¿Desea eliminar este elemento?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Confirmar",
-                cancelButtonText: "Cancelar"
-            }).then(function(){
-                console.log(producto);
+            $('#modalBaja').modal();
+            $('.btn-confirm-baja').click(function() {
                 $.ajax({
                     url: '/reinspecciones/eliminar_producto/' + producto,
                     type: 'POST',
@@ -161,14 +195,27 @@
                         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                     },
                     success: function(data) {
-                        swal('Baja confirmada', 'El elemento se elimino correctamente', 'success').then(
-                            function(){
-                                refresh_table(data);
-                            }
-                        );
+                        refresh_table(data);
+                        $('#modalBaja').modal('hide');
+                    }
+                });
+            });
+        };
+
+        function confirmModificar(producto) {
+            $('#modalModificar').modal();
+            $('.btn-confirm-modificar').click(function() {
+                var kg = $('#nueva_cant').val();
+                $.ajax({
+                    url: '/reinspecciones/modificar_producto/' + producto + '/' + kg,
+                    type: 'POST',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                     },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        swal('Error de operacion', 'Por favor intente nuevamente', 'error');
+                    success: function(data) {
+                        refresh_table(data);
+                        $('#modalModificar').modal('hide');
+                        $('#nueva_cant').val("");
                     }
                 });
             });
