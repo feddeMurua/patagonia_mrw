@@ -91,6 +91,20 @@
                 var atTheEnd = index >= $sections.length - 1;
                 $('.form-navigation .next').toggle(!atTheEnd);
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
+
+                if (index == 1) {
+                    if ($('#id_patentado').is(':checked')) {
+                        $('.form-patentado :input').prop('required', true);
+                        $('.form-no-patentado :input').prop('required', false);
+                        $('.form-patentado').removeClass('hidden');
+                        $('.form-no-patentado').addClass('hidden');
+                    } else {
+                        $('.form-patentado :input').prop('required', false);
+                        $('.form-no-patentado :input').prop('required', true);
+                        $('.form-patentado').addClass('hidden');
+                        $('.form-no-patentado').removeClass('hidden');
+                    }
+                }
             }
 
             function curIndex() {
@@ -116,23 +130,10 @@
             $sections.each(function(index, section) {
                 $(section).find(':input').attr('data-parsley-group', 'block-' + index);
             });
+
             navigateTo(0); // Start at the beginning
 
-            $('#id_patentado').click( function() {
-                if ($(this).is(':checked')) {
-                    $('.form-patentado :input').prop('required', true);
-                    $('.form-no-patentado :input').prop('required', false);
-                    $('.form-patentado').removeClass('hidden');
-                    $('.form-no-patentado').addClass('hidden');
-                } else {
-                    $('.form-patentado :input').prop('required', false);
-                    $('.form-no-patentado :input').prop('required', true);
-                    $('.form-patentado').addClass('hidden');
-                    $('.form-no-patentado').removeClass('hidden');
-                }
-            });
-
-            $("#id_patentado").checkboxradio();
+            $('#id_patentado').checkboxradio();
         });
     </script>
 {% endblock %}

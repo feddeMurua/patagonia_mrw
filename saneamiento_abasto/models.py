@@ -46,7 +46,7 @@ class Producto(models.Model):
 
 
 class Reinspeccion(models.Model):
-    fecha = models.DateField()
+    fecha = models.DateField(default=now)
     turno = models.CharField(max_length=10, choices=TURNO_REINSPECCION)
     inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField(null=True, blank=True)

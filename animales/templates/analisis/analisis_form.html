@@ -17,9 +17,6 @@
     {% endif %}
 {% endblock %}
 
-{% block no-select2 %}
-{% endblock %}
-
 {% block form-right %}
     <div class="col-xs-12 col-md-5" id="container-form-right">
         <div class="panel panel-primary">
@@ -31,7 +28,7 @@
                     {% for form in formset.forms %}
                         {% for field in form.visible_fields %}
                             <div class="form-group">
-                                <label>{{ field.label }}</label>
+                                <label>{{ field.label }} {% if field.field.required %}*{% endif %}</label>
                                 {{ field|add_class:'form-control' }}
                                 {% for error in field.errors %}
                                     <span style="color:red;" class="help-block">{{ error }}</span>

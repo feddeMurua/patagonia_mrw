@@ -248,9 +248,9 @@ def alta_reinspeccion(request):
         servicio = 'Reinspeccion Veterinaria'
         if form.is_valid():
             reinspeccion = form.save(commit=False)
-            reinspeccion.fecha = timezone.now().date()
             reinspeccion.detalles = False
             reinspeccion.save()
+            form.save_m2m()
             importe = calculo_importe(reinspeccion.total_kg)
             if request.POST['optradio'] == 'previa':
                 if detalle_mov_form.is_valid():
@@ -326,6 +326,7 @@ def alta_reinspeccion_cc(request):
             reinspeccion = form.save(commit=False)
             reinspeccion.detalles = True
             reinspeccion.save()
+            form.save_m2m()
             alta_productos(request, reinspeccion)
             cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
             detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
