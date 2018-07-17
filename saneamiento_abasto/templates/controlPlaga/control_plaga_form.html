@@ -41,6 +41,7 @@
         });
 
         var pago_diferido = $('.pago_diferido'),
+        fecha_pago = $('#id_fecha_pago'),
         pago_normal = $('.pago_normal');
 
         tipo_pago = $("input[name='radio_tipo_pago']:checked").val();
@@ -54,10 +55,12 @@
         function hideTipoPago() {
             if (tipo_pago == 'diferido') {
                 pago_diferido.removeClass('hidden');
+                fecha_pago.prop('required', true);
                 pago_normal.addClass('hidden');
                 requireNone();
             } else {
                 pago_diferido.addClass('hidden');
+                fecha_pago.prop('required', false);
                 pago_normal.removeClass('hidden');
                 hideFields();
             }
