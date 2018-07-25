@@ -5,6 +5,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponse
 from desarrollo_patagonia.utils import *
 from .forms import *
+from usuarios.models import CustomUser
 
 
 class CustomPasswordChangeView(PasswordChangeView):
@@ -32,7 +33,7 @@ def alta_usuario(request):
 
 @login_required(login_url='login')
 def baja_usuario(request, pk):
-    usuario = User.objects.get(pk=pk)
+    usuario = CustomUser.objects.get(pk=pk)
     log_eliminar(request.user.id, usuario, 'Usuario')
     usuario.delete()
     return HttpResponse()
@@ -40,7 +41,7 @@ def baja_usuario(request, pk):
 
 @login_required(login_url='login')
 def modificar_usuario(request, pk):
-    usuario = User.objects.get(pk=pk)
+    usuario = CustomUser.objects.get(pk=pk)
     if request.method == 'POST':
         form = UsuarioForm(request.POST, instance=usuario)
         if form.is_valid():

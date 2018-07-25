@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.contrib.auth.models import User
+from usuarios.models import CustomUser
 from django import forms
 from functools import partial
 import re
@@ -17,7 +17,7 @@ regex_alfanumerico = re.compile(r"^[a-zñA-ZÑ0-9]+((\s[a-zñA-ZÑ0-9]+)+)?$")
 
 
 class ListaUsuariosForm(forms.Form):
-    usuario = forms.ModelChoiceField(queryset=User.objects.all())
+    usuario = forms.ModelChoiceField(queryset=CustomUser.objects.all())
 
 
 class ListaPersonasGenericasForm(forms.Form):
