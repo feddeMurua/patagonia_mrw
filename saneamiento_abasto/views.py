@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 import calendar
-from django.db.models import CharField, Value as V, Sum
+from django.db.models import CharField, Value as V
 from django.db.models.functions import Concat, ExtractMonth, ExtractYear
 import locale
 from personas import forms as f
@@ -589,7 +589,7 @@ def nueva_desinfeccion(request, pk_vehiculo):
         form = DesinfeccionForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
-        if form.is_valid() & detalle_mov_form.is_valid():
+        if form.is_valid():
             desinfeccion = form.save(commit=False)
             desinfeccion.vehiculo = vehiculo
             desinfeccion.quincena = 'Primera' if desinfeccion.fecha_realizacion.day <= 15 else 'Segunda'
@@ -611,7 +611,7 @@ def nueva_desinfeccion(request, pk_vehiculo):
                     return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=[pk_vehiculo]))
             else:
                 if mov_form.is_valid():
-                    mov = form.save()
+                    mov = mov_form.save()
                     detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
                     detalle_mov.importe = importe
                     detalle_mov.descripcion = str(servicio) + " | N° " + str(desinfeccion.id)

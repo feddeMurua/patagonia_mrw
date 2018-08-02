@@ -21,6 +21,10 @@ class CursoForm(forms.ModelForm):
         model = Curso
         exclude = ['finalizado']
 
+    def __init__(self, *args, **kwargs):
+        self.usuario = kwargs.pop('usuario', None)
+        super(CursoForm, self).__init__(*args, **kwargs)
+
     def clean_lugar(self):
         lugar = self.cleaned_data['lugar']
         if not regex_alfanumerico.match(lugar):
@@ -29,7 +33,7 @@ class CursoForm(forms.ModelForm):
 
     def clean_fecha(self):
         fecha = self.cleaned_data['fecha']
-        if fecha < timezone.now().date() + relativedelta(days=7):
+        if fecha < timezone.now().date() + relativedelta(days=7) and not self.usuario.is_staff:
             raise forms.ValidationError('Debe haber al menos una semana de diferencia entre la fecha de inicio '
                                         'seleccionada y la fecha actual')
         return fecha
@@ -42,6 +46,10 @@ class ModificacionCursoForm(forms.ModelForm):
         model = Curso
         exclude = ['finalizado']
 
+    def __init__(self, *args, **kwargs):
+        self.usuario = kwargs.pop('usuario', None)
+        super(ModificacionCursoForm, self).__init__(*args, **kwargs)
+
     def clean_lugar(self):
         lugar = self.cleaned_data['lugar']
         if not regex_alfanumerico.match(lugar):
@@ -50,7 +58,7 @@ class ModificacionCursoForm(forms.ModelForm):
 
     def clean_fecha(self):
         fecha = self.cleaned_data['fecha']
-        if fecha < timezone.now().date() + relativedelta(days=1):
+        if fecha < timezone.now().date() + relativedelta(days=1) and not self.usuario.is_staff:
             raise forms.ValidationError('La fecha seleccionada debe ser posterior al dia de hoy')
         return fecha
 
@@ -92,6 +100,16 @@ class ModificacionInscripcionForm(forms.ModelForm):
     class Meta:
         model = Inscripcion
         fields = ['observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+
+
+class RegistroInscripcionForm(forms.ModelForm):
+
+    class Meta:
+        model = Inscripcion
+        exclude = ['curso', 'modificado']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }

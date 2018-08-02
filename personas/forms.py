@@ -57,6 +57,12 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
             )
         }
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if not regex_alfabetico.match(nombre):
+            raise forms.ValidationError('El nombre de la persona, solo puede contener letras y/o espacios')
+        return nombre
+
     def clean_apellido(self):
         apellido = self.cleaned_data['apellido']
         if not regex_alfabetico.match(apellido):
@@ -97,7 +103,36 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
 
     class Meta:
         model = PersonaFisica
-        fields = ['telefono', 'email', 'obra_social', 'documentacion_retirada']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
+                  'documentacion_retirada']
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if not regex_alfabetico.match(nombre):
+            raise forms.ValidationError('El nombre de la persona, solo puede contener letras y/o espacios')
+        return nombre
+
+    def clean_apellido(self):
+        apellido = self.cleaned_data['apellido']
+        if not regex_alfabetico.match(apellido):
+            raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
+        return apellido
+
+    def clean_cuil(self):
+        cuil = self.cleaned_data['cuil']
+        if cuil:
+            if PersonaFisica.objects.filter(cuil=cuil).exists():
+                raise forms.ValidationError('Ya existe una persona con este CUIL')
+
+            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuil):
+                raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
+        return cuil
+
+    def clean_dni(self):
+        dni = self.cleaned_data['dni']
+        if not re.match(r"^[0-9]{7,}$", dni):
+            raise forms.ValidationError('El dni de la persona debe contener al menos 7 digitos y ser númerico')
+        return dni
 
     def clean_obra_social(self):
         obra_social = self.cleaned_data['obra_social']
@@ -122,6 +157,12 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
             'nombre': _("Razon social")
         }
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if not regex_alfabetico.match(nombre):
+            raise forms.ValidationError('El nombre de la persona, solo puede contener letras y/o espacios')
+        return nombre
+
     def clean_cuit(self):
         cuit = self.cleaned_data['cuit']
         if cuit:
@@ -140,7 +181,7 @@ class ModificacionPersonaJuridicaForm(forms.ModelForm):
         exclude = ['nombre', 'cuit']
 
 
-class AltaPersonalPropioForm(forms.ModelForm):
+class PersonalPropioForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
 
     class Meta:
@@ -148,18 +189,40 @@ class AltaPersonalPropioForm(forms.ModelForm):
         fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
                   'rol_actuante']
 
-    def clean_fecha_nacimiento(self):
-        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
-        if fecha_nacimiento > timezone.now().date():
-            raise forms.ValidationError('La fecha seleccionada debe ser menor a la fecha actual')
-        return fecha_nacimiento
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if not regex_alfabetico.match(nombre):
+            raise forms.ValidationError('El nombre de la persona, solo puede contener letras y/o espacios')
+        return nombre
 
+    def clean_apellido(self):
+        apellido = self.cleaned_data['apellido']
+        if not regex_alfabetico.match(apellido):
+            raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
+        return apellido
 
-class ModificacionPersonalPropioForm(forms.ModelForm):
+    def clean_cuil(self):
+        cuil = self.cleaned_data['cuil']
+        if cuil:
+            if PersonaFisica.objects.filter(cuil=cuil).exists():
+                raise forms.ValidationError('Ya existe una persona con este CUIL')
 
-    class Meta:
-        model = PersonalPropio
-        fields = ['telefono', 'email', 'obra_social', 'documentacion_retirada', 'rol_actuante']
+            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuil):
+                raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
+        return cuil
+
+    def clean_dni(self):
+        dni = self.cleaned_data['dni']
+        if not re.match(r"^[0-9]{7,}$", dni):
+            raise forms.ValidationError('El dni de la persona debe contener al menos 7 digitos y ser númerico')
+        return dni
+
+    def clean_obra_social(self):
+        obra_social = self.cleaned_data['obra_social']
+        if obra_social:
+            if not regex_alfanumerico.match(obra_social):
+                raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
+        return obra_social
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
@@ -278,7 +341,7 @@ class LocalidadForm(forms.ModelForm):
         nombre = cleaned_data.get("nombre")
         provincia = cleaned_data.get("provincia")
         if nombre and provincia:
-            if Localidad.objects.get(nombre__iexact=nombre, provincia=provincia):
+            if Localidad.objects.filter(nombre__iexact=nombre, provincia=provincia).last():
                 self.add_error('nombre', forms.ValidationError('La localidad ingresada ya se encuentra registrada en el'
                                                                'sistema para la provincia seleccionada'))
 
@@ -294,7 +357,7 @@ class ProvinciaForm(forms.ModelForm):
         nombre = cleaned_data.get("nombre")
         nacionalidad = cleaned_data.get("nacionalidad")
         if nombre and nacionalidad:
-            if Provincia.objects.get(nombre__iexact=nombre, nacionalidad=nacionalidad):
+            if Provincia.objects.filter(nombre__iexact=nombre, nacionalidad=nacionalidad).last():
                 self.add_error('nombre', forms.ValidationError('La provincia ingresada ya se encuentra registrada en el'
                                                                'sistema para el pais seleccionado'))
 
@@ -307,6 +370,6 @@ class NacionalidadForm(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        if Nacionalidad.objects.get(nombre__iexact=nombre):
+        if Nacionalidad.objects.filter(nombre__iexact=nombre).last():
             raise forms.ValidationError('El pais ingresado ya se encuentra registrado en el sistema')
         return nombre

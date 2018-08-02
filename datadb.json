@@ -601,7 +601,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "usuarios.customuser",
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$36000$CeWB3zSG0cdE$rveYeJ3Me6y8hmheN9UimUcYOqB3Irsj+/pdS6vIgTY=",
@@ -619,7 +619,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "usuarios.customuser",
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$36000$BJMRYq9yMR8b$rdrwGtYLZgf8/KrXARtsXoY2hABt7ZV+6krbCH8DZsk=",

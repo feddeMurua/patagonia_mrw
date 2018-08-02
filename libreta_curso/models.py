@@ -41,7 +41,13 @@ class Inscripcion(models.Model):
     observaciones = models.TextField(max_length=200, default='', blank=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
-    rubro = models.CharField(max_length=50, blank=True, null=True)
+    rubro = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return "Inscripcion Nro: %s" % self.pk
+
+    def to_json(self):
+        return {'fecha_inscripcion': self.fecha_inscripcion.isoformat(), 'observaciones': self.observaciones,
+                'calificacion': self.calificacion, 'porcentaje_asistencia': self.porcentaje_asistencia,
+                'persona': {'apellido': self.persona.apellido, 'nombre': self.persona.nombre, 'dni': self.persona.dni},
+                'rubro': self.rubro}

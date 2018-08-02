@@ -16,7 +16,7 @@ class CustomPasswordChangeView(PasswordChangeView):
 
 @login_required(login_url='login')
 def lista_usuarios(request):
-    return render(request, 'usuarios/usuario_list.html', {'listado': User.objects.filter(is_superuser=False)})
+    return render(request, 'usuarios/usuario_list.html', {'listado': CustomUser.objects.filter(is_superuser=False)})
 
 
 @login_required(login_url='login')

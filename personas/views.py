@@ -130,7 +130,7 @@ def lista_personal_propio(request):
 @login_required(login_url='login')
 def alta_p_propio(request):
     if request.method == 'POST':
-        form = AltaPersonalPropioForm(request.POST)
+        form = PersonalPropioForm(request.POST)
         domicilio_form = DomicilioForm(request.POST)
         if form.is_valid() & domicilio_form.is_valid():
             persona = form.save(commit=False)
@@ -140,7 +140,7 @@ def alta_p_propio(request):
             log_crear(request.user.id, persona, 'Personal Propio')
             return redirect('personas:lista_personal_propio')
     else:
-        form = AltaPersonalPropioForm
+        form = PersonalPropioForm
         domicilio_form = DomicilioForm
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
                                                          'url_return': 'personas:lista_personal_propio'})
@@ -158,14 +158,14 @@ def baja_personal_propio(request, pk):
 def modificacion_personal_propio(request, pk):
     persona = PersonalPropio.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ModificacionPersonalPropioForm(request.POST, instance=persona)
+        form = PersonalPropioForm(request.POST, instance=persona)
         domicilio_form = DomicilioForm(request.POST, instance=persona.domicilio)
         if form.is_valid() & domicilio_form.is_valid():
             domicilio_form.save()
             log_modificar(request.user.id, form.save(), 'Personal Propio')
             return redirect('personas:lista_personal_propio')
     else:
-        form = ModificacionPersonalPropioForm(instance=persona)
+        form = PersonalPropioForm(instance=persona)
         domicilio_form = DomicilioForm(instance=persona.domicilio)
     return render(request, "persona/persona_form.html", {'form': form, 'domicilio_form': domicilio_form,
                                                          'url_return': 'personas:lista_personal_propio'})

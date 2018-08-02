@@ -1,5 +1,5 @@
 {% extends "base/base_listado.html" %}
-{% load staticfiles bootstrap3 %}
+{% load staticfiles bootstrap3 mathfilters %}
 
 {% block title %}Inscripción a Curso{% endblock %}
 
@@ -10,8 +10,10 @@
 {% block panel-title %}Inscripciones{% endblock %}
 
 {% block btn-nuevo %}
-    {% if fecha_hoy < curso.fecha and not curso.finalizado and cupo_restante > 0 %}
-        <a href="{% url 'inscripciones:nueva_inscripcion' curso.pk %}" class="btn btn-sm btn-primary btn-create" >Nueva Inscripción</a>
+    {% if not curso.finalizado and curso.cupo|sub:inscriptos > 0 %}
+        {% if fecha_hoy < curso.fecha or user.is_staff %}
+            <a href="{% url 'inscripciones:nueva_inscripcion' curso.pk %}" class="btn btn-sm btn-primary btn-create" >Nueva Inscripción</a>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -54,6 +56,6 @@
 
 {% block panel-footer %}
     <div class="panel-footer" align="right">
-        <b>Cupo restante: {{ cupo_restante }}</b>
+        <b>Cantidad de inscriptos: {{ inscriptos }} // Cupo restante: {{ curso.cupo|sub:inscriptos }}</b>
     </div>
 {% endblock %}

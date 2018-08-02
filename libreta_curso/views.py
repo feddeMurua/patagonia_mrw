@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -36,7 +36,7 @@ def lista_curso(request):
 @login_required(login_url='login')
 def alta_curso(request):
     if request.method == 'POST':
-        form = CursoForm(request.POST)
+        form = CursoForm(request.POST, usuario=request.user)
         if form.is_valid():
             log_crear(request.user.id, form.save(), 'Curso de Manipulacion de Alimentos')
             return redirect('cursos:lista_cursos')
@@ -58,7 +58,7 @@ def baja_curso(request, pk):
 def modificacion_curso(request, pk):
     curso = Curso.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ModificacionCursoForm(request.POST, instance=curso)
+        form = ModificacionCursoForm(request.POST, instance=curso, usuario=request.user)
         if form.is_valid():
             log_modificar(request.user.id, form.save(), 'Curso de Manipulacion de Alimentos')
             return redirect('cursos:lista_cursos')
@@ -123,10 +123,9 @@ INSCRIPCIONES
 def lista_inscripciones_curso(request, id_curso):
     lista_inscripciones = Inscripcion.objects.filter(curso__pk=id_curso)
     curso = Curso.objects.get(pk=id_curso)
-    cupo_restante = curso.cupo - len(lista_inscripciones)
+    inscriptos = len(lista_inscripciones)
     return render(request, "curso/curso_inscripciones.html", {'fecha_hoy': timezone.now().date(), 'curso': curso,
-                                                              'cupo_restante': cupo_restante,
-                                                              'listado': lista_inscripciones})
+                                                              'inscriptos': inscriptos, 'listado': lista_inscripciones})
 
 
 @login_required(login_url='login')
@@ -343,7 +342,6 @@ class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
     redirect_field_name = 'next'
 
     def get_context_data(self, pk):
-        libreta = LibretaSanitaria.objects.get(pk=pk)
         return super(PdfLibreta, self).get_context_data(
             libreta=LibretaSanitaria.objects.get(pk=pk),
             title='Libreta sanitaria N°'

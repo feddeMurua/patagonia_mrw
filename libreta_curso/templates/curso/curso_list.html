@@ -33,8 +33,10 @@
                     {% else %}
                         <a class="btn btn-warning" data-toggle="tooltip" title="Listado de Aprobados" href="{% url 'cursos:pdf_aprobados' curso.pk%}" target="_blank"><em class="glyphicon glyphicon-sort-by-alphabet"></em></a>
                     {% endif %}
-                    {% if not curso.finalizado and fecha_hoy < curso.fecha %}
-                        <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="{% url 'cursos:inscripciones_curso' curso.pk %}"><em class="glyphicon glyphicon-user"></em></a>
+                    {% if not curso.finalizado %}
+                        {% if fecha_hoy < curso.fecha or user.is_staff %}
+                            <a class="btn btn-info" data-toggle="tooltip" title="Inscripciones" href="{% url 'cursos:inscripciones_curso' curso.pk %}"><em class="glyphicon glyphicon-user"></em></a>
+                        {% endif %}
                     {% endif %}
                     {% if not curso.finalizado and fecha_hoy >= curso.fecha %}
                         <a class="btn btn-success" data-toggle="tooltip" title="Cierre de Curso" href="{% url 'cursos:cierre_curso' curso.pk %}"><em class="glyphicon glyphicon-education"></em></a>
