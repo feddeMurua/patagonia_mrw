@@ -26,7 +26,7 @@
             <tr>
                 <td>{{ control.fecha_suceso }}</td>
                 <td>{{ control.mordido }}</td>
-                <td>{{ control.responsable }}</td>
+                <td>{{ control.responsable|default_if_none:"" }}</td>
                 <td>{{ control.observaciones }}</td>
                 <td>
                     <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'controles:borrar_control' control.pk %}"><em class="glyphicon glyphicon-trash"></em></a>

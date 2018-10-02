@@ -20,6 +20,7 @@
         <tr>
             <th>Periodo</th>
             <th>Total de kg inspeccionados</th>
+            <th>Importe total de periodo</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
@@ -28,6 +29,7 @@
             <tr>
                 <td>{{ periodo }}</td>
                 <td>{{ detalles.total_kg }}</td>
+                <td>${{ detalles.monto }}</td>
                 <td>
                     {% with periodo|string_split as tupla %}
                         <a class="btn btn-warning" data-toggle="tooltip" title="Detalle de periodo" href="{% url 'cuentas_corrientes:detalle_periodo' pk tupla.0 tupla.1 %}"><em class="glyphicon glyphicon-list-alt"></em></a>

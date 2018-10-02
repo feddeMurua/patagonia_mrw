@@ -10,9 +10,7 @@
 {% block panel-title %}Visitas{% endblock %}
 
 {% block btn-nuevo %}
-    {% if apto_visita %}
-        <a href=" {% url 'controles:nueva_visita' pk_control %}" class="btn btn-sm btn-primary btn-create">Nueva Visita</a>
-    {% endif %}
+    <a href=" {% url 'controles:nueva_visita' pk_control %}" class="btn btn-sm btn-primary btn-create">Nueva Visita</a>
 {% endblock %}
 
 {% block tabla %}

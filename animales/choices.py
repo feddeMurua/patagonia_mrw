@@ -35,5 +35,5 @@ Categoria_Mascota = (
 
 Tramites = (
     ('ENTREGA', _("ENTREGA")),
-    ('RETIRO', _("RETIRO"))
+    ('SACRIFICIO', _("SACRIFICIO"))
 )

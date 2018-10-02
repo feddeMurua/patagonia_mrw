@@ -18,6 +18,7 @@ var n_foto = document.querySelector('#nueva-foto');
 var e_foto = document.querySelector('#eliminar-foto');
 var t_foto = document.querySelector('#tomar-foto');
 var c_foto = document.querySelector('#cancelar-foto');
+var no_foto = ["", "borrar"]
 
 canvas.width = 320;
 canvas.height = 240;
@@ -48,10 +49,14 @@ t_foto.onclick = function() {
 c_foto.onclick = function() {
     $(video).attr('hidden',true);
     $(n_foto).removeClass('hidden');
-    $(e_foto).removeClass('hidden');
+    if (img64.value && img64.value != "borrar") {
+        $(e_foto).removeClass('hidden');
+    }
     $(t_foto).addClass('hidden');
     $(c_foto).addClass('hidden');
-    $(img).attr('hidden',false);
+    if (img64.value != "borrar") {
+        $(img).attr('hidden',false);
+    }
     if (!(img64.value)) {
         $(old_img).attr('hidden',false);
     }

@@ -52,7 +52,8 @@ class Reinspeccion(models.Model):
     precintado = models.IntegerField(null=True, blank=True)
     certificado = models.IntegerField()
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
-    total_kg = models.IntegerField(null=True, blank=True)
+    total_kg = models.IntegerField(validators=[MinValueValidator(1)])
+    importe = models.FloatField(null=True, blank=True)
     detalles = models.BooleanField(default=True)
 
     def __str__(self):
@@ -98,7 +99,7 @@ VEHICULO Y DESINFECCIONES
 
 
 class Vehiculo(models.Model):
-    marca = models.CharField(max_length=15, choices=MARCA_VEHICULO)
+    marca = models.ForeignKey('MarcaVehiculo')
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=TIPO_VEHICULO, default='TPP')
@@ -110,6 +111,13 @@ class Vehiculo(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.marca, self.dominio)
+
+
+class MarcaVehiculo(models.Model):
+    nombre = models.CharField(max_length=15, blank=True, null=True)
+
+    def __str__(self):
+        return "%s" % self.nombre
 
 
 class Desinfeccion(models.Model):
@@ -130,11 +138,20 @@ class ControlDePlaga(models.Model):
     tipo_plaga = models.CharField(max_length=50, choices=PLAGAS)
     procedimiento = models.CharField(max_length=400)
     recomendaciones = models.CharField(max_length=400, blank=True, null=True)
-    fecha_prox_visita = models.DateField(blank=True, null=True)
     pagado = models.BooleanField(default=True)
 
     def __str__(self):
         return "%s - %s - %s" % (self.fecha, self.responsable, self.tipo_plaga)
+
+
+class VisitaControl(models.Model):
+    fecha = models.DateField()
+    observaciones = models.TextField(max_length=200, null=True, blank=True)
+    control = models.ForeignKey('ControlDePlaga', on_delete=models.CASCADE)
+    realizada = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "Control N°:%s - %s" % (self.control.pk, self.fecha)
 
 
 class PagoDiferido(models.Model):

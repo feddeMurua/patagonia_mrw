@@ -20,11 +20,10 @@ regex_alfanumerico = re.compile(r"^[a-zñA-ZÑ0-9]+((\s[a-zñA-ZÑ0-9]+)+)?$")
 
 class AltaAnalisisForm(forms.ModelForm):
     fecha = forms.DateField(widget=DateInput())
-    medico_veterinario = forms.ModelChoiceField(queryset=m.PersonalPropio.objects.filter(
-        rol_actuante__nombre='Medico'))
 
     class Meta:
         model = Analisis
+        exclude = ['medico_veterinario', 'resultado']
         fields = '__all__'
         widgets = {
             'procedencia': AddAnotherWidgetWrapper(
@@ -44,13 +43,22 @@ class ModificacionAnalisisForm(forms.ModelForm):
 
     class Meta:
         model = Analisis
-        fields = ['procedencia', 'resultado', 'categoria']
+        fields = ['procedencia', 'categoria']
         widgets = {
             'procedencia': AddAnotherWidgetWrapper(
                 forms.Select,
                 reverse_lazy('personas:nueva_localidad'),
             )
         }
+
+
+class ResultadoAnalisisForm(forms.ModelForm):
+    medico_veterinario = forms.ModelChoiceField(queryset=m.PersonalPropio.objects.filter(
+        rol_actuante__nombre='Medico'), required=False)
+
+    class Meta:
+        model = Analisis
+        fields = ['medico_veterinario', 'resultado']
 
 
 class PorcinoForm(forms.ModelForm):
@@ -208,13 +216,28 @@ class ControlAntirrabicoForm(forms.ModelForm):
 
 
 class VisitaForm(forms.ModelForm):
+    fecha_visita = forms.DateField(widget=DateInput(), label="Fecha de la visita")
 
     class Meta:
         model = Visita
-        fields = ['observaciones']
+        exclude = ['control']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
         }
+
+    def __init__(self, *args, **kwargs):
+        self.control = kwargs.pop('control', None)
+        super(VisitaForm, self).__init__(*args, **kwargs)
+
+    def clean_fecha_visita(self):
+        fecha_visita = self.cleaned_data['fecha_visita']
+        if fecha_visita < self.control.fecha_suceso:
+            raise forms.ValidationError('La fecha seleccionada no puede ser anterior a la fecha del suceso')
+        else:
+            visitas = Visita.objects.filter(control=self.control, fecha_visita=fecha_visita).last()
+            if visitas:
+                raise forms.ValidationError('Ya existe una visita registrada en esa fecha')
+        return fecha_visita
 
 
 class RetiroEntregaForm(forms.ModelForm):

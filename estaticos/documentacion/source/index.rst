@@ -7,7 +7,7 @@ Welcome to Patagonia's documentation!
 =====================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    pantallaprincipal
    personas
@@ -17,11 +17,3 @@ Welcome to Patagonia's documentation!
    abasto
    usuarios
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

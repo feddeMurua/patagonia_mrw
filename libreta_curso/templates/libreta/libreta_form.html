@@ -12,6 +12,11 @@
         <label>Meses de validez *</label>
         <input type="number" name="meses" class="form-control" id="meses_validez" min="1" max="6">
     </div>
+    {% if mensaje %}
+        <div class="alert alert-danger">
+          <strong>{{ mensaje }}</strong>
+        </div>
+    {% endif %}
     <div class="form-group">
         <label>Foto</label><br>
         {% if libreta.foto %}

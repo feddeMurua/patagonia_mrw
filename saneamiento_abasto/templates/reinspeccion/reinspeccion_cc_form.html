@@ -143,6 +143,22 @@
                                                 <td>Abastecedor</td>
                                                 <td id="id-abastecedor-res"></td>
                                             </tr>
+                                            <tr>
+                                                <td>Kg inspeccionados</td>
+                                                <td>
+                                                    <div class="form-group" style="margin:0">
+                                                        {{ form.total_kg|add_class:'form-control'|add_class:'kg_res'|attr:'readonly' }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Importe total</td>
+                                                <td>
+                                                    <div class="form-group" style="margin:0">
+                                                        {{ form.importe|add_class:'form-control'|add_class:'importe_res'|attr:'readonly' }}
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -307,6 +323,21 @@
                 $('#id-precintado-res').text($('#id_precintado').val());
                 $('#id-certificado-res').text($('#id_certificado').val());
                 $('#id-abastecedor-res').text($('#id_abastecedor option:selected').text());
+                setKgImporte();
+            }
+
+            function setKgImporte() {
+                $.ajax({
+                    url: '/reinspecciones/calculo_kg_importe',
+                    type: 'GET',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function(data) {
+                        $('.kg_res').val(data['total_kg']);
+                        $('.importe_res').val(data['importe']);
+                    }
+                });
             }
 
             function curIndex() {

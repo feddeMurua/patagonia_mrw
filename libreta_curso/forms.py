@@ -105,16 +105,6 @@ class ModificacionInscripcionForm(forms.ModelForm):
         }
 
 
-class RegistroInscripcionForm(forms.ModelForm):
-
-    class Meta:
-        model = Inscripcion
-        exclude = ['curso', 'modificado']
-        widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
-        }
-
-
 class CierreInscripcionForm(forms.ModelForm):
 
     class Meta:
@@ -122,6 +112,16 @@ class CierreInscripcionForm(forms.ModelForm):
         fields = ['calificacion', 'porcentaje_asistencia']
         labels = {
             'porcentaje_asistencia': _("Porcentaje de asistencia")
+        }
+
+
+class RegistroInscripcionForm(forms.ModelForm):
+
+    class Meta:
+        model = Inscripcion
+        exclude = ['curso', 'modificado']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
 
 
@@ -176,7 +176,7 @@ class RenovacionLibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento', 'foto']
+        exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento', 'tipo_libreta', 'foto']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }

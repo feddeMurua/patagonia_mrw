@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^borrar/(?P<pk>\d+)$', baja_vehiculo, name='borrar_vehiculo'),
     url(r'^editar/(?P<pk>\d+)$', modificacion_vehiculo, name='modificar_vehiculo'),
     url(r'^pdf/(?P<nro>\d+)$', PdfVehiculo.as_view(), name='vehiculo_pdf'),
-    url(r'^getRubros/(?P<id_categoria>\w+)$', get_rubros_json, name='get_rubros')
+    url(r'^getRubros/(?P<id_categoria>\w+)$', get_rubros_json, name='get_rubros'),
+    url(r'^nueva_marca$', AltaMarca.as_view(), name='alta_marca'),
 ]

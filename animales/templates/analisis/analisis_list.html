@@ -16,7 +16,7 @@
         <tr>
             <th>Fecha</th>
             <th>Interesado</th>
-            <th>Medico veterinario</th>
+            <th>Resultado</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
@@ -25,11 +25,14 @@
             <tr>
                 <td>{{ analisis.fecha }}</td>
                 <td>{{ analisis.interesado }}</td>
-                <td>{{ analisis.medico_veterinario.apellido }}, {{ analisis.medico_veterinario.nombre }}</td>
+                <td>{{ analisis.resultado|default_if_none:"En revisión" }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'analisis:detalle_analisis' analisis.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
-                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'analisis:borrar_analisis' analisis.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
-                    <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'analisis:modificacion_analisis' analisis.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    {% if not analisis.resultado %}
+                        <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'analisis:borrar_analisis' analisis.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'analisis:modificacion_analisis' analisis.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                        <a class="btn btn-success" data-toggle="tooltip" title="Registrar resultado" href="{% url 'analisis:resultado_analisis' analisis.pk %}"><em class="glyphicon glyphicon-ok"></em></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

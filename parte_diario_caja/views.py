@@ -232,26 +232,25 @@ ESTADISTICAS
 
 @login_required(login_url='login')
 def estadisticas_caja(request):
-    rango_form = dp_f.RangoAnioForm
-    years = [timezone.now().year]
+    rango_form = dp_f.RangoFechaForm
+    fecha_desde = timezone.now() - relativedelta(years=1)
+    fecha_hasta = timezone.now()
     if request.method == 'POST':
-        rango_form = dp_f.RangoAnioForm(request.POST)
+        rango_form = dp_f.RangoFechaForm(request.POST)
         if rango_form.is_valid():
-            years = range(int(rango_form.cleaned_data['anio_hasta']),
-                          int(rango_form.cleaned_data['anio_desde']) - 1, -1)
+            fecha_desde = rango_form.cleaned_data['fecha_desde']
+            fecha_hasta = rango_form.cleaned_data['fecha_hasta']
 
-    importe_anual = {}  # importe anual POR SERVICIO
+    importe_total = {}
 
-    for year in years:
-        movimientos_caja = MovimientoDiario.objects.filter(fecha__year=year)
-        for mov in movimientos_caja:
-            for detalle in DetalleMovimiento.objects.filter(movimiento=mov):
-                importe_anual[detalle.servicio] = (DetalleMovimiento.objects.filter(movimiento__fecha__year=year,
-                                                                                    servicio=detalle.servicio).count()) * detalle.importe
+    movimientos = MovimientoDiario.objects.filter(fecha__gte=fecha_desde, fecha__lte=fecha_hasta)
+    for mov in movimientos:
+        for detalle in DetalleMovimiento.objects.filter(movimiento=mov):
+            importe_total[detalle.servicio] = (DetalleMovimiento.objects.filter(servicio=detalle.servicio).count()) * detalle.importe
 
-    total_general = sum(importe_anual.values())  # Total generado en el año
+    total_general = sum(importe_total.values())  # Total generado en el año
     ord_importe_anual = collections.OrderedDict(
-        sorted(importe_anual.iteritems(), key=lambda (k, v): (k, v)))  # Ordena los servicios por importe
+        sorted(importe_total.iteritems(), key=lambda (k, v): (k, v)))  # Ordena los servicios por importe
     label_servicios = ord_importe_anual.keys()  # indistinto para los datos (tienen la misma clave)
     datos_servicios = ord_importe_anual.values()
 

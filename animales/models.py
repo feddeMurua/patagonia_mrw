@@ -11,9 +11,9 @@ class Analisis(models.Model):
     fecha = models.DateField(default=now)
     interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="interesado")
     procedencia = models.ForeignKey(m.Localidad, on_delete=models.CASCADE)
-    medico_veterinario = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE,
+    medico_veterinario = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, null=True, blank=True,
                                            related_name="medico_veterinario")
-    resultado = models.CharField(max_length=15, choices=Resultados)
+    resultado = models.CharField(max_length=15, choices=Resultados, null=True)
     categoria = models.CharField(max_length=15, choices=Categorias)
 
     def __str__(self):
@@ -96,6 +96,7 @@ class RetiroEntregaAnimal(models.Model):
     interesado = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     patentado = models.BooleanField(default=False)
     mascota = models.ForeignKey('Mascota', null=True)
+    patente = models.IntegerField(null=True, blank=True)
     tramite = models.CharField(max_length=10, choices=Tramites)
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
@@ -126,8 +127,8 @@ class Patente(models.Model):
     fecha_vencimiento = models.DateField()
     persona = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)
-    fecha_garrapaticida = models.DateField(null=True)
-    fecha_antiparasitario = models.DateField(null=True)
+    fecha_garrapaticida = models.DateField(null=True, blank=True)
+    fecha_antiparasitario = models.DateField(null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
 
     def __str__(self):

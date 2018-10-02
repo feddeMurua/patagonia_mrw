@@ -42,7 +42,7 @@ class ReinspeccionCCForm(forms.ModelForm):
 
     class Meta:
         model = Reinspeccion
-        exclude = ['total_kg']
+        fields = '__all__'
         labels = {
             'certificado': _("N° de certificado")
         }
@@ -89,6 +89,18 @@ class VehiculoForm(forms.ModelForm):
             'disposicion_resolucion': _("Resolucion N°"),
             'nro': _('N°')
         }
+        widgets = {
+            'marca': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('vehiculo:alta_marca'),
+            )
+        }
+
+
+class MarcaVehiculoForm(forms.ModelForm):
+    class Meta:
+        model = MarcaVehiculo
+        fields = '__all__'
 
 
 class ModificarTSAForm(forms.ModelForm):
@@ -118,7 +130,7 @@ class DesinfeccionForm(forms.ModelForm):
 
 
 class ControlDePlagaForm(forms.ModelForm):
-    fecha_prox_visita = forms.DateField(widget=DATEINPUT(), label="Fecha de próxima visita")
+    fecha_prox_visita = forms.DateField(widget=DATEINPUT(), label="Fecha de próxima visita", required=True)
     funcionario_actuante = forms.ModelChoiceField(queryset=m.PersonalPropio.objects.filter(
         rol_actuante__nombre='Inspector'))
 
@@ -128,17 +140,19 @@ class ControlDePlagaForm(forms.ModelForm):
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }
+        widgets = {
+            'recomendaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
 
     def clean_fecha_prox_visita(self):
         fecha_prox_visita = self.cleaned_data['fecha_prox_visita']
-        if fecha_prox_visita < timezone.now().date() + relativedelta(days=1):
+        if fecha_prox_visita <= timezone.now().date():
             raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues del control que se está'
                                         ' registrando')
         return fecha_prox_visita
 
 
 class ModificacionControlDePlagaForm(forms.ModelForm):
-    fecha_prox_visita = forms.DateField(widget=DATEINPUT(), label="Fecha de próxima visita")
 
     class Meta:
         model = ControlDePlaga
@@ -146,13 +160,41 @@ class ModificacionControlDePlagaForm(forms.ModelForm):
         labels = {
             'tipo_plaga': _("Tipo de plaga")
         }
+        widgets = {
+            'recomendaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
+
+
+class VisitaControlForm(forms.ModelForm):
+    fecha_prox_visita = forms.DateField(widget=DATEINPUT(), label="Fecha de próxima visita", required=False)
+
+    class Meta:
+        model = VisitaControl
+        fields = ['observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+        }
 
     def clean_fecha_prox_visita(self):
         fecha_prox_visita = self.cleaned_data['fecha_prox_visita']
-        if fecha_prox_visita < timezone.now().date() + relativedelta(days=1):
-            raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues del control que se está'
+        if fecha_prox_visita and fecha_prox_visita <= timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues de la visita que se está'
                                         ' registrando')
         return fecha_prox_visita
+
+
+class ModificacionVisitaControlForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DATEINPUT())
+
+    class Meta:
+        model = VisitaControl
+        fields = ['fecha']
+
+    def clean_fecha(self):
+        fecha = self.cleaned_data['fecha']
+        if fecha <= timezone.now().date():
+            raise forms.ValidationError('La fecha seleccionada debe ser al menos 1 dia despues de la fecha actual')
+        return fecha
 
 
 class PagoDiferidoForm(forms.ModelForm):

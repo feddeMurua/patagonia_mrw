@@ -25,11 +25,15 @@
                 </tr>
                 <tr>
                     <td>Medico Veterinario:</td>
-                    <td>{{ analisis.medico_veterinario.apellido }}, {{ analisis.medico_veterinario.nombre }}</td>
+                    {% if analisis.medico_veterinario %}
+                        <td>{{ analisis.medico_veterinario.apellido }}, {{ analisis.medico_veterinario.nombre }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td>Resultado:</td>
-                    <td>{{ analisis.resultado }}</td>
+                    <td>{{ analisis.resultado|default_if_none:"En revisión" }}</td>
                 </tr>
         </table>
     </div>
@@ -54,6 +58,8 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a href="{% url 'analisis:pdf_analisis' analisis.pk %}" target="_blank" class="btn btn-warning" role="button">Imprimir Comprobante</a>
+    {% if analisis.resultado %}
+        <a href="{% url 'analisis:pdf_analisis' analisis.pk %}" target="_blank" class="btn btn-warning" role="button">Imprimir Comprobante</a>
+    {% endif %}
     <a href="{% url 'analisis:lista_analisis' %}" class="btn btn-primary">Regresar</a>
 {% endblock %}

@@ -11,16 +11,16 @@
     <table class="table table-information">
         <tbody>
             <tr>
+                <td>Fecha:</td>
+                <td>{{ object.fecha }}</td>
+            </tr>
+            <tr>
                 <td>Procedimiento:</td>
                 <td>{{ object.procedimiento }}</td>
             </tr>
-                <tr>
-                    <td>Recomendaciones:</td>
-                    <td>{{ object.recomendaciones|default_if_none:"" }}</td>
-                </tr>
             <tr>
-                <td>Fecha próxima visita:</td>
-                <td>{{ object.fecha_prox_visit|default_if_none:"" }}</td>
+                <td>Recomendaciones:</td>
+                <td>{{ object.recomendaciones|default_if_none:"" }}</td>
             </tr>
         </tbody>
     </table>

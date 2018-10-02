@@ -92,6 +92,19 @@ def modificacion_analisis(request, pk):
 
 
 @login_required(login_url='login')
+def resultado_analisis(request, pk):
+    analisis = Analisis.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ResultadoAnalisisForm(request.POST, instance=analisis)
+        if form.is_valid():
+            log_modificar(request.user.id, form.save(), 'Analisis de Triquinosis')
+            return redirect('analisis:lista_analisis')
+    else:
+        form = ResultadoAnalisisForm(instance=analisis)
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'modificacion': True})
+
+
+@login_required(login_url='login')
 def detalle_analisis(request, pk):
     analisis = Analisis.objects.get(pk=pk)
     porcinos = Porcino.objects.filter(analisis__pk=pk)
@@ -302,7 +315,8 @@ PATENTES
 
 @login_required(login_url='login')
 def lista_patente(request):
-    return render(request, 'patente/patente_list.html', {'listado': Patente.objects.all()})
+    return render(request, 'patente/patente_list.html', {'listado': Patente.objects.all(),
+                                                         'fecha_hoy': timezone.now().date()})
 
 
 @login_required(login_url='login')
@@ -478,24 +492,18 @@ def baja_control(request, pk):
 
 @login_required(login_url='login')
 def lista_visitas_control(request, pk_control):
-    lista_visitas = Visita.objects.filter(control__pk=pk_control)
-    control = ControlAntirrabico.objects.get(pk=pk_control)
-    dias_suceso = (timezone.now().date() - control.fecha_suceso).days
-    ultima_visita = lista_visitas.last()
-    apto_visita = True
-    if dias_suceso > 10 or (ultima_visita and ultima_visita.fecha_visita == timezone.now().date()):
-        apto_visita = False
-    return render(request, 'control/visita_list.html', {'pk_control': pk_control, 'listado': lista_visitas,
-                                                        'apto_visita': apto_visita})
+    return render(request, 'control/visita_list.html', {'pk_control': pk_control,
+                                                        'listado': Visita.objects.filter(control__pk=pk_control)})
 
 
 @login_required(login_url='login')
 def alta_visita(request, pk_control):
+    control = ControlAntirrabico.objects.get(pk=pk_control)
     if request.method == 'POST':
-        form = VisitaForm(request.POST)
+        form = VisitaForm(request.POST, control=control)
         if form.is_valid():
             visita = form.save(commit=False)
-            visita.control = ControlAntirrabico.objects.get(pk=pk_control)
+            visita.control = control
             visita.save()
             log_crear(request.user.id, visita, 'Visita de Control')
             return HttpResponseRedirect(reverse('controles:lista_visitas', args=[pk_control]))
@@ -526,7 +534,7 @@ def modificacion_visita(request, pk, pk_control):
 
 
 '''
-RETIRO/ENTREGA ANIMALES
+SACRIFICIO/ENTREGA DE ANIMALES
 '''
 
 
@@ -548,23 +556,24 @@ def alta_tramite(request):
                 patente = patentes_form.cleaned_data['patente']
                 retiro_entrega.interesado = patente.persona
                 retiro_entrega.mascota = patente.mascota
-                if retiro_entrega.tramite == 'RETIRO':
+                retiro_entrega.patente = patente.nro_patente
+                if retiro_entrega.tramite == 'SACRIFICIO':
                     retiro_entrega.mascota.baja = True
                     retiro_entrega.mascota.save()
                 retiro_entrega.save()
-                log_crear(request.user.id, retiro_entrega, 'Retiro/Entrega de Animal Patentado')
+                log_crear(request.user.id, retiro_entrega, 'Sacrificio/Entrega de Animal Patentado')
                 patente.delete()
-                return redirect('retiros_entregas:lista_retiro_entrega')
+                return redirect('sacrificios_entregas:lista_retiro_entrega')
             else:
                 mascota = mascota_form.save()
                 retiro_entrega.mascota = mascota
                 retiro_entrega.interesado = form.cleaned_data['persona']
-                if retiro_entrega.tramite == 'RETIRO':
+                if retiro_entrega.tramite == 'SACRIFICIO':
                     mascota.baja = True
                     mascota.save()
                 retiro_entrega.save()
-                log_crear(request.user.id, retiro_entrega, 'Nuevo Retiro/Entrega de Animal no Patentado')
-                return redirect('retiros_entregas:lista_retiro_entrega')
+                log_crear(request.user.id, retiro_entrega, 'Nuevo Sacrificio/Entrega de Animal no Patentado')
+                return redirect('sacrificios_entregas:lista_retiro_entrega')
     else:
         form = RetiroEntregaForm
         patentes_form = ListaPatentesForm
@@ -581,8 +590,8 @@ def modificacion_tramite(request, pk):
     if request.method == 'POST':
         form = ModificacionRetiroEntregaForm(request.POST, instance=tramite)
         if form.is_valid():
-            log_modificar(request.user.id, form.save(), 'Retiro/Entrega de Animal')
-            return redirect('retiros_entregas:lista_retiro_entrega')
+            log_modificar(request.user.id, form.save(), 'Sacrificio/Entrega de Animal')
+            return redirect('sacrificios_entregas:lista_retiro_entrega')
     else:
         form = ModificacionRetiroEntregaForm(instance=tramite)
     return render(request, 'retiroEntrega/retiroEntrega_modificacion.html', {'form': form})
@@ -638,9 +647,9 @@ def estadisticas_mascotas(request):
     tipo_esterilizacion = to_counter(Esterilizacion, {'turno__year__lte': years[0], 'turno__year__gte': years[-1]},
                                      ['mascota__categoria_mascota', 'mascota__sexo'])
 
-    # RETIRO Y ENTREGA DE ANIMALES
+    # SACRIFICIO Y ENTREGA DE ANIMALES
     tramites = to_counter(RetiroEntregaAnimal, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1]},
-                          ['tramite'])
+                          ['tramite', 'mascota__categoria_mascota', 'mascota__sexo'])
 
     context = {
         'rango_form': rango_form,

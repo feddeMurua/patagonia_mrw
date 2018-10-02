@@ -18,29 +18,31 @@
 {% endblock %}
 
 {% block form-right %}
-    <div class="col-xs-12 col-md-5" id="container-form-right">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Porcinos</h3>
-            </div>
-            <div class="panel-body">
-                <fieldset id="fieldset_porcinos">
-                    {% for form in formset.forms %}
-                        {% for field in form.visible_fields %}
-                            <div class="form-group">
-                                <label>{{ field.label }} {% if field.field.required %}*{% endif %}</label>
-                                {{ field|add_class:'form-control' }}
-                                {% for error in field.errors %}
-                                    <span style="color:red;" class="help-block">{{ error }}</span>
-                                {% endfor %}
-                            </div>
+    {% if formset %}
+        <div class="col-xs-12 col-md-5" id="container-form-right">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Porcinos</h3>
+                </div>
+                <div class="panel-body">
+                    <fieldset id="fieldset_porcinos">
+                        {% for form in formset.forms %}
+                            {% for field in form.visible_fields %}
+                                <div class="form-group">
+                                    <label>{{ field.label }} {% if field.field.required %}*{% endif %}</label>
+                                    {{ field|add_class:'form-control' }}
+                                    {% for error in field.errors %}
+                                        <span style="color:red;" class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </fieldset>
-                {{ formset.management_form }}
+                    </fieldset>
+                    {{ formset.management_form }}
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
 
 {% block btn-cancelar %}

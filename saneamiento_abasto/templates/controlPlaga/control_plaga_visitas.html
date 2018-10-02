@@ -1,0 +1,34 @@
+{% extends "base/base_listado.html" %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Visitas de Control de Plagas{% endblock %}
+
+{% block header-title %}Visitas{% endblock %}
+
+{% block panel-title %}Visitas{% endblock %}
+
+{% block url-volver %}{% url 'controles_plagas:lista_controles_plagas' %}{% endblock %}
+
+{% block tabla %}
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Observaciones</th>
+            <th><em class="glyphicon glyphicon-cog"></em></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for visita in listado %}
+            <tr>
+                <td>{{ visita.fecha }}</td>
+                <td>{{ visita.observaciones|default_if_none:"" }}</td>
+                <td>
+                    {% if not visita.realizada %}
+                        <a class="btn btn-warning" data-toggle="tooltip" title="Modificar fecha" href="{% url 'controles_plagas:mod_visita_control_plaga' visita.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                        <a class="btn btn-primary" data-toggle="tooltip" title="Registrar visita" href="{% url 'controles_plagas:reg_visita_control_plaga' visita.pk %}"><em class="glyphicon glyphicon-ok"></em></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}

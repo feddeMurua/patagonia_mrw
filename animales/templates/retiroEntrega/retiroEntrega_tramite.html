@@ -1,16 +1,16 @@
 {% extends "base/base_form.html" %}
 {% load staticfiles bootstrap3 widget_tweaks %}
 
-{% block title %}Retiro/Entrega de animales{% endblock %}
+{% block title %}Sacrificio/Entrega de animales{% endblock %}
 
 {% block more-stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/alta_retiroEntrega.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/parsley.css' %}"/>
 {% endblock %}
 
-{% block header-title %}Retiro/Entrega de animales{% endblock %}
+{% block header-title %}Sacrificio/Entrega de animales{% endblock %}
 
-{% block url-volver %}{% url 'retiros_entregas:lista_retiro_entrega' %}{% endblock %}
+{% block url-volver %}{% url 'sacrificios_entregas:lista_retiro_entrega' %}{% endblock %}
 
 {% block content %}
     <div class="container container-form">

@@ -49,7 +49,7 @@
                         <ul class="column">
                             <li><a href="{% url 'patentes:lista_patentes' %}">Patentamiento</a></li>
                             <li><a href="{% url 'esterilizacion:lista_esterilizaciones' %}">Esterilización</a></li>
-                            <li><a href="{% url 'retiros_entregas:lista_retiro_entrega' %}">Retiros y Entregas</a></li>
+                            <li><a href="{% url 'sacrificios_entregas:lista_retiro_entrega' %}">Sacrificios y Entregas</a></li>
                             <li><a href="{% url 'est_am:estadisticas_mascotas' %}">Estadísticas</a></li>
                         </ul>
                     </div>
@@ -101,6 +101,21 @@
                             {% endif %}
                             <li><a href="{% url 'cambio_password' %}">Cambiar Contraseña</a></li>
                             <li><a href="{% url 'logout' %}">Salir</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li><a class="top-heading" href="{% static 'documentacion/build/html/index.html' %}" target="_blank">Ayuda</a>
+                <div class="dropdown right-aligned">
+                    <div class="dd-inner">
+                        <ul class="column">
+                            <li><a href="{% static 'documentacion/build/html/pantallaprincipal.html' %}" target="_blank">Menu de Navegación</a></li>
+                            <li><a href="{% static 'documentacion/build/html/personas.html' %}" target="_blank">Personas</a></li>
+                            <li><a href="{% static 'documentacion/build/html/libretacurso.html' %}" target="_blank">Libretas y Cursos Sanitarios</a></li>
+                            <li><a href="{% static 'documentacion/build/html/analisiscontroles.html' %}" target="_blank">Analisis y Controles</a></li>
+                            <li><a href="{% static 'documentacion/build/html/mascotas.html' %}" target="_blank">Mascotas</a></li>
+                            <li><a href="{% static 'documentacion/build/html/abasto.html' %}" target="_blank">Abasto</a></li>
+                            <li><a href="{% static 'documentacion/build/html/usuarios.html' %}" target="_blank">Usuarios</a></li>
                         </ul>
                     </div>
                 </div>
