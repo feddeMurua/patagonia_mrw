@@ -1,0 +1,119 @@
+Pantalla Principal
+==================
+La pantalla principal del sistema ofrece un menú de navegación en el que se encuentran las gestiones generales del sistema.
+
+Estas gestiones son:
+
+  - :ref:`Gestión de Personas <gestion-personas>`
+  - :ref:`Gestíón de Libretas y Cursos Sanitarios <gestion-libretas-cursos>`
+  - :ref:`Gestión de Análisis y Controles <gestion-analisis-controles>`
+  - :ref:`Gestión de Mascotas <gestion-mascotas>`
+  - :ref:`Gestión de Abasto <gestion-abasto>`
+  - :ref:`Gestión de Transporte y Desinfecciones <gestion-tsa-tpp>`
+  - :ref:`Gestión de Parte Diario y Caja <gestion-parte-diario-caja>`
+  - :ref:`Gestión de Usuarios <gestion-usuarios>`
+
+.. _gestion-personas:
+
+Gestión de Personas
++++++++++++++++++++
+
+  La *Gestión de Personas* está apartada para la creación de personas físicas y jurídicas en el sistema, ya sea desde
+  el punto de vista de un contribuyente o un empleado (personal propio).
+
+  Está subdividida en:
+    - Contribuyentes
+    - Personal Propio
+
+.. _gestion-libretas-cursos:
+
+Gestión de Libretas y Cursos Sanitarios
++++++++++++++++++++++++++++++++++++++++
+
+  La *Gestión de Libretas y Cursos Sanitarios* está apartada para la confección de libretas y creacíon y seguimientos
+  de cursos de manipulación.
+
+  Está subdividida en:
+    - Curso de Manipulación de Alimentos
+    - Libreta Sanitaria
+
+.. _gestion-analisis-controles:
+
+Gestión de Análisis y Controles
++++++++++++++++++++++++++++++++
+
+  La *Gestión de Análisis y Controles* está apartada para la confección de análisis de triquinosis, habilitacíon de
+  criaderos de cerdos y control antirrábico.
+
+  Está subdividida en:
+    - Análisis de triquinosis
+    - Habilitación de criadero de cerdos
+    - Control Antirrábico
+
+.. _gestion-mascotas:
+
+Gestión de Mascotas
++++++++++++++++++++
+
+  La *Gestión de Mascotas* está apartada para la creación de patentes, esterilización y retiro y entrega de las mascotas
+  del contribuyente.
+
+  Está subdividida en:
+    - Patentamiento
+    - Esterilización
+    - Retiros y Entregas
+
+.. _gestion-abasto:
+
+Gestión de Abasto
++++++++++++++++++
+
+  La *Gestión de Abasto* está apartada para la creación de abastecedores junto con su registro de cuentas corrientes e
+  inspecciones veterinarias (re inspecciones)
+
+  Está subdividida en:
+    - Abastecedores
+    - Reinspecciones
+    - Cuentas Corrientes
+
+.. _gestion-tsa-tpp:
+
+Gestión de Transporte y Desinfecciones
+++++++++++++++++++++++++++++++++++++++
+
+  La *Gestión de Transporte y Desinfecciones* está apartada para la desinfección mensual de taxis, remises, transportes
+  escolares, transportes de pasajeros y transportes de sustancias alimenticias. Además en esta sección se incluyen
+  fumigaciones, desratizaciones y desinfecciones.
+
+  Está subdividida en:
+    - Vehículos
+    - Control de Plagas
+
+.. _gestion-parte-diario-caja:
+
+Gestión de Parte Diario y Caja
+++++++++++++++++++++++++++++++
+
+  La *Gestión de Parte Diario y Caja* está apartada para el seguimiento diario de las actividades financieras de la caja.
+
+  Está subdividida en:
+    - Parte Diario
+    - Arqueo diario de efectivo
+
+.. _gestion-usuarios:
+
+Gestión de Usuarios
++++++++++++++++++++
+
+  La *Gestión de Usuarios* muestra la información relacionada al usuario activo y funcionalidades que estén acordes a los
+  permisos que posea el mismo.
+
+  Estas funcionalidades son:
+    - Entrar al Sistema
+    - Cambiar la contraseña
+    - Cerrar Sesión
+
+  En caso de ser administrador:
+    - Todas las funcionalidades anteriores.
+    - Seguimiento de eventos de usuario (respecto del uso del sistema)
+    - Administiración de servicio
