@@ -52,6 +52,9 @@
                                 <div class="form-group">
                                     <label>N° de Certificado *</label>
                                     {{ form.certificado|add_class:'form-control' }}
+                                    {% for error in form.certificado.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
