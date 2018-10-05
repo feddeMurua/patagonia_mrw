@@ -1,0 +1,93 @@
+[
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 1,
+  "fields": {
+    "nombre": "Hamburguesas"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 2,
+  "fields": {
+    "nombre": "Salchichas"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 3,
+  "fields": {
+    "nombre": "Quesos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 4,
+  "fields": {
+    "nombre": "Fiambres"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 5,
+  "fields": {
+    "nombre": "Grasa Bovina"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 6,
+  "fields": {
+    "nombre": "Huevos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 7,
+  "fields": {
+    "nombre": "Embutidos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 8,
+  "fields": {
+    "nombre": "Pescados"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 9,
+  "fields": {
+    "nombre": "Porcinos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 10,
+  "fields": {
+    "nombre": "Bovinos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 11,
+  "fields": {
+    "nombre": "Aves"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 12,
+  "fields": {
+    "nombre": "Ovinos"
+  }
+},
+{
+  "model": "saneamiento_abasto.producto",
+  "pk": 13,
+  "fields": {
+    "nombre": "Manteca"
+  }
+}
+]

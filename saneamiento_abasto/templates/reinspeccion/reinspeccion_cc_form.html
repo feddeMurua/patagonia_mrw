@@ -291,7 +291,7 @@
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
 
                 if (index == 1) {
-                    if ($('#table-list tr').length == 1) {
+                    if ($('#table-list tr').length == 2) {
                         $('.form-navigation .next').addClass('hidden');
                     }
                     $('#table-list').each(function() {
@@ -299,13 +299,13 @@
                     });
                 }
 
-                if (index=2) {
+                if (index == 2) {
                     getResumen();
                 }
             }
 
             function hideNext () {
-                if ($('#table-list tr').length == 1) {
+                if ($('#table-list tr').length == 2) {
                     $('.form-navigation .next').addClass('hidden');
                 } else {
                     $('.form-navigation .next').removeClass('hidden');
@@ -331,7 +331,7 @@
                     url: '/reinspecciones/calculo_kg_importe',
                     type: 'GET',
                     beforeSend: function(xhr) {
-                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        xhr.setRequestHeader("X-CSRF-Token", "{{ csrf_token }}");
                     },
                     success: function(data) {
                         $('.kg_res').val(data['total_kg']);
