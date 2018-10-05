@@ -341,7 +341,10 @@ def alta_reinspeccion_cc(request):
             detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
             detalle.save()
             log_crear(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
-            return redirect('reinspecciones:lista_reinspecciones')
+            if '_fin' in request.POST:
+                return redirect('reinspecciones:lista_reinspecciones')
+            elif '_new' in request.POST:
+                return redirect('reinspecciones:nueva_reinspeccion_cc')
     else:
         if 'productos' in request.session:
             del request.session['productos']

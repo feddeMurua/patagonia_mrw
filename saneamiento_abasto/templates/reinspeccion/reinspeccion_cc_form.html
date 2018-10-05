@@ -195,7 +195,9 @@
             <div class="form-navigation">
                 <button type="button" class="previous btn btn-info pull-left">&lt; Anterior</button>
                 <button type="button" class="next btn btn-info pull-right">Siguiente &gt;</button>
-                <input type="submit" class="btn btn-success pull-right" value="Finalizar"
+                <input type="submit" name="_fin" class="btn btn-success pull-right" value="Finalizar" style="margin-left:5px;"
+                       onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
+                <input type="submit" name="_new" class="btn btn-warning pull-right" value="Finalizar e iniciar nuevo"
                        onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
                 <span class="clearfix"></span>
             </div>
@@ -222,9 +224,7 @@
                             <label>{{ producto_form.kilo_producto.label }}</label>
                             {{ producto_form.kilo_producto|add_class:"form-control" }}
                         </div>
-                        <input type="hidden" name="action" id="action"/>
                         <input type="submit" class="btn btn-info" name="add" value="Confirmar y Agregar otro" style="margin-top:0;"/>
-                        <input type="submit" class="btn btn-primary" name="confirm" value="Confirmar"/>
                         <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
                     </form>
                 </div>
@@ -289,6 +289,10 @@
                 var atTheEnd = index >= $sections.length - 1;
                 $('.form-navigation .next').toggle(!atTheEnd);
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
+
+                if (index == 0) {
+                    $('.form-navigation .next').removeClass('hidden');
+                }
 
                 if (index == 1) {
                     if ($('#table-list tr').length == 2) {
@@ -367,20 +371,15 @@
         });
 
         $(document).ready(function(){
-            var action;
-            $(":submit").click(function() { $("#action").val(this.name); });
-
             $("#productoForm").submit(function(e) {
                 e.preventDefault();
                 $.post($(this).data('url'), $(this).serialize())
                     .done(function(data) {
                         if(data['success']) {
-                            if ($("#action").val() == 'confirm') {
-                                $('#agregar_producto').modal('hide');
-                            }
                             refresh_table(data);
                             refresh_resumen(data['productos']);
                             document.getElementById("productoForm").reset();
+                            $('#id_producto').select2('open');
                         } else {
                             alert("Este producto ya se encuentra cargado");
                         }
@@ -460,6 +459,18 @@
                 });
             });
         };
+
+        $('#agregar_producto').on('shown.bs.modal', function () {
+            $('#id_producto').select2('open');
+        })
+
+        $('#id_producto').on('select2:close', function () {
+            setTimeout(function() {
+                $('.select2-container--focus').removeClass('select2-container--focus');
+                $(':focus').blur();
+                $('#id_kilo_producto').focus();
+            }, 1);
+        });
 
         $.datepicker.setDefaults({
             maxDate: new Date()
