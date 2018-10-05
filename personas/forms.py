@@ -157,12 +157,6 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
             'nombre': _("Razon social")
         }
 
-    def clean_nombre(self):
-        nombre = self.cleaned_data['nombre']
-        if not regex_alfabetico.match(nombre):
-            raise forms.ValidationError('El nombre de la persona, solo puede contener letras y/o espacios')
-        return nombre
-
     def clean_cuit(self):
         cuit = self.cleaned_data['cuit']
         if cuit:

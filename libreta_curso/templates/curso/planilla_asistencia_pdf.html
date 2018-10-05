@@ -49,19 +49,19 @@
                 </thead>
                 <tbody>
                     {% for inscripcion in inscripciones %}
-                    <tr>
-                        <td>{{ inscripcion.persona.apellido }}, {{ inscripcion.persona.nombre }}</td>
-                        <td>{{ inscripcion.persona.dni }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ inscripcion.persona.domicilio }}</td>
-                        <td>{{ inscripcion.persona.telefono }}</td>
-                        <td>{{ inscripcion.rubro }}</td>
-                    </tr>
-                {% endfor %}
+                        <tr>
+                            <td>{{ inscripcion.persona.apellido }}, {{ inscripcion.persona.nombre }}</td>
+                            <td>{{ inscripcion.persona.dni }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{ inscripcion.persona.domicilio }}</td>
+                            <td>{{ inscripcion.persona.telefono }}</td>
+                            <td>{{ inscripcion.rubro }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -266,7 +266,7 @@ def calculo_importe(total_kg):
     precios = ReinspeccionPrecios.objects.get()
     monto = precios.precio_min
     if total_kg > precios.kg_min:
-        monto += total_kg * precios.precio_kg
+        total_kg * precios.precio_kg
     return monto
 
 
@@ -276,7 +276,7 @@ def calculo_importe_json(request, kg):
     precios = ReinspeccionPrecios.objects.get()
     monto = precios.precio_min
     if total_kg > precios.kg_min:
-        monto += total_kg * precios.precio_kg
+        total_kg * precios.precio_kg
     return JsonResponse({'importe': monto})
 
 
@@ -286,7 +286,7 @@ def calculo_kg_importe(request):
     precios = ReinspeccionPrecios.objects.get()
     monto = precios.precio_min
     if total_kg > precios.kg_min:
-        monto += total_kg * precios.precio_kg
+        total_kg * precios.precio_kg
     return JsonResponse({'total_kg': total_kg, 'importe': monto})
 
 
