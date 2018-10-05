@@ -55,6 +55,7 @@ class Reinspeccion(models.Model):
     total_kg = models.IntegerField(validators=[MinValueValidator(1)])
     importe = models.FloatField(null=True, blank=True)
     detalles = models.BooleanField(default=True)
+    origen = models.ForeignKey(m.Localidad, null=True, blank=True)
 
     def __str__(self):
         return "%s - %s" % (self.fecha, self.abastecedor)

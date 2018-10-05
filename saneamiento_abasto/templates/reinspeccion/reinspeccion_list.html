@@ -23,6 +23,7 @@
             <th>Precintado</th>
             <th>Certificado</th>
             <th>Abastecedor</th>
+            <th>Origen</th>
             <th>Total Kg</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -35,6 +36,7 @@
                 <td>{{ reinspeccion.precintado|default_if_none:"" }}</td>
                 <td>{{ reinspeccion.certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
+                <td>{{ reinspeccion.origen|default_if_none:"-" }}</td>
                 <td>{{ reinspeccion.total_kg }},0 Kg</td>
                 <td>
                     {% if not reinspeccion.detalles %}
