@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^nueva_cc$', alta_reinspeccion_cc, name='nueva_reinspeccion_cc'),
     url(r'^calculo_kg_importe$', calculo_kg_importe, name='calculo_kg_importe'),
     url(r'^agregar_producto$', agregar_producto, name='agregar_producto'),
+    url(r'^agregar_producto_reinspeccion/(?P<pk>\d+)$', agregar_producto_reinspeccion,
+        name='agregar_producto_reinspeccion'),
     url(r'^eliminar_producto/(?P<nombre>\w+)$', eliminar_producto, name='eliminar_producto'),
     url(r'^modificar_producto/(?P<nombre>\w+)/(?P<kg>\w+)$', modificar_producto, name='modificar_producto'),
     url(r'^modificar_producto_reinspeccion/(?P<pk>\d+)/(?P<nombre>\w+)/(?P<kg>\w+)$', modificar_producto_reinspeccion,

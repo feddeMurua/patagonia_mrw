@@ -266,7 +266,7 @@ def calculo_importe(total_kg):
     precios = ReinspeccionPrecios.objects.get()
     monto = precios.precio_min
     if total_kg > precios.kg_min:
-        total_kg * precios.precio_kg
+        monto = total_kg * precios.precio_kg
     return monto
 
 
@@ -276,7 +276,7 @@ def calculo_importe_json(request, kg):
     precios = ReinspeccionPrecios.objects.get()
     monto = precios.precio_min
     if total_kg > precios.kg_min:
-        total_kg * precios.precio_kg
+        monto = total_kg * precios.precio_kg
     return JsonResponse({'importe': monto})
 
 
@@ -286,7 +286,7 @@ def calculo_kg_importe(request):
     precios = ReinspeccionPrecios.objects.get()
     monto = precios.precio_min
     if total_kg > precios.kg_min:
-        total_kg * precios.precio_kg
+        monto = total_kg * precios.precio_kg
     return JsonResponse({'total_kg': total_kg, 'importe': monto})
 
 
@@ -359,6 +359,24 @@ def existe_producto(request, producto):
         if item['producto']['nombre'] == producto.producto.nombre:
             return True
     return False
+
+
+@login_required(login_url='login')
+def agregar_producto_reinspeccion(request, pk):
+    reinspeccion = Reinspeccion.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ReinspeccionProductoForm(request.POST)
+        if form.is_valid():
+            producto = form.save(commit=False)
+            producto.reinspeccion = reinspeccion
+            producto.save()
+            reinspeccion.total_kg += producto.kilo_producto
+            reinspeccion.save()
+            log_modificar(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
+            return HttpResponseRedirect(reverse('reinspecciones:lista_productos', args=[pk, 0]))
+    else:
+        form = ReinspeccionProductoForm
+    return render(request, 'reinspeccion/nuevo_producto_form.html', {'form': form, 'pk': pk})
 
 
 @login_required(login_url='login')

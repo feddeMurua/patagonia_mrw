@@ -26,8 +26,8 @@
                 </div>
                 <div class="panel-body">
                     <fieldset id="fieldset_porcinos">
-                        {% for form in formset.forms %}
-                            {% for field in form.visible_fields %}
+                        {% for form_set in formset.forms %}
+                            {% for field in form_set.visible_fields %}
                                 <div class="form-group">
                                     <label>{{ field.label }} {% if field.field.required %}*{% endif %}</label>
                                     {{ field|add_class:'form-control' }}

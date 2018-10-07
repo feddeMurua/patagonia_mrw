@@ -15,6 +15,12 @@
 
 {% block panel-title %}Productos{% endblock %}
 
+{% if not id_return and not pagado and user.is_staff %}
+    {% block btn-nuevo %}
+        <a href="{% url 'reinspecciones:agregar_producto_reinspeccion' reinspeccion_pk %}" class="btn btn-primary btn-create">Agregar Producto</a>
+    {% endblock %}
+{% endif %}
+
 {% block tabla %}
     <thead>
         <tr>
@@ -36,7 +42,7 @@
                 <td>{{ producto.producto.nombre }}</td>
                 <td>{{ producto.kilo_producto }} Kg</td>
                 <td>
-                    {% if id_return and not pagado %}
+                    {% if not pagado %}
                         <a class='btn btn-warning' onclick="confirmModificar('{{ reinspeccion_pk }}', '{{ producto.producto.nombre }}')" data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>
                     {% endif %}
                 </td>

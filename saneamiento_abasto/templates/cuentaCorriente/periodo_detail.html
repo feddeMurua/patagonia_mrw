@@ -10,7 +10,7 @@
 {% block panel-title %}Reinspecciones del periodo {{ mes }}-{{ anio }}{% endblock %}
 
 {% block btn-nuevo %}
-    <a class="btn btn-warning" href="{% url 'cuentas_corrientes:pdf_certificado' pk mes anio%}" target="_blank">Generar certificado de deuda</a>
+    <a class="btn btn-warning" href="{% url 'cuentas_corrientes:pdf_certificado' pk mes anio %}" target="_blank">Generar certificado de deuda</a>
 {% endblock %}
 
 {% block tabla %}
