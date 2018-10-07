@@ -1046,12 +1046,16 @@ def estadisticas_reinspeccion(request):
     for k, v in ord_dict_reinspeccion_prod.items():
         ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v*100/total_general)))
 
+    # ORIGEN REINSPECCION
+    totales_origen_reinspeccion = to_counter(Reinspeccion, {'fecha__gte': fecha_desde, 'fecha__lte':fecha_hasta},
+                           ['origen','total_kg'])
+
     context = {
         'rango_form': rango_form,
         'dict': ord_dict_reinspeccion_prod,
         'total_general': total_general,
         # datos y etiquetas
-        'lista_labels': json.dumps([label_reinspeccion]),
-        'lista_datos': json.dumps([{'Productos': datos_reinspecciones}])
+        'lista_labels': json.dumps([label_reinspeccion, totales_origen_reinspeccion.keys()]),
+        'lista_datos': json.dumps([{'Productos': datos_reinspecciones, 'totales_origen_reinspeccion':totales_origen_reinspeccion.values()}])
     }
     return render(request, "estadistica/estadisticas_reinspeccion.html", context)

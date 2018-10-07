@@ -8,6 +8,7 @@
 {% block tabs %}
     <ul>
         <li><a href="#tabs-1">Reinspeccion Veterinaria</a></li>
+        <li><a href="#tabs-2">Origen</a></li>
     </ul>
     <div id="tabs-1">
         <div class="row">
@@ -37,8 +38,16 @@
                 </table>
             </div>
             <div class="col-md-7">
-                <canvas class="doughnut"></canvas>
+                <canvas id="reinspecciones" class="doughnut"></canvas>
             </div>
         </div>
+    </div>
+    <div id="tabs-2">
+      <div class="row">
+        <canvas id="origenes" class="doughnut"></canvas>
+      </div>
+      <div class="row">
+        aaaaaa
+      </div>
     </div>
 {% endblock %}
