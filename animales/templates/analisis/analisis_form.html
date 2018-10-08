@@ -27,15 +27,20 @@
                 <div class="panel-body">
                     <fieldset id="fieldset_porcinos">
                         {% for form_set in formset.forms %}
-                            {% for field in form_set.visible_fields %}
-                                <div class="form-group">
-                                    <label>{{ field.label }} {% if field.field.required %}*{% endif %}</label>
-                                    {{ field|add_class:'form-control' }}
-                                    {% for error in field.errors %}
-                                        <span style="color:red;" class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% endfor %}
+                            <div class="form-group">
+                                <label>{{ form_set.precinto.label }} *</label>
+                                {{ form_set.precinto|add_class:'form-control' }}
+                                {% for error in form_set.precinto.errors %}
+                                    <span style="color:red;" class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                <label>{{ form_set.categoria_porcino.label }} *</label>
+                                {{ form_set.categoria_porcino|add_class:'form-control'|add_class:'noselect2' }}
+                                {% for error in form_set.categoria_porcino.errors %}
+                                    <span style="color:red;" class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
                         {% endfor %}
                     </fieldset>
                     {{ formset.management_form }}

@@ -16,10 +16,6 @@
 {% endblock %}
 
 {% block tabla %}
-    <div class="form-group">
-        <label for="sin_detalles">Solo reinspecciones sin detalles</label>
-        <input type="checkbox" id="sin_detalles" name="detalles" onchange='filtrarTabla(this);'>
-    </div>
     <thead>
         <tr>
             <th>Fecha</th>
@@ -51,18 +47,4 @@
             </tr>
         {% endfor %}
     </tbody>
-{% endblock %}
-
-{% block more-scripts %}
-    <script>
-        $('#sin_detalles').checkboxradio();
-
-        function filtrarTabla(checkbox) {
-            if (checkbox.checked == true) {
-                document.getElementById("submit").removeAttribute("disabled");
-            } else {
-                document.getElementById("submit").setAttribute("disabled", "disabled");
-           }
-        }
-    </script>
 {% endblock %}
