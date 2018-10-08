@@ -81,7 +81,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="" id="productoForm" data-accion=""
-                          data-url="{% url 'reinspecciones:agregar_producto_reinspeccion' reinspeccion_pk %}">
+                          data-url="{% url 'reinspecciones:agregar_producto' %}">
                         {% csrf_token %}
                         {{ producto_form.media }}
                         <div class="form-group">

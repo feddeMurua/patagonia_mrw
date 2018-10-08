@@ -7,8 +7,8 @@
 
 {% block tabs %}
     <ul>
-        <li><a href="#tabs-1">Reinspeccion Veterinaria</a></li>
-        <li><a href="#tabs-2">Origen</a></li>
+        <li><a href="#tabs-1">Reinspecciones Veterinarias</a></li>
+        <li><a href="#tabs-2">Origen de Reinspecciones</a></li>
     </ul>
     <div id="tabs-1">
         <div class="row">
@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for key, value in dict.items %}
+                        {% for key, value in dict_prod.items %}
                             <tr>
                                 <td align="center">{{ key }}</td>
                                 <td align="center">{{ value.0 }}</td>
@@ -31,7 +31,7 @@
                         {% endfor %}
                             <tr>
                                 <td align="center"><b>Total General</b></td>
-                                <td align="center"><b>{{ total_general }}</b></td>
+                                <td align="center"><b>{{ total_general_prod }}</b></td>
                                 <td align="center"><b>100%</b></td>
                             </tr>
                     </tbody>
@@ -43,11 +43,41 @@
         </div>
     </div>
     <div id="tabs-2">
-      <div class="row">
-        <canvas id="origenes" class="doughnut"></canvas>
-      </div>
-      <div class="row">
-        aaaaaa
-      </div>
+        <div class="row">
+            <div class="col-md-6 tabla-datos">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td align="center">Origen</td>
+                            <td align="center">Cant. de Reinspecciones</td>
+                            <td align="center">Porcentaje de Reinspecciones</td>
+                            <td align="center">Cant. de Kg</td>
+                            <td align="center">Porcentaje de Kg</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in dict_orig.items %}
+                            <tr>
+                                <td align="center">{{ key }}</td>
+                                <td align="center">{{ value.0 }}</td>
+                                <td align="center">{{ value.1 }}%</td>
+                                <td align="center">{{ value.2 }}</td>
+                                <td align="center">{{ value.3 }}%</td>
+                            </tr>
+                        {% endfor %}
+                            <tr>
+                                <td align="center"><b>Total General</b></td>
+                                <td align="center"><b>{{ total_general_orig_r }}</b></td>
+                                <td align="center"><b>100%</b></td>
+                                <td align="center"><b>{{ total_general_orig_kg }}</b></td>
+                                <td align="center"><b>100%</b></td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <canvas id="origenes" class="doughnut"></canvas>
+            </div>
+        </div>
     </div>
 {% endblock %}

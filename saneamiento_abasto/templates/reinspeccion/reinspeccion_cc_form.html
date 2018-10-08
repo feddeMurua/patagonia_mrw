@@ -37,6 +37,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Abastecedor *</label>
+                                    {{ form.abastecedor }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Origen *</label>
+                                    {{ form.origen|attr:'required:true' }}
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label>Inspectores *</label>
                             {{ form.inspectores }}
@@ -57,10 +71,6 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Abastecedor *</label>
-                            {{ form.abastecedor }}
                         </div>
                         {% if form.non_field_errors%}
                             <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
