@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^nueva$', alta_reinspeccion, name='nueva_reinspeccion'),
     url(r'^calculo_importe/(?P<kg>\w+)$', calculo_importe_json, name='calculo_importe'),
     url(r'^nueva_cc$', alta_reinspeccion_cc, name='nueva_reinspeccion_cc'),
+    url(r'^modificar/(?P<pk>\d+)$', modificar_reinspeccion, name='modificar_reinspeccion'),
     url(r'^calculo_kg_importe$', calculo_kg_importe, name='calculo_kg_importe'),
     url(r'^agregar_producto$', agregar_producto, name='agregar_producto'),
     url(r'^agregar_producto_reinspeccion/(?P<pk>\d+)$', agregar_producto_reinspeccion,

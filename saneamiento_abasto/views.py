@@ -362,6 +362,18 @@ def existe_producto(request, producto):
 
 
 @login_required(login_url='login')
+def modificar_reinspeccion(request, pk):
+    reinspeccion = Reinspeccion.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ModificarReinspeccionForm(request.POST, instance=reinspeccion)
+        if form.is_valid():
+            log_modificar(request.user.id, form.save(), 'Reinspeccion Veterinaria')
+            return redirect('reinspecciones:lista_reinspecciones')
+    else:
+        form = ModificarReinspeccionForm(instance=reinspeccion)
+    return render(request, 'reinspeccion/reinspeccion_modificar.html', {'form': form})
+
+@login_required(login_url='login')
 def agregar_producto_reinspeccion(request, pk):
     reinspeccion = Reinspeccion.objects.get(pk=pk)
     if request.method == 'POST':

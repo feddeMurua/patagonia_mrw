@@ -48,6 +48,16 @@ class ReinspeccionCCForm(forms.ModelForm):
         }
 
 
+class ModificarReinspeccionForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DATEINPUT(), label="Fecha de realizacion")
+    inspectores = forms.ModelMultipleChoiceField(queryset=m.PersonalPropio.objects.filter(
+        rol_actuante__nombre='Inspector'))
+
+    class Meta:
+        model = Reinspeccion
+        fields = ['fecha, turno, inspectores', 'origen']
+
+
 class AltaProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
