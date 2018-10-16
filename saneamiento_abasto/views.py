@@ -373,6 +373,7 @@ def modificar_reinspeccion(request, pk):
         form = ModificarReinspeccionForm(instance=reinspeccion)
     return render(request, 'reinspeccion/reinspeccion_modificar.html', {'form': form})
 
+
 @login_required(login_url='login')
 def agregar_producto_reinspeccion(request, pk):
     reinspeccion = Reinspeccion.objects.get(pk=pk)
@@ -1074,11 +1075,15 @@ def estadisticas_reinspeccion(request):
     total_general_orig_kg = sum(dict_reinspeccion_orig_kg.values())
     ord_dict_reinspeccion_orig = collections.OrderedDict(
         sorted(dict_reinspeccion_orig_r.iteritems(), key=lambda (k, v): (k, v)))
+    ord_dict_reinspeccion_orig_kg = collections.OrderedDict(
+        sorted(dict_reinspeccion_orig_kg.iteritems(), key=lambda (k, v): (k, v)))
 
     label_reinspeccion = ord_dict_reinspeccion_prod.keys()
     datos_reinspecciones = ord_dict_reinspeccion_prod.values()
-    label_origen = ord_dict_reinspeccion_orig.keys()
-    datos_origen = ord_dict_reinspeccion_orig.values()
+    label_origen_cant = ord_dict_reinspeccion_orig.keys()
+    datos_origen_cant = ord_dict_reinspeccion_orig.values()
+    label_origen_kg = ord_dict_reinspeccion_orig_kg.keys()
+    datos_origen_kg = ord_dict_reinspeccion_orig_kg.values()
 
     for k, v in ord_dict_reinspeccion_prod.items():
         ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v*100/total_general_prod)))
@@ -1096,8 +1101,9 @@ def estadisticas_reinspeccion(request):
         'total_general_orig_r': total_general_orig_r,
         'total_general_orig_kg': total_general_orig_kg,
         # datos y etiquetas
-        'lista_labels': json.dumps([label_reinspeccion, label_origen]),
+        'lista_labels': json.dumps([label_reinspeccion, label_origen_cant, label_origen_kg]),
         'lista_datos': json.dumps([{'Productos': datos_reinspecciones},
-                                   {'Origenes': datos_origen}])
+                                   {'Origenes por cantidad': datos_origen_cant},
+                                   {'Origenes por kg': datos_origen_kg}])
     }
     return render(request, "estadistica/estadisticas_reinspeccion.html", context)

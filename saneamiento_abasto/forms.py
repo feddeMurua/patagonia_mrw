@@ -55,7 +55,7 @@ class ModificarReinspeccionForm(forms.ModelForm):
 
     class Meta:
         model = Reinspeccion
-        fields = ['fecha, turno, inspectores', 'origen']
+        fields = ['fecha', 'turno', 'inspectores', 'origen']
 
 
 class AltaProductoForm(forms.ModelForm):

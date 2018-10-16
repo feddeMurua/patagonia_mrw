@@ -225,8 +225,7 @@
                     <h4 class="modal-title">Nuevo producto</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="productoForm" data-url="{% url 'reinspecciones:agregar_producto' %}"
-                          data-accion="">
+                    <form action="" id="productoForm" data-url="{% url 'reinspecciones:agregar_producto' %}">
                         {% csrf_token %}
                         {{ producto_form.media }}
                         <div class="form-group">

@@ -12,7 +12,7 @@
         }
         .titulo {
             text-align: center;
-            font-size: 20px;
+            font-size: 12px;
         }
         table {
             margin: 0 auto;
@@ -37,7 +37,6 @@
                 Código de abastecedor: {{ cc.abastecedor.pk }}<br>
                 <b>Resumen de Reinspeccion Veterinaria correspondiente al periodo de {{ periodo }}</b>
             </p>
-            <br>
             {% if reinspecciones %}
                 {% for item in reinspecciones %}
                     <table class="tabla-reinspeccion">
@@ -80,7 +79,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <br><br>
+                    <br>
                 {% endfor %}
             {% endif %}
             <p><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ total_kilos }} Kg<br>

@@ -21,12 +21,18 @@ class Analisis(models.Model):
 
 
 class Porcino(models.Model):
-    precinto = models.BigIntegerField(unique=True)
+    precinto = models.IntegerField(unique=True)
     categoria_porcino = models.CharField(max_length=6, choices=Categoria_Porcino)
     analisis = models.ForeignKey('Analisis', on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s - %s" % (self.categoria_porcino, self.precinto)
+
+    def to_json(self):
+        return {
+            'precinto': self.precinto,
+            'categoria_porcino': self.categoria_porcino
+        }
 
 
 class ControlAntirrabico(models.Model):
