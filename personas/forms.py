@@ -49,7 +49,7 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
 
     class Meta:
         model = PersonaFisica
-        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social']
+        exclude = ['domicilio', 'documentacion_retirada']
         widgets = {
             'nacionalidad': AddAnotherWidgetWrapper(
                 forms.Select,
@@ -68,16 +68,6 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
         if not regex_alfabetico.match(apellido):
             raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
         return apellido
-
-    def clean_cuil(self):
-        cuil = self.cleaned_data['cuil']
-        if cuil:
-            if PersonaFisica.objects.filter(cuil=cuil).exists():
-                raise forms.ValidationError('Ya existe una persona con este CUIL')
-
-            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuil):
-                raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
-        return cuil
 
     def clean_dni(self):
         dni = self.cleaned_data['dni']
@@ -103,8 +93,7 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
 
     class Meta:
         model = PersonaFisica
-        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
-                  'documentacion_retirada']
+        exclude = ['domicilio']
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -117,16 +106,6 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
         if not regex_alfabetico.match(apellido):
             raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
         return apellido
-
-    def clean_cuil(self):
-        cuil = self.cleaned_data['cuil']
-        if cuil:
-            if PersonaFisica.objects.filter(cuil=cuil).exists():
-                raise forms.ValidationError('Ya existe una persona con este CUIL')
-
-            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuil):
-                raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
-        return cuil
 
     def clean_dni(self):
         dni = self.cleaned_data['dni']
@@ -159,12 +138,8 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
 
     def clean_cuit(self):
         cuit = self.cleaned_data['cuit']
-        if cuit:
-            if PersonaJuridica.objects.filter(cuit=cuit).exists():
-                raise forms.ValidationError('Ya existe una empresa con este CUIT')
-
-            if not re.match(r"^[0-9]{2}-[0-9]{7,8}-[0-9]$", cuit):
-                raise forms.ValidationError('CUIT inválido, por favor siga este formato XX-YYYYYYYY-Z')
+        if not re.match(r"^[0-9]{2}-[0-9]{7,8}-[0-9]$", cuit):
+            raise forms.ValidationError('CUIT inválido, por favor siga este formato XX-YYYYYYYY-Z')
         return cuit
 
 
@@ -172,7 +147,16 @@ class ModificacionPersonaJuridicaForm(forms.ModelForm):
 
     class Meta:
         model = PersonaJuridica
-        exclude = ['nombre', 'cuit']
+        exclude = ['domicilio']
+        labels = {
+            'nombre': _("Razon social")
+        }
+
+    def clean_cuit(self):
+        cuit = self.cleaned_data['cuit']
+        if not re.match(r"^[0-9]{2}-[0-9]{7,8}-[0-9]$", cuit):
+            raise forms.ValidationError('CUIT inválido, por favor siga este formato XX-YYYYYYYY-Z')
+        return cuit
 
 
 class PersonalPropioForm(forms.ModelForm):
@@ -180,8 +164,7 @@ class PersonalPropioForm(forms.ModelForm):
 
     class Meta:
         model = PersonalPropio
-        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
-                  'rol_actuante']
+        exclude = ['domicilio', 'documentacion_retirada']
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -194,16 +177,6 @@ class PersonalPropioForm(forms.ModelForm):
         if not regex_alfabetico.match(apellido):
             raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
         return apellido
-
-    def clean_cuil(self):
-        cuil = self.cleaned_data['cuil']
-        if cuil:
-            if PersonaFisica.objects.filter(cuil=cuil).exists():
-                raise forms.ValidationError('Ya existe una persona con este CUIL')
-
-            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuil):
-                raise forms.ValidationError('CUIL inválido, por favor siga este formato XX-YYYYYYYY-Z')
-        return cuil
 
     def clean_dni(self):
         dni = self.cleaned_data['dni']

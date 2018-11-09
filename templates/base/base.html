@@ -49,6 +49,7 @@
 
     <script src="{% static 'js/particles.js' %}"></script>
     <script src="{% static 'js/select2.full.js' %}"></script>
+    <script src="{% static 'js/jquery.mask.js' %}"></script>
     <script>
         {% block no-select2 %}
             $('select').select2({
@@ -82,7 +83,8 @@
                 onClose: function(selectedDate) {
                     $("#fecha").datepicker("option","minDate",selectedDate);
                 }
-            });
+            })
+            .mask('00/00/0000');
         });
     </script>
     {% block scripts %}

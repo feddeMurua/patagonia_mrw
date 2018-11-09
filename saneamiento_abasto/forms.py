@@ -5,7 +5,6 @@ from functools import partial
 from .models import *
 from django.utils.translation import ugettext as _
 from django.utils import timezone
-from dateutil.relativedelta import relativedelta
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
 
@@ -33,6 +32,12 @@ class ReinspeccionForm(forms.ModelForm):
         labels = {
             'certificado': _("N° de certificado")
         }
+        widgets = {
+            'origen': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_localidad'),
+            )
+        }
 
 
 class ReinspeccionCCForm(forms.ModelForm):
@@ -46,6 +51,12 @@ class ReinspeccionCCForm(forms.ModelForm):
         labels = {
             'certificado': _("N° de certificado")
         }
+        widgets = {
+            'origen': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_localidad'),
+            )
+        }
 
 
 class ModificarReinspeccionForm(forms.ModelForm):
@@ -56,6 +67,12 @@ class ModificarReinspeccionForm(forms.ModelForm):
     class Meta:
         model = Reinspeccion
         fields = ['fecha', 'turno', 'inspectores', 'origen']
+        widgets = {
+            'origen': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_localidad'),
+            )
+        }
 
 
 class AltaProductoForm(forms.ModelForm):

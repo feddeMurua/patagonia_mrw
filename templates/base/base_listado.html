@@ -84,8 +84,11 @@
 
 {% block scripts %}
     <script src="{% static 'js/datatables.js' %}"></script>
+    <script src="{% static 'js/moment.js' %}"></script>
+    <script src="{% static 'js/datetime-moment.js' %}"></script>
     <script>
         $(document).ready(function(){
+            $.fn.dataTable.moment('D MMM. YYYY');
             $('#table-list').DataTable({
                 language: {
                             "sProcessing":     "Procesando...",
