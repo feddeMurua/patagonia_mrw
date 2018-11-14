@@ -9,7 +9,7 @@
 
 {% block extra-buttons %}
     <div class="form-group meses-group">
-        <label>Meses de validez *</label>
+        <label for="meses_validez">Meses de validez *</label>
         <input type="number" name="meses" class="form-control" id="meses_validez" min="1" max="6">
     </div>
     {% if mensaje %}
@@ -66,7 +66,7 @@
         hideMeses();
 
         function hideMeses() {
-            if (tipo_libreta.val() == 'Celeste') {
+            if (tipo_libreta.val() === 'Celeste') {
                 meses_validez.parent().removeClass('hidden');
                 meses_validez.prop('required', true);
             } else {

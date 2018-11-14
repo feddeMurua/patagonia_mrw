@@ -11,7 +11,7 @@
     <div class="container-fluid container-form">
         <div class="panel panel-info">
             <div class="panel-heading" align="right">
-                <form class="form-inline" method="post" style="margin: 0px">
+                <form class="form-inline" method="post" style="margin: 0">
                     {% csrf_token %}
                     {{ rango_form.media }}
                     {% for field in rango_form %}
@@ -69,15 +69,15 @@
 
         $('canvas').each(function (index){
             var ctx = $(this),
-            labels = labels_list[index];
+            labels = labels_list[index],
             datos = datos_list[index];
 
-            var background_colors = []
+            var background_colors = [];
             for (var i = 0, len = labels.length; i < len; i++) {
                 background_colors.push(getRandomColor());
             }
 
-            datasets = []
+            var datasets = [];
             $.each(datos, function(key, value) {
                 datasets.push(
                     {
@@ -86,18 +86,18 @@
                         backgroundColor: background_colors,
                         borderWidth: 1
                     })
-            })
+            });
 
             if($(this).hasClass('doughnut')){
-                var myPieChart = new Chart(ctx,{
+                new Chart(ctx,{
                     type: 'doughnut',
                     data: {
                         labels: labels,
                         datasets: datasets
-                    },
+                    }
                 });
             } else {
-                var chart = new Chart(ctx, {
+                new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: labels,

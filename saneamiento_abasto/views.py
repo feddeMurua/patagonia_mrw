@@ -8,6 +8,7 @@ import calendar
 from django.db.models import CharField, Value as V
 from django.db.models.functions import Concat, ExtractMonth, ExtractYear
 import locale
+from dateutil import relativedelta
 from personas import forms as f
 from .forms import *
 from .choices import *
@@ -318,9 +319,9 @@ def carga_productos(request, reinspeccion_pk):
         if 'productos' in request.session:
             del request.session['productos']
         request.session['productos'] = []
-    return render(request, 'reinspeccion/carga_productos.html', {'producto_form': producto_form, 'mensaje': mensaje,
-                                                                 'reinspeccion': Reinspeccion.objects.get(pk=reinspeccion_pk),
-                                                                 'productos': productos, 'total_kg': total_kg})
+    return render(request, 'reinspeccion/carga_productos.html',
+                  {'producto_form': producto_form, 'mensaje': mensaje, 'productos': productos, 'total_kg': total_kg,
+                   'reinspeccion': Reinspeccion.objects.get(pk=reinspeccion_pk)})
 
 
 @login_required(login_url='login')
@@ -531,7 +532,7 @@ def alta_vehiculo(request):
         form = VehiculoForm(request.POST)
         if form.is_valid():
             vehiculo = form.save(commit=False)
-            if vehiculo.categoria == 'TSA':
+            if vehiculo.tipo_vehiculo == 'TSA':
                 vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
             vehiculo.save()
             log_crear(request.user.id, vehiculo, 'Vehiculo')
@@ -557,7 +558,8 @@ def modificacion_vehiculo(request, pk):
             else ModificarTPPForm(request.POST, instance=vehiculo)
         if form.is_valid():
             vehiculo = form.save(commit=False)
-            vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
+            if vehiculo.tipo_vehiculo == 'TSA':
+                vehiculo.rubro_vehiculo = request.POST['rubro_vehiculo']
             vehiculo.save()
             log_modificar(request.user.id, vehiculo, 'Vehiculo')
             return redirect('vehiculo:lista_vehiculos')

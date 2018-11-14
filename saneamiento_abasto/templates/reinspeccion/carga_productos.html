@@ -158,11 +158,11 @@
         });
 
         function refresh_table(data){
-            productos = data['productos']
-            var $tbody = $("table tbody");
+            var productos = data['productos'],
+            $tbody = $("table tbody");
             $tbody.children().remove();
             for(var i = 0; i < productos.length; i++){
-                var producto = productos[i]['producto']['nombre']
+                var producto = productos[i]['producto']['nombre'];
                 var row = "<tr align='center'>" +
                             "<td>" + producto + "</td>" +
                             "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
@@ -196,7 +196,7 @@
                     }
                 });
             });
-        };
+        }
 
         function confirmModificar(producto) {
             $('#modalModificar').modal();
@@ -215,11 +215,11 @@
                     }
                 });
             });
-        };
+        }
 
         $('#agregar_producto').on('shown.bs.modal', function () {
             $('#id_producto').select2('open');
-        })
+        });
 
         $('#id_producto').on('select2:close', function () {
             setTimeout(function() {

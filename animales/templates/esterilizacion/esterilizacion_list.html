@@ -86,7 +86,7 @@
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                     },
-                    success: function(data) {
+                    success: function() {
                         $('#modalEsterilizacion').modal('hide');
                         $('#modalConfirmEsterilizacion').modal();
                     }

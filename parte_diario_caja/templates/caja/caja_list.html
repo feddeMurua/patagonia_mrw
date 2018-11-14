@@ -5,10 +5,6 @@
 
 {% block more-stylesheets %}
     <style>
-        #id_fecha {
-            text-align: center;
-            width: 50%;
-        }
     </style>
 {% endblock %}
 
@@ -17,7 +13,7 @@
 {% block panel-title %}Movimientos diarios{% endblock %}
 
 {% block btn-nuevo %}
-    <form class="form-inline" method="post" style="margin: 0px">
+    <form class="form-inline" method="post" style="margin: 0">
         {% csrf_token %}
         {{ fecha_form.media }}
         {% for field in fecha_form %}

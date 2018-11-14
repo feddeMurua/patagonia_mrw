@@ -4,7 +4,6 @@
 {% block title %}Sacrificio/Entrega de animales{% endblock %}
 
 {% block more-stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/alta_retiroEntrega.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/parsley.css' %}"/>
 {% endblock %}
 
@@ -92,7 +91,7 @@
                 $('.form-navigation .next').toggle(!atTheEnd);
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
 
-                if (index == 1) {
+                if (index === 1) {
                     if ($('#id_patentado').is(':checked')) {
                         $('.form-patentado :input').prop('required', true);
                         $('.form-no-patentado :input').prop('required', false);

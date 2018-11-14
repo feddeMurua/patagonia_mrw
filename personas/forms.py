@@ -49,7 +49,7 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
 
     class Meta:
         model = PersonaFisica
-        exclude = ['domicilio', 'documentacion_retirada']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social']
         widgets = {
             'nacionalidad': AddAnotherWidgetWrapper(
                 forms.Select,
@@ -69,12 +69,6 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
             raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
         return apellido
 
-    def clean_dni(self):
-        dni = self.cleaned_data['dni']
-        if not re.match(r"^[0-9]{7,}$", dni):
-            raise forms.ValidationError('El dni de la persona debe contener al menos 7 digitos y ser númerico')
-        return dni
-
     def clean_obra_social(self):
         obra_social = self.cleaned_data['obra_social']
         if obra_social:
@@ -93,7 +87,8 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
 
     class Meta:
         model = PersonaFisica
-        exclude = ['domicilio']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
+                  'documentacion_retirada']
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -106,12 +101,6 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
         if not regex_alfabetico.match(apellido):
             raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
         return apellido
-
-    def clean_dni(self):
-        dni = self.cleaned_data['dni']
-        if not re.match(r"^[0-9]{7,}$", dni):
-            raise forms.ValidationError('El dni de la persona debe contener al menos 7 digitos y ser númerico')
-        return dni
 
     def clean_obra_social(self):
         obra_social = self.cleaned_data['obra_social']
@@ -136,12 +125,6 @@ class AltaPersonaJuridicaForm(forms.ModelForm):
             'nombre': _("Razon social")
         }
 
-    def clean_cuit(self):
-        cuit = self.cleaned_data['cuit']
-        if not re.match(r"^[0-9]{2}-[0-9]{7,8}-[0-9]$", cuit):
-            raise forms.ValidationError('CUIT inválido, por favor siga este formato XX-YYYYYYYY-Z')
-        return cuit
-
 
 class ModificacionPersonaJuridicaForm(forms.ModelForm):
 
@@ -152,19 +135,14 @@ class ModificacionPersonaJuridicaForm(forms.ModelForm):
             'nombre': _("Razon social")
         }
 
-    def clean_cuit(self):
-        cuit = self.cleaned_data['cuit']
-        if not re.match(r"^[0-9]{2}-[0-9]{7,8}-[0-9]$", cuit):
-            raise forms.ValidationError('CUIT inválido, por favor siga este formato XX-YYYYYYYY-Z')
-        return cuit
-
 
 class PersonalPropioForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(widget=DateInput(), label="Fecha de nacimiento")
 
     class Meta:
         model = PersonalPropio
-        exclude = ['domicilio', 'documentacion_retirada']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
+                  'rol_actuante']
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -177,12 +155,6 @@ class PersonalPropioForm(forms.ModelForm):
         if not regex_alfabetico.match(apellido):
             raise forms.ValidationError('El apellido de la persona, solo puede contener letras y/o espacios')
         return apellido
-
-    def clean_dni(self):
-        dni = self.cleaned_data['dni']
-        if not re.match(r"^[0-9]{7,}$", dni):
-            raise forms.ValidationError('El dni de la persona debe contener al menos 7 digitos y ser númerico')
-        return dni
 
     def clean_obra_social(self):
         obra_social = self.cleaned_data['obra_social']

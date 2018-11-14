@@ -5,6 +5,8 @@ from django.utils.timezone import now
 from personas import models as m
 from .choices import *
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 
 class Analisis(models.Model):
@@ -22,16 +24,27 @@ class Analisis(models.Model):
 
 class Porcino(models.Model):
     precinto = models.IntegerField(unique=True)
-    categoria_porcino = models.CharField(max_length=6, choices=Categoria_Porcino)
+    precinto2 = models.IntegerField(unique=True, blank=True, null=True)
+    categoria_porcino = models.CharField(max_length=6, choices=Categoria_Porcino, default='LECHON')
     analisis = models.ForeignKey('Analisis', on_delete=models.CASCADE)
+
+    def clean(self):
+        porcinos = Porcino.objects.all()
+        precintos1 = porcinos.values_list('precinto', flat=True)
+        precintos2 = porcinos.values_list('precinto2', flat=True)
+        if self.precinto in precintos2:
+            raise ValidationError({'precinto': _('Ya existe un Porcino con este Precinto')}, code='unique')
+        if self.precinto2 and self.precinto2 in precintos1:
+            raise ValidationError({'precinto2': _('Ya existe un Porcino con este Precinto')}, code='unique')
 
     def __str__(self):
         return "%s - %s" % (self.categoria_porcino, self.precinto)
 
     def to_json(self):
         return {
+            'categoria_porcino': self.categoria_porcino,
             'precinto': self.precinto,
-            'categoria_porcino': self.categoria_porcino
+            'precinto2': self.precinto2
         }
 
 

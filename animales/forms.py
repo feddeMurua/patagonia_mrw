@@ -64,9 +64,10 @@ class PorcinoForm(forms.ModelForm):
 
     class Meta:
         model = Porcino
-        fields = ['precinto', 'categoria_porcino']
+        fields = ['categoria_porcino', 'precinto', 'precinto2']
         labels = {
-            'categoria_porcino': _("Categoria del porcino")
+            'categoria_porcino': _("Categoria del porcino"),
+            'precinto2': _("Precinto n° 2")
         }
 
 

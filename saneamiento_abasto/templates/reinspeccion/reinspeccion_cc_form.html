@@ -302,12 +302,12 @@
                 $('.form-navigation .next').toggle(!atTheEnd);
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
 
-                if (index == 0) {
+                if (index === 0) {
                     $('.form-navigation .next').removeClass('hidden');
                 }
 
-                if (index == 1) {
-                    if ($('#table-list tr').length == 2) {
+                if (index === 1) {
+                    if ($('#table-list tr').length === 2) {
                         $('.form-navigation .next').addClass('hidden');
                     }
                     $('#table-list').each(function() {
@@ -315,13 +315,13 @@
                     });
                 }
 
-                if (index == 2) {
+                if (index === 2) {
                     getResumen();
                 }
             }
 
-            function hideNext () {
-                if ($('#table-list tr').length == 2) {
+            function hideNext() {
+                if ($('#table-list tr').length === 2) {
                     $('.form-navigation .next').addClass('hidden');
                 } else {
                     $('.form-navigation .next').removeClass('hidden');
@@ -400,11 +400,11 @@
         });
 
         function refresh_table(data){
-            productos = data['productos']
-            var $tbody = $("#table-list tbody");
+            var productos = data['productos'],
+            $tbody = $("#table-list tbody");
             $tbody.children().remove();
             for(var i = 0; i < productos.length; i++){
-                var producto = productos[i]['producto']['nombre']
+                var producto = productos[i]['producto']['nombre'];
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
                         "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
@@ -427,7 +427,7 @@
             var $tbody = $("#table-res tbody");
             $tbody.children().remove();
             for(var i = 0; i < productos.length; i++){
-                var producto = productos[i]['producto']['nombre']
+                var producto = productos[i]['producto']['nombre'];
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
                         "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
@@ -451,7 +451,7 @@
                     }
                 });
             });
-        };
+        }
 
         function confirmModificar(producto) {
             $('#modalModificar').modal();
@@ -470,11 +470,11 @@
                     }
                 });
             });
-        };
+        }
 
         $('#agregar_producto').on('shown.bs.modal', function () {
             $('#id_producto').select2('open');
-        })
+        });
 
         $.datepicker.setDefaults({
             maxDate: new Date(),
@@ -484,7 +484,7 @@
              }
         });
 
-        $('select').on('select2:close', function (e) {
+        $('select').on('select2:close', function() {
             var inputs = $(this).closest('form').find(':input:visible'),
             my_index = inputs.index(this);
             setTimeout(function() {
@@ -496,7 +496,7 @@
 
         $('.entab').keydown( function(e) {
             var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
-            if(key == 13) {
+            if(key === 13) {
                 e.preventDefault();
                 var inputs = $(this).closest('form').find(':input:visible');
                 inputs.eq(inputs.index(this) + 1).focus();

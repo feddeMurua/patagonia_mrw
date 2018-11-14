@@ -81,13 +81,13 @@
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                     },
-                    success: function(data) {
+                    success: function() {
                         $('#modalModificar').modal('hide');
                         $('#nueva_cant').val("");
                         location.reload();
                     }
                 });
             });
-        };
+        }
     </script>
 {% endblock %}

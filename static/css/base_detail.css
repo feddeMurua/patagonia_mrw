@@ -37,15 +37,15 @@
 }
 
 .panel-table .panel-body .table-bordered > tbody > tr > td:last-of-type {
-    border-right: 0px;
+    border-right: 0;
 }
 
 .panel-table .panel-body .table-bordered > tbody > tr > td:first-of-type {
-    border-left: 0px;
+    border-left: 0;
 }
 
 .panel-table .panel-body .table-bordered > tbody > tr:first-of-type > td {
-    border-bottom: 0px;
+    border-bottom: 0;
 }
 
 .panel-table .panel-heading .col h3 {

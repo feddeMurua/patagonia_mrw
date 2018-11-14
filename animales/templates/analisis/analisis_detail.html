@@ -41,15 +41,20 @@
         <table class="table table-striped table-porcinos">
             <thead>
                 <tr>
-                    <th>Precinto</th>
                     <th>Tipo</th>
+                    <th>Precinto</th>
                 </tr>
             </thead>
             <tbody>
                 {% for porcino in porcinos %}
                     <tr>
-                        <td>{{ porcino.precinto }}</td>
                         <td>{{ porcino.categoria_porcino }}</td>
+                        <td>
+                            {{ porcino.precinto }}
+                            {%  if porcino.precinto2 %}
+                                - {{ porcino.precinto2 }}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

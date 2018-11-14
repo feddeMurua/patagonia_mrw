@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^nuevo$', alta_analisis, name='nuevo_analisis'),
     url(r'^agregar_porcino$', agregar_porcino, name='agregar_porcino'),
     url(r'^eliminar_porcino/(?P<precinto>\d+)$', eliminar_porcino, name='eliminar_porcino'),
+    url(r'^modificar_porcino/(?P<analisis_pk>\d+)/(?P<pk>\d+)$', modificar_porcino, name='modificar_porcino'),
     url(r'^borrar/(?P<pk>\d+)$', baja_analisis, name='borrar_analisis'),
     url(r'^editar/(?P<pk>\d+)$', modificacion_analisis, name='modificacion_analisis'),
     url(r'^resultado/(?P<pk>\d+)$', resultado_analisis, name='resultado_analisis'),

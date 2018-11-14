@@ -1,10 +1,9 @@
-{% extends "base/base_form.html" %}
+{% extends 'base/base_form.html' %}
 {% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block title %}Análisis de Triquinósis{% endblock %}
 
 {% block more-stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/alta_analisis.css' %}"/>
     <style>
         tr th, td {
             text-align: center;
@@ -47,9 +46,11 @@
                                     <div class="col-xs-3 col-md-3">
                                         <h3 class="panel-title">Porcinos</h3>
                                     </div>
-                                    <div class="col-xs-3 col-md-3 pull-right">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="false" data-target="#agregar_porcino">Nuevo</button>
-                                    </div>
+                                    {% if not modificacion %}
+                                        <div class="col-xs-3 col-md-3 pull-right">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="false" data-target="#agregar_porcino">Nuevo</button>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="panel-body">
@@ -57,18 +58,28 @@
                                     <table class="table table-list table-bordered table-striped" id="table-list">
                                         <thead>
                                             <tr>
-                                                <th>Precinto</th>
                                                 <th>Categoria</th>
+                                                <th>Precinto</th>
                                                 <th><em class="glyphicon glyphicon-cog"></em></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for porcino in porcinos %}
                                                 <tr>
-                                                    <td>{{ porcino.precinto }}</td>
                                                     <td>{{ porcino.categoria_porcino }}</td>
                                                     <td>
-                                                        <a class="btn btn-danger btn-eliminar" onclick="confirmBaja('{{ porcino.precinto }}')" data-toggle="tooltip" title="Eliminar"><em class='glyphicon glyphicon-trash'></em></a>
+                                                        {{ porcino.precinto }}
+                                                        {%  if porcino.precinto2 %}
+                                                            - {{ porcino.precinto2 }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+
+                                                        {% if modificacion %}
+                                                            <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'analisis:modificar_porcino' analisis_pk porcino.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                                                        {% else %}
+                                                            <a class="btn btn-danger btn-eliminar" onclick="confirmBaja('{{ porcino.precinto }}')" data-toggle="tooltip" title="Eliminar"><em class='glyphicon glyphicon-trash'></em></a>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -99,12 +110,16 @@
                     <form action="" id="porcinoForm" data-url="{% url 'analisis:agregar_porcino' %}">
                         {% csrf_token %}
                         <div class="form-group">
+                            <label>Categoria</label>
+                            {{ porcino_form.categoria_porcino|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group">
                             <label>Precinto</label>
                             {{ porcino_form.precinto|add_class:"form-control" }}
                         </div>
-                        <div class="form-group">
-                            <label>Categoria</label>
-                            {{ porcino_form.categoria_porcino|add_class:"form-control" }}
+                        <div class="form-group .precinto2">
+                            <label>Precinto N° 2</label>
+                            {{ porcino_form.precinto2|add_class:"form-control" }}
                         </div>
                         <input type="submit" class="btn btn-info" name="add" value="Confirmar y Agregar otro" style="margin-top:0;"/>
                         <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
@@ -141,30 +156,55 @@
             maxDate: new Date()
         });
 
-        $(document).ready(function(){
-            $('#porcinoForm').submit(function(e) {
-                e.preventDefault();
-                $.post($(this).data('url'), $(this).serialize())
-                    .done(function(data) {
-                        if(data['success']) {
-                            refresh_table(data);
-                            document.getElementById("porcinoForm").reset();
+        var precinto2 = $('.precinto2'),
+        precinto2input = $('#id_precinto2'),
+        cat_porcino = $('#id_categoria_porcino');
+        precinto2.addClass('hidden');
+
+        cat_porcino.change(function() {
+            if (cat_porcino.val() !== 'LECHON') {
+                precinto2.removeClass('hidden');
+                precinto2input.prop('required', true);
+            } else {
+                precinto2.addClass('hidden');
+                precinto2input.prop('required', false);
+            }
+        });
+
+        $('#porcinoForm').submit(function(e) {
+            e.preventDefault();
+            $.post($(this).data('url'), $(this).serialize())
+                .done(function(data) {
+                    if(data['success']) {
+                        refresh_table(data);
+                        document.getElementById("porcinoForm").reset();
+                    } else {
+                        if (data['errores'] !== "") {
+                            $('.error_precinto').remove();
+                            var errores = data['errores'];
+                            $.each(errores, function(index, value) {
+                                $('#id_' + value[0]).after("<span class='error_precinto' style='color:red'>" + value[1] + "</span>");
+                            });
                         } else {
-                            alert("Este precinto ya se encuentra cargado");
+                            alert(data['msg']);
                         }
-                    });
-            });
+                    }
+                })
         });
 
         function refresh_table(data){
-            porcinos = data['porcinos']
+            var porcinos = data['porcinos'];
             var $tbody = $("#table-list tbody");
             $tbody.children().remove();
-            for(var i = 0; i < porcinos.length; i++){
-                var porcino = porcinos[i]['precinto']
+            for (var i = 0; i < porcinos.length; i++){
+                var porcino = porcinos[i]['precinto'],
+                precinto2 = " - " + porcinos[i]['precinto2'];
+                if (porcinos[i]['precinto2'] === null) {
+                    precinto2 = ""
+                }
                 var row = "<tr align='center'>" +
-                        "<td>" + porcino + "</td>" +
                         "<td>" + porcinos[i]['categoria_porcino'] + "</td>" +
+                        "<td>" + porcino + precinto2 + "</td>" +
                         "<td><a class='btn btn-danger btn-eliminar' onclick='confirmBaja(\"" + porcino + "\")' data-toggle='tooltip' title='Eliminar'><em class='glyphicon glyphicon-trash'></em></a></td>" +
                     "</tr>";
                 $tbody.append(row);
@@ -186,6 +226,6 @@
                     }
                 });
             });
-        };
+        }
     </script>
 {% endblock %}

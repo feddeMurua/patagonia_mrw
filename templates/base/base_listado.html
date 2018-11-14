@@ -117,22 +117,22 @@
             });
 
             $('[data-toggle="tooltip"]').tooltip();
+        });
 
-            $('.btn-baja').click(function() {
-                $('#modalBaja').modal();
-                var urlBaja = $(this).data('url');
-                $('.btn-confirm-baja').click(function() {
-                    $.ajax({
-                        url: urlBaja,
-                        type: 'POST',
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                        },
-                        success: function() {
-                            $('#modalBaja').modal('hide');
-                            $('#modalConfirmBaja').modal();
-                        }
-                    });
+        $('.btn-baja').click(function() {
+            $('#modalBaja').modal();
+            var urlBaja = $(this).data('url');
+            $('.btn-confirm-baja').click(function() {
+                $.ajax({
+                    url: urlBaja,
+                    type: 'POST',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function() {
+                        $('#modalBaja').modal('hide');
+                        $('#modalConfirmBaja').modal();
+                    }
                 });
             });
         });

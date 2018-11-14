@@ -44,7 +44,7 @@
         fecha_pago = $('#id_fecha_pago'),
         pago_normal = $('.pago_normal');
 
-        tipo_pago = $("input[name='radio_tipo_pago']:checked").val();
+        var tipo_pago = $("input[name='radio_tipo_pago']:checked").val();
         hideTipoPago();
 
         $('#radio_pago').change(function(){
@@ -53,7 +53,7 @@
         });
 
         function hideTipoPago() {
-            if (tipo_pago == 'diferido') {
+            if (tipo_pago === 'diferido') {
                 pago_diferido.removeClass('hidden');
                 fecha_pago.prop('required', true);
                 pago_normal.addClass('hidden');
