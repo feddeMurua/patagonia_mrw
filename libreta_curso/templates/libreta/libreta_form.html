@@ -17,8 +17,10 @@
           <strong>{{ mensaje }}</strong>
         </div>
     {% endif %}
+    <!--
     <div class="form-group">
         <label>Foto</label><br>
+        <input type="file" id="foto_ul">
         {% if libreta.foto %}
             <img id="old-img" src="{{ libreta.foto.url }}" style="max-width:320px; max-height:240px">
         {% endif %}
@@ -33,6 +35,7 @@
             <button type="button" class="btn btn-danger hidden" id="cancelar-foto">Cancelar</button>
         </div>
     </div>
+    -->
 {% endblock %}
 
 {% block form-right %}
@@ -48,11 +51,14 @@
 {% endblock %}
 
 {% block more-scripts %}
-    <script src="{% static 'js/webrtc.js' %}"></script>
+    <!-- <script src="{% static 'js/webrtc.js' %}"></script> -->
     <script>
         $.datepicker.setDefaults({
             maxDate: new Date()
         });
+
+        $('#id_foto').removeClass('form-control');
+        $('#foto-clear_id').checkboxradio();
 
         var tipo_libreta = $('#id_tipo_libreta'),
         meses_validez = $('#meses_validez');

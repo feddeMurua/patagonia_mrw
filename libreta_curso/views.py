@@ -245,8 +245,10 @@ def alta_libreta(request):
                         months=int(request.POST['meses']))
                 if cursos:
                     libreta.curso = cursos[-1]
+                '''
                 if request.POST['foto'] and request.POST['foto'] != "borrar":
                     libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+                '''
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()
@@ -289,10 +291,12 @@ def modificacion_libreta(request, pk):
         form = ModificacionLibretaForm(request.POST, instance=libreta)
         if form.is_valid():
             libreta = form.save(commit=False)
+            '''
             if request.POST['foto'] == 'borrar':
                 libreta.foto = None
             elif request.POST['foto'] == 'borrar':
                 libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+            '''
             libreta.save()
             log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
@@ -320,10 +324,12 @@ def renovacion_libreta(request, pk):
                 libreta.curso = cursos[-1]
                 libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(years=1)
                 libreta.tipo_libreta = 'Blanca'
+                '''
                 if request.POST['foto'] == 'borrar':
                     libreta.foto = None
                 elif request.POST['foto'] == 'borrar':
                     libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+                '''
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()

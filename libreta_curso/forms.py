@@ -130,7 +130,7 @@ class LibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        exclude = ['fecha', 'curso', 'fecha_vencimiento', 'foto']
+        exclude = ['fecha', 'curso', 'fecha_vencimiento']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
@@ -165,7 +165,7 @@ class ModificacionLibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        fields = ['observaciones']
+        fields = ['observaciones', 'foto']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }
@@ -176,7 +176,7 @@ class RenovacionLibretaForm(forms.ModelForm):
 
     class Meta:
         model = LibretaSanitaria
-        exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento', 'tipo_libreta', 'foto']
+        exclude = ['persona', 'curso', 'fecha', 'fecha_vencimiento', 'tipo_libreta']
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
         }

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django import forms
-from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext as _
 from functools import partial
 from .models import *
@@ -24,7 +23,6 @@ class AltaAnalisisForm(forms.ModelForm):
     class Meta:
         model = Analisis
         exclude = ['medico_veterinario', 'resultado']
-        fields = '__all__'
         widgets = {
             'procedencia': AddAnotherWidgetWrapper(
                 forms.Select,
@@ -69,11 +67,6 @@ class PorcinoForm(forms.ModelForm):
         labels = {
             'categoria_porcino': _("Categoria del porcino")
         }
-
-
-AltaPorcinoFormSet = formset_factory(PorcinoForm, min_num=1, validate_min=True, extra=0)
-
-ModificacionPorcinoFormSet = forms.modelformset_factory(Porcino, fields=('precinto', 'categoria_porcino'), extra=0)
 
 
 class SolicitudForm(forms.ModelForm):

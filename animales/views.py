@@ -33,18 +33,15 @@ def lista_analisis(request):
 
 @login_required(login_url='login')
 def alta_analisis(request):
+    porcino_form = PorcinoForm
     if request.method == 'POST':
         form = AltaAnalisisForm(request.POST)
-        formset = AltaPorcinoFormSet(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
-        if form.is_valid() & formset.is_valid():
+        if form.is_valid():
             analisis = form.save()
+            alta_porcinos(request, analisis)
             servicio = 'Analisis de triquinosis'
-            for form in formset.forms:
-                porcino_item = form.save(commit=False)
-                porcino_item.analisis = analisis
-                porcino_item.save()
             if request.POST['optradio'] == 'previa':
                 if detalle_mov_form.is_valid():
                     pd_v.movimiento_previo(request, detalle_mov_form, servicio, analisis, servicio)
@@ -54,12 +51,97 @@ def alta_analisis(request):
                     pd_v.nuevo_movimiento(request, mov_form, servicio, analisis, servicio)
                     return redirect('analisis:lista_analisis')
     else:
+        if 'porcinos' in request.session:
+            del request.session['porcinos']
+        request.session['porcinos'] = []
         form = AltaAnalisisForm
-        formset = AltaPorcinoFormSet
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'mov_form': mov_form,
-                                                           'detalle_mov_form': detalle_mov_form})
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'porcino_form': porcino_form,
+                                                           'mov_form': mov_form, 'detalle_mov_form': detalle_mov_form})
+
+
+def existe_porcino(request, porcino):
+    for item in request.session['porcinos']:
+        if item['precinto'] == porcino.precinto:
+            return True
+    return False
+
+
+@login_required(login_url='login')
+def agregar_porcino(request):
+    form = PorcinoForm(request.POST)
+    success = True
+    if form.is_valid():
+        porcino = form.save(commit=False)
+        if existe_porcino(request, porcino):
+            success = False
+        else:
+            request.session['porcinos'].append(porcino.to_json())
+            request.session.modified = True
+    return JsonResponse({'success': success, 'porcinos': request.session['porcinos']})
+
+
+@login_required(login_url='login')
+def eliminar_porcino(request, precinto):
+    porcinos = request.session['porcinos']
+    porcinos[:] = [p for p in porcinos if p['precinto'] != int(precinto)]
+    request.session['porcinos'] = porcinos
+    return JsonResponse({'porcinos': request.session['porcinos']})
+
+
+def alta_porcinos(request, analisis):
+    for porcino in request.session['porcinos']:
+        item = Porcino(precinto=porcino['precinto'], categoria_porcino=porcino['categoria_porcino'], analisis=analisis)
+        item.save()
+    return HttpResponse()
+
+
+def actualizacion_porcinos(request, analisis):
+    dbporcinos = Porcino.objects.filter(analisis=analisis)
+    dbprecintos = dbporcinos.values_list('precinto', flat=True)
+    sporcinos = request.session['porcinos']
+    sprecintos = []
+    for porcino in sporcinos:
+        sprecintos.append(porcino['precinto'])
+    for porcino in sporcinos:
+        if porcino['precinto'] not in dbprecintos:
+            item = Porcino(precinto=porcino['precinto'], categoria_porcino=porcino['categoria_porcino'],
+                           analisis=analisis)
+            item.save()
+    for porcino in dbporcinos:
+        if porcino.precinto not in sprecintos:
+            porcino.delete()
+    return HttpResponse()
+
+
+def porcinostoSession(request, analisis):
+    request.session['porcinos'] = []
+    porcinos = Porcino.objects.filter(analisis=analisis)
+    for porcino in porcinos:
+        request.session['porcinos'].append(porcino.to_json())
+        request.session.modified = True
+    return HttpResponse()
+
+
+@login_required(login_url='login')
+def modificacion_analisis(request, pk):
+    porcino_form = PorcinoForm
+    analisis = Analisis.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ModificacionAnalisisForm(request.POST, instance=analisis)
+        if form.is_valid():
+            analisis = form.save()
+            actualizacion_porcinos(request, analisis)
+            log_modificar(request.user.id, analisis, 'Analisis de Triquinosis')
+            return redirect('analisis:lista_analisis')
+    else:
+        if 'porcinos' in request.session:
+            del request.session['porcinos']
+        porcinostoSession(request, analisis)
+        form = ModificacionAnalisisForm(instance=analisis)
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'porcinos': request.session['porcinos'],
+                                                           'porcino_form': porcino_form, 'modificacion': True})
 
 
 @login_required(login_url='login')
@@ -68,27 +150,6 @@ def baja_analisis(request, pk):
     log_eliminar(request.user.id, analisis, 'Analisis de Triquinosis')
     analisis.delete()
     return HttpResponse()
-
-
-@login_required(login_url='login')
-def modificacion_analisis(request, pk):
-    analisis = Analisis.objects.get(pk=pk)
-    if request.method == 'POST':
-        form = ModificacionAnalisisForm(request.POST, instance=analisis)
-        formset = ModificacionPorcinoFormSet(request.POST)
-        if form.is_valid() & formset.is_valid():
-            analisis = form.save()
-            for porcino_form in formset:
-                porcino = porcino_form.save(commit=False)
-                porcino.analisis = analisis
-                porcino.save()
-            log_modificar(request.user.id, analisis, 'Analisis de Triquinosis')
-            return redirect('analisis:lista_analisis')
-    else:
-        form = ModificacionAnalisisForm(instance=analisis)
-        formset = ModificacionPorcinoFormSet(queryset=Porcino.objects.filter(analisis__pk=pk))
-    return render(request, 'analisis/analisis_form.html', {'form': form, 'formset': formset, 'can_delete': False,
-                                                           'modificacion': True})
 
 
 @login_required(login_url='login')
