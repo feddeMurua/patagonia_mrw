@@ -52,9 +52,11 @@
     <script src="{% static 'js/jquery.mask.js' %}"></script>
     <script>
         {% block no-select2 %}
-            $('select').select2({
-                theme: "bootstrap",
-                width: "100%"
+            $(document).ready(function() {
+                $('select').select2({
+                    theme: "bootstrap",
+                    width: "100%"
+                });
             });
         {% endblock %}
 

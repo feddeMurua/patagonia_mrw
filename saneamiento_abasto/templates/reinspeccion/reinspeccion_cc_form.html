@@ -287,6 +287,22 @@
     <script src="{% static 'js/parsley.js' %}"></script>
     <script src="{% static 'js/118n/es.js' %}"></script>
     <script>
+        function matchStart(params, data) {
+            params.term = params.term || '';
+            if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) === 0) {
+                return data;
+            }
+            return null;
+        }
+
+        $(document).ready(function() {
+            $('#id_producto').select2({
+                theme: "bootstrap",
+                width: "100%",
+                matcher: matchStart
+            });
+        });
+
         $(function () {
             var $sections = $('.form-section');
 

@@ -141,6 +141,22 @@
 
 {% block more-scripts %}
     <script>
+        function matchStart(params, data) {
+            params.term = params.term || '';
+            if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) === 0) {
+                return data;
+            }
+            return null;
+        }
+
+        $(document).ready(function() {
+            $('#id_producto').select2({
+                theme: "bootstrap",
+                width: "100%",
+                matcher: matchStart
+            });
+        });
+
         $(document).ready(function(){
             $("#productoForm").submit(function(e) {
                 e.preventDefault();
