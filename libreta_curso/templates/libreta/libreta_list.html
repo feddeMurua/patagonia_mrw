@@ -1,5 +1,5 @@
 {% extends "base/base_listado.html" %}
-{% load staticfiles bootstrap3 %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block title %}Libretas Sanitarias{% endblock %}
 
@@ -8,6 +8,7 @@
 {% block panel-title %}Libretas{% endblock %}
 
 {% block btn-nuevo %}
+    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-backdrop="false" data-target="#modalSolicitud">Imprimir formulario</button>
     <a href="{% url 'libretas:nueva_libreta' %}" class="btn btn-sm btn-primary btn-create">Nueva Libreta</a>
 {% endblock %}
 
@@ -38,9 +39,40 @@
                     {% if user.is_staff %}
                         <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'libretas:borrar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     {% endif %}
-                    <a class="btn btn-info" data-toggle="tooltip" title="Renovacion" href="{% url 'libretas:renovacion_libreta' libreta.pk %}"><em class="glyphicon glyphicon-refresh"></em></a>
+                    <a class="btn btn-info" data-toggle="tooltip" title="Imprimir formulario" target="_blank" href="{% url 'libretas:pdf_renovacion' libreta.pk %}"><em class="glyphicon glyphicon-list"></em></a>
+                    <a class="btn btn-primary" data-toggle="tooltip" title="Renovacion" href="{% url 'libretas:renovacion_libreta' libreta.pk %}"><em class="glyphicon glyphicon-refresh"></em></a>
                 </td>
             </tr>
         {% endfor %}
     </tbody>
+
+    <div id="modalSolicitud" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Imprimir solicitud</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="solicitudForm" target="_blank">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Persona</label>
+                            {{ form.persona|add_class:"form-control" }}
+                        </div>
+                        <input type="submit" class="btn btn-info btn-solicitud" value="Confirmar" style="margin-top:0;"/>
+                        <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        $("#solicitudForm").submit(function(e) {
+            $('#modalSolicitud').modal('hide');
+        });
+    </script>
 {% endblock %}

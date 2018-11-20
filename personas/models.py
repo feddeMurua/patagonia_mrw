@@ -34,7 +34,7 @@ class Domicilio(models.Model):
     calle = models.CharField(max_length=50)
     calle_entre1 = models.CharField(max_length=50, null=True, blank=True)
     calle_entre2 = models.CharField(max_length=50, null=True, blank=True)
-    nro = models.IntegerField()
+    nro = models.IntegerField(null=True, blank=True)
     dpto = models.CharField(max_length=50, null=True, blank=True)
     piso = models.IntegerField(null=True, blank=True)
     localidad = models.ForeignKey('Localidad', on_delete=models.CASCADE)
@@ -57,7 +57,7 @@ class DomicilioRural(models.Model):
 
 class PersonaGenerica(PolymorphicModel):
     nombre = models.CharField(max_length=50)
-    domicilio = models.ForeignKey('domicilio')
+    domicilio = models.ForeignKey('Domicilio')
     telefono = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, blank=True)
 

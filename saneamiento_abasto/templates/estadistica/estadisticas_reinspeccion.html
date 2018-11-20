@@ -9,6 +9,7 @@
     <ul>
         <li><a href="#tabs-1">Reinspecciones Veterinarias</a></li>
         <li><a href="#tabs-2">Origen de Reinspecciones</a></li>
+        <li><a href="#tabs-3">Reinspecciones de Ganado por Origen</a></li>
     </ul>
     <div id="tabs-1">
         <div class="row">
@@ -80,5 +81,35 @@
                 <canvas id="origenes_kg" class="doughnut"></canvas>
             </div>
         </div>
+    </div>
+    <div id="tabs-3">
+        <div class="tabla-datos">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td align="center">Origen</td>
+                        <td align="center">Bovinos</td>
+                        <td align="center">Porcinos</td>
+                        <td align="center">Ovinos</td>
+                        <td align="center">Total de Kg</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in dict_gan.items %}
+                        <tr>
+                            <td align="center">{{ key }}</td>
+                            {% for k2, v2 in value.items %}
+                                <td align="center">{{ v2 }} Kg</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                        <tr>
+                            <td align="center" colspan="4"><b>Total General de Kg</b></td>
+                            <td align="center"><b>{{ total_general_gan }} Kg</b></td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+        <canvas class="barStacked" width="400" height="150"></canvas>
     </div>
 {% endblock %}

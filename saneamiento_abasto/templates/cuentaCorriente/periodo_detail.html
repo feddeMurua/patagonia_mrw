@@ -34,6 +34,7 @@
                 <td>{{ detalle.reinspeccion.total_kg }},0 Kg</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk 0 %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                    <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'reinspecciones:baja_reinspeccion' detalle.reinspeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>
         {% endfor %}

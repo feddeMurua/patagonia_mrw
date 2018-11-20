@@ -154,7 +154,7 @@ def resultado_analisis(request, pk):
             return redirect('analisis:lista_analisis')
     else:
         form = ResultadoAnalisisForm(instance=analisis)
-    return render(request, 'analisis/analisis_form.html', {'form': form, 'modificacion': True})
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'modificacion': True, 'resultado': True})
 
 
 @login_required(login_url='login')

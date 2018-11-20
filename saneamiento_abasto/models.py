@@ -50,7 +50,7 @@ class Reinspeccion(models.Model):
     turno = models.CharField(max_length=10, choices=TURNO_REINSPECCION)
     inspectores = models.ManyToManyField(m.PersonalPropio)
     precintado = models.IntegerField(null=True, blank=True)
-    certificado = models.IntegerField(unique=True)
+    certificado = models.CharField(max_length=15, unique=True)
     abastecedor = models.ForeignKey('Abastecedor', on_delete=models.CASCADE)
     total_kg = models.IntegerField(validators=[MinValueValidator(1)])
     importe = models.FloatField(null=True, blank=True)

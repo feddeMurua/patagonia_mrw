@@ -1,11 +1,5 @@
 {% extends "easy_pdf/base.html" %}
 
-{%block page_header%}
-    <div id="page-header">
-        <p><b><u>CONSENTIMIENTO INFORMADO PARA CIRUGIA</u></b></p>
-    </div>
-{% endblock %}
-
 {% block extra_style %}
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <style>
@@ -19,12 +13,17 @@
         td, th {
             text-align: center;
         }
+        .titulo {
+            text-align: center;
+            font-size: 16px;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
     <div id="content">
         <div class="main">
+            <p class="titulo"><b><u>CONSENTIMIENTO INFORMADO PARA CIRUGIA</u></b></p>
             <p>
                 En el dia de la fecha el Sr.(a) {{ esterilizacion.interesado.apellido }},
                 {{ esterilizacion.interesado.nombre }} DNI N° {{ esterilizacion.interesado.dni }} domiciliado en
