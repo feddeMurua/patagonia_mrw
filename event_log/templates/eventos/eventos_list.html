@@ -14,7 +14,7 @@
 {% block panel-title %}Eventos{% endblock %}
 
 {% block btn-nuevo %}
-    <form class="form-filtro form-inline" method="post" style="margin: 0px">
+    <form class="form-filtro form-inline" method="post" style="margin: 0">
         {% csrf_token %}
         {{ rango_form.media }}
         {% for field in rango_form %}

@@ -44,7 +44,9 @@
                                                 <td>{{ detalles.total_kg }}</td>
                                                 <td>${{ detalles.monto }}</td>
                                                 <td>
-                                                    <input class="check-pagar" type="checkbox" name="pagar" value="{{ periodo }}"><br>
+                                                    <label>
+                                                        <input class="check-pagar" type="checkbox" name="pagar" value="{{ periodo }}">
+                                                    </label><br>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -94,11 +96,12 @@
                 $('.form-navigation .next').toggle(!atTheEnd);
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
 
-                if (index == 0) {
-                    if (!$('input[type="checkbox"]').is(':checked')) {
+                if (index === 0) {
+                    var checkbox = $('input[type="checkbox"]');
+                    if (!checkbox.is(':checked')) {
                         $('.form-navigation .next').addClass('hidden');
                     }
-                    $('input[type="checkbox"]').click(hideNext);
+                    checkbox.click(hideNext);
                 }
             }
 

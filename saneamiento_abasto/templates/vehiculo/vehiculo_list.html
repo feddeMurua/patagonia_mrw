@@ -36,38 +36,3 @@
         {% endfor %}
     </tbody>
 {% endblock %}
-
-{% block more-scripts %}
-    <script>
-        $('.btn-disp').click(function ingresarDisp(e) {
-            var pk = $(e.target).data('pk');
-            swal({
-                title: 'Ingrese el número de disposicion a registrar',
-                input: 'text',
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Confirmar",
-                cancelButtonText: "Cancelar"
-            }).then(function(text){
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRFToken": Cookies.get('csrftoken')
-                    }
-                });
-                $.ajax({
-                    url: 'nroDisposicion/' + pk + '/' + text,
-                    type: 'POST',
-                    success: function(e) {
-                        swal('Accion exitosa', 'Se asigno el número de disposicion correctamente', 'success').then(
-                            function(){
-                                location.reload()
-                            });
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        swal('Error de operacion', 'Por favor intente nuevamente', 'error');
-                    }
-                });
-            });
-        });
-    </script>
-{% endblock %}

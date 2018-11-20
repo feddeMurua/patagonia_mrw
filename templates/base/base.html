@@ -49,11 +49,14 @@
 
     <script src="{% static 'js/particles.js' %}"></script>
     <script src="{% static 'js/select2.full.js' %}"></script>
+    <script src="{% static 'js/jquery.mask.js' %}"></script>
     <script>
         {% block no-select2 %}
-            $('select').select2({
-                theme: "bootstrap",
-                width: "100%"
+            $(document).ready(function() {
+                $('select').select2({
+                    theme: "bootstrap",
+                    width: "100%"
+                });
             });
         {% endblock %}
 
@@ -68,7 +71,7 @@
             dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
             dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
             weekHeader: 'Sm',
-            dateFormat: 'dd/mm/yy',
+            dateFormat: 'dd/mm/yy'
         };
 
         $.datepicker.setDefaults($.datepicker.regional['es']);
@@ -82,7 +85,8 @@
                 onClose: function(selectedDate) {
                     $("#fecha").datepicker("option","minDate",selectedDate);
                 }
-            });
+            })
+            .mask('00/00/0000');
         });
     </script>
     {% block scripts %}

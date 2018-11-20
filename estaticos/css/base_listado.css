@@ -30,20 +30,20 @@ tr th, td {
 
 .panel-table .panel-body .table-bordered > thead > tr > th:last-of-type,
 .panel-table .panel-body .table-bordered > tbody > tr > td:last-of-type {
-    border-right: 0px;
+    border-right: 0;
 }
 
 .panel-table .panel-body .table-bordered > thead > tr > th:first-of-type,
 .panel-table .panel-body .table-bordered > tbody > tr > td:first-of-type {
-    border-left: 0px;
+    border-left: 0;
 }
 
 .panel-table .panel-body .table-bordered > tbody > tr:first-of-type > td {
-    border-bottom: 0px;
+    border-bottom: 0;
 }
 
 .panel-table .panel-body .table-bordered > thead > tr:first-of-type > th {
-    border-top: 0px;
+    border-top: 0;
 }
 
 .panel-table .panel-heading .col h3 {

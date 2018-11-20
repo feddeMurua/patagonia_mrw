@@ -9,7 +9,7 @@
 
 {% block extra-buttons %}
     <div class="form-group">
-        <label>Rubro del vehículo</label>
+        <label for="id_rubro_vehiculo">Rubro del vehículo</label>
         <select name="rubro_vehiculo" class="form-control selectized" id="id_rubro_vehiculo" tabindex="-1" style="display: none;"></select>
     </div>
 {% endblock %}
@@ -21,7 +21,7 @@
 {% block more-scripts %}
     <script>
         var tipo_vehiculo = $('#id_tipo_vehiculo'),
-        tipo_tpp = $('#id_tipo_tpp')
+        tipo_tpp = $('#id_tipo_tpp'),
         disp_res = $('#id_disposicion_resolucion'),
         categoria = $('#id_categoria'),
         rubro = $('#id_rubro_vehiculo');
@@ -30,7 +30,7 @@
         hideFields();
 
         function hideFields() {
-            if (tipo_vehiculo.val() == 'TPP') {
+            if (tipo_vehiculo.val() === 'TPP') {
                 tipo_tpp.parent().removeClass('hidden');
                 tipo_tpp.prop('required', true);
                 disp_res.parent().removeClass('hidden');
@@ -52,7 +52,7 @@
         setOptionsSelect();
 
         function setOptionsSelect() {
-            var id_categoria = categoria.val()
+            var id_categoria = categoria.val();
             if (id_categoria) {
                 $.ajax({
                     url: '/vehiculos/getRubros/' + id_categoria,
@@ -64,7 +64,7 @@
                             rubro.append(nuevo).trigger('change');
                         })
                     },
-                    error: function(err){
+                    error: function(){
                         alert("Fallo Ajax");
                     }
                 });

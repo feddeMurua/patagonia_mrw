@@ -18,7 +18,7 @@
 
 {% block content %}
     <div class="container container-form">
-        <form method="post" class="reinspeccion-form">
+        <form method="post" class="reinspeccion-form" id="reinspeccion-form">
             {% csrf_token %}
             <div class="form-section">
                 <div class="panel panel-primary">
@@ -27,13 +27,34 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Fecha de realización *</label>
-                                    {{ form.fecha|add_class:'form-control' }}
+                                    {{ form.fecha|add_class:'form-control'|add_class:'entab' }}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Turno *</label>
-                                    {{ form.turno }}
+                                    {{ form.turno|add_class:'entab' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Inspectores *</label>
+                            {{ form.inspectores|add_class:'entab' }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Precintado</label>
+                                    {{ form.precintado|add_class:'form-control'|add_class:'entab' }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>N° de Certificado *</label>
+                                    {{ form.certificado|add_class:'form-control'|add_class:'entab' }}
+                                    {% for error in form.certificado.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -41,34 +62,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Abastecedor *</label>
-                                    {{ form.abastecedor }}
+                                    {{ form.abastecedor|add_class:'entab' }}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Origen *</label>
-                                    {{ form.origen|attr:'required:true' }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Inspectores *</label>
-                            {{ form.inspectores }}
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Precintado</label>
-                                    {{ form.precintado|add_class:'form-control' }}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>N° de Certificado *</label>
-                                    {{ form.certificado|add_class:'form-control' }}
-                                    {% for error in form.certificado.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
+                                    {{ form.origen|attr:'required:true'|add_class:'entab' }}
                                 </div>
                             </div>
                         </div>
@@ -287,6 +287,22 @@
     <script src="{% static 'js/parsley.js' %}"></script>
     <script src="{% static 'js/118n/es.js' %}"></script>
     <script>
+        function matchStart(params, data) {
+            params.term = params.term || '';
+            if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) === 0) {
+                return data;
+            }
+            return null;
+        }
+
+        $(document).ready(function() {
+            $('#id_producto').select2({
+                theme: "bootstrap",
+                width: "100%",
+                matcher: matchStart
+            });
+        });
+
         $(function () {
             var $sections = $('.form-section');
 
@@ -302,12 +318,12 @@
                 $('.form-navigation .next').toggle(!atTheEnd);
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
 
-                if (index == 0) {
+                if (index === 0) {
                     $('.form-navigation .next').removeClass('hidden');
                 }
 
-                if (index == 1) {
-                    if ($('#table-list tr').length == 2) {
+                if (index === 1) {
+                    if ($('#table-list tr').length === 2) {
                         $('.form-navigation .next').addClass('hidden');
                     }
                     $('#table-list').each(function() {
@@ -315,13 +331,13 @@
                     });
                 }
 
-                if (index == 2) {
+                if (index === 2) {
                     getResumen();
                 }
             }
 
-            function hideNext () {
-                if ($('#table-list tr').length == 2) {
+            function hideNext() {
+                if ($('#table-list tr').length === 2) {
                     $('.form-navigation .next').addClass('hidden');
                 } else {
                     $('.form-navigation .next').removeClass('hidden');
@@ -400,11 +416,11 @@
         });
 
         function refresh_table(data){
-            productos = data['productos']
-            var $tbody = $("#table-list tbody");
+            var productos = data['productos'],
+            $tbody = $("#table-list tbody");
             $tbody.children().remove();
             for(var i = 0; i < productos.length; i++){
-                var producto = productos[i]['producto']['nombre']
+                var producto = productos[i]['producto']['nombre'];
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
                         "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
@@ -427,7 +443,7 @@
             var $tbody = $("#table-res tbody");
             $tbody.children().remove();
             for(var i = 0; i < productos.length; i++){
-                var producto = productos[i]['producto']['nombre']
+                var producto = productos[i]['producto']['nombre'];
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
                         "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
@@ -451,7 +467,7 @@
                     }
                 });
             });
-        };
+        }
 
         function confirmModificar(producto) {
             $('#modalModificar').modal();
@@ -470,22 +486,38 @@
                     }
                 });
             });
-        };
+        }
 
         $('#agregar_producto').on('shown.bs.modal', function () {
             $('#id_producto').select2('open');
-        })
-
-        $('#id_producto').on('select2:close', function () {
-            setTimeout(function() {
-                $('.select2-container--focus').removeClass('select2-container--focus');
-                $(':focus').blur();
-                $('#id_kilo_producto').focus();
-            }, 1);
         });
 
         $.datepicker.setDefaults({
-            maxDate: new Date()
+            maxDate: new Date(),
+            onClose: function(selectedDate) {
+                $(".datepicker").datepicker("option", "minDate", selectedDate);
+                $(this).parent().next().children().focus();
+             }
         });
+
+        $('select').on('select2:close', function() {
+            var inputs = $(this).closest('form').find(':input:visible'),
+            my_index = inputs.index(this);
+            setTimeout(function() {
+                $('.select2-container--focus').removeClass('select2-container--focus');
+                $(':focus').blur();
+                inputs.eq(my_index + 1).focus();
+            }, 1);
+        });
+
+        $('.entab').keydown( function(e) {
+            var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+            if(key === 13) {
+                e.preventDefault();
+                var inputs = $(this).closest('form').find(':input:visible');
+                inputs.eq(inputs.index(this) + 1).focus();
+            }
+        });
+
     </script>
 {% endblock %}

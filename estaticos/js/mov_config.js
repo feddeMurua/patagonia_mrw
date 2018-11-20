@@ -1,15 +1,14 @@
 var previa = $('.previa'),
-nueva = $('.nueva')
+nueva = $('.nueva'),
 movimiento = $('#id_movimiento'),
 titular = $('#id_titular'),
-nro_ingreso = $('#id_nro_ingreso'),
 forma_pago = $('#id_forma_pago'),
 nro_cheque = $('#id_nro_cheque');
 
 forma_pago.change(hideNroCheque);
 hideNroCheque();
 
-tipo_factura = $("input[name='optradio']:checked").val();
+var tipo_factura = $("input[name='optradio']:checked").val();
 hideFields();
 
 $('#radio_options').change(function() {
@@ -18,7 +17,7 @@ $('#radio_options').change(function() {
 });
 
 function hideFields() {
-    if (tipo_factura == 'previa') {
+    if (tipo_factura === 'previa') {
         $('.previa :input').prop('required', true);
         $('.nueva :input').prop('required', false);
         previa.removeClass('hidden');
@@ -33,7 +32,7 @@ function hideFields() {
 }
 
 function hideNroCheque() {
-    if (forma_pago.val() == 'Cheque') {
+    if (forma_pago.val() === 'Cheque') {
         nro_cheque.parent().removeClass('hidden');
         nro_cheque.prop('required', true);
     } else {
@@ -44,5 +43,5 @@ function hideNroCheque() {
 
 function requireNone() {
     $('.previa :input').prop('required', false);
-    $('nueva :input').prop('required', false);
+    $('.nueva :input').prop('required', false);
 }

@@ -1,0 +1,24 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Porcino{% endblock %}
+
+{% block url-volver %}{% url 'analisis:modificacion_analisis' analisis_pk %}{% endblock %}
+
+{% block header-title %}Modificación de Porcino{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        var precinto2 = $('#id_precinto2'),
+        precinto2group = precinto2.parent(),
+        cat_porcino = $('#id_categoria_porcino');
+
+        if (cat_porcino.val() === 'LECHON') {
+                precinto2group.addClass('hidden');
+                cat_porcino.prop('disabled', true);
+            } else {
+                $('#id_categoria_porcino option[value="LECHON"]').remove();
+                precinto2.prop('required', true);
+            }
+    </script>
+{% endblock %}

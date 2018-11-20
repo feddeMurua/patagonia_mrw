@@ -33,6 +33,12 @@ class ReinspeccionForm(forms.ModelForm):
         labels = {
             'certificado': _("N° de certificado")
         }
+        widgets = {
+            'origen': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_localidad'),
+            )
+        }
 
 
 class ReinspeccionCCForm(forms.ModelForm):
@@ -45,6 +51,12 @@ class ReinspeccionCCForm(forms.ModelForm):
         fields = '__all__'
         labels = {
             'certificado': _("N° de certificado")
+        }
+        widgets = {
+            'origen': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_localidad'),
+            )
         }
 
 
@@ -116,7 +128,7 @@ class MarcaVehiculoForm(forms.ModelForm):
 class ModificarTSAForm(forms.ModelForm):
     class Meta:
         model = Vehiculo
-        exclude = ['titular', 'tipo_vehiculo', 'rubro_vehiculo']
+        exclude = ['titular', 'tipo_tpp', 'tipo_vehiculo', 'rubro_vehiculo']
         labels = {
             'disposicion_resolucion': _("Disposicion")
         }

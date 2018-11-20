@@ -158,14 +158,15 @@
                 $('.form-navigation .next').toggle(!atTheEnd);
                 $('.form-navigation [type=submit]').toggle(atTheEnd);
 
-                if (index=1) {
+                if (index === 1) {
                     getResumen();
                 }
             }
 
             function getResumen() {
                 $('#id-turno-res').text($('#id_turno').val());
-                var inspectores = [];
+                var inspectores = [],
+                total_kg = $('#id_total_kg');
                 $("#id_inspectores :selected").each(function(){
                     inspectores.push($(this).text());
                 });
@@ -173,8 +174,8 @@
                 $('#id-precintado-res').text($('#id_precintado').val());
                 $('#id-certificado-res').text($('#id_certificado').val());
                 $('#id-abastecedor-res').text($('#id_abastecedor option:selected').text());
-                $('#id-kg-res').text($('#id_total_kg').val());
-                setImporte($('#id_total_kg').val());
+                $('#id-kg-res').text(total_kg.val());
+                setImporte(total_kg.val());
             }
 
             function setImporte(kg) {
