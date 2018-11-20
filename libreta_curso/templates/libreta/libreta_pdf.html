@@ -82,11 +82,11 @@
                                         </tr>
                                         <tr>
                                             <td>Realizo curso:
-                                                {% if libreta.curso %}
-                                                    SI - <b>{{ libreta.curso.fecha_inicio }}</b>
+                                                <b>{% if libreta.curso %}
+                                                    SI - {{ libreta.curso.fecha }}
                                                 {% else %}
                                                     NO
-                                                {% endif %}
+                                                {% endif %}</b>
                                             </td>
                                         </tr>
                                     </table>

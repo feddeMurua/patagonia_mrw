@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -10,6 +10,7 @@ from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
 from parte_diario_caja import views as pd_v
+from personas import forms as p_f
 from desarrollo_patagonia import forms as dp_f
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,7 +31,8 @@ CURSOS
 
 @login_required(login_url='login')
 def lista_curso(request):
-    return render(request, 'curso/curso_list.html', {'fecha_hoy': timezone.now().date(), 'listado': Curso.objects.all()})
+    return render(request, 'curso/curso_list.html', {'fecha_hoy': timezone.now().date(),
+                                                     'listado': Curso.objects.all()})
 
 
 @login_required(login_url='login')
@@ -215,11 +217,17 @@ def get_cursos(pk_persona):
 
 @login_required(login_url='login')
 def lista_libreta(request):
+    if request.method == 'POST':
+        form = p_f.ListaPersonasFisicasForm(request.POST)
+        if form.is_valid():
+            persona = form.cleaned_data['persona']
+            return HttpResponseRedirect(reverse('libretas:pdf_solicitud', kwargs={'pk': persona.pk}))
     return render(request, 'libreta/libreta_list.html', {'listado': LibretaSanitaria.objects.all(),
+                                                         'form': p_f.ListaPersonasFisicasForm,
                                                          'fecha_hoy': timezone.now()})
 
 
-def img_to_base64(data,usr):
+def img_to_base64(data, usr):
     formato, imgstr = data.split(';base64,')
     ext = formato.split('/')[-1]
     return ContentFile(b64decode(imgstr), name=usr + '.' + ext)  # You can save this as file instance.
@@ -245,10 +253,6 @@ def alta_libreta(request):
                         months=int(request.POST['meses']))
                 if cursos:
                     libreta.curso = cursos[-1]
-                '''
-                if request.POST['foto'] and request.POST['foto'] != "borrar":
-                    libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
-                '''
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()
@@ -258,7 +262,8 @@ def alta_libreta(request):
                 else:
                     if mov_form.is_valid():
                         libreta.save()
-                        pd_v.nuevo_movimiento(request, mov_form, "Alta de libreta sanitaria", libreta, 'Libreta Sanitaria')
+                        pd_v.nuevo_movimiento(request, mov_form, "Alta de libreta sanitaria", libreta,
+                                              'Libreta Sanitaria')
                         return redirect('libretas:lista_libretas')
     else:
         form = LibretaForm
@@ -290,15 +295,7 @@ def modificacion_libreta(request, pk):
     if request.method == 'POST':
         form = ModificacionLibretaForm(request.POST, instance=libreta)
         if form.is_valid():
-            libreta = form.save(commit=False)
-            '''
-            if request.POST['foto'] == 'borrar':
-                libreta.foto = None
-            elif request.POST['foto'] == 'borrar':
-                libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
-            '''
-            libreta.save()
-            log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
+            log_modificar(request.user.id, form.save(), 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = ModificacionLibretaForm(instance=libreta)
@@ -324,12 +321,6 @@ def renovacion_libreta(request, pk):
                 libreta.curso = cursos[-1]
                 libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(years=1)
                 libreta.tipo_libreta = 'Blanca'
-                '''
-                if request.POST['foto'] == 'borrar':
-                    libreta.foto = None
-                elif request.POST['foto'] == 'borrar':
-                    libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
-                '''
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()
@@ -348,6 +339,44 @@ def renovacion_libreta(request, pk):
         mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
                                                          'mov_form': mov_form, 'libreta': libreta, 'mensaje': mensaje})
+
+
+class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'libreta/solicitud_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk):
+        persona = m.PersonaFisica.objects.get(pk=pk)
+        hoy = timezone.datetime.today()
+        edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
+                                                                                   persona.fecha_nacimiento.day))
+        return super(PdfSolicitud, self).get_context_data(
+            persona=persona,
+            edad=edad,
+            title='Solicitud de Libreta Sanitaria'
+        )
+
+
+class PdfRenovacion(LoginRequiredMixin, PDFTemplateView):
+    template_name = 'libreta/solicitud_pdf.html'
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+    def get_context_data(self, pk):
+        libreta = LibretaSanitaria.objects.get(pk=pk)
+        persona = libreta.persona
+        inscripcion = Inscripcion.objects.filter(curso=libreta.curso, persona=persona)
+        hoy = timezone.datetime.today()
+        edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
+                                                                                   persona.fecha_nacimiento.day))
+        return super(PdfRenovacion, self).get_context_data(
+            libreta=libreta,
+            persona=persona,
+            inscripcion=inscripcion,
+            edad=edad,
+            title='Renovación de Libreta Sanitaria'
+        )
 
 
 class PdfLibreta(LoginRequiredMixin, PDFTemplateView):

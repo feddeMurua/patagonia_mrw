@@ -1,0 +1,81 @@
+{% extends "easy_pdf/base.html" %}
+
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-size: 12px;
+        }
+        table {
+            margin: 0 auto;
+            width: 100%;
+        }
+        td, th {
+            text-align: center;
+        }
+        .titulo {
+            text-align: center;
+            font-size: 16px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <p class="titulo"><b><u>{% if libreta %}RENOVACION{% else %}SOLICITUD{% endif %} DE LIBRETA SANITARIA</u></b></p>
+            <p>
+                <b>Fecha:</b> {% now "SHORT_DATE_FORMAT" %}<br>
+                <b>Apellido y nombre:</b> {{ persona.apellido }}, {{ persona.nombre }} &nbsp&nbsp//&nbsp&nbsp
+                <b>Nacionalidad:</b> {{ persona.nacionalidad }}<br>
+                <b>Fecha de Nacimiento:</b> {{ persona.fecha_nacimiento|date:"SHORT_DATE_FORMAT" }} &nbsp&nbsp//&nbsp&nbsp
+                <b>DNI:</b> {{ persona.dni }}<br>
+                <b>Teléfono:</b> {{ persona.telefono }} &nbsp&nbsp//&nbsp&nbsp <b>Domicilio:</b> {{ persona.domicilio }}<br>
+                <b>Obra social:</b> {{ persona.obra_social|default:"No posee" }}<br>
+                {% if libreta %}
+                    <b>Curso de Manipulación de Alimentos:</b> {% if libreta.curso %}SI({{ libreta.curso }} &nbsp&nbsp//&nbsp&nbsp
+                    <b>Rubro:</b> {{ inscripcion.rubro }}{% else %}NO{% endif %}<br>
+                    {% if libreta.foto %}
+                        <img class="foto" src="{{ libreta.foto.url }}" height="96" width="96">
+                    {% endif %}
+                {% endif %}
+            </p>
+            <table>
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td></td>
+                        <td></td>
+                        <td>......................................</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Firma del interesado</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><b>_______________________________________________________________________________________________</b></p>
+            <p>
+                Por la presente se deja constancia que <b>{{ persona.apellido }}, {{ persona.nombre }}</b> de
+                <b>{{ edad }}</b> años de edad, DNI <b>{{ persona.dni }}</b>, segun examen clínico no presenta patologias
+                infectocontagiosas transmitibles a la fecha del control.<br><br>
+                Rawson ....... de ................................ del año .................
+            </p>
+            <table>
+                <tbody>
+                    <tr  style="height:50px; vertical-align:bottom">
+                        <td>......................................</td>
+                        <td>......................................</td>
+                        <td>......................................</td>
+                    </tr>
+                    <tr>
+                        <td>FIRMA DEL PROFESIONAL</td>
+                        <td>FECHA</td>
+                        <td>IDENTIFICACION DEL CENTRO DE ATENCION</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><b>_______________________________________________________________________________________________</b></p>
+        </div>
+    </div>
+{% endblock %}

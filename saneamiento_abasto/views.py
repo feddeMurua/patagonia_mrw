@@ -8,7 +8,7 @@ import calendar
 from django.db.models import CharField, Value as V
 from django.db.models.functions import Concat, ExtractMonth, ExtractYear
 import locale
-from dateutil import relativedelta
+from dateutil.relativedelta import relativedelta
 from personas import forms as f
 from .forms import *
 from .choices import *
@@ -261,6 +261,14 @@ def alta_reinspeccion(request):
         mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
                                                                    'mov_form': mov_form})
+
+
+@login_required(login_url='login')
+def baja_reinspeccion(request, pk):
+    reinspeccion = Reinspeccion.objects.get(pk=pk)
+    log_eliminar(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
+    reinspeccion.delete()
+    return HttpResponse()
 
 
 def calculo_importe(total_kg):
@@ -597,7 +605,8 @@ def get_vencimiento(fecha_realizacion):
     if fecha_realizacion.day <= 15:
         return proximo_vencimiento.replace(day=15)
     else:
-        return proximo_vencimiento.replace(day=calendar.monthrange(proximo_vencimiento.year, proximo_vencimiento.month)[1])
+        return proximo_vencimiento.replace(day=calendar.monthrange(proximo_vencimiento.year,
+                                                                   proximo_vencimiento.month)[1])
 
 
 def get_estado(desinfecciones):
@@ -1044,30 +1053,35 @@ def estadisticas_reinspeccion(request):
             fecha_desde = rango_form.cleaned_data['fecha_desde']
             fecha_hasta = rango_form.cleaned_data['fecha_hasta']
 
-    productos = ReinspeccionProducto.objects.filter(reinspeccion__fecha__gte=fecha_desde,
-                                                    reinspeccion__fecha__lte=fecha_hasta,
-                                                    reinspeccion__detalles=True)
+    reinspecciones_data = ReinspeccionProducto.objects.filter(reinspeccion__fecha__gte=fecha_desde,
+                                                              reinspeccion__fecha__lte=fecha_hasta,
+                                                              reinspeccion__detalles=True)\
+        .values_list('reinspeccion__origen__nombre', 'producto__nombre', 'kilo_producto')
 
     reinspecciones = Reinspeccion.objects.filter(fecha__gte=fecha_desde, fecha__lte=fecha_hasta, detalles=True)
-
-    reinspecciones_prod = productos.values_list('producto__nombre', 'kilo_producto')
-    reinspecciones_orig = productos.values_list('reinspeccion__origen__nombre', 'kilo_producto')
 
     dict_reinspeccion_prod = {}
     dict_reinspeccion_orig_r = {}
     dict_reinspeccion_orig_kg = {}
+    dict_reinspeccion_gan = {'Bovinos': {}, 'Porcinos': {}, 'Ovinos': {}}
+    dict_reinspeccion_gan_orig = collections.defaultdict(dict)
 
-    for prod, cant_kg in reinspecciones_prod:
-        total_kg = dict_reinspeccion_prod.get(prod, 0) + cant_kg
-        dict_reinspeccion_prod[prod] = total_kg
+    for orig, prod, cant_kg in reinspecciones_data:
+        total_kg_prod = dict_reinspeccion_prod.get(prod, 0) + cant_kg
+        total_kg_orig = dict_reinspeccion_orig_kg.get(orig, 0) + cant_kg
+        dict_reinspeccion_prod[prod] = total_kg_prod
+        dict_reinspeccion_orig_kg[orig] = total_kg_orig
+
+        if prod in ['Bovinos', 'Porcinos', 'Ovinos']:
+            if orig not in dict_reinspeccion_gan['Bovinos']:
+                dict_reinspeccion_gan['Bovinos'][orig] = 0
+                dict_reinspeccion_gan['Porcinos'][orig] = 0
+                dict_reinspeccion_gan['Ovinos'][orig] = 0
+            dict_reinspeccion_gan[prod][orig] += cant_kg
 
     for reinspeccion in reinspecciones:
         total_cant = dict_reinspeccion_orig_r.get(reinspeccion.origen.nombre, 0) + 1
         dict_reinspeccion_orig_r[reinspeccion.origen.nombre] = total_cant
-
-    for orig, cant_kg in reinspecciones_orig:
-        total_kg = dict_reinspeccion_orig_kg.get(orig, 0) + cant_kg
-        dict_reinspeccion_orig_kg[orig] = total_kg
 
     total_general_prod = sum(dict_reinspeccion_prod.values())
     ord_dict_reinspeccion_prod = collections.OrderedDict(
@@ -1086,6 +1100,7 @@ def estadisticas_reinspeccion(request):
     datos_origen_cant = ord_dict_reinspeccion_orig.values()
     label_origen_kg = ord_dict_reinspeccion_orig_kg.keys()
     datos_origen_kg = ord_dict_reinspeccion_orig_kg.values()
+    label_gan = dict_reinspeccion_gan['Bovinos'].keys()
 
     for k, v in ord_dict_reinspeccion_prod.items():
         ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v*100/total_general_prod)))
@@ -1095,17 +1110,33 @@ def estadisticas_reinspeccion(request):
         ord_dict_reinspeccion_orig[k] = (v, float("{0:.2f}".format(v*100/total_general_orig_r)), cant_kg,
                                          float("{0:.2f}".format(cant_kg*100/total_general_orig_kg)))
 
+    orden = ['Bovinos', 'Porcinos', 'Ovinos', 'total_kg']
+    for orig in label_gan:
+        dict_reinspeccion_gan_orig[orig]['Bovinos'] = dict_reinspeccion_gan['Bovinos'][orig]
+        dict_reinspeccion_gan_orig[orig]['Porcinos'] = dict_reinspeccion_gan['Porcinos'][orig]
+        dict_reinspeccion_gan_orig[orig]['Ovinos'] = dict_reinspeccion_gan['Ovinos'][orig]
+        dict_reinspeccion_gan_orig[orig]['total_kg'] = sum(dict_reinspeccion_gan_orig[orig].values())
+        dict_reinspeccion_gan_orig[orig] = collections.OrderedDict(sorted(dict_reinspeccion_gan_orig[orig].items(),
+                                                                          key=lambda i: orden.index(i[0])))
+
+    total_general_gan = sum(origen['total_kg'] for origen in dict_reinspeccion_gan_orig.values())
+
     context = {
         'rango_form': rango_form,
         'dict_prod': ord_dict_reinspeccion_prod,
         'dict_orig': ord_dict_reinspeccion_orig,
+        'dict_gan': collections.OrderedDict(dict_reinspeccion_gan_orig),
         'total_general_prod': total_general_prod,
         'total_general_orig_r': total_general_orig_r,
         'total_general_orig_kg': total_general_orig_kg,
+        'total_general_gan': total_general_gan,
         # datos y etiquetas
-        'lista_labels': json.dumps([label_reinspeccion, label_origen_cant, label_origen_kg]),
+        'lista_labels': json.dumps([label_reinspeccion, label_origen_cant, label_origen_kg, label_gan]),
         'lista_datos': json.dumps([{'Productos': datos_reinspecciones},
                                    {'Origenes por cantidad': datos_origen_cant},
-                                   {'Origenes por kg': datos_origen_kg}])
+                                   {'Origenes por kg': datos_origen_kg},
+                                   {'Bovinos': dict_reinspeccion_gan['Bovinos'].values(),
+                                    'Porcinos': dict_reinspeccion_gan['Porcinos'].values(),
+                                    'Ovinos': dict_reinspeccion_gan['Ovinos'].values()}])
     }
     return render(request, "estadistica/estadisticas_reinspeccion.html", context)

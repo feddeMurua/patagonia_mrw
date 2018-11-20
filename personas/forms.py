@@ -73,7 +73,7 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
         obra_social = self.cleaned_data['obra_social']
         if obra_social:
             if not regex_alfanumerico.match(obra_social):
-                raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
+                raise forms.ValidationError('La obra social solo puede contener letras, numeros y/o espacios')
         return obra_social
 
     def clean_fecha_nacimiento(self):
@@ -106,7 +106,7 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
         obra_social = self.cleaned_data['obra_social']
         if obra_social:
             if not regex_alfanumerico.match(obra_social):
-                raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
+                raise forms.ValidationError('La obra social solo puede contener letras, numeros y/o espacios')
         return obra_social
 
     def clean_fecha_nacimiento(self):
@@ -160,7 +160,7 @@ class PersonalPropioForm(forms.ModelForm):
         obra_social = self.cleaned_data['obra_social']
         if obra_social:
             if not regex_alfanumerico.match(obra_social):
-                raise forms.ValidationError('La obra social de la persona, solo puede contener letras/numeros y/o espacios')
+                raise forms.ValidationError('La obra social solo puede contener letras, numeros y/o espacios')
         return obra_social
 
     def clean_fecha_nacimiento(self):

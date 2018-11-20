@@ -42,10 +42,10 @@
                     {% if not reinspeccion.detalles %}
                         <a class="btn btn-info" data-toggle="tooltip" title="Carga de Productos" href="{% url 'reinspecciones:carga_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-th-list"></em></a>
                     {% endif %}
-                    {% if user.is_staff %}
-                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar Reinspeccion" href="{% url 'reinspecciones:modificar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    {% endif %}
                     <a class="btn btn-warning" data-toggle="tooltip" title="Lista de Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk 1 %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                    {% if user.is_staff %}
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_reinspeccion' reinspeccion.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

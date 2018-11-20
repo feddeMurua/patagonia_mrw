@@ -86,7 +86,7 @@
                     $("#fecha").datepicker("option","minDate",selectedDate);
                 }
             })
-            .mask('00/00/0000');
+            .mask('00/00/0000', {placeholder: "dd/mm/aaaa"});
         });
     </script>
     {% block scripts %}
