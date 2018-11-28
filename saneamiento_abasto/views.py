@@ -386,19 +386,28 @@ def modificar_reinspeccion(request, pk):
 @login_required(login_url='login')
 def agregar_producto_reinspeccion(request, pk):
     reinspeccion = Reinspeccion.objects.get(pk=pk)
+    productos = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion).values_list('producto__nombre',
+                                                                                           flat=True)
+    msg = ""
     if request.method == 'POST':
         form = ReinspeccionProductoForm(request.POST)
         if form.is_valid():
             producto = form.save(commit=False)
-            producto.reinspeccion = reinspeccion
-            producto.save()
-            reinspeccion.total_kg += producto.kilo_producto
-            reinspeccion.save()
-            log_modificar(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
-            return HttpResponseRedirect(reverse('reinspecciones:lista_productos', args=[pk, 0]))
+            if producto.producto.nombre not in productos:
+                producto.reinspeccion = reinspeccion
+                producto.save()
+                reinspeccion.total_kg += producto.kilo_producto
+                reinspeccion.importe = calculo_importe(reinspeccion.total_kg)
+                if reinspeccion.turno == 'Feriado':
+                    reinspeccion.importe *= 2
+                reinspeccion.save()
+                log_modificar(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
+                return HttpResponseRedirect(reverse('reinspecciones:lista_productos', args=[pk, 0]))
+            else:
+                msg = "Este producto ya se encuentra cargado"
     else:
         form = ReinspeccionProductoForm
-    return render(request, 'reinspeccion/nuevo_producto_form.html', {'form': form, 'pk': pk})
+    return render(request, 'reinspeccion/nuevo_producto_form.html', {'form': form, 'pk': pk, 'msg': msg})
 
 
 @login_required(login_url='login')

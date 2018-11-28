@@ -626,10 +626,10 @@ def alta_tramite(request):
                 log_crear(request.user.id, retiro_entrega, 'Sacrificio/Entrega de Animal Patentado')
                 patente.delete()
                 return redirect('sacrificios_entregas:lista_retiro_entrega')
-            else:
+            elif personas_form.is_valid():
                 mascota = mascota_form.save()
                 retiro_entrega.mascota = mascota
-                retiro_entrega.interesado = form.cleaned_data['persona']
+                retiro_entrega.interesado = personas_form.cleaned_data['persona']
                 if retiro_entrega.tramite == 'SACRIFICIO':
                     mascota.baja = True
                     mascota.save()
@@ -710,14 +710,20 @@ def estadisticas_mascotas(request):
                                      ['mascota__categoria_mascota', 'mascota__sexo'])
 
     # SACRIFICIO Y ENTREGA DE ANIMALES
-    tramites = to_counter(RetiroEntregaAnimal, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1]},
-                          ['tramite', 'mascota__categoria_mascota', 'mascota__sexo'])
+    sacrificios = to_counter(RetiroEntregaAnimal, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1],
+                                                   'tramite': 'SACRIFICIO'}, ['mascota__categoria_mascota',
+                                                                              'mascota__sexo'])
+
+    entregas = to_counter(RetiroEntregaAnimal, {'fecha__year__lte': years[0], 'fecha__year__gte': years[-1],
+                                                'tramite': 'ENTREGA'}, ['mascota__categoria_mascota',
+                                                                        'mascota__sexo'])
 
     context = {
         'rango_form': rango_form,
-        'lista_labels': json.dumps([tipo_patente.keys(), tipo_esterilizacion.keys(), tramites.keys()]),
+        'lista_labels': json.dumps([tipo_patente.keys(), tipo_esterilizacion.keys(), sacrificios.keys(), entregas.keys()]),
         'lista_datos': json.dumps([{'Tipo Patente': tipo_patente.values()},
                                    {'Tipo Esterilizacion': tipo_esterilizacion.values()},
-                                   {'Tramites': tramites.values()}])
+                                   {'Sacrificios': sacrificios.values()},
+                                   {'Entregas': entregas.values()}])
     }
     return render(request, "estadistica/estadisticas_mascotas.html", context)

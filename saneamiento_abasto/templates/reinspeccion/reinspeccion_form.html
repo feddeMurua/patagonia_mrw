@@ -186,7 +186,11 @@
                         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                     },
                     success: function(data) {
-                        $('.importe_res').val(data['importe']);
+                        if ($('#id_turno').val() !== 'Feriado') {
+                            $('.importe_res').val(data['importe']);
+                        } else {
+                            $('.importe_res').val(data['importe'] * 2);
+                        }
                     }
                 });
             }

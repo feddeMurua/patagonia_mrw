@@ -7,6 +7,44 @@
 
 {% block header-title %}Agregar Producto{% endblock %}
 
+{% block extra-buttons %}
+    {% if msg %}
+        <div class="alert alert-danger">
+          <strong>{{ msg }}</strong>
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'reinspecciones:lista_productos' pk 0 %}">Cancelar</a>
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        var producto = $('#id_producto');
+
+        function matchStart(params, data) {
+            params.term = params.term || '';
+            if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) === 0) {
+                return data;
+            }
+            return null;
+        }
+
+        $(document).ready(function() {
+            producto.select2({
+                theme: "bootstrap",
+                width: "100%",
+                matcher: matchStart
+            });
+        });
+
+        producto.on('select2:close', function () {
+            setTimeout(function() {
+                $('.select2-container--focus').removeClass('select2-container--focus');
+                $(':focus').blur();
+                $('#id_kilo_producto').focus();
+            }, 1);
+        });
+    </script>
 {% endblock %}

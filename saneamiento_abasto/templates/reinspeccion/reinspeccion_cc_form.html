@@ -367,7 +367,11 @@
                     },
                     success: function(data) {
                         $('.kg_res').val(data['total_kg']);
-                        $('.importe_res').val(data['importe']);
+                        if ($('#id_turno').val() !== 'Feriado') {
+                            $('.importe_res').val(data['importe']);
+                        } else {
+                            $('.importe_res').val(data['importe'] * 2);
+                        }
                     }
                 });
             }
