@@ -27,7 +27,7 @@
             $("#id_documentacion_retirada").checkboxradio();
         });
 
-        $('#id_dni').mask('90000000');
+        $('#id_dni').mask('ZZ99000000', {translation:  {'Z': {pattern: /a-zA-Z0-9/, optional: true}}});
         $('#id_cuit').mask('00-00000000-0');
     </script>
 {% endblock %}

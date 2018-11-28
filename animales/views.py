@@ -12,6 +12,7 @@ from personas import forms as f
 from django.views.generic import DetailView
 from parte_diario_caja import forms as pd_f
 from parte_diario_caja import views as pd_v
+from parte_diario_caja import models as pd_m
 from desarrollo_patagonia.utils import *
 from django.utils import timezone
 from dateutil.relativedelta import *
@@ -42,13 +43,20 @@ def alta_analisis(request):
             analisis = form.save()
             alta_porcinos(request, analisis)
             servicio = 'Analisis de triquinosis'
+            servicio_obj = pd_m.Servicio.objects.get(nombre=servicio)
+            importe = servicio_obj.importe * len(request.session['porcinos'])
             if request.POST['optradio'] == 'previa':
                 if detalle_mov_form.is_valid():
-                    pd_v.movimiento_previo(request, detalle_mov_form, servicio, analisis, servicio)
+                    detalle_mov = detalle_mov_form.save(commit=False)
+                    detalle_mov.completar_monto(importe, servicio, analisis)
+                    log_crear(request.user.id, analisis, servicio)
                     return redirect('analisis:lista_analisis')
             else:
                 if mov_form.is_valid():
-                    pd_v.nuevo_movimiento(request, mov_form, servicio, analisis, servicio)
+                    mov = mov_form.save()
+                    detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
+                    detalle_mov.completar_monto(importe, servicio, analisis)
+                    log_crear(request.user.id, analisis, servicio)
                     return redirect('analisis:lista_analisis')
     else:
         if 'porcinos' in request.session:
