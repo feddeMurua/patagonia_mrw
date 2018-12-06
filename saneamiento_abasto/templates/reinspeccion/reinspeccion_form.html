@@ -42,6 +42,9 @@
                                 <div class="form-group">
                                     <label>Precintado</label>
                                     {{ form.precintado|add_class:'form-control' }}
+                                    {% for error in form.precintado.errors %}
+                                        <span style="color:red;" class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -65,6 +68,9 @@
                                 <div class="form-group">
                                     <label>Cantidad de Kg inspeccionados *</label>
                                     {{ form.total_kg|add_class:'form-control' }}
+                                    {% for error in form.total_kg.errors %}
+                                        <span style="color:red;" class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
