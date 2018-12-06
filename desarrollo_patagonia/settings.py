@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'polymorphic',
     'django_addanother',
     'solo',
-    'mathfilters'
+    'mathfilters',
+    'django_cleanup'
 ]
 
 MIDDLEWARE = [

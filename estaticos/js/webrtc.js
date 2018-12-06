@@ -68,7 +68,7 @@ t_foto.onclick = function() {
 c_foto.onclick = function() {
     $(video).attr('hidden',true);
     $(n_foto).removeClass('hidden');
-    if (img64.value && img64.value !== "borrar") {
+    if ((img64.value || old_img) && img64.value !== "borrar") {
         $(e_foto).removeClass('hidden');
     }
     $(t_foto).addClass('hidden');

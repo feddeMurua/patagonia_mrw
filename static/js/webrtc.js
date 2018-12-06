@@ -25,16 +25,17 @@ $(btn_foto).addClass('hidden');
 
 document.getElementById("id_foto").accept = ".jpg, .png";
 
+canvas.width = 320;
+canvas.height = 240;
+
 $(btn_foto).change(function (event) {
     var input = event.target;
     var reader = new FileReader();
     reader.onload = function(){
-        var dataURL = reader.result;
-        var output = document.getElementById('foto-img');
-        output.src = dataURL;
+        img.src = reader.result;
+        img64.value = img.src;
     };
     reader.readAsDataURL(input.files[0]);
-    img64.value = img.src;
     $(img).attr('hidden',false);
     $(e_foto).removeClass('hidden');
 });
@@ -52,7 +53,7 @@ n_foto.onclick = function() {
 
 t_foto.onclick = function() {
     canvas.getContext('2d').
-        drawImage(video, 0, 0, 320, 240);
+        drawImage(video, 0, 0, canvas.width, canvas.height);
     $(video).attr('hidden',true);
     $(n_foto).removeClass('hidden');
     $(e_foto).removeClass('hidden');
@@ -67,7 +68,7 @@ t_foto.onclick = function() {
 c_foto.onclick = function() {
     $(video).attr('hidden',true);
     $(n_foto).removeClass('hidden');
-    if (img64.value && img64.value !== "borrar") {
+    if ((img64.value || old_img) && img64.value !== "borrar") {
         $(e_foto).removeClass('hidden');
     }
     $(t_foto).addClass('hidden');

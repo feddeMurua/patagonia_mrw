@@ -298,8 +298,13 @@ def modificacion_libreta(request, pk):
         form = ModificacionLibretaForm(request.POST, request.FILES, instance=libreta)
         if form.is_valid():
             libreta = form.save(commit=False)
-            if request.POST['foto'] and request.POST['foto'] != "borrar":
-                libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+            if request.POST['foto']:
+                print (request.POST['foto'])
+                if request.POST['foto'] != "borrar":
+                    libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+                else:
+                    libreta.foto.delete()
+            libreta.save()
             log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
@@ -326,6 +331,11 @@ def renovacion_libreta(request, pk):
                 libreta.curso = cursos[-1]
                 libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(years=1)
                 libreta.tipo_libreta = 'Blanca'
+                if request.POST['foto']:
+                    if request.POST['foto'] != "borrar":
+                        libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+                    else:
+                        libreta.foto.delete()
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()

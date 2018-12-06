@@ -7,99 +7,46 @@
 
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
 
-{% block content %}
-    <div class="container container-form">
-        <form method="post" enctype="multipart/form-data" id="form-base">
-            {% csrf_token %}
-            <div class="panel panel-primary">
-                <div class="panel-body">
-                    <div class="col-md-7" id="container-form-left">
-                        {{ form.media }}
-                        {% if not modificacion %}
-                            {% if not renovacion %}
-                                <div class="form-group">
-                                    <label>Persona *</label>
-                                    {{ form.persona|add_class:'form-control' }}
-                                    {% for error in form.persona.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                                <div class="form-group">
-                                    <label>Tipo de libreta *</label>
-                                    {{ form.tipo_libreta|add_class:'form-control' }}
-                                </div>
-                                <div class="form-group meses-group">
-                                    <label for="meses_validez">Meses de validez *</label>
-                                    <input type="number" name="meses" class="form-control" id="meses_validez" min="1" max="6">
-                                </div>
-                                {% if mensaje %}
-                                    <div class="alert alert-danger">
-                                      <strong>{{ mensaje }}</strong>
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                            <div class="form-group">
-                                <label>Fecha de examen clínico *</label>
-                                {{ form.fecha_examen_clinico|add_class:'form-control' }}
-                                {% for error in form.fecha_examen_clinico.errors %}
-                                    <span class="help-block">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="form-group">
-                                <label>Médico clínico *</label>
-                                {{ form.profesional_examen_clinico|add_class:'form-control' }}
-                                {% for error in form.profesional_examen_clinico.errors %}
-                                    <span class="help-block">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="form-group">
-                                <label>Lugar de realización del examen *</label>
-                                {{ form.lugar_examen_clinico|add_class:'form-control' }}
-                                {% for error in form.lugar_examen_clinico.errors %}
-                                    <span class="help-block">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        <div class="form-group">
-                            <label>Observaciones</label>
-                            {{ form.observaciones|add_class:'form-control' }}
-                        </div>
-                        <div class="form-group">
-                            <label>Foto</label><br>
-                            {% if libreta.foto %}
-                                <img id="old-img" src="{{ libreta.foto.url }}" style="max-width:320px; max-height:240px" alt="">
-                            {% endif %}
-                            <video width="320" height="240" autoplay hidden></video>
-                            <canvas style="display:none;"></canvas>
-                            <img id="foto-img" src="" alt="" style="max-width: 320px;max-height: 240px;">
-                            <label for="img-base64"></label><input style="display:none;" id="img-base64" name="foto" value="">
-                            <div style="margin-top:10px;">
-                                <button type="button" class="btn btn-success" id="nueva-foto">Nueva fotografia</button>
-                                {{ form.foto }}
-                                <button type="button" class="btn btn-info" id="id_clon" onclick="document.getElementById('id_foto').click();">Examinar</button>
-                                <button type="button" class="btn btn-warning {% if not libreta.foto %}hidden{% endif %}" id="eliminar-foto">Eliminar fotografia</button>
-                                <button type="button" class="btn btn-primary hidden" id="tomar-foto">Aceptar</button>
-                                <button type="button" class="btn btn-danger hidden" id="cancelar-foto">Cancelar</button>
-                            </div>
-                        </div>
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
-                        {% endif %}
-                    </div>
-                    {% if not modificacion %}
-                        <div class="col-xs-12 col-md-5" id="container-form-right">
-                            {% include 'caja/cuadro_facturacion.html' %}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="panel-footer">
-                    <input type="submit" class="btn btn-primary" value="Aceptar"
-                           onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
-                    <a class="btn btn-danger btn-cancelar" href="{% url 'libretas:lista_libretas' %}">Cancelar</a>
-                </div>
-            </div>
-        </form>
+{% block extra-buttons %}
+    <div class="form-group meses-group">
+        <label for="meses_validez">Meses de validez *</label>
+        <input type="number" name="meses" class="form-control" id="meses_validez" min="1" max="6">
     </div>
+    {% if mensaje %}
+        <div class="alert alert-danger">
+          <strong>{{ mensaje }}</strong>
+        </div>
+    {% endif %}
+    <div class="form-group">
+        <label>Foto</label><br>
+        <input type="file" id="id_foto">
+        {% if libreta.foto %}
+            <img id="old-img" src="{{ libreta.foto.url }}" style="max-width:320px; max-height:240px" alt="">
+        {% endif %}
+        <video width="320" height="240" autoplay hidden></video>
+        <canvas style="display:none;"></canvas>
+        <img id="foto-img" src="" alt="" style="max-width: 320px; max-height: 240px">
+        <label for="img-base64"></label><input style="display:none;" id="img-base64" name="foto" value="">
+        <div style="margin-top:10px;">
+            <button type="button" class="btn btn-success" id="nueva-foto">Nueva fotografia</button>
+            <button type="button" class="btn btn-info" id="id_clon" onclick="document.getElementById('id_foto').click();">Examinar</button>
+            <button type="button" class="btn btn-danger {% if not libreta.foto %}hidden{% endif %}" id="eliminar-foto">Eliminar fotografia</button>
+            <button type="button" class="btn btn-primary hidden" id="tomar-foto">Aceptar</button>
+            <button type="button" class="btn btn-danger hidden" id="cancelar-foto">Cancelar</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block form-right %}
+    {% if not modificacion %}
+        <div class="col-xs-12 col-md-5" id="container-form-right">
+            {% include 'caja/cuadro_facturacion.html' %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'libretas:lista_libretas' %}">Cancelar</a>
 {% endblock %}
 
 {% block more-scripts %}
@@ -108,8 +55,6 @@
         $.datepicker.setDefaults({
             maxDate: new Date()
         });
-
-        $('#foto-clear_id').checkboxradio();
 
         var tipo_libreta = $('#id_tipo_libreta'),
         meses_validez = $('#meses_validez');

@@ -96,7 +96,7 @@
                                 <thead>
                                     <tr>
                                         <th>Producto</th>
-                                        <th>Peso</th>
+                                        <th>Kg</th>
                                         <th><em class="glyphicon glyphicon-cog"></em></th>
                                     </tr>
                                 </thead>
@@ -104,7 +104,7 @@
                                     {% for producto in productos %}
                                         <tr>
                                             <td>{{ producto.producto.nombre }}</td>
-                                            <td>{{ producto.kilo_producto }},0 Kg</td>
+                                            <td>{{ producto.kilo_producto }}</td>
                                             <td>
                                                 <a class="btn btn-warning" onclick="confirmModificar('{{ producto.producto.nombre }}')" data-toggle="tooltip" title="Modificar cantidad"><em class='glyphicon glyphicon-pencil'></em></a>
                                                 <a class="btn btn-danger btn-eliminar" onclick="confirmBaja('{{ producto.producto.nombre }}')" data-toggle="tooltip" title="Eliminar"><em class='glyphicon glyphicon-trash'></em></a>
@@ -113,7 +113,7 @@
                                     {% endfor %}
                                     <tr align='center'>
                                         <td><b>Total</b></td>
-                                        <td colspan='2'>{% if productos %}{{ total_kg }} Kg{% else %}0,0 Kg{% endif %}</td>
+                                        <td colspan='2'>{% if productos %}{{ total_kg }} Kg{% else %}0{% endif %}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -187,7 +187,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Producto</th>
-                                                <th>Peso</th>
+                                                <th>Kg</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -427,7 +427,7 @@
                 var producto = productos[i]['producto']['nombre'];
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
-                        "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
+                        "<td>" + productos[i]['kilo_producto'] + "</td>" +
                         "<td>" +
                             "<a class='btn btn-warning' onclick='confirmModificar(\"" + producto + "\")' data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>" +
                             " " +
@@ -438,7 +438,7 @@
             }
             var total = "<tr align='center'>" +
                             "<td><b>Total</b></td>" +
-                            "<td colspan='2'>" + data['total_kg'] + ",0 Kg</td>" +
+                            "<td colspan='2'>" + data['total_kg'] + "</td>" +
                         "</tr>";
             $tbody.append(total);
         }
@@ -450,7 +450,7 @@
                 var producto = productos[i]['producto']['nombre'];
                 var row = "<tr align='center'>" +
                         "<td>" + producto + "</td>" +
-                        "<td>" + productos[i]['kilo_producto'] + ",0 Kg</td>" +
+                        "<td>" + productos[i]['kilo_producto'] + "</td>" +
                     "</tr>";
                 $tbody.append(row);
             }
