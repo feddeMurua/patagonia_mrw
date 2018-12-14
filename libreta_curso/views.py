@@ -253,6 +253,8 @@ def alta_libreta(request):
                         months=int(request.POST['meses']))
                 if cursos:
                     libreta.curso = cursos[-1]
+                if request.POST['foto'] and request.POST['foto'] != "borrar":
+                    libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()
@@ -293,9 +295,17 @@ def baja_libreta(request, pk):
 def modificacion_libreta(request, pk):
     libreta = LibretaSanitaria.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ModificacionLibretaForm(request.POST, instance=libreta)
+        form = ModificacionLibretaForm(request.POST, request.FILES, instance=libreta)
         if form.is_valid():
-            log_modificar(request.user.id, form.save(), 'Libreta Sanitaria')
+            libreta = form.save(commit=False)
+            if request.POST['foto']:
+                print (request.POST['foto'])
+                if request.POST['foto'] != "borrar":
+                    libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+                else:
+                    libreta.foto.delete()
+            libreta.save()
+            log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
     else:
         form = ModificacionLibretaForm(instance=libreta)
@@ -307,7 +317,7 @@ def renovacion_libreta(request, pk):
     mensaje = ''
     libreta = LibretaSanitaria.objects.get(pk=pk)
     if request.method == 'POST':
-        form = RenovacionLibretaForm(request.POST, instance=libreta)
+        form = RenovacionLibretaForm(request.POST, request.FILES, instance=libreta)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if form.is_valid():
@@ -321,6 +331,11 @@ def renovacion_libreta(request, pk):
                 libreta.curso = cursos[-1]
                 libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(years=1)
                 libreta.tipo_libreta = 'Blanca'
+                if request.POST['foto']:
+                    if request.POST['foto'] != "borrar":
+                        libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+                    else:
+                        libreta.foto.delete()
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()
@@ -338,7 +353,8 @@ def renovacion_libreta(request, pk):
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'mov_form': mov_form, 'libreta': libreta, 'mensaje': mensaje})
+                                                         'mov_form': mov_form, 'libreta': libreta, 'mensaje': mensaje,
+                                                         'renovacion': True})
 
 
 class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):

@@ -25,14 +25,14 @@
     <thead>
         <tr>
             <th>Producto</th>
-            <th>Peso</th>
+            <th>Kg</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
     <tfoot>
         <tr style="background-color:#d6d7d8">
             <td><b>TOTAL</b></td>
-            <td><b>{{ total_kg }},0 Kg</b></td>
+            <td><b>{{ total_kg }}</b></td>
             <td></td>
         </tr>
     </tfoot>
@@ -40,7 +40,7 @@
         {% for producto in listado %}
             <tr>
                 <td>{{ producto.producto.nombre }}</td>
-                <td>{{ producto.kilo_producto }} Kg</td>
+                <td>{{ producto.kilo_producto }}</td>
                 <td>
                     {% if not pagado %}
                         <a class='btn btn-warning' onclick="confirmModificar('{{ reinspeccion_pk }}', '{{ producto.producto.nombre }}')" data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>

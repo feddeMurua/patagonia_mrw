@@ -31,13 +31,13 @@
     <tbody>
         {% for reinspeccion in listado %}
             <tr>
-                <td>{{ reinspeccion.fecha }}</td>
+                <td>{{ reinspeccion.fecha|date:"d M. Y" }}</td>
                 <td>{{ reinspeccion.turno }}</td>
                 <td>{{ reinspeccion.precintado|default_if_none:"" }}</td>
                 <td>{{ reinspeccion.certificado }}</td>
                 <td>{{ reinspeccion.abastecedor }}</td>
                 <td>{{ reinspeccion.origen.nombre|default_if_none:"" }}</td>
-                <td>{{ reinspeccion.total_kg }},0 Kg</td>
+                <td>{{ reinspeccion.total_kg }}</td>
                 <td>
                     {% if not reinspeccion.detalles %}
                         <a class="btn btn-info" data-toggle="tooltip" title="Carga de Productos" href="{% url 'reinspecciones:carga_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-th-list"></em></a>
