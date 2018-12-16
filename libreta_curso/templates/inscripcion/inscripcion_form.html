@@ -5,8 +5,17 @@
 
 {% block header-title %}Alta/Modificación de Inscripción{% endblock %}
 
-{% block url-volver %}{% url url_return id_curso %}{% endblock %}
+{% block url-volver %}{% url url_return curso.pk %}{% endblock %}
+
+{% block extra-form %}
+    {% if vencido %}
+        <div class="form-group">
+            <label for="id_fecha">Fecha *</label>
+            <input class="form-control datepicker" name="fecha" id="id_fecha">
+        </div>
+    {% endif %}
+{% endblock %}
 
 {% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url url_return id_curso %}">Cancelar</a>
+    <a class="btn btn-danger btn-cancelar" href="{% url url_return curso.pk %}">Cancelar</a>
 {% endblock %}

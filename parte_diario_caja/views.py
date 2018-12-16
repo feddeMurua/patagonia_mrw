@@ -4,8 +4,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from easy_pdf.views import PDFTemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 from django.utils import timezone
 from desarrollo_patagonia.utils import *
@@ -16,6 +14,8 @@ from dateutil.relativedelta import *
 import collections
 import json
 import datetime
+from weasyprint import HTML
+from django.template.loader import get_template
 
 '''
 MOVIMIENTO DIARIO
@@ -76,21 +76,19 @@ def get_subtotales(detalles):
     return subtotales
 
 
-class PdfParteDiario(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'caja/parte_diario_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, anio, mes, dia):
-        fecha = datetime.date(int(anio), int(mes), int(dia))
-        detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha).order_by('movimiento__nro_ingreso')
-        return super(PdfParteDiario, self).get_context_data(
-            fecha_maniana=fecha + relativedelta(days=1),
-            detalles=detalles,
-            subtotales=get_subtotales(detalles),
-            total=sum(detalle.importe for detalle in detalles),
-            title='Parte diario del dia ' + str(fecha.strftime('%d/%m/%Y'))
-        )
+@login_required(login_url='login')
+def pdf_parte_diario(request, anio, mes, dia):
+    template = get_template('caja/parte_diario_pdf.html')
+    fecha = datetime.date(int(anio), int(mes), int(dia))
+    detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha).order_by('movimiento__nro_ingreso')
+    context = {'title': 'Parte diario del dia ' + str(fecha.strftime('%d/%m/%Y')), 'detalles': detalles,
+               'subtotales': get_subtotales(detalles), 'total': sum(detalle.importe for detalle in detalles),
+               'fecha_maniana': fecha + relativedelta(days=1)}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Parte_diario_dia_" + str(fecha.strftime('%d/%m/%Y')))
+    return response
 
 
 '''
@@ -164,18 +162,17 @@ def detalle_arqueo(request, pk):
     return render(request, 'arqueo/arqueo_detail.html', {'datos': calculo_arqueo(ArqueoDiario.objects.get(pk=pk))})
 
 
-class PdfArqueo(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'arqueo/arqueo_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, planilla):
-        arqueo = ArqueoDiario.objects.get(nro_planilla=planilla)
-        return super(PdfArqueo, self).get_context_data(
-            datos=calculo_arqueo(arqueo),
-            title='Arqueo de efectivo del dia ' + str(arqueo.fecha.strftime('%d/%m/%Y') + ' / N° de planilla')
-
-        )
+@login_required(login_url='login')
+def pdf_arqueo(request, planilla):
+    template = get_template('arqueo/arqueo_pdf.html')
+    arqueo = ArqueoDiario.objects.get(nro_planilla=planilla)
+    context = {'datos': calculo_arqueo(arqueo),
+               'title': 'Arqueo de efectivo del dia ' + str(arqueo.fecha.strftime('%d/%m/%Y') + ' / N° de planilla')}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Arqueo_caja_" + str(arqueo.fecha.strftime('%d/%m/%Y')))
+    return response
 
 
 '''

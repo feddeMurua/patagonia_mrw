@@ -125,6 +125,11 @@ class RegistroInscripcionForm(forms.ModelForm):
         }
 
 
+class ListaSolicitudLibretaForm(forms.Form):
+    registrados = LibretaSanitaria.objects.values_list('persona__pk', flat=True)
+    persona = forms.ModelChoiceField(queryset=m.PersonaFisica.objects.exclude(pk__in=registrados), required=True)
+
+
 class LibretaForm(forms.ModelForm):
     fecha_examen_clinico = forms.DateField(widget=DateInput())
 

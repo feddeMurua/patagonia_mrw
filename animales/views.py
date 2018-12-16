@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
-from easy_pdf.views import PDFTemplateView
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from .forms import *
@@ -19,7 +18,8 @@ from desarrollo_patagonia import forms as dp_f
 import json
 import collections
 import numpy as np
-
+from weasyprint import HTML
+from django.template.loader import get_template
 
 '''
 ANALISIS
@@ -164,18 +164,17 @@ def detalle_analisis(request, pk):
     return render(request, 'analisis/analisis_detail.html', {'analisis': analisis, 'porcinos': porcinos})
 
 
-class PdfAnalisis(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'analisis/analisis_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        analisis = Analisis.objects.get(pk=pk)
-        return super(PdfAnalisis, self).get_context_data(
-            analisis=analisis,
-            porcinos=Porcino.objects.filter(analisis=analisis),
-            title='Analisis N°'
-        )
+@login_required(login_url='login')
+def pdf_analisis(request, pk):
+    template = get_template('analisis/analisis_pdf.html')
+    analisis = Analisis.objects.get(pk=pk)
+    context = {'analisis': analisis, 'porcinos': Porcino.objects.filter(analisis=analisis),
+               'title': 'Analisis N°'}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Analisis_N°_" + str(analisis.pk))
+    return response
 
 
 '''
@@ -241,16 +240,16 @@ def aplazo_solicitud(request, pk):
     return render(request, 'criadero/solicitud_aplazo.html', {"form": form, 'modificacion': True})
 
 
-class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'criadero/solicitud_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        return super(PdfSolicitud, self).get_context_data(
-            solicitud=SolicitudCriaderoCerdos.objects.get(pk=pk),
-            title='Solicitud N°'
-        )
+@login_required(login_url='login')
+def pdf_solicitud(request, pk):
+    template = get_template('criadero/solicitud_pdf.html')
+    solicitud = SolicitudCriaderoCerdos.objects.get(pk=pk)
+    context = {'solicitud': solicitud, 'title': 'Solicitud N°'}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Solicitud_N°_" + str(solicitud.pk))
+    return response
 
 
 @login_required(login_url='login')
@@ -281,30 +280,28 @@ def lista_esterilizaciones(request):
     return render(request, 'esterilizacion/esterilizacion_list.html', {'listado': Esterilizacion.objects.all()})
 
 
-class PdfConsentimiento(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'esterilizacion/consentimiento_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        esterilizacion = Esterilizacion.objects.get(pk=pk)
-        tiempo_edad = None
-        edad_mascota = None
-        if esterilizacion.mascota.nacimiento_fecha:
-            edad_mascota = (timezone.now().date() - esterilizacion.mascota.nacimiento_fecha).days / 30
-            tiempo_edad = 'MESES'
-            if 11 < edad_mascota < 24:
-                edad_mascota = 1
-                tiempo_edad = 'AÑO'
-            elif edad_mascota > 23:
-                edad_mascota = int(edad_mascota/12)
-                tiempo_edad = 'AÑOS'
-        return super(PdfConsentimiento, self).get_context_data(
-            esterilizacion=esterilizacion,
-            tiempo_edad=tiempo_edad,
-            edad_mascota=edad_mascota,
-            title='Esterilizacion N°'
-        )
+@login_required(login_url='login')
+def pdf_consentimiento(request, pk):
+    template = get_template('esterilizacion/consentimiento_pdf.html')
+    esterilizacion = Esterilizacion.objects.get(pk=pk)
+    tiempo_edad = None
+    edad_mascota = None
+    if esterilizacion.mascota.nacimiento_fecha:
+        edad_mascota = (timezone.now().date() - esterilizacion.mascota.nacimiento_fecha).days / 30
+        tiempo_edad = 'MESES'
+        if 11 < edad_mascota < 24:
+            edad_mascota = 1
+            tiempo_edad = 'AÑO'
+        elif edad_mascota > 23:
+            edad_mascota = int(edad_mascota / 12)
+            tiempo_edad = 'AÑOS'
+    context = {'esterilizacion': esterilizacion, 'tiempo_edad': tiempo_edad, 'edad_mascota': edad_mascota,
+               'title': 'Esterilizacion N°'}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Esterilizacion_N°_" + str(esterilizacion.pk))
+    return response
 
 
 @login_required(login_url='login')
@@ -432,17 +429,16 @@ def alta_patente(request):
                                                          'mascota_form': mascota_form, 'mov_form': mov_form})
 
 
-class PdfCarnet(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'patente/carnet_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        patente = Patente.objects.get(pk=pk)
-        return super(PdfCarnet, self).get_context_data(
-            patente=patente,
-            title='Patente N°: ' + str(patente.nro_patente)
-        )
+@login_required(login_url='login')
+def pdf_carnet(request, pk):
+    template = get_template('patente/carnet_pdf.html')
+    patente = Patente.objects.get(pk=pk)
+    context = {'patente': patente, 'title': 'Patente N°: ' + str(patente.nro_patente)}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Patente_N°_" + str(patente.nro_patente))
+    return response
 
 
 @login_required(login_url='login')
