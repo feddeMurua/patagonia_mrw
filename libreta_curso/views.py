@@ -22,6 +22,8 @@ import collections
 from parte_diario_caja.models import DetalleMovimiento
 from base64 import b64decode
 from django.core.files.base import ContentFile
+from weasyprint import HTML
+from django.template.loader import get_template
 
 
 '''
@@ -217,20 +219,20 @@ def get_cursos(pk_persona):
 
 @login_required(login_url='login')
 def lista_libreta(request):
+    libretas = LibretaSanitaria.objects.all()
     if request.method == 'POST':
         form = p_f.ListaPersonasFisicasForm(request.POST)
         if form.is_valid():
             persona = form.cleaned_data['persona']
             return HttpResponseRedirect(reverse('libretas:pdf_solicitud', kwargs={'pk': persona.pk}))
-    return render(request, 'libreta/libreta_list.html', {'listado': LibretaSanitaria.objects.all(),
+    return render(request, 'libreta/libreta_list.html', {'listado': libretas,
                                                          'form': p_f.ListaPersonasFisicasForm,
                                                          'fecha_hoy': timezone.now()})
 
 
 def img_to_base64(data, usr):
     formato, imgstr = data.split(';base64,')
-    ext = formato.split('/')[-1]
-    return ContentFile(b64decode(imgstr), name=usr + '.' + ext)  # You can save this as file instance.
+    return ContentFile(b64decode(imgstr), name=usr + '.png')  # You can save this as file instance.
 
 
 @login_required(login_url='login')
@@ -299,11 +301,9 @@ def modificacion_libreta(request, pk):
         if form.is_valid():
             libreta = form.save(commit=False)
             if request.POST['foto']:
-                print (request.POST['foto'])
+                libreta.foto.delete()
                 if request.POST['foto'] != "borrar":
                     libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
-                else:
-                    libreta.foto.delete()
             libreta.save()
             log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
             return redirect('libretas:lista_libretas')
@@ -332,10 +332,9 @@ def renovacion_libreta(request, pk):
                 libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(years=1)
                 libreta.tipo_libreta = 'Blanca'
                 if request.POST['foto']:
+                    libreta.foto.delete()
                     if request.POST['foto'] != "borrar":
                         libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
-                    else:
-                        libreta.foto.delete()
                 if request.POST['optradio'] == 'previa':
                     if detalle_mov_form.is_valid():
                         libreta.save()
@@ -357,54 +356,47 @@ def renovacion_libreta(request, pk):
                                                          'renovacion': True})
 
 
-class PdfSolicitud(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'libreta/solicitud_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        persona = m.PersonaFisica.objects.get(pk=pk)
-        hoy = timezone.datetime.today()
-        edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
-                                                                                   persona.fecha_nacimiento.day))
-        return super(PdfSolicitud, self).get_context_data(
-            persona=persona,
-            edad=edad,
-            title='Solicitud de Libreta Sanitaria'
-        )
+@login_required(login_url='login')
+def pdf_solicitud(request, pk):
+    template = get_template('libreta/solicitud_pdf.html')
+    persona = m.PersonaFisica.objects.get(pk=pk)
+    hoy = timezone.datetime.today()
+    edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
+                                                                               persona.fecha_nacimiento.day))
+    context = {'persona': persona, 'edad': edad}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="home_page.pdf"'
+    return response
 
 
-class PdfRenovacion(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'libreta/solicitud_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        libreta = LibretaSanitaria.objects.get(pk=pk)
-        persona = libreta.persona
-        inscripcion = Inscripcion.objects.filter(curso=libreta.curso, persona=persona)
-        hoy = timezone.datetime.today()
-        edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
-                                                                                   persona.fecha_nacimiento.day))
-        return super(PdfRenovacion, self).get_context_data(
-            libreta=libreta,
-            persona=persona,
-            inscripcion=inscripcion,
-            edad=edad,
-            title='Renovación de Libreta Sanitaria'
-        )
+@login_required(login_url='login')
+def pdf_renovacion(request, pk):
+    template = get_template('libreta/solicitud_pdf.html')
+    libreta = LibretaSanitaria.objects.get(pk=pk)
+    persona = libreta.persona
+    inscripcion = Inscripcion.objects.filter(curso=libreta.curso, persona=persona)
+    hoy = timezone.datetime.today()
+    edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
+                                                                               persona.fecha_nacimiento.day))
+    context = {'persona': persona, 'edad': edad, 'libreta': libreta, 'inscripcion': inscripcion}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="home_page.pdf"'
+    return response
 
 
-class PdfLibreta(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'libreta/libreta_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        return super(PdfLibreta, self).get_context_data(
-            libreta=LibretaSanitaria.objects.get(pk=pk),
-            title='Libreta sanitaria N°'
-        )
+@login_required(login_url='login')
+def pdf_libreta(request, pk):
+    template = get_template('libreta/libreta_pdf.html')
+    context = {'libreta': LibretaSanitaria.objects.get(pk=pk)}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="home_page.pdf"'
+    return response
 
 
 '''
