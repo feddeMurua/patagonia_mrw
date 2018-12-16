@@ -1,5 +1,3 @@
-{% extends "easy_pdf/base.html" %}
-
 {% block extra_style %}
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <style>
@@ -16,6 +14,10 @@
         .titulo {
             text-align: center;
             font-size: 16px;
+        }
+        .foto {
+            max-height: 96px;
+            max-width: 96px;
         }
     </style>
 {% endblock %}
@@ -36,7 +38,7 @@
                     <b>Curso de Manipulación de Alimentos:</b> {% if libreta.curso %}SI({{ libreta.curso }} &nbsp&nbsp//&nbsp&nbsp
                     <b>Rubro:</b> {{ inscripcion.rubro }}{% else %}NO{% endif %}<br>
                     {% if libreta.foto %}
-                        <img class="foto" src="{{ libreta.foto.url }}" height="96" width="96">
+                        <img class="foto" src="{{ libreta.foto.url }}" alt="">
                     {% endif %}
                 {% endif %}
             </p>
@@ -54,7 +56,7 @@
                     </tr>
                 </tbody>
             </table>
-            <p><b>_______________________________________________________________________________________________</b></p>
+            <p><b>________________________________________________________________________________________________________</b></p>
             <p>
                 Por la presente se deja constancia que <b>{{ persona.apellido }}, {{ persona.nombre }}</b> de
                 <b>{{ edad }}</b> años de edad, DNI <b>{{ persona.dni }}</b>, segun examen clínico no presenta patologias
@@ -75,7 +77,7 @@
                     </tr>
                 </tbody>
             </table>
-            <p><b>_______________________________________________________________________________________________</b></p>
+            <p><b>________________________________________________________________________________________________________</b></p>
         </div>
     </div>
 {% endblock %}

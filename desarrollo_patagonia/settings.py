@@ -26,7 +26,7 @@ SECRET_KEY = 'jl^-^8hf7y(6%c=3jf9)#vkhtq)l(3s4(4jaeonjx$a93w0==v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.veterinariayabastorawson.com', '192.168.1.46', 'localhost']
+ALLOWED_HOSTS = ['.veterinariayabastorawson.com', 'localhost']
 
 # Application definition
 
@@ -73,7 +73,7 @@ ROOT_URLCONF = 'desarrollo_patagonia.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,15 +139,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = 'inicio/'
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "estaticos"),
 )
-
-LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = 'inicio/'
 
 MEDIA_URL = '/estaticos/fotos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'estaticos/fotos/')

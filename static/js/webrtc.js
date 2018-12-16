@@ -38,6 +38,7 @@ $(btn_foto).change(function (event) {
     reader.readAsDataURL(input.files[0]);
     $(img).attr('hidden',false);
     $(e_foto).removeClass('hidden');
+    $(old_img).addClass('hidden');
 });
 
 n_foto.onclick = function() {
