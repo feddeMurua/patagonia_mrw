@@ -19,13 +19,14 @@ from desarrollo_patagonia import forms as dp_f
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from desarrollo_patagonia.utils import *
 from django.views.generic import DetailView, CreateView
-from easy_pdf.views import PDFTemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 from django.utils import timezone
 import collections
 import json
 from itertools import groupby
+from weasyprint import HTML
+from django.template.loader import get_template
 
 '''
 ABASTECEDORES
@@ -201,23 +202,21 @@ def cancelar_deuda_cc(request, pk):
                                                                       'mov_form': mov_form, 'listado': periodos})
 
 
-class PdfCertificado(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'cuentaCorriente/certificado_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk, mes, anio):
-        cc = CuentaCorriente.objects.get(pk=pk)
-        locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
-        reinspecciones = agrupar_reinspecciones(cc, mes, anio)
-        return super(PdfCertificado, self).get_context_data(
-            cc=cc,
-            reinspecciones=reinspecciones,
-            periodo=calendar.month_name[int(mes)] + " " + str(anio),
-            total_kilos=sum(item['reinspeccion'].total_kg for item in reinspecciones),
-            total_monto=sum(item['subtotal'] for item in reinspecciones),
-            title='Certificado de deuda - ' + str(cc.abastecedor.responsable.nombre) + ' / Periodo: ' + str(mes)
-        )
+@login_required(login_url='login')
+def pdf_certificado(request, pk, mes, anio):
+    template = get_template('cuentaCorriente/certificado_pdf.html')
+    cc = CuentaCorriente.objects.get(pk=pk)
+    locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
+    reinspecciones = agrupar_reinspecciones(cc, mes, anio)
+    context = {'cc': cc, 'reinspecciones': reinspecciones, 'periodo': calendar.month_name[int(mes)] + " " + str(anio),
+               'total_kilos': sum(item['reinspeccion'].total_kg for item in reinspecciones),
+               'total_monto': sum(item['subtotal'] for item in reinspecciones),
+               'title': 'Certificado de deuda - ' + str(cc.abastecedor.responsable.nombre) + ' / Periodo: ' + str(mes)}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Certificado_deuda_" + str(cc.abastecedor.responsable.nombre))
+    return response
 
 
 '''
@@ -589,15 +588,16 @@ def modificacion_vehiculo(request, pk):
             return render(request, 'vehiculo/tpp_update.html', {'form': form})
 
 
-class PdfVehiculo(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'vehiculo/vehiculo_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, nro):
-        return super(PdfVehiculo, self).get_context_data(
-            vehiculo=Vehiculo.objects.get(nro=nro)
-        )
+@login_required(login_url='login')
+def pdf_vehiculo(request, nro):
+    template = get_template('vehiculo/vehiculo_pdf.html')
+    vehiculo = Vehiculo.objects.get(nro=nro)
+    context = {'vehiculo': vehiculo, 'title': 'Vehiculo N°'}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Vehiculo_N°_" + str(nro))
+    return response
 
 
 '''

@@ -4,13 +4,11 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-from easy_pdf.views import PDFTemplateView
 from .forms import *
 from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
 from parte_diario_caja import views as pd_v
-from personas import forms as p_f
 from desarrollo_patagonia import forms as dp_f
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,7 +22,6 @@ from base64 import b64decode
 from django.core.files.base import ContentFile
 from weasyprint import HTML
 from django.template.loader import get_template
-import socket
 
 '''
 CURSOS
@@ -90,32 +87,30 @@ def cierre_de_curso(request, id_curso):
                                                            'apto_cierre': apto_cierre})
 
 
-class PdfAsistencia(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'curso/planilla_asistencia_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
+@login_required(login_url='login')
+def pdf_asistencia(request, pk):
+    template = get_template('curso/planilla_asistencia_pdf.html')
+    curso = Curso.objects.get(pk=pk)
+    context = {'inscripciones': Inscripcion.objects.filter(curso=curso), 'title': 'Planilla de asistencia a curso',
+               'curso': curso}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Listado_asistencia_curso_N°_" + str(curso.pk))
+    return response
 
-    def get_context_data(self, pk):
-        curso = Curso.objects.get(pk=pk)
-        return super(PdfAsistencia, self).get_context_data(
-            curso=curso,
-            inscripciones=Inscripcion.objects.filter(curso=curso),
-            title='Planilla de asistencia a curso N°'
-        )
 
-
-class PdfAprobados(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'curso/aprobados_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        curso = Curso.objects.get(pk=pk)
-        return super(PdfAprobados, self).get_context_data(
-            curso=curso,
-            inscripciones=Inscripcion.objects.filter(curso=curso, calificacion="Aprobado"),
-            title='Planilla de aprobados de curso N°'
-        )
+@login_required(login_url='login')
+def pdf_aprobados(request, pk):
+    template = get_template('curso/aprobados_pdf.html')
+    curso = Curso.objects.get(pk=pk)
+    context = {'inscripciones': Inscripcion.objects.filter(curso=curso, calificacion="Aprobado"), 'curso': curso,
+               'title': 'Planilla de aprobados de curso'}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Listado_aprobados_curso_N°_" + str(curso.pk))
+    return response
 
 
 '''
@@ -134,19 +129,23 @@ def lista_inscripciones_curso(request, id_curso):
 
 @login_required(login_url='login')
 def alta_inscripcion(request, id_curso):
+    curso = Curso.objects.get(pk=id_curso)
+    vencido = curso.fecha < timezone.now().date()
     if request.method == 'POST':
         form = InscripcionForm(request.POST, id_curso=id_curso)
         if form.is_valid():
             inscripcion = form.save(commit=False)
             inscripcion.curso = Curso.objects.get(pk=id_curso)
+            if request.POST['fecha']:
+                inscripcion.fecha_inscripcion = timezone.datetime.strptime(request.POST['fecha'], '%d/%m/%Y').strftime('%Y-%m-%d')
             inscripcion.save()
             log_crear(request.user.id, inscripcion, 'Inscripcion a Curso')
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso}))
     else:
         form = InscripcionForm
     url_return = 'cursos:inscripciones_curso'
-    return render(request, "inscripcion/inscripcion_form.html", {'id_curso': id_curso, 'url_return': url_return,
-                                                                 'form': form})
+    return render(request, "inscripcion/inscripcion_form.html", {'curso': curso, 'url_return': url_return,
+                                                                 'form': form, 'vencido': vencido})
 
 
 @login_required(login_url='login')
@@ -190,17 +189,16 @@ def cierre_inscripcion(request, pk, id_curso):
                                                                  'modificacion': True})
 
 
-class PdfInscripcion(LoginRequiredMixin, PDFTemplateView):
-    template_name = 'inscripcion/inscripcion_pdf.html'
-    login_url = '/accounts/login/'
-    redirect_field_name = 'next'
-
-    def get_context_data(self, pk):
-        inscripcion = Inscripcion.objects.get(pk=pk)
-        return super(PdfInscripcion, self).get_context_data(
-            inscripcion=inscripcion,
-            title='Comprobante de inscripcion a curso N° ' + str(inscripcion.curso.pk)
-        )
+@login_required(login_url='login')
+def pdf_inscripcion(request, pk):
+    template = get_template('inscripcion/inscripcion_pdf.html')
+    inscripcion = Inscripcion.objects.get(pk=pk)
+    context = {'inscripcion': inscripcion, 'title': 'Comprobante de inscripcion a curso N° ' + str(inscripcion.curso.pk)}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Comprobante_inscripcion_curso_N°_" + str(inscripcion.pk))
+    return response
 
 
 '''
@@ -219,14 +217,13 @@ def get_cursos(pk_persona):
 
 @login_required(login_url='login')
 def lista_libreta(request):
-    libretas = LibretaSanitaria.objects.all()
     if request.method == 'POST':
-        form = p_f.ListaPersonasFisicasForm(request.POST)
+        form = ListaSolicitudLibretaForm(request.POST)
         if form.is_valid():
             persona = form.cleaned_data['persona']
             return HttpResponseRedirect(reverse('libretas:pdf_solicitud', kwargs={'pk': persona.pk}))
-    return render(request, 'libreta/libreta_list.html', {'listado': libretas,
-                                                         'form': p_f.ListaPersonasFisicasForm,
+    return render(request, 'libreta/libreta_list.html', {'listado': LibretaSanitaria.objects.all(),
+                                                         'form': ListaSolicitudLibretaForm,
                                                          'fecha_hoy': timezone.now()})
 
 
@@ -363,11 +360,11 @@ def pdf_solicitud(request, pk):
     hoy = timezone.datetime.today()
     edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
                                                                                persona.fecha_nacimiento.day))
-    context = {'persona': persona, 'edad': edad}
+    context = {'persona': persona, 'edad': edad, 'title': 'Solicitud de libreta sanitaria'}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="home_page.pdf"'
+    response['Content-Disposition'] = 'filename="Solicitud_de_libreta_sanitaria"'
     return response
 
 
@@ -380,25 +377,24 @@ def pdf_renovacion(request, pk):
     hoy = timezone.datetime.today()
     edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
                                                                                persona.fecha_nacimiento.day))
-    context = {'persona': persona, 'edad': edad, 'libreta': libreta, 'inscripcion': inscripcion}
+    context = {'persona': persona, 'edad': edad, 'inscripcion': inscripcion, 'title': 'Renovacion de libreta sanitaria',
+               'libreta': libreta, }
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="home_page.pdf"'
+    response['Content-Disposition'] = 'filename=' + str("Renovacion_de_libreta_sanitaria_N°_" + str(libreta.pk))
     return response
 
 
 @login_required(login_url='login')
 def pdf_libreta(request, pk):
     template = get_template('libreta/libreta_pdf.html')
-    context = {'libreta': LibretaSanitaria.objects.get(pk=pk)}
+    libreta = LibretaSanitaria.objects.get(pk=pk)
+    context = {'libreta': libreta, 'title': 'Libreta sanitaria'}
     rendered = template.render(context)
-
-    IPAddr = socket.gethostbyname(socket.gethostname())
-
-    pdf_file = HTML(string=rendered, base_url=('http://'+ IPAddr)).write_pdf() #base_url=request.build_absolute_uri()).write_pdf()
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    #response['Content-Disposition'] = 'filename="home_page.pdf"'
+    response['Content-Disposition'] = 'filename=' + str("Libreta_sanitaria_N°_" + str(libreta.pk))
     return response
 
 
