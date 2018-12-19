@@ -22,8 +22,6 @@ from base64 import b64decode
 from django.core.files.base import ContentFile
 from weasyprint import HTML
 from django.template.loader import get_template
-import socket
-
 
 '''
 CURSOS
@@ -394,8 +392,7 @@ def pdf_libreta(request, pk):
     libreta = LibretaSanitaria.objects.get(pk=pk)
     context = {'libreta': libreta, 'title': 'Libreta sanitaria'}
     rendered = template.render(context)
-    IPAddr = socket.gethostbyname(socket.gethostname())
-    pdf_file = HTML(string=rendered, base_url=('http://'+ IPAddr)).write_pdf() #base_url=request.build_absolute_uri()).write_pdf()
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename=' + str("Libreta_sanitaria_N°_" + str(libreta.pk))
     return response
