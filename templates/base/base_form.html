@@ -19,7 +19,7 @@
             {% csrf_token %}
             <div class="panel panel-primary">
                 <div class="panel-body">
-                    <div class="col-md-7" id="container-form-left">
+                    <div class="col-md-7">
                         {% block form-left %}
                             {{ form.media }}
                             {% for field in form %}

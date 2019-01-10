@@ -21,7 +21,7 @@
             {% csrf_token %}
             <div class="panel panel-primary">
                 <div class="panel-body">
-                    <div class="col-xs-12 col-md-6" id="container-form-left">
+                    <div class="col-xs-12 col-md-6">
                         {{ form.media }}
                         {% for field in form %}
                             <div class="form-group">
@@ -40,7 +40,7 @@
                         {% endif %}
                     </div>
                     {% if not resultado %}
-                        <div class="col-xs-12 col-md-6" id="container-form-right">
+                        <div class="col-xs-12 col-md-6">
                             <div class="panel panel-info panel-table">
                                 <div class="panel-heading">
                                     <div class="row">

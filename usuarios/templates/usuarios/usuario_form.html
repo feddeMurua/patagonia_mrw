@@ -32,5 +32,10 @@
 {% block more-scripts %}
     <script>
         $('#container-form-left').find('input').addClass('form-control');
+
+        var staff = $('#id_is_staff');
+
+        staff.checkboxradio();
+        staff.next('span').hide();
     </script>
 {% endblock %}

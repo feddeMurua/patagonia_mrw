@@ -22,26 +22,26 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Abastecedor *</label>
-                                    {{ form.abastecedor }}
+                                    {{ form.abastecedor|add_class:'entab' }}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Origen *</label>
-                                    {{ form.origen|attr:'required:true' }}
+                                    {{ form.origen|attr:'required:true'|add_class:'entab' }}
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label>Inspectores *</label>
-                            {{ form.inspectores }}
+                            {{ form.inspectores|add_class:'entab' }}
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Precintado</label>
-                                    {{ form.precintado|add_class:'form-control' }}
+                                    {{ form.precintado|add_class:'form-control'|add_class:'entab' }}
                                     {% for error in form.precintado.errors %}
                                         <span style="color:red;" class="help-block">{{ error }}</span>
                                     {% endfor %}
@@ -50,7 +50,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>N° de Certificado *</label>
-                                    {{ form.certificado|add_class:'form-control' }}
+                                    {{ form.certificado|add_class:'form-control'|add_class:'entab' }}
                                     {% for error in form.certificado.errors %}
                                         <span class="help-block">{{ error }}</span>
                                     {% endfor %}
@@ -61,13 +61,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Turno *</label>
-                                    {{ form.turno }}
+                                    {{ form.turno|add_class:'entab' }}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Cantidad de Kg inspeccionados *</label>
-                                    {{ form.total_kg|add_class:'form-control' }}
+                                    {{ form.total_kg|add_class:'form-control'|add_class:'entab' }}
                                     {% for error in form.total_kg.errors %}
                                         <span style="color:red;" class="help-block">{{ error }}</span>
                                     {% endfor %}
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-5" id="container-form-right">
+                        <div class="col-xs-12 col-md-5">
                             {% include 'caja/cuadro_facturacion.html' %}
                         </div>
                     </div>
@@ -225,6 +225,25 @@
                 $(section).find(':input').attr('data-parsley-group', 'block-' + index);
             });
             navigateTo(0); // Start at the beginning
+        });
+
+        $('select').on('select2:close', function() {
+            var inputs = $(this).closest('form').find(':input:visible'),
+            my_index = inputs.index(this);
+            setTimeout(function() {
+                $('.select2-container--focus').removeClass('select2-container--focus');
+                $(':focus').blur();
+                inputs.eq(my_index + 1).focus();
+            }, 1);
+        });
+
+        $('.entab').keydown( function(e) {
+            var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+            if (key === 13) {
+                e.preventDefault();
+                var inputs = $(this).closest('form').find(':input:visible');
+                inputs.eq(inputs.index(this) + 1).focus();
+            }
         });
     </script>
 {% endblock %}

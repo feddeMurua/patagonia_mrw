@@ -15,16 +15,16 @@
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
-    {% block stylesheets %}
-    {% endblock %}
+
+    {% block stylesheets %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
     {% bootstrap_messages %}
 
-    {% block no-navbar %}
-        {% include 'base/nav.html' %}
-    {% endblock %}
+    {% block no-particles %}<div id="particles"></div>{% endblock %}
+
+    {% block no-navbar %}{% include 'base/nav.html' %}{% endblock %}
 
     {% block no-header %}
         <header id="header-page" class="header">

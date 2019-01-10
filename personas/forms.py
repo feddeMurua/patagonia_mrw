@@ -143,6 +143,12 @@ class PersonalPropioForm(forms.ModelForm):
         model = PersonalPropio
         fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
                   'rol_actuante']
+        widgets = {
+            'nacionalidad': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_nacionalidad'),
+            )
+        }
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']

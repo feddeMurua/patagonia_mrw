@@ -9,11 +9,15 @@
 
 {% block extra-form %}
     {% if fecha_hoy >= patente.fecha_vencimiento %}
-        <input type="radio" name="radio" value="renovacion" checked> Renovacion<br>
-        <input type="radio" name="radio" value="duplicado"> Duplicado
+        <label for="id-radio-ren"></label>
+        <input type="radio" id="id-radio-ren" name="radio" value="renovacion" checked> Renovacion<br>
+        <label for="id-radio-dup"></label>
+        <input type="radio" id="id-radio-dup" name="radio" value="duplicado"> Duplicado
     {% else %}
-        <input type="radio" data-toggle="tooltip" title="La patente aun es válida" name="radio" value="renovacion" disabled> Renovacion<br>
-        <input type="radio" name="radio" value="duplicado" checked> Duplicado
+        <label for="id-radio-ren-v"></label>
+        <input type="radio" id="id-radio-ren-v" data-toggle="tooltip" title="La patente aun es válida" name="radio" value="renovacion" disabled> Renovacion<br>
+        <label for="id-radio-dup-v"></label>
+        <input type="radio" id="id-radio-dup-v" name="radio" value="duplicado" checked> Duplicado
     {% endif %}
     <br><br>
     {% include 'caja/cuadro_facturacion.html' %}
