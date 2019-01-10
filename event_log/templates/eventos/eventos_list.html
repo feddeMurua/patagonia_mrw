@@ -3,6 +3,7 @@
 
 {% block more-stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/eventos_list.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
 {% endblock %}
 
 {% block title %}Seguimiento de Eventos{% endblock %}
@@ -52,15 +53,21 @@
 {% endblock %}
 
 {% block more-scripts %}
+    <script src="{% static 'js/moment.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'js/es-us.js' %}"></script>
     <script>
         $('#id_fecha_desde').datetimepicker({
-            format:'d/m/Y H:i',
-            maxDate: new Date()
+            format: 'DD/MM/YY HH:mm',
+            locale: 'es-us',
+            sideBySide: true,
+            maxDate: moment()
         });
-        $('fecha_hasta').datetimepicker({
-            format:'d/m/Y H:i',
-            maxDate: new Date()
+        $('#id_fecha_hasta').datetimepicker({
+            format: 'DD/MM/YY HH:mm',
+            locale: 'es-us',
+            sideBySide: true,
+            maxDate: moment()
         });
-        $.datetimepicker.setLocale('es');
     </script>
 {% endblock %}

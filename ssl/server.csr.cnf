@@ -1,0 +1,14 @@
+ [req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+
+[dn]
+C=AR
+ST=Chubut
+L=Rawson
+O=Patagonia
+OU=RandomOrganizationUnit
+emailAddress=hello@example.com
+CN = veterinariayabasto.com

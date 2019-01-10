@@ -6,6 +6,7 @@ from .models import *
 from django.utils import timezone
 from functools import partial
 import re
+from dateutil.relativedelta import *
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -30,7 +31,8 @@ class MovimientoDiarioForm(forms.ModelForm):
 
 
 class DetalleMovimientoDiarioForm(forms.ModelForm):
-    movimiento = forms.ModelChoiceField(queryset=MovimientoDiario.objects.filter(fecha=timezone.now().date()))
+    fecha_min = timezone.now().date() - relativedelta(days=3)
+    movimiento = forms.ModelChoiceField(queryset=MovimientoDiario.objects.filter(fecha__lte=timezone.now().date(), fecha__gte=fecha_min))
 
     class Meta:
         model = DetalleMovimiento
