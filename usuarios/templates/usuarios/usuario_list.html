@@ -16,6 +16,7 @@
         <tr>
             <th>Nombre de usuario</th>
             <th>Apellido y Nombre</th>
+            <th>Staff</th>
             <th>Ultima conexion</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -27,6 +28,11 @@
             <td>
                 {{ usuario.last_name }}{% if usuario.last_name and usuario.first_name %}, {% endif %}{{ usuario.first_name }}
             </td>
+            {% if usuario.is_staff %}
+                <td>SI</td>
+            {% else %}
+                <td>NO</td>
+            {% endif %}
             <td>{{ usuario.last_login|default_if_none:"" }}</td>
             <td align="center">
                 <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'baja_usuario' usuario.pk %}"><em class="glyphicon glyphicon-trash"></em></a>

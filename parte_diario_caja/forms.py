@@ -41,7 +41,7 @@ class ListaServicios(forms.Form):
     servicio = forms.ModelChoiceField(queryset=Servicio.objects.all())
 
     def __init__(self, *args, **kwargs):
-        tipo = kwargs.pop('tipo')
+        tipo = kwargs.pop(str('tipo'))
         super(ListaServicios, self).__init__(*args, **kwargs)
 
         self.fields['servicio'] = forms.ModelChoiceField(queryset=Servicio.objects.filter(tipo__nombre=tipo))

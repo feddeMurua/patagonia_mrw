@@ -41,17 +41,3 @@
 {% block btn-footer %}
     <a href="{% url 'personas:lista_contribuyentes' %}" class="btn btn-primary">Regresar</a>
 {% endblock %}
-
-{% block more-scripts %}
-    <script>
-        $(document).ready(function(){
-            $("#hidden-panel").hide();
-
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $("#buscar").click(function(){
-                $("#hidden-panel").slideToggle("slow");
-            });
-        });
-    </script>
-{% endblock %}

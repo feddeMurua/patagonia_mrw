@@ -496,14 +496,6 @@
             $('#id_producto').select2('open');
         });
 
-        $.datepicker.setDefaults({
-            maxDate: new Date(),
-            onClose: function(selectedDate) {
-                $(".datepicker").datepicker("option", "minDate", selectedDate);
-                $(this).parent().next().children().focus();
-             }
-        });
-
         $('select').on('select2:close', function() {
             var inputs = $(this).closest('form').find(':input:visible'),
             my_index = inputs.index(this);
@@ -522,6 +514,5 @@
                 inputs.eq(inputs.index(this) + 1).focus();
             }
         });
-
     </script>
 {% endblock %}

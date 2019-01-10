@@ -46,7 +46,7 @@
                                 <span class="help-block">{{ error }}</span>
                             {% endfor %}
                         </div>
-                        <div class="col-xs-12 col-md-7 form-no-patentado" id="container-form-left">
+                        <div class="col-xs-12 col-md-7 form-no-patentado">
                             <div class="form-group">
                                 <label for="{{ personas_form.persona.id_for_label }}">Interesado</label>
                                 {{ personas_form.persona|add_class:'form-control' }}
@@ -55,7 +55,7 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-5 form-no-patentado" id="container-form-botom-right">
+                        <div class="col-xs-12 col-md-5 form-no-patentado">
                             {% include 'mascota/cuadro_mascota.html' %}
                         </div>
                     </div>
