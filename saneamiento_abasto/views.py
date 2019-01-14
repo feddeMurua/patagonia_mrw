@@ -542,6 +542,14 @@ class AltaMarca(LoginRequiredMixin, CreatePopupMixin, CreateView):
     redirect_field_name = 'next'
 
 
+class AltaModelo(LoginRequiredMixin, CreatePopupMixin, CreateView):
+    model = ModeloVehiculo
+    form_class = ModeloVehiculoForm
+    template_name = "vehiculo/modelo_form.html"
+    login_url = '/accounts/login/'
+    redirect_field_name = 'next'
+
+
 @login_required(login_url='login')
 def alta_vehiculo(request):
     if request.method == 'POST':

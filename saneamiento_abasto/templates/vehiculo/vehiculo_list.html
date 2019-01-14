@@ -15,7 +15,7 @@
     <thead>
         <tr>
             <th>Titular</th>
-            <th>Marca - Patente</th>
+            <th>Modelo/Marca - Patente</th>
             <th>Tipo de Vehículo</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
@@ -24,7 +24,7 @@
         {% for vehiculo in listado %}
             <tr>
                 <td>{{ vehiculo.titular }}</td>
-                <td>{{ vehiculo.marca }} - {{vehiculo.dominio}}</td>
+                <td>{{ vehiculo.modelo }} - {{vehiculo.dominio}}</td>
                 <td>{{ vehiculo.tipo_vehiculo }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'vehiculo:detalle_vehiculo' vehiculo.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>

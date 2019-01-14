@@ -5,7 +5,6 @@ from functools import partial
 from .models import *
 from django.utils.translation import ugettext as _
 from django.utils import timezone
-from dateutil.relativedelta import relativedelta
 from django_addanother.widgets import AddAnotherWidgetWrapper
 from django.core.urlresolvers import reverse_lazy
 
@@ -112,9 +111,9 @@ class VehiculoForm(forms.ModelForm):
             'nro': _('N°')
         }
         widgets = {
-            'marca': AddAnotherWidgetWrapper(
+            'modelo': AddAnotherWidgetWrapper(
                 forms.Select,
-                reverse_lazy('vehiculo:alta_marca'),
+                reverse_lazy('vehiculo:alta_modelo'),
             )
         }
 
@@ -123,6 +122,18 @@ class MarcaVehiculoForm(forms.ModelForm):
     class Meta:
         model = MarcaVehiculo
         fields = '__all__'
+
+
+class ModeloVehiculoForm(forms.ModelForm):
+    class Meta:
+        model = ModeloVehiculo
+        fields = '__all__'
+        widgets = {
+            'marca': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('vehiculo:alta_marca'),
+            )
+        }
 
 
 class ModificarTSAForm(forms.ModelForm):

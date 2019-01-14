@@ -100,7 +100,8 @@ VEHICULO Y DESINFECCIONES
 
 
 class Vehiculo(models.Model):
-    marca = models.ForeignKey('MarcaVehiculo')
+    modelo = models.ForeignKey('ModeloVehiculo', null=True)
+    anio = models.IntegerField(validators=[MinValueValidator(1950)], blank=True, null=True)
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=TIPO_VEHICULO, default='TPP')
@@ -111,14 +112,22 @@ class Vehiculo(models.Model):
     rubro_vehiculo = models.CharField(max_length=25, blank=True, null=True)
 
     def __str__(self):
-        return "%s - %s" % (self.marca, self.dominio)
+        return "%s %s - %s" % (self.modelo.nombre, self.modelo.marca, self.dominio)
 
 
 class MarcaVehiculo(models.Model):
-    nombre = models.CharField(max_length=15, blank=True, null=True)
+    nombre = models.CharField(max_length=15)
 
     def __str__(self):
         return "%s" % self.nombre
+
+
+class ModeloVehiculo(models.Model):
+    nombre = models.CharField(max_length=15)
+    marca = models.ForeignKey('MarcaVehiculo')
+
+    def __str__(self):
+        return "%s %s" % (self.nombre, self.marca)
 
 
 class Desinfeccion(models.Model):

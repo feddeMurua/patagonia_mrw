@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^pdf/(?P<nro>\d+)$', pdf_vehiculo, name='vehiculo_pdf'),
     url(r'^getRubros/(?P<id_categoria>\w+)$', get_rubros_json, name='get_rubros'),
     url(r'^nueva_marca$', AltaMarca.as_view(), name='alta_marca'),
+    url(r'^nuevo_modelo$', AltaModelo.as_view(), name='alta_modelo')
 ]
