@@ -105,6 +105,7 @@ class VehiculoForm(forms.ModelForm):
         model = Vehiculo
         exclude = ['rubro_vehiculo']
         labels = {
+            'anio': _("Año"),
             'tipo_vehiculo': _("Tipo de vehiculo"),
             'tipo_tpp': _("Tipo de transporte"),
             'disposicion_resolucion': _("Resolucion N°"),
@@ -143,6 +144,12 @@ class ModificarTSAForm(forms.ModelForm):
         labels = {
             'disposicion_resolucion': _("Disposicion")
         }
+        widgets = {
+            'modelo': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('vehiculo:alta_modelo'),
+            )
+        }
 
 
 class ModificarTPPForm(forms.ModelForm):
@@ -153,6 +160,12 @@ class ModificarTPPForm(forms.ModelForm):
             'disposicion_resolucion': _("Resolucion"),
             'tipo_tpp': _('Tipo de transporte'),
             'nro': _('N°')
+        }
+        widgets = {
+            'modelo': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('vehiculo:alta_modelo'),
+            )
         }
 
 

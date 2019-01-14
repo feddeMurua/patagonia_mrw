@@ -100,7 +100,7 @@ VEHICULO Y DESINFECCIONES
 
 
 class Vehiculo(models.Model):
-    modelo = models.ForeignKey('ModeloVehiculo', null=True)
+    modelo = models.ForeignKey('ModeloVehiculo')
     anio = models.IntegerField(validators=[MinValueValidator(1950)], blank=True, null=True)
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
@@ -127,7 +127,7 @@ class ModeloVehiculo(models.Model):
     marca = models.ForeignKey('MarcaVehiculo')
 
     def __str__(self):
-        return "%s %s" % (self.nombre, self.marca)
+        return "%s %s" % (self.marca, self.nombre)
 
 
 class Desinfeccion(models.Model):
