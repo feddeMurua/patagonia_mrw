@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 {% block extra_style %}
     <title>{{ title }}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -22,14 +24,20 @@
         td, th {
             text-align: center;
         }
+        .logo {
+            max-height: 64px;
+            max-width: 64px;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
     <div id="content">
         <div class="main">
-            <h3>PLANILLA DE ASISTENCIA</h3>
-            <h3>{% now "SHORT_DATE_FORMAT" %}</h3>
+            <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
+            <h3 align="center">PLANILLA DE ASISTENCIA</h3>
+            <h3>Curso N°: {{ curso.pk }}</h3>
+            <h3>Fecha de inicio de curso: {{ curso.fecha }}</h3>
             <table class="tabla-alumnos">
                 <thead>
                     <tr>

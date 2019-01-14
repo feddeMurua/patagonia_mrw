@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 {% block extra_style %}
     <title>{{ title }}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -20,12 +22,17 @@
             max-height: 96px;
             max-width: 96px;
         }
+        .logo {
+            max-height: 64px;
+            max-width: 64px;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
     <div id="content">
         <div class="main">
+            <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
             <p class="titulo"><b><u>{% if libreta %}RENOVACION{% else %}SOLICITUD{% endif %} DE LIBRETA SANITARIA</u></b></p>
             <p>
                 <b>Fecha:</b> {% now "SHORT_DATE_FORMAT" %}<br>
@@ -38,11 +45,11 @@
                 {% if libreta %}
                     <b>Curso de Manipulación de Alimentos:</b> {% if libreta.curso %}SI({{ libreta.curso }} &nbsp&nbsp//&nbsp&nbsp
                     <b>Rubro:</b> {{ inscripcion.rubro }}{% else %}NO{% endif %}<br>
-                    {% if libreta.foto %}
-                        <img class="foto" src="{{ libreta.foto.url }}" alt="">
-                    {% endif %}
                 {% endif %}
             </p>
+            {% if libreta.foto %}
+                <img class="foto" src="{{ libreta.foto.url }}" alt="">
+            {% endif %}
             <table>
                 <tbody>
                     <tr  style="height:50px; vertical-align:bottom">

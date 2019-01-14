@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 {% block extra_style %}
     <title>{{ title }}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -13,7 +15,7 @@
             border: 1px solid black;
             width: 75%;
         }
-        .tabla-datos {
+        .tabla-datos, .tabla-cab {
             margin: 0 30px;
         }
         .derecha {
@@ -23,6 +25,10 @@
         .cel-der {
             text-align: right;
         }
+        .logo {
+            max-height: 64px;
+            max-width: 64px;
+        }
     </style>
 {% endblock %}
 
@@ -30,9 +36,20 @@
     <div id="content">
         <div class="main">
             <div class="panel-carnet">
-                <p class="titulo"><b>DIRECCION DE VETERINARIA</b></p>
-                <p class="titulo"><b>Municipalidad de Rawson</b></p>
-                <p class="derecha">Fecha de Registro: {{ patente.fecha }}</p>
+                <table class="tabla-cab">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
+                            </td>
+                            <td colspan="2">
+                                <p class="titulo"><b>DIRECCION DE VETERINARIA</b></p>
+                                <p class="titulo"><b>Municipalidad de Rawson</b></p>
+                                <p style="text-align: right">Fecha de Registro: {{ patente.fecha }}</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <table class="tabla-datos">
                     <tbody>
                         <tr>

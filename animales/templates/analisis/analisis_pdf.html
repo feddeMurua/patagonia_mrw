@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 {% block extra_style %}
     <title>{{ title }}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -25,12 +27,17 @@
         .fecha {
             text-align: right;
         }
+        .logo {
+            max-height: 64px;
+            max-width: 64px;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
     <div id="content">
         <div class="main">
+            <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
             <p class="titulo"><b><u>ANALISIS DE TRICHINELOSIS (Digestión Enzimática)</u></b></p>
             <p>
                 Fecha: {{ analisis.fecha }}<br>
@@ -63,7 +70,9 @@
             <p>
                 REALIZADO EL ANALISIS DE 12 (doce) grs. de muestra correspondiente al/los animales previamente listados
                 {% if analisis.resultado == 'Negativo' %} NO {% endif %} se han detectado larvas en la muestra procesada
-                mediante digestión enzimática.<br>
+                mediante digestión enzimática.
+            </p>
+            <p>
                 <b><u>ACLARACION:</u></b> EL ANALISIS NO AUTORIZA LA COMERCIALIZACION DEL/LOS CERDO/S NI CERTIFICA LA
                 AUSENCIA DE OTRAS ENFERMEDADES QUE PUDIERA/N SUFRIR O TRANSMITIR.
             </p>

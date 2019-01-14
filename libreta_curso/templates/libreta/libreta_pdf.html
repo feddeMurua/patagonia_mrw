@@ -43,6 +43,10 @@
             max-height: 96px;
             max-width: 96px;
         }
+        .logo {
+            max-height: 64px;
+            max-width: 64px;
+        }
     </style>
 {% endblock %}
 
@@ -109,8 +113,10 @@
                         </div>
                         <table class="firma">
                             <tr>
-                                <td class="firma-vacio"></td>
                                 <td>
+                                    <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
+                                </td>
+                                <td colspan="2">
                                     <p><b>SANDRA GERMILLAC</b></p>
                                     <p><b>Dpto. Administrativo</b></p>
                                     <p><b>Abasto, Saneamiento y Veterinaria</b></p>

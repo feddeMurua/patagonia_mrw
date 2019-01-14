@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 {% block extra_style %}
     <title>{{ title }}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -12,12 +14,17 @@
         td {
             text-align: center;
         }
+        .logo {
+            max-height: 64px;
+            max-width: 64px;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
     <div id="content">
         <div class="main">
+            <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
             <p><b>REGISTRO DE
                 {% if vehiculo.tipo_vehiculo == 'TSA' %}
                     TRANSPORTE DE SUSTANCIAS ALIMENTICIAS
@@ -32,9 +39,12 @@
                 MARCA: {{ vehiculo.marca }}<br>
                 DOMINIO: {{ vehiculo.dominio }}<br>
                 {% if vehiculo.tipo_vehiculo == 'TSA' %}
-                    RESOLUCION: N° {{ vehiculo.disposicion_resolucion }}<br>
+                    DISPOSICION: N° {{ vehiculo.disposicion_resolucion }}<br>
+                    CATEGORIA: {{ vehiculo.categoria }}<br>
+                    RUBRO: {{ vehiculo.rubro_vehiculo }}
                 {% else %}
-                    DISPOSICION N°: {{ vehiculo.disposicion_resolucion|default_if_none:"" }}
+                    RESOLUCION N°: {{ vehiculo.disposicion_resolucion|default_if_none:"" }}<br>
+                    TIPO DE TRANSPORTE: {{ vehiculo.tipo_tpp }}
                 {% endif %}<br>
             </b></p>
             <br>
