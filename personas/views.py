@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import *
+from .models import PersonaFisica
 from desarrollo_patagonia.utils import *
 from libreta_curso import models as lc_m
 from animales import models as a_m
@@ -200,3 +201,17 @@ class AltaNacionalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
     template_name = "domicilio/nacionalidad_form.html"
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
+
+
+@login_required(login_url='login')
+def verificar_documento(request):
+
+    existe = False
+
+    try:
+        nueva_persona = PersonaFisica.objects.get(dni=request.GET['documento'])
+        existe = True
+    except:
+        pass
+
+    return JsonResponse({'existe': existe},safe=False)
