@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^domicilio/nueva_provincia/$', AltaProvincia.as_view(), name='nueva_provincia'),
     url(r'^domicilio/nueva_nacionalidad/$', AltaNacionalidad.as_view(), name='nueva_nacionalidad'),
 
+    url(r'^verificar/documento/$', verificar_documento, name='verificar_documento'),
+
 ]

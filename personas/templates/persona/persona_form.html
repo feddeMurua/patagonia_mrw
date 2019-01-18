@@ -29,5 +29,27 @@
 
         $('#id_dni').mask('ZZ99000000', {translation:  {'Z': {pattern: /a-zA-Z0-9/, optional: true}}});
         $('#id_cuit').mask('00-00000000-0');
+
+        $("#id_dni").focusout(function(){
+          var doc_ingresado = $('#id_dni').val();
+          $.ajax({
+           url: "{% url 'personas:verificar_documento' %}",
+           method: 'GET',
+           data: {
+             documento: doc_ingresado
+           },
+           success: function(data){
+             if(data['existe']){
+               alert("Ya existe este documento registrado en el sistema.")
+             }
+           }
+         });
+
+        });
+
     </script>
+
+
+
+
 {% endblock %}
