@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.urlresolvers import reverse
 from .forms import *
 from django.utils import timezone
@@ -45,6 +45,17 @@ def detalle_movimiento(request, pk):
     detalles = DetalleMovimiento.objects.filter(movimiento=movimiento)
     return render(request, "caja/movimiento_detail.html", {'movimiento': movimiento, 'detalles': detalles,
                                                            'total': sum(detalle.importe for detalle in detalles)})
+
+
+@login_required(login_url='login')
+def verificar_nro_ingreso(request):
+    existe = False
+    try:
+        MovimientoDiario.objects.get(nro_ingreso=request.GET['nro_ingreso'])
+        existe = True
+    except:
+        pass
+    return JsonResponse({'existe': existe})
 
 
 def movimiento_previo(request, form, servicio, obj, logname):

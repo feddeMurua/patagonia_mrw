@@ -8,7 +8,7 @@ from .models import PersonaFisica
 from desarrollo_patagonia.utils import *
 from libreta_curso import models as lc_m
 from animales import models as a_m
-from django.views.generic import DetailView, CreateView, View
+from django.views.generic import DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_addanother.views import CreatePopupMixin
 
@@ -205,13 +205,10 @@ class AltaNacionalidad(LoginRequiredMixin, CreatePopupMixin, CreateView):
 
 @login_required(login_url='login')
 def verificar_documento(request):
-
     existe = False
-
     try:
-        nueva_persona = PersonaFisica.objects.get(dni=request.GET['documento'])
+        PersonaFisica.objects.get(dni=request.GET['documento'])
         existe = True
     except:
         pass
-
-    return JsonResponse({'existe': existe},safe=False)
+    return JsonResponse({'existe': existe})

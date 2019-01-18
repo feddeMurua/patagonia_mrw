@@ -27,29 +27,30 @@
             $("#id_documentacion_retirada").checkboxradio();
         });
 
-        $('#id_dni').mask('ZZ99000000', {translation:  {'Z': {pattern: /a-zA-Z0-9/, optional: true}}});
+        var dni = $('#id_dni');
+
+        dni.mask('ZZ99000000', {translation:  {'Z': {pattern: /a-zA-Z0-9/, optional: true}}});
         $('#id_cuit').mask('00-00000000-0');
 
-        $("#id_dni").focusout(function(){
-          var doc_ingresado = $('#id_dni').val();
-          $.ajax({
-           url: "{% url 'personas:verificar_documento' %}",
-           method: 'GET',
-           data: {
-             documento: doc_ingresado
-           },
-           success: function(data){
-             if(data['existe']){
-               alert("Ya existe este documento registrado en el sistema.")
-             }
-           }
-         });
-
+        dni.focusout( function(){
+            $.ajax({
+                url: "{% url 'personas:verificar_documento' %}",
+                method: 'GET',
+                data: {
+                    documento: dni.val()
+                },
+                success: function(data){
+                    if(data['existe']){
+                        dni.after('<div class="alert alert-danger"><strong>Ya existe una persona registrada con el DNI ingresado</strong></div>')
+                    }
+                }
+            });
         });
 
+        dni.focusin( function (){
+            if ($('.alert')) {
+                $('.alert').remove()
+            }
+        });
     </script>
-
-
-
-
 {% endblock %}

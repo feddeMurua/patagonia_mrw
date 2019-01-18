@@ -3,7 +3,8 @@ nueva = $('.nueva'),
 movimiento = $('#id_movimiento'),
 titular = $('#id_titular'),
 forma_pago = $('#id_forma_pago'),
-nro_cheque = $('#id_nro_cheque');
+nro_cheque = $('#id_nro_cheque'),
+nro_ingreso = $('#id_nro_ingreso');
 
 forma_pago.change(hideNroCheque);
 hideNroCheque();
@@ -45,3 +46,24 @@ function requireNone() {
     $('.previa :input').prop('required', false);
     $('.nueva :input').prop('required', false);
 }
+
+nro_ingreso.focusout( function(){
+    $.ajax({
+        url: '/caja/verificar_nro_ingreso/',
+        method: 'GET',
+        data: {
+            nro_ingreso: nro_ingreso.val()
+        },
+        success: function(data){
+            if(data['existe']){
+                nro_ingreso.after('<div class="alert alert-danger"><strong>El número de ingresos varios ya existe</strong></div>')
+            }
+        }
+    });
+});
+
+nro_ingreso.focusin( function (){
+    if ($('.alert')) {
+        $('.alert').remove()
+    }
+});
