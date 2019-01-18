@@ -8,7 +8,6 @@
 {% block panel-title %}Libretas{% endblock %}
 
 {% block btn-nuevo %}
-    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-backdrop="false" data-target="#modalSolicitud">Imprimir formulario</button>
     <a href="{% url 'libretas:nueva_libreta' %}" class="btn btn-sm btn-primary btn-create">Nueva Libreta</a>
 {% endblock %}
 
@@ -27,52 +26,36 @@
             <tr>
                 <td>{{ libreta.persona }}</td>
                 <td>{{ libreta.tipo_libreta }}</td>
-                <td>{{ libreta.fecha_vencimiento }}</td>
-                {% if libreta.fecha_vencimiento < fecha_hoy %}
-                    <td>Vencida</td>
+                <td>{{ libreta.fecha_vencimiento|default_if_none:"" }}</td>
+                {% if libreta.fecha_vencimiento %}
+                    {% if libreta.fecha_vencimiento < fecha_hoy %}
+                        <td>Vencida</td>
+                    {% else %}
+                        <td>Al dia</td>
+                    {% endif %}
                 {% else %}
-                    <td>Al dia</td>
+                    <td>Pendiente</td>
                 {% endif %}
                 <td>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'libretas:detalle_libreta' libreta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'libretas:modificar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                     {% if user.is_staff %}
                         <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'libretas:borrar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     {% endif %}
-                    <a class="btn btn-info" data-toggle="tooltip" title="Imprimir formulario" target="_blank" href="{% url 'libretas:pdf_renovacion' libreta.pk %}"><em class="glyphicon glyphicon-list"></em></a>
-                    <a class="btn btn-primary" data-toggle="tooltip" title="Renovacion" href="{% url 'libretas:renovacion_libreta' libreta.pk %}"><em class="glyphicon glyphicon-refresh"></em></a>
+                    {% if libreta.fecha_vencimiento %}
+                        <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'libretas:detalle_libreta' libreta.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                        {% if libreta.pendiente %}
+                            <a class="btn btn-success" data-toggle="tooltip" title="Completar tramite" href="{% url 'libretas:confirmar_renovacion' libreta.pk %}"><em class="glyphicon glyphicon-ok"></em></a>
+                        {% else %}
+                            <a class="btn btn-primary" data-toggle="tooltip" title="Renovar libreta" href="{% url 'libretas:renovar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-refresh"></em></a>
+                        {% endif %}
+                    {% elif not libreta.fecha_vencimiento and libreta.pendiente %}
+                        <a class="btn btn-success" data-toggle="tooltip" title="Completar tramite" href="{% url 'libretas:confirmar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-ok"></em></a>
+                    {% endif %}
+                    {% if libreta.pendiente %}
+                        <a class="btn btn-info" data-toggle="tooltip" title="Imprimir formulario" target="_blank" href="{% url 'libretas:pdf_formulario' libreta.pk %}"><em class="glyphicon glyphicon-list"></em></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
     </tbody>
-
-    <div id="modalSolicitud" class="modal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Imprimir solicitud</h4>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" id="solicitudForm" target="_blank">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label>Persona</label>
-                            {{ form.persona|add_class:"form-control" }}
-                        </div>
-                        <input type="submit" class="btn btn-info btn-solicitud" value="Confirmar" style="margin-top:0;"/>
-                        <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block more-scripts %}
-    <script>
-        $("#solicitudForm").submit(function() {
-            $('#modalSolicitud').modal('hide');
-        });
-    </script>
 {% endblock %}

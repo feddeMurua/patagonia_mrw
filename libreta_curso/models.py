@@ -11,13 +11,14 @@ class LibretaSanitaria(models.Model):
     persona = models.OneToOneField(m.PersonaFisica, on_delete=models.CASCADE)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, null=True, blank=True)
     observaciones = models.TextField(max_length=200, default='', blank=True)
-    fecha_examen_clinico = models.DateField()
-    profesional_examen_clinico = models.CharField(max_length=200, default='')
-    lugar_examen_clinico = models.CharField(max_length=200, default='')
+    fecha_examen_clinico = models.DateField(null=True)
+    profesional_examen_clinico = models.CharField(max_length=200)
+    lugar_examen_clinico = models.CharField(max_length=200)
     fecha = models.DateField(default=now)
     tipo_libreta = models.CharField(max_length=10, choices=Tipo_Libreta)
-    fecha_vencimiento = models.DateField()
+    fecha_vencimiento = models.DateField(null=True)
     foto = models.ImageField(upload_to='libreta_curso/foto/', blank=True)
+    pendiente = models.BooleanField(default=False)
 
     def __str__(self):
         return "Libreta Sanitaria N°: %s - %s" % (self.pk, self.persona)

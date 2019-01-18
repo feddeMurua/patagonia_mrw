@@ -188,41 +188,6 @@ class DomicilioForm(forms.ModelForm):
             )
         }
 
-    def clean_barrio(self):
-        barrio = self.cleaned_data['barrio']
-        if barrio:
-            if not regex_alfanumerico.match(barrio):
-                raise forms.ValidationError('El nombre del barrio, solo puede contener letras/números y/o espacios')
-        return barrio
-
-    def clean_calle(self):
-        calle = self.cleaned_data['calle']
-        if not regex_alfanumerico.match(calle):
-            raise forms.ValidationError('El nombre de la calle, solo puede contener letras/números y/o espacios')
-        return calle
-
-    def clean_calle_entre1(self):
-        calle_entre1 = self.cleaned_data['calle_entre1']
-        if calle_entre1:
-            if not regex_alfanumerico.match(calle_entre1):
-                raise forms.ValidationError('El nombre de la calle, solo puede contener letras/números y/o espacios')
-
-        return calle_entre1
-
-    def clean_calle_entre2(self):
-        calle_entre2 = self.cleaned_data['calle_entre2']
-        if calle_entre2:
-            if not regex_alfanumerico.match(calle_entre2):
-                raise forms.ValidationError('El nombre de la calle, solo puede contener letras/números y/o espacios')
-        return calle_entre2
-
-    def clean_dpto(self):
-        dpto = self.cleaned_data['dpto']
-        if dpto:
-            if not regex_alfanumerico.match(dpto):
-                raise forms.ValidationError('El Departamento, solo puede contener letras/números y/o espacios')
-        return dpto
-
 
 class DomicilioRuralForm(forms.ModelForm):
 

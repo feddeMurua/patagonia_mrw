@@ -17,24 +17,26 @@
           <strong>{{ mensaje }}</strong>
         </div>
     {% endif %}
-    <div class="form-group">
-        <label>Foto</label><br>
-        <input type="file" id="id_foto">
-        {% if libreta.foto %}
-            <img id="old-img" src="{{ libreta.foto.url }}" style="max-width:320px; max-height:240px" alt="">
-        {% endif %}
-        <video width="320" height="240" autoplay hidden></video>
-        <canvas style="display:none;"></canvas>
-        <img id="foto-img" src="" alt="" style="max-width: 320px; max-height: 240px">
-        <label for="img-base64"></label><input style="display:none;" id="img-base64" name="foto" value="">
-        <div style="margin-top:10px;">
-            <button type="button" class="btn btn-success" id="nueva-foto">Nueva fotografia</button>
-            <button type="button" class="btn btn-info" id="id_clon" onclick="document.getElementById('id_foto').click();">Examinar</button>
-            <button type="button" class="btn btn-danger {% if not libreta.foto %}hidden{% endif %}" id="eliminar-foto">Eliminar fotografia</button>
-            <button type="button" class="btn btn-primary hidden" id="tomar-foto">Aceptar</button>
-            <button type="button" class="btn btn-danger hidden" id="cancelar-foto">Cancelar</button>
+    {% if not confirmacion %}
+        <div class="form-group">
+            <label>Foto</label><br>
+            <input type="file" id="id_foto">
+            {% if libreta.foto %}
+                <img id="old-img" src="{{ libreta.foto.url }}" style="max-width:320px; max-height:240px" alt="">
+            {% endif %}
+            <video width="320" height="240" autoplay hidden></video>
+            <canvas style="display:none;"></canvas>
+            <img id="foto-img" src="" alt="" style="max-width: 320px; max-height: 240px">
+            <label for="img-base64"></label><input style="display:none;" id="img-base64" name="foto" value="">
+            <div style="margin-top:10px;">
+                <button type="button" class="btn btn-success" id="nueva-foto">Nueva fotografia</button>
+                <button type="button" class="btn btn-info" id="id_clon" onclick="document.getElementById('id_foto').click();">Examinar</button>
+                <button type="button" class="btn btn-danger {% if not libreta.foto %}hidden{% endif %}" id="eliminar-foto">Eliminar fotografia</button>
+                <button type="button" class="btn btn-primary hidden" id="tomar-foto">Aceptar</button>
+                <button type="button" class="btn btn-danger hidden" id="cancelar-foto">Cancelar</button>
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
 
 {% block form-right %}

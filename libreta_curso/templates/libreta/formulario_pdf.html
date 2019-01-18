@@ -33,7 +33,7 @@
     <div id="content">
         <div class="main">
             <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
-            <p class="titulo"><b><u>{% if libreta %}RENOVACION{% else %}SOLICITUD{% endif %} DE LIBRETA SANITARIA</u></b></p>
+            <p class="titulo"><b><u>{% if libreta.fecha_vencimiento %}RENOVACION{% else %}SOLICITUD{% endif %} DE LIBRETA SANITARIA</u></b></p>
             <p>
                 <b>Fecha:</b> {% now "SHORT_DATE_FORMAT" %}<br>
                 <b>Apellido y nombre:</b> {{ persona.apellido }}, {{ persona.nombre }} &nbsp&nbsp//&nbsp&nbsp
@@ -42,10 +42,9 @@
                 <b>DNI:</b> {{ persona.dni }}<br>
                 <b>Teléfono:</b> {{ persona.telefono }} &nbsp&nbsp//&nbsp&nbsp <b>Domicilio:</b> {{ persona.domicilio }}<br>
                 <b>Obra social:</b> {{ persona.obra_social|default:"No posee" }}<br>
-                {% if libreta %}
-                    <b>Curso de Manipulación de Alimentos:</b> {% if libreta.curso %}SI({{ libreta.curso }} &nbsp&nbsp//&nbsp&nbsp
-                    <b>Rubro:</b> {{ inscripcion.rubro }}{% else %}NO{% endif %}<br>
-                {% endif %}
+                <b>Curso de Manipulación de Alimentos:</b>
+                {% if libreta.curso %}SI ({{ libreta.curso }}){% else %}NO{% endif %}
+                {% if inscripcion.rubro %} &nbsp&nbsp//&nbsp&nbsp <b>Rubro:</b> {{ inscripcion.rubro }}{% endif %}
             </p>
             {% if libreta.foto %}
                 <img class="foto" src="{{ libreta.foto.url }}" alt="">

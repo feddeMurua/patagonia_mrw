@@ -234,7 +234,6 @@ def img_to_base64(data, usr):
 
 @login_required(login_url='login')
 def alta_libreta(request):
-    mensaje = ''
     if request.method == 'POST':
         form = LibretaForm(request.POST, request.FILES)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
@@ -242,7 +241,40 @@ def alta_libreta(request):
         if form.is_valid():
             libreta = form.save(commit=False)
             cursos = get_cursos(libreta.persona.pk)
-            if not cursos and libreta.tipo_libreta == "Blanca":
+            if cursos:
+                libreta.curso = cursos[-1]
+            if request.POST['foto'] and request.POST['foto'] != "borrar":
+                libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+            libreta.pendiente = True
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    libreta.save()
+                    pd_v.movimiento_previo(request, detalle_mov_form, "Alta de libreta sanitaria", libreta,
+                                           'Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
+            else:
+                if mov_form.is_valid():
+                    libreta.save()
+                    pd_v.nuevo_movimiento(request, mov_form, "Alta de libreta sanitaria", libreta,
+                                          'Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
+    else:
+        form = LibretaForm
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
+                                                         'mov_form': mov_form})
+
+
+@login_required(login_url='login')
+def confirmar_libreta(request, pk):
+    libreta = LibretaSanitaria.objects.get(pk=pk)
+    mensaje = ''
+    if request.method == 'POST':
+        form = ConfirmarLibretaForm(request.POST, request.FILES, instance=libreta)
+        if form.is_valid():
+            libreta = form.save(commit=False)
+            if not libreta.curso and libreta.tipo_libreta == "Blanca":
                 mensaje = 'No es posible expedir una libreta BLANCA sin un curso previo'
             else:
                 if libreta.tipo_libreta != 'Celeste':
@@ -250,28 +282,14 @@ def alta_libreta(request):
                 else:
                     libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(
                         months=int(request.POST['meses']))
-                if cursos:
-                    libreta.curso = cursos[-1]
-                if request.POST['foto'] and request.POST['foto'] != "borrar":
-                    libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
-                if request.POST['optradio'] == 'previa':
-                    if detalle_mov_form.is_valid():
-                        libreta.save()
-                        pd_v.movimiento_previo(request, detalle_mov_form, "Alta de libreta sanitaria", libreta,
-                                               'Libreta Sanitaria')
-                        return redirect('libretas:lista_libretas')
-                else:
-                    if mov_form.is_valid():
-                        libreta.save()
-                        pd_v.nuevo_movimiento(request, mov_form, "Alta de libreta sanitaria", libreta,
-                                              'Libreta Sanitaria')
-                        return redirect('libretas:lista_libretas')
+                libreta.pendiente = False
+                libreta.save()
+                log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
+                return redirect('libretas:lista_libretas')
     else:
-        form = LibretaForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'mov_form': mov_form, 'mensaje': mensaje})
+        form = ConfirmarLibretaForm(instance=libreta)
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'mensaje': mensaje, 'modificacion': True,
+                                                         'confirmacion': True})
 
 
 class DetalleLibreta(LoginRequiredMixin, DetailView):
@@ -310,8 +328,7 @@ def modificacion_libreta(request, pk):
 
 
 @login_required(login_url='login')
-def renovacion_libreta(request, pk):
-    mensaje = ''
+def renovar_libreta(request, pk):
     libreta = LibretaSanitaria.objects.get(pk=pk)
     if request.method == 'POST':
         form = RenovacionLibretaForm(request.POST, request.FILES, instance=libreta)
@@ -320,60 +337,63 @@ def renovacion_libreta(request, pk):
         if form.is_valid():
             libreta = form.save(commit=False)
             cursos = get_cursos(libreta.persona.pk)
-            if libreta.tipo_libreta == 'Amarilla':
-                mensaje = 'No es posible renovar libretas AMARILLAS'
-            elif not cursos and libreta.tipo_libreta == "Celeste":
-                mensaje = 'No es posible renovar una libreta CELESTE sin un curso previo'
+            libreta.curso = cursos[-1]
+            if request.POST['foto']:
+                libreta.foto.delete()
+                if request.POST['foto'] != "borrar":
+                    libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
+            libreta.pendiente = True
+            if request.POST['optradio'] == 'previa':
+                if detalle_mov_form.is_valid():
+                    libreta.save()
+                    pd_v.movimiento_previo(request, detalle_mov_form, "Renovacion de libreta sanitaria", libreta,
+                                           'Renovacion de Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
             else:
-                libreta.curso = cursos[-1]
-                libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(years=1)
-                libreta.tipo_libreta = 'Blanca'
-                if request.POST['foto']:
-                    libreta.foto.delete()
-                    if request.POST['foto'] != "borrar":
-                        libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
-                if request.POST['optradio'] == 'previa':
-                    if detalle_mov_form.is_valid():
-                        libreta.save()
-                        pd_v.movimiento_previo(request, detalle_mov_form, "Renovacion de libreta sanitaria", libreta,
-                                               'Renovacion de Libreta Sanitaria')
-                        return redirect('libretas:lista_libretas')
-                else:
-                    if mov_form.is_valid():
-                        libreta.save()
-                        pd_v.nuevo_movimiento(request, mov_form, "Renovacion de libreta sanitaria", libreta,
-                                              'Renovacion de Libreta Sanitaria')
-                        return redirect('libretas:lista_libretas')
+                if mov_form.is_valid():
+                    libreta.save()
+                    pd_v.nuevo_movimiento(request, mov_form, "Renovacion de libreta sanitaria", libreta,
+                                          'Renovacion de Libreta Sanitaria')
+                    return redirect('libretas:lista_libretas')
     else:
         form = RenovacionLibretaForm(instance=libreta)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'mov_form': mov_form, 'libreta': libreta, 'mensaje': mensaje,
-                                                         'renovacion': True})
+                                                         'mov_form': mov_form, 'libreta': libreta, 'renovacion': True})
 
 
 @login_required(login_url='login')
-def pdf_solicitud(request, pk):
-    template = get_template('libreta/solicitud_pdf.html')
-    persona = m.PersonaFisica.objects.get(pk=pk)
-    hoy = timezone.datetime.today()
-    edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
-                                                                               persona.fecha_nacimiento.day))
-    context = {'persona': persona, 'edad': edad, 'title': 'Solicitud de libreta sanitaria'}
-    rendered = template.render(context)
-    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
-    response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="Solicitud_de_libreta_sanitaria"'
-    return response
+def confirmar_renovacion(request, pk):
+    mensaje = ''
+    libreta = LibretaSanitaria.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ConfirmarRenovacionLibretaForm(request.POST, request.FILES, instance=libreta)
+        if form.is_valid():
+            libreta = form.save(commit=False)
+            if libreta.tipo_libreta == 'Amarilla':
+                mensaje = 'No es posible renovar libretas AMARILLAS'
+            elif not libreta.curso and libreta.tipo_libreta == "Celeste":
+                mensaje = 'No es posible renovar una libreta CELESTE sin un curso previo'
+            else:
+                libreta.fecha_vencimiento = libreta.fecha_examen_clinico + relativedelta(years=1)
+                libreta.tipo_libreta = 'Blanca'
+                libreta.pendiente = False
+                libreta.save()
+                log_modificar(request.user.id, libreta, 'Libreta Sanitaria')
+                return redirect('libretas:lista_libretas')
+    else:
+        form = ConfirmarRenovacionLibretaForm(instance=libreta)
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'libreta': libreta, 'mensaje': mensaje,
+                                                         'modificacion': True, 'confirmacion': True})
 
 
 @login_required(login_url='login')
-def pdf_renovacion(request, pk):
-    template = get_template('libreta/solicitud_pdf.html')
+def pdf_formulario(request, pk):
+    template = get_template('libreta/formulario_pdf.html')
     libreta = LibretaSanitaria.objects.get(pk=pk)
     persona = libreta.persona
-    inscripcion = Inscripcion.objects.filter(curso=libreta.curso, persona=persona)
+    inscripcion = Inscripcion.objects.get(curso=libreta.curso, persona=persona)
     hoy = timezone.datetime.today()
     edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
                                                                                persona.fecha_nacimiento.day))
