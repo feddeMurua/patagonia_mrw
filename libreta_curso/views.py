@@ -397,8 +397,8 @@ def pdf_formulario(request, pk):
     hoy = timezone.datetime.today()
     edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
                                                                                persona.fecha_nacimiento.day))
-    context = {'persona': persona, 'edad': edad, 'inscripcion': inscripcion, 'title': 'Solicitud/Renovacion de libreta sanitaria',
-               'libreta': libreta, }
+    context = {'title': 'Solicitud/Renovacion de libreta sanitaria', 'inscripcion': inscripcion, 'libreta': libreta,
+               'persona': persona, 'edad': edad}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
