@@ -393,16 +393,16 @@ def pdf_formulario(request, pk):
     template = get_template('libreta/formulario_pdf.html')
     libreta = LibretaSanitaria.objects.get(pk=pk)
     persona = libreta.persona
-    inscripcion = Inscripcion.objects.get(curso=libreta.curso, persona=persona)
+    inscripcion = Inscripcion.objects.filter(curso=libreta.curso, persona=persona)
     hoy = timezone.datetime.today()
     edad = hoy.year - persona.fecha_nacimiento.year - ((hoy.month, hoy.day) < (persona.fecha_nacimiento.month,
                                                                                persona.fecha_nacimiento.day))
-    context = {'persona': persona, 'edad': edad, 'inscripcion': inscripcion, 'title': 'Renovacion de libreta sanitaria',
-               'libreta': libreta, }
+    context = {'title': 'Solicitud/Renovacion de libreta sanitaria', 'inscripcion': inscripcion, 'libreta': libreta,
+               'persona': persona, 'edad': edad}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename=' + str("Renovacion_de_libreta_sanitaria_N°_" + str(libreta.pk))
+    response['Content-Disposition'] = 'filename=' + str("Solicitud/Renovacion_de_libreta_sanitaria_N°_" + str(libreta.pk))
     return response
 
 
