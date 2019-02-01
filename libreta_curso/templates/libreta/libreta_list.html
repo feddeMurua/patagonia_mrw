@@ -27,14 +27,14 @@
                 <td>{{ libreta.persona }}</td>
                 <td>{{ libreta.tipo_libreta }}</td>
                 <td>{{ libreta.fecha_vencimiento|default_if_none:"" }}</td>
-                {% if libreta.fecha_vencimiento %}
+                {% if libreta.pendiente %}
+                    <td>Pendiente</td>
+                {% elif libreta.fecha_vencimiento %}
                     {% if libreta.fecha_vencimiento < fecha_hoy %}
                         <td>Vencida</td>
                     {% else %}
                         <td>Al dia</td>
-                    {% endif %}
-                {% else %}
-                    <td>Pendiente</td>
+                    {% endif %}                    
                 {% endif %}
                 <td>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'libretas:modificar_libreta' libreta.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
