@@ -26,7 +26,7 @@ class AltaAnalisisForm(forms.ModelForm):
         widgets = {
             'procedencia': AddAnotherWidgetWrapper(
                 forms.Select,
-                reverse_lazy('personas:nueva_localidad'),
+                reverse_lazy('personas:nueva_localidad')
             )
         }
 
@@ -195,7 +195,15 @@ class ControlAntirrabicoForm(forms.ModelForm):
         model = ControlAntirrabico
         fields = '__all__'
         widgets = {
-            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20})
+            'observaciones': forms.Textarea(attrs={'rows': 2, 'cols': 20}),
+            'mordido': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica')
+            ),
+            'responsable': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_persona_fisica')
+            )
         }
         labels = {
             'responsable': _("Responsable del animal"),

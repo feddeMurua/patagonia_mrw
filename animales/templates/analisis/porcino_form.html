@@ -15,7 +15,8 @@
 
         if (cat_porcino.val() === 'LECHON') {
                 precinto2group.addClass('hidden');
-                cat_porcino.prop('disabled', true);
+                $('#id_categoria_porcino option[value="PORKER"]').remove();
+                $('#id_categoria_porcino option[value="ADULTO"]').remove();
             } else {
                 $('#id_categoria_porcino option[value="LECHON"]').remove();
                 precinto2.prop('required', true);

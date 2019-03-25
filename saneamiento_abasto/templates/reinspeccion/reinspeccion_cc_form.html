@@ -86,7 +86,7 @@
                                 <h3 class="panel-title">Productos</h3>
                             </div>
                             <div class="col-xs-8 col-md-8 text-right">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="false" data-target="#agregar_producto">Agregar Producto</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregar" data-toggle="modal" data-backdrop="false" data-target="#agregar_producto">Agregar Producto</button>
                             </div>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
             </div>
             <div class="form-navigation">
                 <button type="button" class="previous btn btn-info pull-left">&lt; Anterior</button>
-                <button type="button" class="next btn btn-info pull-right">Siguiente &gt;</button>
+                <button type="button" id="btn-sig" class="next btn btn-info pull-right">Siguiente &gt;</button>
                 <input type="submit" name="_fin" class="btn btn-success pull-right" value="Finalizar" style="margin-left:5px;"
                        onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
                 <input type="submit" name="_new" class="btn btn-warning pull-right" value="Finalizar e iniciar nuevo"
@@ -323,11 +323,15 @@
                 }
 
                 if (index === 1) {
+                    $('#btn-agregar').focus();
                     if ($('#table-list tr').length === 2) {
                         $('.form-navigation .next').addClass('hidden');
                     }
                     $('#table-list').each(function() {
-                        new MutationObserver(hideNext).observe(this, {childList: true, subtree: true});
+                        new MutationObserver(hideNext).observe(this, {childList: true, subtree: true})
+                    });
+                    $('#agregar_producto').on('hidden.bs.modal', function() {
+                        $('#btn-sig').focus();
                     });
                 }
 

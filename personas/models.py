@@ -44,7 +44,7 @@ class Domicilio(models.Model):
 
 
 class DomicilioRural(models.Model):
-    chacra = models.CharField(max_length=4)
+    chacra = models.CharField(max_length=6)
     parcela = models.CharField(max_length=4, null=True, blank=True)
     sector = models.CharField(max_length=3, null=True, blank=True)
     circunscripcion = models.CharField(max_length=3, null=True, blank=True)

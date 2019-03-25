@@ -166,8 +166,9 @@ def modificacion_inscripcion(request, pk, id_curso):
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso}))
     else:
         form = ModificacionInscripcionForm(instance=inscripcion)
+    url_return = 'cursos:inscripciones_curso'
     return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
-                                                                 'url_return': 'cursos:inscripciones_curso',
+                                                                 'url_return': url_return,
                                                                  'modificacion': True})
 
 
@@ -184,8 +185,9 @@ def cierre_inscripcion(request, pk, id_curso):
             return HttpResponseRedirect(reverse('cursos:cierre_curso', kwargs={'id_curso': id_curso}))
     else:
         form = CierreInscripcionForm(instance=inscripcion)
-    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
-                                                                 'url_return': 'cursos:cierre_curso',
+    url_return = 'cursos:cierre_curso'
+    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'curso': inscripcion.curso,
+                                                                 'url_return': url_return,
                                                                  'modificacion': True})
 
 
@@ -337,7 +339,8 @@ def renovar_libreta(request, pk):
         if form.is_valid():
             libreta = form.save(commit=False)
             cursos = get_cursos(libreta.persona.pk)
-            libreta.curso = cursos[-1]
+            if cursos:
+                libreta.curso = cursos[-1]
             if request.POST['foto']:
                 libreta.foto.delete()
                 if request.POST['foto'] != "borrar":

@@ -17,7 +17,7 @@
 {% block url-volver %}{% url 'cuentas_corrientes:periodos_cc' pk %}{% endblock %}
 
 {% block content %}
-    <div class="container container-form">
+    <div class="container container-form" style="margin-top: 35px">
         <form method="post" class="deuda-cc-form">
             {% csrf_token %}
             <div class="form-section">

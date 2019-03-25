@@ -1,5 +1,5 @@
 {% extends "base/base_form.html" %}
-{% load staticfiles bootstrap3 %}
+{% load staticfiles bootstrap3 widget_tweaks %}
 
 {% block title %}Abastecedor{% endblock %}
 
@@ -7,11 +7,56 @@
 
 {% block url-volver %}{% url 'abastecedores:lista_abastecedores' %}{% endblock %}
 
-{% block extra-buttons %}
-    <a class="btn btn-info" href="{% url 'abastecedores:nuevo_abastecedor_particular' %}">Nuevo abastecedor - PARTICULAR</a>
-    <a class="btn btn-warning" href="{% url 'abastecedores:nuevo_abastecedor_empresa' %}">Nuevo abastecedor - EMPRESA</a>
+{% block form-left %}
+    <div id="radio_options">
+        <div class="radio">
+            <label><input type="radio" name="optradio" value="existente" checked>Crear desde persona existente</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="optradio" value="nuevo">Crear nuevo</label>
+        </div>
+    </div>
+    <br>
+    <div class="existente">
+        <div class="form-group">
+            <label for="id_responsable">Persona</label>
+            {{ form.responsable|add_class:'form-control' }}
+            {% for error in form.responsable.errors %}
+                <span class="help-block">{{ error }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="nuevo">
+        <a class="btn btn-info" href="{% url 'abastecedores:nuevo_abastecedor_particular' %}">Nuevo abastecedor - PARTICULAR</a>
+        <a class="btn btn-warning" href="{% url 'abastecedores:nuevo_abastecedor_empresa' %}">Nuevo abastecedor - EMPRESA</a>
+    </div>
 {% endblock %}
 
 {% block btn-cancelar %}
     <a class="btn btn-danger btn-cancelar" href="{% url 'abastecedores:lista_abastecedores' %}">Cancelar</a>
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        var existente = $('.existente'),
+            nuevo = $('.nuevo');
+
+        var tipo_abastecedor = $("input[name='optradio']:checked").val();
+        hideFields();
+
+        $('#radio_options').change(function() {
+            tipo_abastecedor = $("input[name='optradio']:checked").val();
+            hideFields();
+        });
+
+        function hideFields() {
+            if (tipo_abastecedor === 'existente') {
+                existente.removeClass('hidden');
+                nuevo.addClass('hidden');
+            } else {
+                nuevo.removeClass('hidden');
+                existente.addClass('hidden');
+            }
+        }
+    </script>
 {% endblock %}

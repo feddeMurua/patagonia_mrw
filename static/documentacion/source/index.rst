@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Patagonia's documentation!
-=====================================
+Bienvenido a la documentación de sistema
+========================================
 
 .. toctree::
    :maxdepth: 1
@@ -15,5 +15,6 @@ Welcome to Patagonia's documentation!
    analisiscontroles
    mascotas   
    abasto
+   transpdes
    usuarios
 

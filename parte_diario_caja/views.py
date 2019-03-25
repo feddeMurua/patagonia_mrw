@@ -73,7 +73,7 @@ def nuevo_movimiento(request, form, servicio, obj, logname):
 
 def get_subtotales(detalles):
     movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date())
-    subtotales = {'efectivo': 0, 'tarjeta': 0, 'cheque': 0}
+    subtotales = {'efectivo': 0, 'tarjeta': 0, 'cheque': 0, 'total': 0}
     for movimiento in movimientos:
         if movimiento.forma_pago != 'Eximido':
             detalles_movimiento = detalles.filter(movimiento=movimiento)
@@ -84,6 +84,7 @@ def get_subtotales(detalles):
                 subtotales['tarjeta'] += sub
             else:
                 subtotales['cheque'] += sub
+            subtotales['total'] += sub
     return subtotales
 
 
@@ -92,9 +93,9 @@ def pdf_parte_diario(request, anio, mes, dia):
     template = get_template('caja/parte_diario_pdf.html')
     fecha = datetime.date(int(anio), int(mes), int(dia))
     detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha).order_by('movimiento__nro_ingreso')
+    subtotales = get_subtotales(detalles)
     context = {'title': 'Parte diario del dia ' + str(fecha.strftime('%d/%m/%Y')), 'detalles': detalles,
-               'subtotales': get_subtotales(detalles), 'total': sum(detalle.importe for detalle in detalles),
-               'fecha_maniana': fecha + relativedelta(days=1)}
+               'subtotales': subtotales, 'fecha_maniana': fecha + relativedelta(days=1)}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
