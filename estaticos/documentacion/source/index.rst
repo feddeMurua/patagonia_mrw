@@ -15,6 +15,6 @@ Bienvenido a la documentación de sistema
    analisiscontroles
    mascotas   
    abasto
-   transpdes
+   transportedesinfeccion
    usuarios
 
