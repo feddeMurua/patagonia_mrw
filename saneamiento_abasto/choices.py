@@ -119,7 +119,7 @@ TURNO_REINSPECCION = (
     ('Mañana', _("Mañana")),
     ('Tarde', _("Tarde")),
     ('Sabado', _("Sabado")),
-    ('Feriado', _("Feriado")),
+    ('Feriado', _("Feriado/Fuera de horario")),
     ('Excepcion', _("Excepcion"))
 )
 

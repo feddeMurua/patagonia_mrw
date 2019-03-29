@@ -887,16 +887,10 @@ def estadisticas_td(request):
             years = range(int(rango_form.cleaned_data['anio_hasta']),
                           int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
-    des_tr = {}
-    des_escolares = {}
-    des_tsa = {}
-    des_colectivos = {}
+    des_tr, des_escolares, des_tsa, des_colectivos = {}, {}, {}, {}
 
     for year in years:
-        tr = 0
-        escolares = 0
-        tsa = 0
-        colectivos = 0
+        tr, escolares, tsa, colectivos, = 0, 0, 0, 0
 
         desinfecciones_vehiculos = Desinfeccion.objects.filter(fecha_realizacion__year=year).values_list(
             "vehiculo__tipo_vehiculo", "vehiculo__tipo_tpp")
@@ -997,16 +991,10 @@ def estadisticas_td(request):
             years = range(int(rango_form.cleaned_data['anio_hasta']),
                           int(rango_form.cleaned_data['anio_desde']) - 1, -1)
 
-    des_tr = {}
-    des_escolares = {}
-    des_tsa = {}
-    des_colectivos = {}
+    des_tr, des_escolares, des_tsa, des_colectivos = {}, {}, {}, {}
 
     for year in years:
-        tr = 0
-        escolares = 0
-        tsa = 0
-        colectivos = 0
+        tr, escolares, tsa, colectivos = 0, 0, 0, 0
 
         desinfecciones_vehiculos = Desinfeccion.objects.filter(fecha_realizacion__year=year).values_list(
             "vehiculo__tipo_vehiculo", "vehiculo__tipo_tpp")
@@ -1077,10 +1065,8 @@ def estadisticas_reinspeccion(request):
 
     reinspecciones = Reinspeccion.objects.filter(fecha__gte=fecha_desde, fecha__lte=fecha_hasta, detalles=True)
 
-    dict_reinspeccion_prod = {}
-    dict_reinspeccion_orig_r = {}
-    dict_reinspeccion_orig_kg = {}
-    dict_reinspeccion_gan = {'Bovinos': {}, 'Porcinos': {}, 'Ovinos': {}}
+    dict_reinspeccion_prod, dict_reinspeccion_orig_r, dict_reinspeccion_orig_kg = {}, {}, {}
+    dict_reinspeccion_gan = {'Bovinos': {}, 'Bovinos sin hueso': {}, 'Porcinos': {}, 'Ovinos': {}}
     dict_reinspeccion_gan_orig = collections.defaultdict(dict)
 
     for orig, prod, cant_kg in reinspecciones_data:
@@ -1089,9 +1075,10 @@ def estadisticas_reinspeccion(request):
         dict_reinspeccion_prod[prod] = total_kg_prod
         dict_reinspeccion_orig_kg[orig] = total_kg_orig
 
-        if prod in ['Bovinos', 'Porcinos', 'Ovinos']:
+        if prod.lower() in ['bovinos', 'bovinos sin hueso', 'porcinos', 'ovinos']:
             if orig not in dict_reinspeccion_gan['Bovinos']:
                 dict_reinspeccion_gan['Bovinos'][orig] = 0
+                dict_reinspeccion_gan['Bovinos sin hueso'][orig] = 0
                 dict_reinspeccion_gan['Porcinos'][orig] = 0
                 dict_reinspeccion_gan['Ovinos'][orig] = 0
             dict_reinspeccion_gan[prod][orig] += cant_kg
@@ -1127,9 +1114,10 @@ def estadisticas_reinspeccion(request):
         ord_dict_reinspeccion_orig[k] = (v, float("{0:.2f}".format(v*100/total_general_orig_r)), cant_kg,
                                          float("{0:.2f}".format(cant_kg*100/total_general_orig_kg)))
 
-    orden = ['Bovinos', 'Porcinos', 'Ovinos', 'total_kg']
+    orden = ['Bovinos', 'Bovinos sin hueso', 'Porcinos', 'Ovinos', 'total_kg']
     for orig in label_gan:
         dict_reinspeccion_gan_orig[orig]['Bovinos'] = dict_reinspeccion_gan['Bovinos'][orig]
+        dict_reinspeccion_gan_orig[orig]['Bovinos sin hueso'] = dict_reinspeccion_gan['Bovinos sin hueso'][orig]
         dict_reinspeccion_gan_orig[orig]['Porcinos'] = dict_reinspeccion_gan['Porcinos'][orig]
         dict_reinspeccion_gan_orig[orig]['Ovinos'] = dict_reinspeccion_gan['Ovinos'][orig]
         dict_reinspeccion_gan_orig[orig]['total_kg'] = sum(dict_reinspeccion_gan_orig[orig].values())
@@ -1146,6 +1134,10 @@ def estadisticas_reinspeccion(request):
         'total_general_prod': total_general_prod,
         'total_general_orig_r': total_general_orig_r,
         'total_general_orig_kg': total_general_orig_kg,
+        'total_bovinos': sum(origen['Bovinos'] for origen in dict_reinspeccion_gan_orig.values()),
+        'total_bovinos_sh': sum(origen['Bovinos sin hueso'] for origen in dict_reinspeccion_gan_orig.values()),
+        'total_porcinos': sum(origen['Porcinos'] for origen in dict_reinspeccion_gan_orig.values()),
+        'total_ovinos': sum(origen['Ovinos'] for origen in dict_reinspeccion_gan_orig.values()),
         'total_general_gan': total_general_gan,
         # datos y etiquetas
         'lista_labels': json.dumps([label_reinspeccion, label_origen_cant, label_origen_kg, label_gan]),
@@ -1153,6 +1145,7 @@ def estadisticas_reinspeccion(request):
                                    {'Origenes por cantidad': datos_origen_cant},
                                    {'Origenes por kg': datos_origen_kg},
                                    {'Bovinos': dict_reinspeccion_gan['Bovinos'].values(),
+                                    'Bovinos sin hueso': dict_reinspeccion_gan['Bovinos sin hueso'].values(),
                                     'Porcinos': dict_reinspeccion_gan['Porcinos'].values(),
                                     'Ovinos': dict_reinspeccion_gan['Ovinos'].values()}])
     }

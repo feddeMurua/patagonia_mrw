@@ -35,29 +35,33 @@ def lista_analisis(request):
 @login_required(login_url='login')
 def alta_analisis(request):
     porcino_form = PorcinoForm
+    msg = ""
     if request.method == 'POST':
         form = AltaAnalisisForm(request.POST)
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if form.is_valid():
-            analisis = form.save()
-            alta_porcinos(request, analisis)
-            servicio = 'Analisis de triquinosis'
-            servicio_obj = pd_m.Servicio.objects.get(nombre=servicio)
-            importe = servicio_obj.importe * len(request.session['porcinos'])
-            if request.POST['optradio'] == 'previa':
-                if detalle_mov_form.is_valid():
-                    detalle_mov = detalle_mov_form.save(commit=False)
-                    detalle_mov.completar_monto(importe, servicio, analisis)
-                    log_crear(request.user.id, analisis, servicio)
-                    return redirect('analisis:lista_analisis')
+            if request.session['porcinos']:
+                analisis = form.save()
+                alta_porcinos(request, analisis)
+                servicio = 'Analisis de triquinosis'
+                servicio_obj = pd_m.Servicio.objects.get(nombre=servicio)
+                importe = servicio_obj.importe * len(request.session['porcinos'])
+                if request.POST['optradio'] == 'previa':
+                    if detalle_mov_form.is_valid():
+                        detalle_mov = detalle_mov_form.save(commit=False)
+                        detalle_mov.completar_monto(importe, servicio, analisis)
+                        log_crear(request.user.id, analisis, servicio)
+                        return redirect('analisis:lista_analisis')
+                else:
+                    if mov_form.is_valid():
+                        mov = mov_form.save()
+                        detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
+                        detalle_mov.completar_monto(importe, servicio, analisis)
+                        log_crear(request.user.id, analisis, servicio)
+                        return redirect('analisis:lista_analisis')
             else:
-                if mov_form.is_valid():
-                    mov = mov_form.save()
-                    detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
-                    detalle_mov.completar_monto(importe, servicio, analisis)
-                    log_crear(request.user.id, analisis, servicio)
-                    return redirect('analisis:lista_analisis')
+                msg = "Debe ingresar al menos un animal para su análisis"
     else:
         if 'porcinos' in request.session:
             del request.session['porcinos']
@@ -65,7 +69,7 @@ def alta_analisis(request):
         form = AltaAnalisisForm
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'analisis/analisis_form.html', {'form': form, 'porcino_form': porcino_form,
+    return render(request, 'analisis/analisis_form.html', {'form': form, 'porcino_form': porcino_form, 'msg': msg,
                                                            'mov_form': mov_form, 'detalle_mov_form': detalle_mov_form})
 
 

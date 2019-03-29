@@ -14,7 +14,7 @@
     <div id="tabs-1">
         <div class="row">
             <div class="col-md-5 tabla-datos">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped table-list">
                     <thead>
                         <tr>
                             <td align="center">Producto</td>
@@ -45,12 +45,12 @@
     </div>
     <div id="tabs-2">
         <div class="row">
-            <div class="col-md-6 tabla-datos">
-                <table class="table table-bordered table-striped">
+            <div class="col-md-7 tabla-datos">
+                <table class="table table-bordered table-striped table-list">
                     <thead>
                         <tr>
                             <td align="center">Origen</td>
-                            <td align="center">Cant. de Reinspecciones</td>
+                            <td align="center">Cantidad de Reinspecciones</td>
                             <td align="center">Porcentaje de Reinspecciones</td>
                             <td align="center">Cant. de Kg</td>
                             <td align="center">Porcentaje de Kg</td>
@@ -76,7 +76,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <canvas id="origenes_cant" class="doughnut"></canvas>
                 <canvas id="origenes_kg" class="doughnut"></canvas>
             </div>
@@ -84,11 +84,12 @@
     </div>
     <div id="tabs-3">
         <div class="tabla-datos">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped table-list">
                 <thead>
                     <tr>
                         <td align="center">Origen</td>
                         <td align="center">Bovinos</td>
+                        <td align="center">Bovinos sin hueso</td>
                         <td align="center">Porcinos</td>
                         <td align="center">Ovinos</td>
                         <td align="center">Total de Kg</td>
@@ -103,13 +104,18 @@
                             {% endfor %}
                         </tr>
                     {% endfor %}
-                        <tr>
-                            <td align="center" colspan="4"><b>Total General de Kg</b></td>
-                            <td align="center"><b>{{ total_general_gan }} Kg</b></td>
-                        </tr>
+                    <tr>
+                        <td align="center"><b>Total de Kg</b></td>
+                        <td align="center">{{ total_bovinos }} Kg</td>
+                        <td align="center">{{ total_bovinos_sh }} Kg</td>
+                        <td align="center">{{ total_porcinos }} Kg</td>
+                        <td align="center">{{ total_ovinos }} Kg</td>
+                        <td align="center"><b>{{ total_general_gan }} Kg</b></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <canvas class="barStacked" width="400" height="150"></canvas>
     </div>
 {% endblock %}
+

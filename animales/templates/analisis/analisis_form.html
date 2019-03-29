@@ -86,6 +86,9 @@
                                                 {% endfor %}
                                             </tbody>
                                         </table>
+                                        {% if msg %}
+                                            <div class="alert alert-danger"><strong>{{ msg }}</strong></div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -181,6 +184,9 @@
                     if(data['success']) {
                         refresh_table(data);
                         document.getElementById("porcinoForm").reset();
+                        if ($('.alert')) {
+                            $('.alert').remove()
+                        }
                     } else {
                         if (data['errores'] !== "") {
                             $('.error_precinto').remove();
