@@ -31,7 +31,7 @@
     <tbody>
         {% for reinspeccion in listado %}
             <tr>
-                <td>{{ reinspeccion.fecha|date:"d-m-Y" }}</td>
+                <td>{{ reinspeccion.fecha }}</td>
                 <td>{{ reinspeccion.turno }}</td>
                 <td>{{ reinspeccion.precintado|default_if_none:"" }}</td>
                 <td>{{ reinspeccion.certificado }}</td>
