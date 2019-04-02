@@ -7,7 +7,7 @@
 
 {% block url-volver %}{% url 'libretas:lista_libretas' %}{% endblock %}
 
-{% block extra-buttons %}
+{% block extra-form %}
     <div class="form-group meses-group">
         <label for="meses_validez">Meses de validez *</label>
         <input type="number" name="meses" class="form-control" id="meses_validez" min="1" max="6">

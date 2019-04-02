@@ -9,6 +9,7 @@ Junto con el listado, se presentarán un conjunto de funcionalidades que permiti
 
   - :ref:`Nueva Reinspección <nueva-reinspeccion>`
   - :ref:`Nueva Reinspección en Cuenta Corriente <nueva-reinspeccion-cc>`
+  - :ref:`Modificar Reinspección <modificar-reinspeccion>`
   - :ref:`Precios Vigentes <precios-vigentes>`
   - :ref:`Lista de Productos <lista-productos>`
   - :ref:`Carga de Productos <carga-productos>`
@@ -73,6 +74,30 @@ Para finalizar, se mostrara un resumen de la reinspeccion a cargar.
         - Uno o más campos con un formato incorrecto.
 
 Una vez completados todos los pasos requeridos, se podra seleccionar volver al listado de reinspecciones, o registrar una nueva reinspeccion en cuenta corriente.
+
+
+.. _modificar-reinspeccion:
+
+Modificar Reinspeccion
+----------------------
+
+Si el usuario desea modificar los datos de una *Reinspección*, deberá seleccionar en la columna de **acciones** asociado a la *Reinspección* y presionar el ícono ``Modificar``.
+
+Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:
+
+.. image:: _static/mod_reinspeccion.png
+    :align: center
+
+En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados a la *Reinspección*.
+
+.. ATTENTION::
+
+    El sistema recopilará los datos registrados de la Reinspección y los mostrará para modificarlos, además, siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
+    En este punto, las posibles causas de errores son:
+
+        - Uno o más campos con un formato incorrecto.
+
+Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos de la *Reinspección* seleccionada.
 
 
 .. _precios-vigentes:

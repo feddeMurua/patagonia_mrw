@@ -64,7 +64,7 @@ Detalle de Contribuyente
 ------------------------
 
    Si el usuario desea ver el detalle de un *Contribuyente*, deberá seleccionar en la columna de **acciones** asociado al *Contribuyente* y
-   presionar el ícono ``Detalle``
+   presionar el ícono ``Detalle``.
 
    Una vez realizado el paso anterior aparecerá la siguiente vista emergente:
 
@@ -73,6 +73,10 @@ Detalle de Contribuyente
 
    En esta parte el usuario podrá observar la información adicional del *Contribuyente*.
    Si desea volver al listado inicial, presionará el botón ``Regresar``.
+
+   Se puede observar, en caso que sea una persona física, 3 (tres) pestañas las cuales informan los datos personales, la información asociada a los cursos y libretas que tiene el contribuyente y la información sobre sus mascotas.
+
+   Por otro lado, en caso de ser una persona jurídica, solo se mostrará los datos adicionales respectivos de la empresa.
 
 
 .. _modificar-contribuyente:

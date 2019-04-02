@@ -11,10 +11,11 @@ Análisis de Triquinosis
   Estas funcionalidades son:
 
     - :ref:`Detalle Análisis <detalle-analisis>`
-    - :ref:`Modificar Análisis <modificar-Análisis>`
     - :ref:`Eliminar Análisis <eliminar-Análisis>`
+    - :ref:`Modificar Análisis <modificar-Análisis>`
+    - :ref:`Registrar Resultado del Análisis <registrar-resultado>`
 
-  Además, si el usuario desea Registrar un nuevo *Análisis*:
+  Además, si el usuario desea dar de alta un nuevo *Análisis*:
 
     - :ref:`Nuevo Análisis <nuevo-Análisis>`
 
@@ -95,3 +96,18 @@ Eliminar Análisis
     :align: center
 
   En esta parte el usuario deberá decidir si confirma la eliminación del *Análisis* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
+
+
+.. _registrar-resultado:
+
+Registrar Resultado del Análisis
+--------------------------------
+
+    Si el usuario desea registrar un resultado de un *Análisis*, deberá seleccionar en la columna de **acciones** asociado al *Análisis* y presionar el ícono ``Registrar resultado``.
+
+    A continuación el sistema lo redirigirá a la siguiente pantalla:
+
+    .. image:: _static/registrar_resultado_analisis.png
+      :align: center
+
+    En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para registrar el resultado del *Análisis*.

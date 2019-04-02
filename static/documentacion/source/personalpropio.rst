@@ -1,6 +1,6 @@
 Personal Propio
 ===============
-  Se presentará una pantalla que contendrá un listado con todos el *Personal Propio*
+  Se presentará una pantalla que contendrá un listado con todo el *Personal Propio*
   que se encuentren registrados en el sistema hasta la fecha.
 
   .. image:: _static/listado_pp.png
@@ -28,7 +28,7 @@ Nueva Persona
 
   A continuación el sistema lo redirigirá a la siguiente pantalla:
 
-  .. image:: _static/alta_personafisica.png
+  .. image:: _static/alta_personalpropio.png
      :align: center
 
   En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta una nueva *Persona*.

@@ -74,6 +74,12 @@ class AltaProductoForm(forms.ModelForm):
         model = Producto
         fields = ['nombre']
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if Producto.objects.filter(nombre__iexact=nombre).last():
+            self.add_error('nombre', forms.ValidationError('El producto ingresado ya se encuentra registrado en el'
+                                                           'sistema'))
+
 
 class ReinspeccionProductoForm(forms.ModelForm):
     class Meta:

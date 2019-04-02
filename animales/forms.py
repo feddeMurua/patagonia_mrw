@@ -269,6 +269,13 @@ class ListaPatentesForm(forms.Form):
 class ListaPatentesEsterilizacionForm(forms.Form):
     patente = forms.ModelChoiceField(queryset=Patente.objects.filter(mascota__esterilizado=False), required=True)
 
+    def clean_patente(self):
+        patente = self.cleaned_data['patente']
+        turnos = Esterilizacion.objects.filter(mascota=patente.mascota)
+        if turnos:
+            raise forms.ValidationError('Ya existe un turno creado para la patente seleccionada')
+        return patente
+
 
 class EsterilizacionPatenteForm(forms.ModelForm):
     ultimo_celo = forms.DateField(widget=DateInput(), required=False)

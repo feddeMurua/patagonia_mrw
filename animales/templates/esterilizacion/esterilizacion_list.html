@@ -18,6 +18,7 @@
             <th>Dia</th>
             <th>Hora</th>
             <th>Interesado</th>
+            <th>Mascota</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
@@ -25,8 +26,9 @@
         {% for esterilizacion in listado %}
             <tr>
                 <td>{{ esterilizacion.turno.date }}</td>
-                <td>{{ esterilizacion.turno|time:"H:i" }}</td>
+                <td>{{ esterilizacion.turno|time:'H:i' }}</td>
                 <td>{{ esterilizacion.interesado }}</td>
+                <td>{{ esterilizacion.mascota.nombre }}</td>
                 <td>
                     {% if not esterilizacion.mascota.esterilizado %}
                         <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir Consentimiento" target="_blank" href="{% url 'esterilizacion:pdf_consentimiento' esterilizacion.pk %}"><em class="glyphicon glyphicon-print"></em></a>

@@ -129,13 +129,13 @@ LANGUAGE_CODE = 'es-AR'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
-USE_I18N = True
-
 USE_L10N = False
 
 USE_TZ = True
 
+DATETIME_FORMAT = 'd-m-Y H:i'
 DATE_FORMAT = 'd-m-Y'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

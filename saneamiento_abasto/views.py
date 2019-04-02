@@ -1076,6 +1076,8 @@ def estadisticas_reinspeccion(request):
         dict_reinspeccion_orig_kg[orig] = total_kg_orig
 
         if prod.lower() in ['bovinos', 'bovinos sin hueso', 'porcinos', 'ovinos']:
+            if prod.lower() == 'bovinos sin hueso':
+                prod = 'Bovinos sin hueso'
             if orig not in dict_reinspeccion_gan['Bovinos']:
                 dict_reinspeccion_gan['Bovinos'][orig] = 0
                 dict_reinspeccion_gan['Bovinos sin hueso'][orig] = 0

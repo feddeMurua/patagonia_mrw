@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser, UserManager
+from django.db import models
 
 
 class CustomUserManager(UserManager):
@@ -8,4 +9,5 @@ class CustomUserManager(UserManager):
 
 
 class CustomUser(AbstractUser):
+    is_directive = models.BooleanField(default=False, verbose_name=u"Es directivo")
     objects = CustomUserManager()
