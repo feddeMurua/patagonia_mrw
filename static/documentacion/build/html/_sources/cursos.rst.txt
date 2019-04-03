@@ -1,22 +1,24 @@
 Cursos de Manipulación de alimentos
 ===================================
-  Se presentará una pantalla que contendrá un listado con todos los *Cursos*
-  que se encuentren registrados en el sistema hasta la fecha.
+Se presentará una pantalla que contendrá un listado con todos los *Cursos*
+que se encuentren registrados en el sistema hasta la fecha.
 
-  .. image:: _static/listado_curso.png
+.. image:: _static/listado_curso.png
     :align: center
 
-  Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular cada *Curso*.
+Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular cada *Curso*.
 
-  Estas funcionalidades son:
+Estas funcionalidades son:
 
-    - :ref:`Modificar Curso <modificar-curso>`
-    - :ref:`Eliminar Curso <eliminar-curso>`
-    - :ref:`Inscripciones del Curso <listado-inscripciones>`
+- :ref:`Eliminar Curso <eliminar-curso>`
+- :ref:`Modificar Curso <modificar-curso>`
+- :ref:`Inscripciones del Curso <listado-inscripciones>`
+- :ref:`Cierre del Curso <cierre-curso>`
+- :ref:`Planilla de Asistencia Curso <asistencia-curso>`
 
-  Además, si el usuario desea Registrar un nuevo *Curso*:
+Además, si el usuario desea Registrar un nuevo *Curso*:
 
-    - :ref:`Nuevo Curso <nuevo-curso>`
+- :ref:`Nuevo Curso <nuevo-curso>`
 
 
 .. _nuevo-curso:
@@ -28,7 +30,7 @@ Nuevo Curso
 
   A continuación el sistema lo redirigirá a la siguiente pantalla:
 
-  .. image:: _static/alta_curso.png
+  .. image:: _static/baja_curso.png
     :align: center
 
   En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo *Curso*.
@@ -41,6 +43,21 @@ Nuevo Curso
           - Uno o más campos con un formato incorrecto.
 
   Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de cursos.
+
+
+.. _eliminar-curso:
+
+Eliminar Curso
+--------------
+
+  Si el usuario desea eliminar un *Curso*, deberá seleccionar en la columna de **acciones** asociado al *Curso* y presionar el ícono ``Eliminar``
+
+  Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
+
+  .. image:: _static/baja_curso.png
+    :align: center
+
+  En esta parte el usuario deberá decidir si confirma la eliminación del *Curso* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
 
 
 .. _modificar-curso:
@@ -67,21 +84,6 @@ Modificación de Curso
    Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos del *Curso* seleccionado.
 
 
-.. _eliminar-curso:
-
-Eliminar Curso
---------------
-
-  Si el usuario desea eliminar un *Curso*, deberá seleccionar en la columna de **acciones** asociado al *Curso* y presionar el ícono ``Eliminar``
-
-  Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
-
-  .. image:: _static/baja_curso.png
-    :align: center
-
-  En esta parte el usuario deberá decidir si confirma la eliminación del *Curso* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
-
-
 .. _listado-inscripciones:
 
 Inscripciones del Curso
@@ -100,3 +102,23 @@ Inscripciones del Curso
      :maxdepth: 1
 
      inscripcioncurso
+
+
+.. _cierre-curso:
+
+Cierre del Curso
+----------------
+
+  Si el usuario desea finalizar un *Curso*, deberá seleccionar en la columna de **acciones** asociado al *Curso* y presionar el ícono ``Cierre de Curso``
+
+  Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:
+
+  .. image:: _static/cierre_curso.png
+    :align: center
+
+  En esta parte al usuario se le presentará un listado con todas las inscripciones asociado al *Curso*.
+
+  .. toctree::
+    :maxdepth: 1
+
+    cierrecurso
