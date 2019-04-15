@@ -78,20 +78,46 @@ CUENTAS CORRIENTES
 '''
 
 
-class DetalleCC(models.Model):
-    reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
-    cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE)
-    pagado = models.BooleanField(default=False)
-
-    def __str__(self):
-        return "%s" % self.reinspeccion
-
-
 class CuentaCorriente(models.Model):
     abastecedor = models.OneToOneField('Abastecedor', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return "Cuenta: %s - %s" % (self.pk, self.abastecedor)
+
+
+class PeriodoCC(models.Model):
+    cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE, null=True)
+    periodo = models.DateField(blank=True, null=True)
+    total_kg = models.IntegerField(validators=[MinValueValidator(0)], blank=True, null=True)
+    importe = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True)
+    fecha_certificado = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return "%s-%s / %s" % (self.periodo.month, self.periodo.year, self.cc)
+
+
+class DetalleCC(models.Model):
+    reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
+    periodo = models.ForeignKey('PeriodoCC', on_delete=models.CASCADE, null=True)
+    pagado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s" % self.reinspeccion
+
+    def save(self, *args, **kwargs):
+        periodo = PeriodoCC.objects.filter(periodo__month=self.reinspeccion.fecha.month,
+                                           periodo__year=self.reinspeccion.fecha.year).last()
+        if periodo:
+            periodo.total_kg += self.reinspeccion.total_kg
+            periodo.importe += self.reinspeccion.importe
+            periodo.save()
+        else:
+            cc = CuentaCorriente.objects.get(abastecedor=self.reinspeccion.abastecedor)
+            periodo = PeriodoCC.objects.create(periodo=self.reinspeccion.fecha, importe=self.reinspeccion.importe,
+                                               total_kg=self.reinspeccion.total_kg, cc=cc)
+            periodo.save()
+        self.periodo = periodo
+        super(DetalleCC, self).save(*args, **kwargs)
 
 
 '''

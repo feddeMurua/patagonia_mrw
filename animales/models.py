@@ -104,7 +104,7 @@ class Esterilizacion(models.Model):
     anticonceptivos = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     partos = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     ultimo_celo = models.DateField(null=True, blank=True)
-    turno = models.DateTimeField(unique=True)
+    turno = models.DateTimeField()
 
     def __str__(self):
         return "%s" % self.interesado

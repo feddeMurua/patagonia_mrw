@@ -87,7 +87,8 @@
     <script src="{% static 'js/datetime-moment.js' %}"></script>
     <script>
         $(document).ready(function(){
-            $.fn.dataTable.moment('DD-MM-YYYY');
+            moment.locale('es');
+            $.fn.dataTable.moment('D MMMM YYYY');
             $('#table-list').DataTable({
                 language: {
                             "sProcessing":     "Procesando...",

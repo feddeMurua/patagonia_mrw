@@ -110,22 +110,20 @@ def lista_cc(request):
 @login_required(login_url='login')
 def periodos_cc(request, pk):
     cc = CuentaCorriente.objects.get(pk=pk)
-    return render(request, 'cuentaCorriente/cc_periodos.html', {'pk': pk, 'listado': agrupar_periodos(cc)})
+    return render(request, 'cuentaCorriente/cc_periodos.html', {'pk': pk, 'listado': PeriodoCC.objects.filter(cc=cc)})
 
 
 @login_required(login_url='login')
-def detalle_periodo(request, pk, mes, anio):
-    return render(request,
-                  'cuentaCorriente/periodo_detail.html',
-                  {'pk': pk, 'listado': DetalleCC.objects.filter(cc__pk=pk, reinspeccion__fecha__month=mes,
-                                                                 reinspeccion__fecha__year=anio), 'mes': mes,
-                   'anio': anio})
+def detalle_periodo(request, pk):
+    periodo = PeriodoCC.objects.get(pk=pk)
+    return render(request, 'cuentaCorriente/periodo_detail.html', {'listado': DetalleCC.objects.filter(periodo=periodo),
+                                                                   'pk': pk, 'anio': periodo.periodo.year,
+                                                                   'mes': periodo.periodo.month})
 
 
-def agrupar_reinspecciones(cc, mes, anio):
+def agrupar_reinspecciones(periodo):
     reinspecciones = []
-    detalles = DetalleCC.objects.filter(cc=cc, reinspeccion__fecha__month=mes, reinspeccion__fecha__year=anio)\
-        .order_by('reinspeccion__fecha')
+    detalles = DetalleCC.objects.filter(periodo=periodo).order_by('reinspeccion__fecha')
     for detalle in detalles:
         productos = ReinspeccionProducto.objects.filter(reinspeccion=detalle.reinspeccion)
         reinspecciones.append({'reinspeccion': detalle.reinspeccion, 'subtotal': detalle.reinspeccion.importe,
@@ -203,19 +201,19 @@ def cancelar_deuda_cc(request, pk):
 
 
 @login_required(login_url='login')
-def pdf_certificado(request, pk, mes, anio):
+def pdf_certificado(request, pk):
     template = get_template('cuentaCorriente/certificado_pdf.html')
-    cc = CuentaCorriente.objects.get(pk=pk)
     locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
-    reinspecciones = agrupar_reinspecciones(cc, mes, anio)
-    context = {'cc': cc, 'reinspecciones': reinspecciones, 'periodo': calendar.month_name[int(mes)] + " " + str(anio),
-               'total_kilos': sum(item['reinspeccion'].total_kg for item in reinspecciones),
-               'total_monto': sum(item['subtotal'] for item in reinspecciones),
-               'title': 'Certificado de deuda - ' + str(cc.abastecedor.responsable.nombre) + ' / Periodo: ' + str(mes)}
+    periodo = PeriodoCC.objects.get(pk=pk)
+    reinspecciones = agrupar_reinspecciones(periodo)
+    context = {'periodo': periodo, 'reinspecciones': reinspecciones,
+               'title': 'Certificado de deuda - ' + str(periodo.cc.abastecedor.responsable.nombre)
+                        + ' / Periodo: ' + str(periodo.periodo.month)}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename=' + str("Certificado_deuda_" + str(cc.abastecedor.responsable.nombre))
+    response['Content-Disposition'] = 'filename=' + str("Certificado_deuda_"
+                                                        + str(periodo.cc.abastecedor.responsable.nombre))
     return response
 
 
@@ -345,8 +343,7 @@ def alta_reinspeccion_cc(request):
             reinspeccion.save()
             form.save_m2m()
             alta_productos(request, reinspeccion)
-            cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
-            detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
+            detalle = DetalleCC(reinspeccion=reinspeccion)
             detalle.save()
             log_crear(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
             if '_fin' in request.POST:

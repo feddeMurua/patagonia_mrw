@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     # Librerias
     'bootstrap3',
     'widget_tweaks',
-    'easy_pdf',
     'polymorphic',
     'django_addanother',
     'solo',
@@ -129,12 +128,9 @@ LANGUAGE_CODE = 'es-AR'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
-USE_L10N = False
+USE_L10N = True
 
 USE_TZ = True
-
-DATETIME_FORMAT = 'd-m-Y H:i'
-DATE_FORMAT = 'd-m-Y'
 
 
 # Static files (CSS, JavaScript, Images)

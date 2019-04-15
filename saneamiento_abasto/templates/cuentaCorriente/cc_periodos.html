@@ -7,7 +7,7 @@
 
 {% block url-volver %}{% url 'cuentas_corrientes:lista_cc' %}{% endblock %}
 
-{% block panel-title %}Reinspecciones en cuenta corriente{% endblock %}
+{% block panel-title %}Períodos de cuenta corriente{% endblock %}
 
 {% block btn-nuevo %}
     {% if listado %}
@@ -25,15 +25,14 @@
         </tr>
     </thead>
     <tbody>
-        {% for periodo, detalles in listado.items %}
+        {% for periodo in listado %}
             <tr>
-                <td>{{ periodo }}</td>
-                <td>{{ detalles.total_kg }}</td>
-                <td>${{ detalles.monto }}</td>
+                <td>{{ periodo.periodo|date:"m-Y" }}</td>
+                <td>{{ periodo.total_kg }}</td>
+                <td>${{ periodo.importe }}</td>
                 <td>
-                    {% with periodo|string_split as tupla %}
-                        <a class="btn btn-warning" data-toggle="tooltip" title="Detalle de periodo" href="{% url 'cuentas_corrientes:detalle_periodo' pk tupla.0 tupla.1 %}"><em class="glyphicon glyphicon-list-alt"></em></a>
-                    {% endwith %}
+                    <a class="btn btn-default" data-toggle="tooltip" title="Detalle de periodo" href="{% url 'cuentas_corrientes:detalle_periodo' periodo.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Generar certificado de deuda" href="{% url 'cuentas_corrientes:pdf_certificado' periodo.pk %}" target="_blank"><em class="glyphicon glyphicon-print"></em></a>
                 </td>
             </tr>
         {% endfor %}

@@ -47,9 +47,9 @@
                 </tr>
             </table>
             <p>
-                Domicilio: {{ cc.abastecedor.responsable.domicilio }}<br>
-                Código de abastecedor: {{ cc.abastecedor.pk }}<br>
-                <b>Resumen de Reinspeccion Veterinaria correspondiente al periodo de {{ periodo }}</b>
+                Domicilio: {{ periodo.cc.abastecedor.responsable.domicilio }}<br>
+                Código de abastecedor: {{ periodo.cc.abastecedor.pk }}<br>
+                <b>Resumen de Reinspeccion Veterinaria correspondiente al periodo de {{ periodo.periodo|date:"F Y" }}</b>
             </p>
             {% if reinspecciones %}
                 {% for item in reinspecciones %}
@@ -96,8 +96,8 @@
                     <br>
                 {% endfor %}
             {% endif %}
-            <p><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ total_kilos }} Kg<br>
-            MONTO A ABONAR: ${{ total_monto }}</b></p>
+            <p><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ periodo.total_kg }} Kg<br>
+            MONTO A ABONAR: ${{ periodo.importe }}</b></p>
             <p>
                 Nota: El presente certificado deberá ser abonado dentro de los cinco (5) dias habiles de ser notificado,
                 caso contrario se incrementará el valor del mismo a razon del 2% mensual, Ordenanza Impositiva Vigente
