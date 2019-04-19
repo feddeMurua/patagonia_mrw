@@ -5,9 +5,9 @@
 
 {% block header-title %}Detalle de la Cuenta Corriente{% endblock %}
 
-{% block url-volver %}{% url 'cuentas_corrientes:periodos_cc' pk %}{% endblock %}
+{% block url-volver %}{% url 'cuentas_corrientes:periodos_cc' periodo.cc.pk %}{% endblock %}
 
-{% block panel-title %}Reinspecciones del periodo {{ mes }}-{{ anio }}{% endblock %}
+{% block panel-title %}Reinspecciones del periodo {{ periodo.periodo|date:"F Y" }}{% endblock %}
 
 {% block tabla %}
     <thead>
@@ -29,7 +29,7 @@
                 <td>{{ detalle.reinspeccion.certificado }}</td>
                 <td>{{ detalle.reinspeccion.total_kg }}</td>
                 <td>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk 0 %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                    <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk periodo.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
                     <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'reinspecciones:baja_reinspeccion' detalle.reinspeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                 </td>
             </tr>

@@ -91,6 +91,7 @@ class PeriodoCC(models.Model):
     total_kg = models.IntegerField(validators=[MinValueValidator(0)], blank=True, null=True)
     importe = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True)
     fecha_certificado = models.DateField(blank=True, null=True)
+    pagado = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s-%s / %s" % (self.periodo.month, self.periodo.year, self.cc)
@@ -99,7 +100,6 @@ class PeriodoCC(models.Model):
 class DetalleCC(models.Model):
     reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
     periodo = models.ForeignKey('PeriodoCC', on_delete=models.CASCADE, null=True)
-    pagado = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s" % self.reinspeccion

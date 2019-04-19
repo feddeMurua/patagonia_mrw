@@ -18,6 +18,6 @@ urlpatterns = [
         name='modificar_producto_reinspeccion'),
     url(r'^productos/nuevo$', AltaProducto.as_view(), name='alta_producto'),
     url(r'^carga_productos/(?P<reinspeccion_pk>\d+)$', carga_productos, name='carga_productos'),
-    url(r'^productos/(?P<reinspeccion_pk>\d+)/(?P<pagado>\d+)$', lista_productos, name='lista_productos'),
+    url(r'^productos/(?P<reinspeccion_pk>\d+)/(?P<periodo_pk>\d+)$', lista_productos, name='lista_productos'),
     url(r'^precios$', precios_reinspeccion, name='precios_reinspeccion')
 ]

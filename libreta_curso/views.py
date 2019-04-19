@@ -186,7 +186,7 @@ def cierre_inscripcion(request, pk, id_curso):
     else:
         form = CierreInscripcionForm(instance=inscripcion)
     url_return = 'cursos:cierre_curso'
-    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'curso': inscripcion.curso,
+    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'curso': inscripcion.cursodatetime.now().date(),
                                                                  'url_return': url_return,
                                                                  'modificacion': True})
 

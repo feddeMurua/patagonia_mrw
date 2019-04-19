@@ -9,12 +9,6 @@
 
 {% block panel-title %}Períodos de cuenta corriente{% endblock %}
 
-{% block btn-nuevo %}
-    {% if listado %}
-        <a class="btn btn-danger" href="{% url 'cuentas_corrientes:cancelar_deuda_cc' pk %}">Cancelar Deuda</a>
-    {% endif %}
-{% endblock %}
-
 {% block tabla %}
     <thead>
         <tr>
@@ -32,7 +26,14 @@
                 <td>${{ periodo.importe }}</td>
                 <td>
                     <a class="btn btn-default" data-toggle="tooltip" title="Detalle de periodo" href="{% url 'cuentas_corrientes:detalle_periodo' periodo.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Generar certificado de deuda" href="{% url 'cuentas_corrientes:pdf_certificado' periodo.pk %}" target="_blank"><em class="glyphicon glyphicon-print"></em></a>
+                    {% if periodo.fecha_certificado %}
+                        <a class="btn btn-warning" data-toggle="tooltip" title="Imprimir certificado de deuda" href="{% url 'cuentas_corrientes:pdf_certificado' periodo.pk %}" target="_blank"><em class="glyphicon glyphicon-print"></em></a>
+                        {% if not periodo.pagado %}
+                            <a class="btn btn-success" data-toggle="tooltip" title="Abonar certificado de deuda" href="{% url 'cuentas_corrientes:abonar_certificado' periodo.pk %}"><em class="glyphicon glyphicon-usd"></em></a>
+                        {% endif %}
+                    {% else %}
+                        <a class="btn btn-primary" data-toggle="tooltip" title="Generar certificado de deuda" href="{% url 'cuentas_corrientes:certificado_deuda' periodo.pk %}"><em class="glyphicon glyphicon-file"></em></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

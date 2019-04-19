@@ -7,7 +7,7 @@
 
 {% block url-volver %}
     {% if id_return %}
-        {% url url_return id_return mes_return anio_return %}
+        {% url url_return id_return %}
     {% else %}
         {% url url_return %}
     {% endif %}
@@ -15,9 +15,9 @@
 
 {% block panel-title %}Productos{% endblock %}
 
-{% if not id_return and not pagado and user.is_staff %}
+{% if not id_return and not periodo.pagado and user.is_staff %}
     {% block btn-nuevo %}
-        <a href="{% url 'reinspecciones:agregar_producto_reinspeccion' reinspeccion_pk %}" class="btn btn-primary btn-create">Agregar Producto</a>
+        <a href="{% url 'reinspecciones:agregar_producto_reinspeccion' reinspeccion.pk %}" class="btn btn-primary btn-create">Agregar Producto</a>
     {% endblock %}
 {% endif %}
 
@@ -32,7 +32,7 @@
     <tfoot>
         <tr style="background-color:#d6d7d8">
             <td><b>TOTAL</b></td>
-            <td><b>{{ total_kg }}</b></td>
+            <td><b>{{ reinspeccion.total_kg }}</b></td>
             <td></td>
         </tr>
     </tfoot>
@@ -42,8 +42,8 @@
                 <td>{{ producto.producto.nombre }}</td>
                 <td>{{ producto.kilo_producto }}</td>
                 <td>
-                    {% if not pagado %}
-                        <a class='btn btn-warning' onclick="confirmModificar('{{ reinspeccion_pk }}', '{{ producto.producto.nombre }}')" data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>
+                    {% if not periodo.pagado %}
+                        <a class='btn btn-warning' onclick="confirmModificar('{{ reinspeccion.pk }}', '{{ producto.producto.nombre }}')" data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>
                     {% endif %}
                 </td>
             </tr>
@@ -58,6 +58,7 @@
                     <h4 class="modal-title">Modificar cantidad</h4>
                 </div>
                 <div class="modal-body" align="center">
+                    <label for="nueva_cant"></label>
                     <input class="form-control" style="width:45%;text-align:center;" type="number" id="nueva_cant" placeholder="Ingrese un número entero">
                 </div>
                 <div class="modal-footer">

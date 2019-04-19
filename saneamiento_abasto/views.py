@@ -117,8 +117,7 @@ def periodos_cc(request, pk):
 def detalle_periodo(request, pk):
     periodo = PeriodoCC.objects.get(pk=pk)
     return render(request, 'cuentaCorriente/periodo_detail.html', {'listado': DetalleCC.objects.filter(periodo=periodo),
-                                                                   'pk': pk, 'anio': periodo.periodo.year,
-                                                                   'mes': periodo.periodo.month})
+                                                                   'periodo': periodo})
 
 
 def agrupar_reinspecciones(periodo):
@@ -126,95 +125,71 @@ def agrupar_reinspecciones(periodo):
     detalles = DetalleCC.objects.filter(periodo=periodo).order_by('reinspeccion__fecha')
     for detalle in detalles:
         productos = ReinspeccionProducto.objects.filter(reinspeccion=detalle.reinspeccion)
-        reinspecciones.append({'reinspeccion': detalle.reinspeccion, 'subtotal': detalle.reinspeccion.importe,
-                               'productos': productos})
+        reinspecciones.append({'reinspeccion': detalle.reinspeccion, 'productos': productos})
     return reinspecciones
 
 
-def agrupar_periodos(cc):
-    detallescc = DetalleCC.objects.filter(cc=cc)\
-        .annotate(periodo=Concat(ExtractMonth('reinspeccion__fecha'), V('-'), ExtractYear('reinspeccion__fecha'),
-                                 output_field=CharField()))\
-        .order_by('periodo')
-    periodos = {}
-    for k, group in groupby(detallescc, lambda x: x.periodo):
-        detalles = list(group)
-        periodos[k] = {'detalles': detalles,
-                       'total_kg': sum(item.reinspeccion.total_kg for item in detalles),
-                       'monto': sum(item.reinspeccion.importe for item in detalles)}
-    return periodos
-
-
-def agrupar_periodos_adeudados(cc):
-    detallescc = DetalleCC.objects.filter(cc=cc, pagado=False)\
-        .annotate(periodo=Concat(ExtractMonth('reinspeccion__fecha'), V('-'), ExtractYear('reinspeccion__fecha'),
-                                 output_field=CharField()))\
-        .order_by('periodo')
-    periodos = {}
-    for k, group in groupby(detallescc, lambda x: x.periodo):
-        detalles = list(group)
-        periodos[k] = {'detalles': detalles,
-                       'total_kg': sum(item.reinspeccion.total_kg for item in detalles),
-                       'monto': sum(item.reinspeccion.importe for item in detalles)}
-    return periodos
-
-
-def calcular_deuda(periodos, selected):
-    importe = 0
-    for k in selected:
-        importe += periodos[k]['monto']
-        for detalle in periodos[k]['detalles']:
-            detalle.pagado = True
-            detalle.save()
-    return importe
-
-
 @login_required(login_url='login')
-def cancelar_deuda_cc(request, pk):
-    cc = CuentaCorriente.objects.get(pk=pk)
-    periodos = agrupar_periodos_adeudados(cc)
+def certificado_deuda(request, pk):
+    periodo = PeriodoCC.objects.get(pk=pk)
+    reinspecciones = agrupar_reinspecciones(periodo)
     if request.method == 'POST':
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        mov_form = pd_f.MovimientoDiarioForm(request.POST)
-        selected = request.POST.getlist('pagar')
-        servicio = "Cancelacion de deuda en Cuenta Corriente"
-        if request.POST['optradio'] == 'previa':
-            if detalle_mov_form.is_valid():
-                importe = calcular_deuda(periodos, selected)
-                detalle_mov = detalle_mov_form.save(commit=False)
-                detalle_mov.completar_monto(importe, servicio, cc)
-                log_crear(request.user.id, cc, servicio)
-                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[pk]))
-        else:
-            if mov_form.is_valid():
-                importe = calcular_deuda(periodos, selected)
-                mov = mov_form.save()
-                detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
-                detalle_mov.completar_monto(importe, servicio, cc)
-                log_crear(request.user.id, cc, servicio)
-                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[pk]))
-    else:
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'cuentaCorriente/cancelar_deuda_cc.html', {'detalle_mov_form': detalle_mov_form, 'pk': pk,
-                                                                      'mov_form': mov_form, 'listado': periodos})
+        periodo.fecha_certificado = now()
+        periodo.save()
+        return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
+    return render(request, 'cuentaCorriente/certificado_deuda.html', {'periodo': periodo,
+                                                                      'reinspecciones': reinspecciones})
 
 
 @login_required(login_url='login')
 def pdf_certificado(request, pk):
     template = get_template('cuentaCorriente/certificado_pdf.html')
-    locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
     periodo = PeriodoCC.objects.get(pk=pk)
     reinspecciones = agrupar_reinspecciones(periodo)
     context = {'periodo': periodo, 'reinspecciones': reinspecciones,
                'title': 'Certificado de deuda - ' + str(periodo.cc.abastecedor.responsable.nombre)
-                        + ' / Periodo: ' + str(periodo.periodo.month)}
+                        + ' / Periodo: ' + str(periodo.periodo.month) + '-' + str(periodo.periodo.year)}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename=' + str("Certificado_deuda_"
                                                         + str(periodo.cc.abastecedor.responsable.nombre))
     return response
+
+
+@login_required(login_url='login')
+def abonar_certificado(request, pk):
+    periodo = PeriodoCC.objects.get(pk=pk)
+    delta = timezone.now().date() - periodo.fecha_certificado
+    importe = periodo.importe
+    if delta.days >= 5:
+        importe += (importe * (delta.days-5) / 100)
+    if request.method == 'POST':
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        periodo.pagado = True
+        servicio = "Cancelacion de deuda en Cuenta Corriente"
+        if request.POST['optradio'] == 'previa':
+            if detalle_mov_form.is_valid():
+                periodo.save()
+                detalle_mov = detalle_mov_form.save(commit=False)
+                detalle_mov.completar_monto(importe, servicio, periodo.cc)
+                log_crear(request.user.id, periodo.cc, servicio)
+                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
+        else:
+            if mov_form.is_valid():
+                periodo.save()
+                mov = mov_form.save()
+                detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
+                detalle_mov.completar_monto(importe, servicio, periodo.cc)
+                log_crear(request.user.id, periodo.cc, servicio)
+                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
+    else:
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'cuentaCorriente/abonar_certificado.html', {'periodo': periodo, 'atraso': delta.days,
+                                                                       'detalle_mov_form': detalle_mov_form,
+                                                                       'importe': importe, 'mov_form': mov_form})
 
 
 '''
@@ -466,20 +441,19 @@ def alta_productos(request, reinspeccion):
 
 
 @login_required(login_url='login')
-def lista_productos(request, reinspeccion_pk, pagado):
+def lista_productos(request, reinspeccion_pk, periodo_pk):
     reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-    referer = request.META.get('HTTP_REFERER')
-    elem = referer.split('/')
-    if 'detalle' in referer:
+    if periodo_pk:
+        periodo = PeriodoCC.objects.get(pk=periodo_pk)
         url_return = 'cuentas_corrientes:detalle_periodo'
-        id_return = elem[-5]
+        id_return = periodo_pk
     else:
+        periodo = None
         url_return = 'reinspecciones:lista_reinspecciones'
         id_return = ""
     return render(request, 'reinspeccion/producto_list.html',
-                  {'reinspeccion_pk': reinspeccion_pk, 'mes_return': elem[-3], 'pagado': True if pagado == 0 else False,
-                   'total_kg': reinspeccion.total_kg, 'url_return': url_return, 'id_return': id_return,
-                   'anio_return': elem[-2], 'listado': ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)})
+                  {'reinspeccion': reinspeccion, 'url_return': url_return, 'id_return': id_return,
+                   'listado': ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion), 'periodo': periodo})
 
 
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):

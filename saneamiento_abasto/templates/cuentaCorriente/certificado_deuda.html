@@ -1,0 +1,110 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Cuentas Corrientes{% endblock %}
+
+{% block more-stylesheets %}
+    <style>
+        #cabecera {
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+        #info-total {
+            margin-left: 20px;
+        }
+        .panel-table {
+            margin-top: 35px;
+        }
+        .table {
+            margin-bottom: 0;
+            border: 2px solid #ddd;
+        }
+        .tabla-productos {
+            table-layout: fixed;
+        }
+        th, tr {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block header-title %}Certificado de deuda{% endblock %}
+
+{% block url-volver %}{% url 'cuentas_corrientes:periodos_cc' periodo.cc.pk %}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid col-md-12">
+        <div class="panel panel-info panel-table">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-8 col-md-8">
+                        <h3 class="panel-title">Certificado de deuda por inspeccion/reinspeccion veterinaria - {{ periodo.periodo|date:"F Y" }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <h4 id="cabecera">
+                    <b>Abastecedor:</b> {{ periodo.cc.abastecedor }}<br>
+                    <b>Domicilio:</b> {{ periodo.cc.abastecedor.responsable.domicilio }}<br>
+                </h4>
+                {% for item in reinspecciones %}
+                    <div class="container-fluid container-table">
+                        <table class="table table-bordered table-striped table-info">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Inspectores</th>
+                                    <th>Turno</th>
+                                    <th>Precintado</th>
+                                    <th>Certificado</th>
+                                    <th>Monto</th>
+                                    <th>Total Kg.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ item.reinspeccion.fecha }}</td>
+                                    <td>
+                                        {% for i in item.reinspeccion.inspectores.all %}{{ i.apellido }}, {{ i.nombre }} | {% endfor %}
+                                    </td>
+                                    <td>{{ item.reinspeccion.turno }}</td>
+                                    <td>{{ item.reinspeccion.precintado|default_if_none:"" }}</td>
+                                    <td>{{ item.reinspeccion.certificado }}</td>
+                                    <td>${{ item.reinspeccion.importe }}</td>
+                                    <td>{{ item.reinspeccion.total_kg }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered table-striped tabla-productos">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Kilos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for producto in item.productos %}
+                                    <tr>
+                                        <td>{{ producto.producto }}</td>
+                                        <td>{{ producto.kilo_producto }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                {% endfor %}
+                <h5 id="info-total"><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ periodo.total_kg }} Kg<br>
+                MONTO A ABONAR: ${{ periodo.importe }}</b></h5>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="panel-footer">
+                    <input type="submit" class="btn btn-primary" value="Aceptar"
+                               onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
+                    <a class="btn btn-danger btn-cancelar" href="{% url 'cuentas_corrientes:periodos_cc' periodo.cc.pk %}">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
