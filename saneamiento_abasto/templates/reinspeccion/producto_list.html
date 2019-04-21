@@ -15,11 +15,11 @@
 
 {% block panel-title %}Productos{% endblock %}
 
-{% if not id_return and not periodo.pagado and user.is_staff %}
-    {% block btn-nuevo %}
-        <a href="{% url 'reinspecciones:agregar_producto_reinspeccion' reinspeccion.pk %}" class="btn btn-primary btn-create">Agregar Producto</a>
-    {% endblock %}
-{% endif %}
+{% block btn-nuevo %}
+    {% if id_return and not periodo.pagado and user.is_staff %}
+        <a href="{% url 'reinspecciones:agregar_producto_reinspeccion' reinspeccion.pk id_return %}" class="btn btn-primary btn-create">Agregar Producto</a>
+    {% endif %}
+{% endblock %}
 
 {% block tabla %}
     <thead>
@@ -42,8 +42,11 @@
                 <td>{{ producto.producto.nombre }}</td>
                 <td>{{ producto.kilo_producto }}</td>
                 <td>
-                    {% if not periodo.pagado %}
+                    {% if id_return and not periodo.pagado %}
                         <a class='btn btn-warning' onclick="confirmModificar('{{ reinspeccion.pk }}', '{{ producto.producto.nombre }}')" data-toggle='tooltip' title='Modificar cantidad'><em class='glyphicon glyphicon-pencil'></em></a>
+                        {% if listado|length  > 1 %}
+                            <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'reinspecciones:borrar_producto' producto.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>

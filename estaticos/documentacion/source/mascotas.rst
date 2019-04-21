@@ -7,3 +7,6 @@ entre patentamiento, esterilización, estadíscticas o sacrificios/entregas de a
    :maxdepth: 1
 
    patentamiento
+   esterilizacion
+   sacrificio_entrega
+   estadisticasM

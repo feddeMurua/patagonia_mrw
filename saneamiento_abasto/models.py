@@ -88,8 +88,8 @@ class CuentaCorriente(models.Model):
 class PeriodoCC(models.Model):
     cc = models.ForeignKey('CuentaCorriente', on_delete=models.CASCADE, null=True)
     periodo = models.DateField(blank=True, null=True)
-    total_kg = models.IntegerField(validators=[MinValueValidator(0)], blank=True, null=True)
-    importe = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True)
+    total_kg = models.IntegerField(validators=[MinValueValidator(0)], default=0)
+    importe = models.FloatField(validators=[MinValueValidator(0)], default=0)
     fecha_certificado = models.DateField(blank=True, null=True)
     pagado = models.BooleanField(default=False)
 
