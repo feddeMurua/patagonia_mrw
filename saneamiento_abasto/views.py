@@ -736,14 +736,14 @@ def alta_control_plaga(request):
                         VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'],
                                       control=control_plaga).save()
                         pd_v.movimiento_previo(request, detalle_mov_form, servicio, control_plaga,
-                                               'Analisis de Triquinosis')
+                                               'Control de plagas')
                         return redirect('controles_plagas:lista_controles_plagas')
                 else:
                     if mov_form.is_valid():
                         control_plaga = form.save()
                         VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'],
                                       control=control_plaga).save()
-                        pd_v.nuevo_movimiento(request, mov_form, servicio, control_plaga, 'Analisis de Triquinosis')
+                        pd_v.nuevo_movimiento(request, mov_form, servicio, control_plaga, 'Control de plagas')
                         return redirect('controles_plagas:lista_controles_plagas')
             else:
                 if pago_diferido_form.is_valid():
