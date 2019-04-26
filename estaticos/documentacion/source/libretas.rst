@@ -14,6 +14,8 @@ Libretas Sanitarias
     - :ref:`Eliminar Libreta <eliminar-libreta>`
     - :ref:`Detalle Libreta <detalle-libreta>`
     - :ref:`Renovación Libreta <renovacion-libreta>`
+    - :ref:`Completar Trámite <completar-tramite>`
+    - :ref:`Imprimir Formulario <imprimir-formulario>`
 
   Además, si el usuario desea Registrar una nueva *Libreta*:
 
@@ -119,3 +121,38 @@ Renovación Libreta
           - Uno o más campos con un formato incorrecto.
 
   Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos de la *Libreta* seleccionada, caso contrario, presionará el botón ``Cancelar``..
+
+
+.. _completar-tramite:
+
+Completar Trámite
+-----------------
+
+  Si el usuario desea completar el trámite de una *Libreta*, deberá seleccionar en la columna de **acciones** asociado a la *Libreta* y presionar el ícono ``Completar Trámite``
+
+  Una vez realizado el paso anterior aparecerá la siguiente vista emergente:
+
+  .. image:: _static/completar_tramite.png
+    :align: center
+
+  En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para completar el trámite de una *Libreta*.
+
+  .. ATTENTION::
+      El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
+      En este punto, las posibles causas de errores son:
+
+          - Uno o más campos obligatorios vacíos.
+          - Uno o más campos con un formato incorrecto.
+
+  Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de las libretas.
+
+
+.. _imprimir-formulario:
+
+Imprimir Formulario
+-------------------
+
+  Si el usuario desea imprimir el  *Formulario* de una libreta, deberá seleccionar en la columna de **acciones** asociado a la *Libreta* y presionar el ícono ``Imprimir Formulario``
+
+  A continuación, el sistema presentará en una nueva pestaña un archivo en formato .PDF para imprimir el formulario correspondiente.
+  `

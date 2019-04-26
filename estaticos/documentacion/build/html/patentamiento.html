@@ -20,22 +20,12 @@
   <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'',
-              LANGUAGE:'es',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
         <script type="text/javascript" src="_static/translations.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -98,11 +88,11 @@
 <li class="toctree-l1"><a class="reference internal" href="analisiscontroles.html">Análisis y Controles</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="mascotas.html">Mascotas</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Patentamiento de Mascotas</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#retiro-de-beneficios">Retiro de Beneficios</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#nueva-patente">Nueva Patente</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retiro-de-beneficios">Retiro de Beneficios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detalle-patente">Detalle Patente</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#modificacion-de-patente">Modificación de Patente</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#eliminar-patente">Eliminar Patente</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#detalle-patente">Detalle Patente</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#renovacion-patente">Renovación Patente</a></li>
 </ul>
 </li>
@@ -205,15 +195,6 @@ que se encuentren registradas en el sistema hasta la fecha.</p>
 </ul>
 </div></blockquote>
 </div></blockquote>
-<div class="section" id="retiro-de-beneficios">
-<span id="retiro-beneficios"></span><h2>Retiro de Beneficios<a class="headerlink" href="#retiro-de-beneficios" title="Enlazar permanentemente con este título">¶</a></h2>
-<blockquote>
-<div><p>Si el usuario desea registrar un nuevo retiro de un <em>garrapaticida</em> o <em>atiparasitario</em> , deberá presionar los respectivos botones de <code class="docutils literal notranslate"><span class="pre">Garrapaticida</span></code> o <code class="docutils literal notranslate"><span class="pre">Antiparasitario</span></code>.</p>
-<p>Una vez realizado el paso anterior aparecerá la siguiente vista emergente:</p>
-<img alt="_images/retiro_beneficio.png" class="align-center" src="_images/retiro_beneficio.png" />
-<p>En esta parte el usuario deberá decidir si confirma el retiro del beneficio o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
-</div></blockquote>
-</div>
 <div class="section" id="nueva-patente">
 <span id="id1"></span><h2>Nueva Patente<a class="headerlink" href="#nueva-patente" title="Enlazar permanentemente con este título">¶</a></h2>
 <blockquote>
@@ -233,6 +214,24 @@ En este punto, las posibles causas de errores son:</p>
 </div></blockquote>
 </div>
 <p>Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de las Patentes.</p>
+</div></blockquote>
+</div>
+<div class="section" id="retiro-de-beneficios">
+<span id="retiro-beneficios"></span><h2>Retiro de Beneficios<a class="headerlink" href="#retiro-de-beneficios" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea registrar un nuevo retiro de un <em>garrapaticida</em> o <em>atiparasitario</em> , deberá presionar los respectivos botones de <code class="docutils literal notranslate"><span class="pre">Garrapaticida</span></code> o <code class="docutils literal notranslate"><span class="pre">Antiparasitario</span></code>.</p>
+<p>Una vez realizado el paso anterior aparecerá la siguiente vista emergente:</p>
+<img alt="_images/retiro_beneficio.png" class="align-center" src="_images/retiro_beneficio.png" />
+<p>En esta parte el usuario deberá decidir si confirma el retiro del beneficio o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="detalle-patente">
+<span id="id2"></span><h2>Detalle Patente<a class="headerlink" href="#detalle-patente" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea ver el detalle de una <em>Patente</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Patente</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Detalle</span></code></p>
+<p>Una vez realizado el paso anterior aparecerá la siguiente vista emergente:</p>
+<img alt="_images/detalle_patente.png" class="align-center" src="_images/detalle_patente.png" />
+<p>En esta parte el usuario podrá observar la información adicional de la <em>Patente</em>. Si desea imprimir la tarjeta, deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Imprimir</span> <span class="pre">Tarjeta</span></code>, de otro modo, si desea volver al listado inicial, presionará el botón <code class="docutils literal notranslate"><span class="pre">Regresar</span></code>.</p>
 </div></blockquote>
 </div>
 <div class="section" id="modificacion-de-patente">
@@ -257,21 +256,12 @@ En este punto, las posibles causas de errores son:</p>
 </div></blockquote>
 </div>
 <div class="section" id="eliminar-patente">
-<span id="id2"></span><h2>Eliminar Patente<a class="headerlink" href="#eliminar-patente" title="Enlazar permanentemente con este título">¶</a></h2>
+<span id="id3"></span><h2>Eliminar Patente<a class="headerlink" href="#eliminar-patente" title="Enlazar permanentemente con este título">¶</a></h2>
 <blockquote>
 <div><p>Si el usuario desea eliminar una <em>Patente</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Patente</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Eliminar</span></code></p>
 <p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
 <img alt="_images/baja_patente.png" class="align-center" src="_images/baja_patente.png" />
 <p>En esta parte el usuario deberá decidir si confirma la eliminación de la <em>Patente</em> o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
-</div></blockquote>
-</div>
-<div class="section" id="detalle-patente">
-<span id="id3"></span><h2>Detalle Patente<a class="headerlink" href="#detalle-patente" title="Enlazar permanentemente con este título">¶</a></h2>
-<blockquote>
-<div><p>Si el usuario desea ver el detalle de una <em>Patente</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Patente</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Detalle</span></code></p>
-<p>Una vez realizado el paso anterior aparecerá la siguiente vista emergente:</p>
-<img alt="_images/detalle_patente.png" class="align-center" src="_images/detalle_patente.png" />
-<p>En esta parte el usuario podrá observar la información adicional de la <em>Patente</em>. Si desea imprimir la tarjeta, deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Imprimir</span> <span class="pre">Tarjeta</span></code>, de otro modo, si desea volver al listado inicial, presionará el botón <code class="docutils literal notranslate"><span class="pre">Regresar</span></code>.</p>
 </div></blockquote>
 </div>
 <div class="section" id="renovacion-patente">
