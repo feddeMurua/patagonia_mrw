@@ -46,8 +46,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Índice" href="genindex.html" />
     <link rel="search" title="Búsqueda" href="search.html" />
-    <link rel="next" title="Controles de Plagas" href="controlesplagas.html" />
-    <link rel="prev" title="Transportes/Desinfecciones" href="transpdes.html" /> 
+    <link rel="next" title="Desinfecciones" href="desinfeccionvehiculo.html" />
+    <link rel="prev" title="Transportes y Desinfecciones" href="transportedesinfeccion.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,10 +98,20 @@
 <li class="toctree-l1"><a class="reference internal" href="analisiscontroles.html">Análisis y Controles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mascotas.html">Mascotas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abasto.html">Abasto</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="transpdes.html">Transportes/Desinfecciones</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Vehículos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="controlesplagas.html">Controles de Plagas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="estadisticasTD.html">Estadísticas para Transportes/Desinfecciones</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="transportedesinfeccion.html">Transportes y Desinfecciones</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vehículos</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nuevo-vehiculo">Nuevo Vehículo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detalle-de-vehiculo">Detalle de vehiculo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#desinfectar-vehiculo">Desinfectar vehículo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="desinfeccionvehiculo.html">Desinfecciones</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#eliminar-vehiculo">Eliminar vehículo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modificar-vehiculo">Modificar vehículo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="controles.html">Controles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="estadisticasDV.html">Estadísticas de Desinfección de Vehículos</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
@@ -150,7 +160,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="transpdes.html">Transportes/Desinfecciones</a> &raquo;</li>
+          <li><a href="transportedesinfeccion.html">Transportes y Desinfecciones</a> &raquo;</li>
         
       <li>Vehículos</li>
     
@@ -173,6 +183,102 @@
             
   <div class="section" id="vehiculos">
 <h1>Vehículos<a class="headerlink" href="#vehiculos" title="Enlazar permanentemente con este título">¶</a></h1>
+<blockquote>
+<div><p>Se presentará una pantalla que contendrá un listado con todos los <em>Vehículos</em>
+que se encuentren registrados en el sistema hasta la fecha.</p>
+<img alt="_images/listado_vehiculos.png" class="align-center" src="_images/listado_vehiculos.png" />
+<p>Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular cada <em>Vehículo</em>.</p>
+<p>Estas funcionalidades son:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#detalle-vehiculo"><span class="std std-ref">Detalle del Vehículo</span></a></li>
+<li><a class="reference internal" href="#eliminar-vehiculo"><span class="std std-ref">Eliminar Vehículo</span></a></li>
+<li><a class="reference internal" href="#desinfectar-vehiculo"><span class="std std-ref">Desinfectar Vehículo</span></a></li>
+<li><a class="reference internal" href="#modificar-vehiculo"><span class="std std-ref">Modificar Vehículo</span></a></li>
+</ul>
+<p>Además, si el usuario desea Registrar un nuevo <em>Vehículo</em>:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#alta-vehiculo"><span class="std std-ref">Nuevo Vehículo</span></a></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<div class="section" id="nuevo-vehiculo">
+<span id="alta-vehiculo"></span><h2>Nuevo Vehículo<a class="headerlink" href="#nuevo-vehiculo" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea crear un nuevo <em>Vehículo</em>, deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Nuevo</span> <span class="pre">Vehículo</span></code>.</p>
+<p>A continuación, el sistema lo redirigirá a la siguiente pantalla. En esta parte, al usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo <em>Vehículo</em>.</p>
+<img alt="_images/alta_vehiculo.png" class="align-center" src="_images/alta_vehiculo.png" />
+<div class="admonition attention">
+<p class="first admonition-title">Atención</p>
+<p>Se puede observar un botón verde con la leyenda <code class="docutils literal notranslate"><span class="pre">Agregar</span></code> en el campo <em>Modelo</em>, el cual es utilizado para
+agregar un nuevo modelo respectivamente si no se encuentra registrado en el sistema. Además;
+El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
+En este punto, las posibles causas de errores son:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Uno o más campos obligatorios vacíos.</li>
+<li>Uno o más campos con un formato incorrecto.</li>
+</ul>
+</div></blockquote>
+</div>
+<p>Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de vehículos.</p>
+</div></blockquote>
+</div>
+<div class="section" id="detalle-de-vehiculo">
+<span id="detalle-vehiculo"></span><h2>Detalle de vehiculo<a class="headerlink" href="#detalle-de-vehiculo" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea ver el detalle de un <em>vehiculo</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado al <em>vehiculo</em> y
+presionar el ícono <code class="docutils literal notranslate"><span class="pre">Detalle</span></code>.</p>
+<p>Una vez realizado el paso anterior aparecerá la siguiente vista emergente:</p>
+<img alt="_images/detalle_vehiculo.png" class="align-center" src="_images/detalle_vehiculo.png" />
+<p>En esta parte el usuario podrá observar la información adicional del <em>vehiculo</em>.
+Si desea imprimir el comprobante, deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Imprimir</span> <span class="pre">Comprobante</span></code>, de otro modo, si desea volver al listado inicial, presionará el botón <code class="docutils literal notranslate"><span class="pre">Regresar</span></code>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="desinfectar-vehiculo">
+<span id="id1"></span><h2>Desinfectar vehículo<a class="headerlink" href="#desinfectar-vehiculo" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea registrar una desinfección de un <em>vehículo</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado al <em>vehículo</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Desinfección</span></code>.</p>
+<p>En esta parte al usuario se le presentará un listado con todas las desinfecciones asociadas al <em>Vehículo</em>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="desinfeccionvehiculo.html">Desinfecciones</a></li>
+</ul>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="eliminar-vehiculo">
+<span id="id2"></span><h2>Eliminar vehículo<a class="headerlink" href="#eliminar-vehiculo" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea eliminar un <em>vehículo</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado al <em>vehículo</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Eliminar</span></code></p>
+<p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
+<img alt="_images/baja_vehiculo.png" class="align-center" src="_images/baja_vehiculo.png" />
+<p>En esta parte el usuario deberá decidir si confirma la eliminación del <em>vehículo</em> o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="modificar-vehiculo">
+<span id="id3"></span><h2>Modificar vehículo<a class="headerlink" href="#modificar-vehiculo" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea modificar los datos de un <em>vehículo</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado al <em>vehículo</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Modificar</span></code>.</p>
+<p>Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:</p>
+<img alt="_images/mod_vehiculo.png" class="align-center" src="_images/mod_vehiculo.png" />
+<p>En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados al <em>vehículo</em>.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Atención</p>
+<p>Se puede observar un botón verde con la leyenda <code class="docutils literal notranslate"><span class="pre">Agregar</span></code> en el campo <em>Modelo</em>, el cual es utilizado para
+agregar un nuevo modelo respectivamente si no se encuentra registrado en el sistema. Además;
+El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
+En este punto, las posibles causas de errores son:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Uno o más campos obligatorios vacíos.</li>
+<li>Uno o más campos con un formato incorrecto.</li>
+</ul>
+</div></blockquote>
+</div>
+<p>Una vez completado el formulario, el usuario deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code> y el sistema se encargará de actualizar los datos del <em>vehículo</em> seleccionado.</p>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -183,10 +289,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="controlesplagas.html" class="btn btn-neutral float-right" title="Controles de Plagas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="desinfeccionvehiculo.html" class="btn btn-neutral float-right" title="Desinfecciones" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="transpdes.html" class="btn btn-neutral float-left" title="Transportes/Desinfecciones" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="transportedesinfeccion.html" class="btn btn-neutral float-left" title="Transportes y Desinfecciones" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -101,19 +101,20 @@
 <li class="toctree-l2"><a class="reference internal" href="abastecedores.html">Abastecedores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reinspecciones.html">Reinspecciones</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Cuentas Corrientes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cancelar-deuda">Cancelar Deuda</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#detalle-de-periodo">Detalle de período</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#generar-certificado-de-deuda">Generar certificado de deuda</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#productos">Productos</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#eliminar">Eliminar</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#generar-certificado-de-deuda">Generar certificado de deuda</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imprimir-certificado-de-deuda">Imprimir certificado de deuda</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#abonar-certificado-de-deuda">Abonar certificado de deuda</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="estadisticasA.html">Estadísticas de Reinspecciones Veterinarias</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="transpdes.html">Transportes/Desinfecciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transportedesinfeccion.html">Transportes y Desinfecciones</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
 </ul>
 
@@ -185,23 +186,16 @@
 <h1>Cuentas Corrientes<a class="headerlink" href="#cuentas-corrientes" title="Enlazar permanentemente con este título">¶</a></h1>
 <p>Se presentará una pantalla que contendrá un listado con todas las <em>Cuentas Corrientes</em> que se encuentren registradas en el sistema hasta la fecha.</p>
 <img alt="_images/listado_cc.png" class="align-center" src="_images/listado_cc.png" />
-<p>Para ingresar al detalle de una <em>Cuenta Corriente</em>, el usuario deberá presionar el ícono <code class="docutils literal notranslate"><span class="pre">Períodos</span></code> en la columna de <strong>acciones</strong> asociado a la <em>Cuenta Corriente</em>. Al hacero, sera redireccionado a la siguiente pantalla:</p>
+<p>Para ingresar al detalle de una <em>Cuenta Corriente</em>, el usuario deberá presionar el ícono <code class="docutils literal notranslate"><span class="pre">Períodos</span></code> en la columna de <strong>acciones</strong> asociado a la <em>Cuenta Corriente</em>. Al hacerlo, será redireccionado a la siguiente pantalla:</p>
 <img alt="_images/detalle_cc.png" class="align-center" src="_images/detalle_cc.png" />
 <p>En esta pantalla se mostrara el listado de todos los períodos de facturación de la <em>Cuenta Corriente</em>. Junto al listado, se presentará un conjunto de funcionalidades que permitirán interactuar con la <em>Cuenta Corriente</em>. Estas funcionalidades son:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="#cancelar-deuda"><span class="std std-ref">Cancelar Deuda</span></a></li>
 <li><a class="reference internal" href="#detalle-periodo"><span class="std std-ref">Detalle de período</span></a></li>
+<li><a class="reference internal" href="#certificado-deuda"><span class="std std-ref">Generar certificado de deuda</span></a></li>
+<li><a class="reference internal" href="#certificado-pago"><span class="std std-ref">Abonar certificado de deuda</span></a></li>
 </ul>
 </div></blockquote>
-<div class="section" id="cancelar-deuda">
-<span id="id1"></span><h2>Cancelar Deuda<a class="headerlink" href="#cancelar-deuda" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Si el usuario desea cancelar uno o mas de los periodos adeudados de la <em>Cuenta Corriente</em>, deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span> <span class="pre">Deuda</span></code>. Al hacerlo sera redirigido a una nueva pantalla, en la cual debera seguir una serie de pasos.</p>
-<p>En el primer paso, se listaran todos los periodos adeudados, y el usuario deberá seleccionar los periodos que se desea cancelar:</p>
-<img alt="_images/cancelar_deuda.png" class="align-center" src="_images/cancelar_deuda.png" />
-<p>A continuación, se deberá ingresar los datos de facturación.</p>
-<p>Una vez finalizado el proceso, se regresara al listado de períodos de facturación de la <em>Cuenta Corriente</em>.</p>
-</div>
 <div class="section" id="detalle-de-periodo">
 <span id="detalle-periodo"></span><h2>Detalle de período<a class="headerlink" href="#detalle-de-periodo" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Si el usuario desea ingresar al detalle del período, deberá presionar el ícono <code class="docutils literal notranslate"><span class="pre">Detalle</span> <span class="pre">de</span> <span class="pre">período</span></code> en la columna de <strong>acciones</strong> asociado al <em>Período</em>. Al hacerlo será redireccionado a la siguiente pantalla:</p>
@@ -209,14 +203,10 @@
 <p>En esta pantalla, se mostrará el listado de todas las reinspecciones que componen al <em>Período</em> seleccionado. Junto al listado, se presentará un conjunto de funcionalidades que permitirán interactuar con el <em>Período</em>. Estas funcionalidades son:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="#certificado-deuda"><span class="std std-ref">Generar certificado de deuda</span></a></li>
 <li><a class="reference internal" href="#productos-reinspeccion"><span class="std std-ref">Productos</span></a></li>
 <li><a class="reference internal" href="#eliminar-reinspeccion"><span class="std std-ref">Eliminar</span></a></li>
 </ul>
 </div></blockquote>
-<div class="section" id="generar-certificado-de-deuda">
-<span id="certificado-deuda"></span><h3>Generar certificado de deuda<a class="headerlink" href="#generar-certificado-de-deuda" title="Enlazar permanentemente con este título">¶</a></h3>
-</div>
 <div class="section" id="productos">
 <span id="productos-reinspeccion"></span><h3>Productos<a class="headerlink" href="#productos" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>Si el usuario desea ver el el listado de productos de una <em>Reinspección</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Reinspección</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Productos</span></code></p>
@@ -231,6 +221,26 @@
 <img alt="_images/baja_reinspeccion.png" class="align-center" src="_images/baja_reinspeccion.png" />
 <p>Aqui el usuario deberá decidir si confirma la eliminación de la <em>Reinspección</em> o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
 </div>
+</div>
+<div class="section" id="generar-certificado-de-deuda">
+<span id="certificado-deuda"></span><h2>Generar certificado de deuda<a class="headerlink" href="#generar-certificado-de-deuda" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Si el usuario desea generar un <em>Certificado de Deuda</em>, deberá presionar el ícono <code class="docutils literal notranslate"><span class="pre">Generar</span> <span class="pre">certificado</span> <span class="pre">de</span> <span class="pre">deuda</span></code> en la columna de <strong>acciones</strong> asociada al <em>Período</em>. Al hacerlo sera redirigido a una nueva pantalla.</p>
+<img alt="_images/certificado_deuda.png" class="align-center" src="_images/certificado_deuda.png" />
+<p>En esta pantalla el usuario podra visualizar la informacion correspondiente al <em>Abastecedor</em> y al <em>Período</em>, incluyendo un detalle de cada <em>Reinspección</em> que forme parte del detalle del <em>Período</em>.</p>
+<p>Al presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, se generará un <em>Certificado de Deuda</em>, y se regresara al listado de períodos de la <em>Cuenta Corriente</em>.</p>
+</div>
+<div class="section" id="imprimir-certificado-de-deuda">
+<span id="certificado-pdf"></span><h2>Imprimir certificado de deuda<a class="headerlink" href="#imprimir-certificado-de-deuda" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Si el usuario desea imprimir un <em>Certificado de Deuda</em>, deberá presionar el ícono <code class="docutils literal notranslate"><span class="pre">Imprimir</span> <span class="pre">certificado</span> <span class="pre">de</span> <span class="pre">deuda</span></code> en la columna de <strong>acciones</strong> asociada al <em>Período</em>. Al hacerlo se abrira una nueva pestaña, en la que se podrá visualizar e imprimir el <em>Certificado de Deuda</em>.</p>
+</div>
+<div class="section" id="abonar-certificado-de-deuda">
+<span id="certificado-pago"></span><h2>Abonar certificado de deuda<a class="headerlink" href="#abonar-certificado-de-deuda" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Si el usuario desea abonar <em>Certificado de Deuda</em> previamente generado, deberá presionar el ícono <code class="docutils literal notranslate"><span class="pre">Abonar</span> <span class="pre">certificado</span> <span class="pre">de</span> <span class="pre">deuda</span></code> en la columna de <strong>acciones</strong> asociada al <em>Período</em>. Al hacerlo sera redirigido a una nueva pantalla.</p>
+<img alt="_images/certificado_pago.png" class="align-center" src="_images/certificado_pago.png" />
+<p>En esta pantalla el usuario podra visualizar un resumen de la informacion correspondiente al <em>Certificado de Deuda</em>.
+En caso de que exista una mora en el pago, se calculara automaticamente un interés, correspondiente a un 1% por cada dia de atraso luego de los 5 dias desde la generación del <em>Certificado de Deuda</em>. Se mostrará entonces el valor final con el interés incluido.</p>
+<p>A continuación, se deberá ingresar los datos de facturación.</p>
+<p>Una vez finalizado el proceso, se regresara al listado de períodos de la <em>Cuenta Corriente</em>.</p>
 </div>
 </div>
 

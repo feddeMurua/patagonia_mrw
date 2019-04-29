@@ -100,6 +100,7 @@
                     } else {
                         $('.form-patentado :input').prop('required', false);
                         $('.form-no-patentado :input').prop('required', true);
+                        $('#id_nacimiento_fecha').prop('required', false);
                         $('.form-patentado').addClass('hidden');
                         $('.form-no-patentado').removeClass('hidden');
                     }

@@ -26,7 +26,7 @@ SECRET_KEY = 'jl^-^8hf7y(6%c=3jf9)#vkhtq)l(3s4(4jaeonjx$a93w0==v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['veterinariayabasto.com', 'localhost', '192.168.0.16']
+ALLOWED_HOSTS = ['veterinariayabasto.com', 'localhost', '127.0.0.1', '192.168.0.16']
 
 # Application definition
 
@@ -50,12 +50,11 @@ INSTALLED_APPS = [
     # Librerias
     'bootstrap3',
     'widget_tweaks',
-    'easy_pdf',
     'polymorphic',
     'django_addanother',
     'solo',
     'mathfilters',
-    'django_cleanup'
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 MIDDLEWARE = [
@@ -129,12 +128,9 @@ LANGUAGE_CODE = 'es-AR'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
-USE_I18N = True
-
 USE_L10N = True
 
 USE_TZ = True
-
 
 
 # Static files (CSS, JavaScript, Images)

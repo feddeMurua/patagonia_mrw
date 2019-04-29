@@ -167,7 +167,7 @@ def modificacion_inscripcion(request, pk, id_curso):
     else:
         form = ModificacionInscripcionForm(instance=inscripcion)
     url_return = 'cursos:inscripciones_curso'
-    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
+    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'curso': inscripcion.curso,
                                                                  'url_return': url_return,
                                                                  'modificacion': True})
 

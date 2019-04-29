@@ -182,9 +182,10 @@ class ModificacionPatenteForm(forms.ModelForm):
 
     def clean_nro_patente(self):
         nro_patente = self.cleaned_data['nro_patente']
-        patentes = Patente.objects.filter(mascota__categoria_mascota=self.instance.mascota.categoria_mascota).values_list('nro_patente', flat=True)
-        if nro_patente in patentes:
-            raise forms.ValidationError(_('Ya existe una patente con este número'), code='invalid')
+        if nro_patente != self.instance.nro_patente:
+            patentes = Patente.objects.filter(mascota__categoria_mascota=self.instance.mascota.categoria_mascota).values_list('nro_patente', flat=True)
+            if nro_patente in patentes:
+                raise forms.ValidationError(_('Ya existe una patente con este número'), code='invalid')
         return nro_patente
 
 
@@ -268,6 +269,13 @@ class ListaPatentesForm(forms.Form):
 
 class ListaPatentesEsterilizacionForm(forms.Form):
     patente = forms.ModelChoiceField(queryset=Patente.objects.filter(mascota__esterilizado=False), required=True)
+
+    def clean_patente(self):
+        patente = self.cleaned_data['patente']
+        turnos = Esterilizacion.objects.filter(mascota=patente.mascota)
+        if turnos:
+            raise forms.ValidationError('Ya existe un turno creado para la patente seleccionada')
+        return patente
 
 
 class EsterilizacionPatenteForm(forms.ModelForm):

@@ -42,14 +42,15 @@
                     </td>
                     <td colspan="2">
                         <p class="titulo"><b><u>Certificado de Deuda por Inspeccion/Reinspeccion Veterinaria</u></b></p>
-                        <p class="titulo">{{ cc.abastecedor }}</p>
+                        <p class="titulo">{{ periodo.cc.abastecedor }}</p>
                     </td>
                 </tr>
             </table>
             <p>
-                Domicilio: {{ cc.abastecedor.responsable.domicilio }}<br>
-                Código de abastecedor: {{ cc.abastecedor.pk }}<br>
-                <b>Resumen de Reinspeccion Veterinaria correspondiente al periodo de {{ periodo }}</b>
+                Código de abastecedor: {{ periodo.cc.abastecedor.pk }}<br>
+                Domicilio: {{ periodo.cc.abastecedor.responsable.domicilio }}<br><br>
+                <b>Resumen de Reinspeccion Veterinaria correspondiente al periodo de {{ periodo.periodo|date:"F Y" }}</b><br>
+                Fecha de generación del certificado: {{ periodo.fecha_certificado }}
             </p>
             {% if reinspecciones %}
                 {% for item in reinspecciones %}
@@ -62,6 +63,7 @@
                                 <th>Precintado</th>
                                 <th>Certificado</th>
                                 <th>Monto</th>
+                                <th>Total Kg.</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,7 +75,8 @@
                                 <td>{{ item.reinspeccion.turno }}</td>
                                 <td>{{ item.reinspeccion.precintado|default_if_none:"" }}</td>
                                 <td>{{ item.reinspeccion.certificado }}</td>
-                                <td>${{ item.subtotal }}</td>
+                                <td>${{ item.reinspeccion.importe }}</td>
+                                <td>{{ item.reinspeccion.total_kg }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -96,8 +99,8 @@
                     <br>
                 {% endfor %}
             {% endif %}
-            <p><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ total_kilos }} Kg<br>
-            MONTO A ABONAR: ${{ total_monto }}</b></p>
+            <p><b>TOTAL DE PRODUCTOS INSPECCIONADOS: {{ periodo.total_kg }} Kg<br>
+            MONTO A ABONAR: ${{ periodo.importe }}</b></p>
             <p>
                 Nota: El presente certificado deberá ser abonado dentro de los cinco (5) dias habiles de ser notificado,
                 caso contrario se incrementará el valor del mismo a razon del 2% mensual, Ordenanza Impositiva Vigente

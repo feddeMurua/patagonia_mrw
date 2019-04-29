@@ -18,7 +18,6 @@
             <th>Persona</th>
             <th>Mascota</th>
             <th>Fecha de Vencimiento</th>
-            <th>Retiro de Beneficios</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
@@ -27,21 +26,17 @@
             <tr>
                 <td>{{ patente.nro_patente }}</td>
                 <td>{{ patente.persona }}</td>
-                <td>{{ patente.mascota }}</td>
+                <td>{{ patente.mascota.nombre }}</td>
                 {% if patente.fecha_vencimiento > fecha_hoy %}
                     <td>{{ patente.fecha_vencimiento }}</td>
                 {% else %}
                     <td style="color:red;">{{ patente.fecha_vencimiento }} (Vencida)</td>
                 {% endif %}
-                {% if patente.fecha_vencimiento > fecha_hoy %}
-                    <td>
-                        <a class="btn btn-info btn-beneficio" data-url="{% url 'patentes:retiro_garrapaticida' patente.pk %}">Garrapaticida</a>
-                        <a class="btn btn-info btn-beneficio" data-url="{% url 'patentes:retiro_antiparasitario' patente.pk %}">Antiparasitario</a>
-                    </td>
-                {% else %}
-                    <td></td>
-                {% endif %}
                 <td>
+                    <a class="btn btn-success" data-toggle="tooltip" title="Imprimir carnet" href="{% url 'patentes:carnet_pdf' patente.pk %}" target="_blank"><em class="glyphicon glyphicon-print"></em></a>
+                    {% if patente.fecha_vencimiento > fecha_hoy %}
+                        <a class="btn btn-primary btn-beneficio" data-toggle="tooltip" title="Retiro de beneficios" data-pk="{{ patente.pk }}"><em class="glyphicon glyphicon-check"></em></a>
+                    {% endif %}
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalles" href="{% url 'patentes:detalle_patente' patente.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
                     <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'patentes:modificar_patente' patente.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                     <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'patentes:borrar_patente' patente.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
@@ -59,12 +54,11 @@
                     <h4 class="modal-title">Retiro de beneficio</h4>
                 </div>
                 <div class="modal-body" align="center">
-                    <p>Se registrará el retiro del beneficio</p>
-                    <p>¿Desea continuar?</p>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" class="btn btn-primary btn-confirm-beneficio" name="confirm" value="Confirmar"/>
-                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                    <p>Seleccione el beneficio que desea retirar</p>
+                    <input type="button" class="btn btn-primary btn-confirm-beneficio" value="Garrapaticida"
+                           data-url="beneficios/garrapaticida/"/>
+                    <input type="button" class="btn btn-primary btn-confirm-beneficio" value="Antiparasitario"
+                           data-url="beneficios/antiparasitario/">
                 </div>
             </div>
         </div>
@@ -89,11 +83,12 @@
 {% block more-scripts %}
     <script>
         $('.btn-beneficio').click(function () {
+            const pk = $(this).data('pk');
             $('#modalBeneficio').modal();
-            var urlBeneficio = $(this).data('url');
             $('.btn-confirm-beneficio').click(function() {
+                const urlBeneficio = $(this).data('url');
                 $.ajax({
-                    url: urlBeneficio,
+                    url: urlBeneficio + pk,
                     type: 'POST',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");

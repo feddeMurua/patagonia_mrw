@@ -4,7 +4,7 @@
 {% block title %}Esterilización de Mascotas{% endblock %}
 
 {% block more-stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flatpickr.min.css' %}"/>
 {% endblock %}
 
 {% block header-title %}Alta de Esterilización{% endblock %}
@@ -60,20 +60,31 @@
 {% endblock %}
 
 {% block more-scripts %}
-    <script src="{% static 'js/moment.js' %}"></script>
-    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
-    <script src="{% static 'js/es-us.js' %}"></script>
+    <script src="{% static 'js/flatpickr.min.js' %}"></script>
+    <script src="{% static 'js/es.js' %}"></script>
     <script>
-        $(function () {
-            $('#id_turno').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-                locale: 'es-us',
-                sideBySide: true,
-                daysOfWeekDisabled: [0],
-                minDate: moment(),
-                stepping: 15,
-                enabledHours: [8,9,10,11,12,13,14,15,16,17,18,19]
-            });
+        flatpickr.localize(flatpickr.l10ns.es);
+        $("#id_turno").flatpickr({
+            locale: {
+                firstDayOfWeek: 0
+            },
+            minuteIncrement: 30,
+            time_24hr: true,
+            enableTime: true,
+            altInput: true,
+            altFormat: 'd-m-Y - H:i',
+            defaultHour: 8,
+            minTime: '08:00',
+            maxTime: '19:30',
+            minDate: 'today',
+            disable: [
+                function(date) {
+                    return (date.getDay() === 6 || date.getDay() === 0);
+                }
+            ],
+            onOpen: function(){
+                $('.numInput').prop('disabled', true)
+            }
         });
     </script>
 {% endblock %}

@@ -10,21 +10,12 @@ Control Antirrábico
 
   Estas funcionalidades son:
 
-    - :ref:`Generar Acta de Infracción <acta-infraccion>`
     - :ref:`Eliminar Control Antirrábico <eliminar-control>`
     - :ref:`Registro de visitas <registro-visitas>`
 
   Además, si el usuario desea Registrar un nuevo *Control Antirrábico*:
 
     - :ref:`Nuevo Control Antirrábico <nuevo-control>`
-
-
-.. _acta-infraccion:
-
-Acta de Infracción
-------------------
-
-  PROXIMAMENTE.
 
 
 .. _nuevo-control:

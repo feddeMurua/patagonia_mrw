@@ -5,9 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 import calendar
-from django.db.models import CharField, Value as V
-from django.db.models.functions import Concat, ExtractMonth, ExtractYear
-import locale
 from dateutil.relativedelta import relativedelta
 from personas import forms as f
 from .forms import *
@@ -24,9 +21,25 @@ from django_addanother.views import CreatePopupMixin
 from django.utils import timezone
 import collections
 import json
-from itertools import groupby
 from weasyprint import HTML
 from django.template.loader import get_template
+
+
+def enlazar_detalles():
+    detalles = DetalleCC.objects.filter(periodo__isnull=True)
+    for detalle in detalles:
+        try:
+            periodo = PeriodoCC.objects.get(periodo__month=detalle.reinspeccion.fecha.month,
+                                            periodo__year=detalle.reinspeccion.fecha.year,
+                                            cc=CuentaCorriente.objects.get(abastecedor=detalle.reinspeccion.abastecedor))
+            detalle.periodo = periodo
+        except:
+            periodo = PeriodoCC(periodo=detalle.reinspeccion.fecha,
+                                cc=CuentaCorriente.objects.get(abastecedor=detalle.reinspeccion.abastecedor))
+            periodo.save()
+            detalle.periodo = periodo
+        detalle.save()
+
 
 '''
 ABASTECEDORES
@@ -104,119 +117,93 @@ CUENTAS CORRIENTES
 
 @login_required(login_url='login')
 def lista_cc(request):
+    enlazar_detalles()
     return render(request, 'cuentaCorriente/cc_list.html', {'listado': CuentaCorriente.objects.all()})
 
 
 @login_required(login_url='login')
 def periodos_cc(request, pk):
     cc = CuentaCorriente.objects.get(pk=pk)
-    return render(request, 'cuentaCorriente/cc_periodos.html', {'pk': pk, 'listado': agrupar_periodos(cc)})
+    return render(request, 'cuentaCorriente/cc_periodos.html', {'pk': pk, 'listado': PeriodoCC.objects.filter(cc=cc)})
 
 
 @login_required(login_url='login')
-def detalle_periodo(request, pk, mes, anio):
-    return render(request,
-                  'cuentaCorriente/periodo_detail.html',
-                  {'pk': pk, 'listado': DetalleCC.objects.filter(cc__pk=pk, reinspeccion__fecha__month=mes,
-                                                                 reinspeccion__fecha__year=anio), 'mes': mes,
-                   'anio': anio})
+def detalle_periodo(request, pk):
+    periodo = PeriodoCC.objects.get(pk=pk)
+    return render(request, 'cuentaCorriente/periodo_detail.html', {'listado': DetalleCC.objects.filter(periodo=periodo),
+                                                                   'periodo': periodo})
 
 
-def agrupar_reinspecciones(cc, mes, anio):
+def agrupar_reinspecciones(periodo):
     reinspecciones = []
-    detalles = DetalleCC.objects.filter(cc=cc, reinspeccion__fecha__month=mes, reinspeccion__fecha__year=anio)\
-        .order_by('reinspeccion__fecha')
+    detalles = DetalleCC.objects.filter(periodo=periodo).order_by('reinspeccion__fecha')
     for detalle in detalles:
         productos = ReinspeccionProducto.objects.filter(reinspeccion=detalle.reinspeccion)
-        reinspecciones.append({'reinspeccion': detalle.reinspeccion, 'subtotal': detalle.reinspeccion.importe,
-                               'productos': productos})
+        reinspecciones.append({'reinspeccion': detalle.reinspeccion, 'productos': productos})
     return reinspecciones
 
 
-def agrupar_periodos(cc):
-    detallescc = DetalleCC.objects.filter(cc=cc)\
-        .annotate(periodo=Concat(ExtractMonth('reinspeccion__fecha'), V('-'), ExtractYear('reinspeccion__fecha'),
-                                 output_field=CharField()))\
-        .order_by('periodo')
-    periodos = {}
-    for k, group in groupby(detallescc, lambda x: x.periodo):
-        detalles = list(group)
-        periodos[k] = {'detalles': detalles,
-                       'total_kg': sum(item.reinspeccion.total_kg for item in detalles),
-                       'monto': sum(item.reinspeccion.importe for item in detalles)}
-    return periodos
-
-
-def agrupar_periodos_adeudados(cc):
-    detallescc = DetalleCC.objects.filter(cc=cc, pagado=False)\
-        .annotate(periodo=Concat(ExtractMonth('reinspeccion__fecha'), V('-'), ExtractYear('reinspeccion__fecha'),
-                                 output_field=CharField()))\
-        .order_by('periodo')
-    periodos = {}
-    for k, group in groupby(detallescc, lambda x: x.periodo):
-        detalles = list(group)
-        periodos[k] = {'detalles': detalles,
-                       'total_kg': sum(item.reinspeccion.total_kg for item in detalles),
-                       'monto': sum(item.reinspeccion.importe for item in detalles)}
-    return periodos
-
-
-def calcular_deuda(periodos, selected):
-    importe = 0
-    for k in selected:
-        importe += periodos[k]['monto']
-        for detalle in periodos[k]['detalles']:
-            detalle.pagado = True
-            detalle.save()
-    return importe
-
-
 @login_required(login_url='login')
-def cancelar_deuda_cc(request, pk):
-    cc = CuentaCorriente.objects.get(pk=pk)
-    periodos = agrupar_periodos_adeudados(cc)
+def certificado_deuda(request, pk):
+    periodo = PeriodoCC.objects.get(pk=pk)
+    reinspecciones = agrupar_reinspecciones(periodo)
     if request.method == 'POST':
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
-        mov_form = pd_f.MovimientoDiarioForm(request.POST)
-        selected = request.POST.getlist('pagar')
-        servicio = "Cancelacion de deuda en Cuenta Corriente"
-        if request.POST['optradio'] == 'previa':
-            if detalle_mov_form.is_valid():
-                importe = calcular_deuda(periodos, selected)
-                detalle_mov = detalle_mov_form.save(commit=False)
-                detalle_mov.completar_monto(importe, servicio, cc)
-                log_crear(request.user.id, cc, servicio)
-                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[pk]))
-        else:
-            if mov_form.is_valid():
-                importe = calcular_deuda(periodos, selected)
-                mov = mov_form.save()
-                detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
-                detalle_mov.completar_monto(importe, servicio, cc)
-                log_crear(request.user.id, cc, servicio)
-                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[pk]))
-    else:
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
-        mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'cuentaCorriente/cancelar_deuda_cc.html', {'detalle_mov_form': detalle_mov_form, 'pk': pk,
-                                                                      'mov_form': mov_form, 'listado': periodos})
+        periodo.fecha_certificado = now()
+        periodo.save()
+        return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
+    return render(request, 'cuentaCorriente/certificado_deuda.html', {'periodo': periodo,
+                                                                      'reinspecciones': reinspecciones})
 
 
 @login_required(login_url='login')
-def pdf_certificado(request, pk, mes, anio):
+def pdf_certificado(request, pk):
     template = get_template('cuentaCorriente/certificado_pdf.html')
-    cc = CuentaCorriente.objects.get(pk=pk)
-    locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
-    reinspecciones = agrupar_reinspecciones(cc, mes, anio)
-    context = {'cc': cc, 'reinspecciones': reinspecciones, 'periodo': calendar.month_name[int(mes)] + " " + str(anio),
-               'total_kilos': sum(item['reinspeccion'].total_kg for item in reinspecciones),
-               'total_monto': sum(item['subtotal'] for item in reinspecciones),
-               'title': 'Certificado de deuda - ' + str(cc.abastecedor.responsable.nombre) + ' / Periodo: ' + str(mes)}
+    periodo = PeriodoCC.objects.get(pk=pk)
+    reinspecciones = agrupar_reinspecciones(periodo)
+    context = {'periodo': periodo, 'reinspecciones': reinspecciones,
+               'title': 'Certificado de deuda - ' + str(periodo.cc.abastecedor.responsable.nombre)
+                        + ' / Periodo: ' + str(periodo.periodo.month) + '-' + str(periodo.periodo.year)}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename=' + str("Certificado_deuda_" + str(cc.abastecedor.responsable.nombre))
+    response['Content-Disposition'] = 'filename=' + str("Certificado_deuda_"
+                                                        + str(periodo.cc.abastecedor.responsable.nombre))
     return response
+
+
+@login_required(login_url='login')
+def abonar_certificado(request, pk):
+    periodo = PeriodoCC.objects.get(pk=pk)
+    delta = timezone.now().date() - periodo.fecha_certificado
+    importe = periodo.importe
+    if delta.days >= 5:
+        importe += (importe * (delta.days - 5) / 100)
+    if request.method == 'POST':
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
+        mov_form = pd_f.MovimientoDiarioForm(request.POST)
+        periodo.pagado = True
+        servicio = "Cancelacion de deuda en Cuenta Corriente"
+        if request.POST['optradio'] == 'previa':
+            if detalle_mov_form.is_valid():
+                periodo.save()
+                detalle_mov = detalle_mov_form.save(commit=False)
+                detalle_mov.completar_monto(importe, servicio, periodo.cc)
+                log_crear(request.user.id, periodo.cc, servicio)
+                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
+        else:
+            if mov_form.is_valid():
+                periodo.save()
+                mov = mov_form.save()
+                detalle_mov = pd_m.DetalleMovimiento(movimiento=mov)
+                detalle_mov.completar_monto(importe, servicio, periodo.cc)
+                log_crear(request.user.id, periodo.cc, servicio)
+                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
+    else:
+        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
+        mov_form = pd_f.MovimientoDiarioForm
+    return render(request, 'cuentaCorriente/abonar_certificado.html', {'periodo': periodo, 'atraso': delta.days,
+                                                                       'detalle_mov_form': detalle_mov_form,
+                                                                       'importe': importe, 'mov_form': mov_form})
 
 
 '''
@@ -345,8 +332,7 @@ def alta_reinspeccion_cc(request):
             reinspeccion.save()
             form.save_m2m()
             alta_productos(request, reinspeccion)
-            cc = CuentaCorriente.objects.get(abastecedor=reinspeccion.abastecedor)
-            detalle = DetalleCC(reinspeccion=reinspeccion, cc=cc)
+            detalle = DetalleCC(reinspeccion=reinspeccion)
             detalle.save()
             log_crear(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
             if '_fin' in request.POST:
@@ -383,8 +369,8 @@ def modificar_reinspeccion(request, pk):
 
 
 @login_required(login_url='login')
-def agregar_producto_reinspeccion(request, pk):
-    reinspeccion = Reinspeccion.objects.get(pk=pk)
+def agregar_producto_reinspeccion(request, reinspeccion_pk, periodo_pk):
+    reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
     productos = ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion).values_list('producto__nombre',
                                                                                            flat=True)
     msg = ""
@@ -401,12 +387,14 @@ def agregar_producto_reinspeccion(request, pk):
                     reinspeccion.importe *= 2
                 reinspeccion.save()
                 log_modificar(request.user.id, reinspeccion, 'Reinspeccion Veterinaria')
-                return HttpResponseRedirect(reverse('reinspecciones:lista_productos', args=[pk, 0]))
+                return HttpResponseRedirect(reverse('reinspecciones:lista_productos',
+                                                    args=[reinspeccion_pk, periodo_pk]))
             else:
                 msg = "Este producto ya se encuentra cargado"
     else:
         form = ReinspeccionProductoForm
-    return render(request, 'reinspeccion/nuevo_producto_form.html', {'form': form, 'pk': pk, 'msg': msg})
+    return render(request, 'reinspeccion/nuevo_producto_form.html', {'form': form, 'reinspeccion_pk': reinspeccion_pk,
+                                                                     'periodo_pk': periodo_pk, 'msg': msg})
 
 
 @login_required(login_url='login')
@@ -469,20 +457,27 @@ def alta_productos(request, reinspeccion):
 
 
 @login_required(login_url='login')
-def lista_productos(request, reinspeccion_pk, pagado):
+def lista_productos(request, reinspeccion_pk, periodo_pk):
     reinspeccion = Reinspeccion.objects.get(pk=reinspeccion_pk)
-    referer = request.META.get('HTTP_REFERER')
-    elem = referer.split('/')
-    if 'detalle' in referer:
+    if int(periodo_pk):
+        periodo = PeriodoCC.objects.get(pk=periodo_pk)
         url_return = 'cuentas_corrientes:detalle_periodo'
-        id_return = elem[-5]
+        id_return = periodo_pk
     else:
+        periodo = None
         url_return = 'reinspecciones:lista_reinspecciones'
         id_return = ""
     return render(request, 'reinspeccion/producto_list.html',
-                  {'reinspeccion_pk': reinspeccion_pk, 'mes_return': elem[-3], 'pagado': True if pagado == 0 else False,
-                   'total_kg': reinspeccion.total_kg, 'url_return': url_return, 'id_return': id_return,
-                   'anio_return': elem[-2], 'listado': ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion)})
+                  {'reinspeccion': reinspeccion, 'url_return': url_return, 'id_return': id_return,
+                   'listado': ReinspeccionProducto.objects.filter(reinspeccion=reinspeccion), 'periodo': periodo})
+
+
+@login_required(login_url='login')
+def borrar_producto(request, pk):
+    producto = ReinspeccionProducto.objects.get(pk=pk)
+    log_eliminar(request.user.id, producto, 'Producto de reinspección')
+    producto.delete()
+    return HttpResponse()
 
 
 class AltaProducto(LoginRequiredMixin, CreatePopupMixin, CreateView):
@@ -514,12 +509,12 @@ VEHICULO
 @login_required(login_url='login')
 def get_rubros_json(request, id_categoria):
     return JsonResponse({
-        'Categoria_A': CATEGORIA_A,
-        'Categoria_B': CATEGORIA_B,
-        'Categoria_C': CATEGORIA_C,
-        'Categoria_D': CATEGORIA_D,
-        'Categoria_E': CATEGORIA_E
-    }.get(id_categoria, None))
+                            'Categoria_A': CATEGORIA_A,
+                            'Categoria_B': CATEGORIA_B,
+                            'Categoria_C': CATEGORIA_C,
+                            'Categoria_D': CATEGORIA_D,
+                            'Categoria_E': CATEGORIA_E
+                        }.get(id_categoria, None))
 
 
 @login_required(login_url='login')
@@ -578,7 +573,7 @@ def baja_vehiculo(request, pk):
 def modificacion_vehiculo(request, pk):
     vehiculo = Vehiculo.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ModificarTSAForm(request.POST, instance=vehiculo) if vehiculo.tipo_vehiculo == 'TSA'\
+        form = ModificarTSAForm(request.POST, instance=vehiculo) if vehiculo.tipo_vehiculo == 'TSA' \
             else ModificarTPPForm(request.POST, instance=vehiculo)
         if form.is_valid():
             vehiculo = form.save(commit=False)
@@ -741,14 +736,14 @@ def alta_control_plaga(request):
                         VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'],
                                       control=control_plaga).save()
                         pd_v.movimiento_previo(request, detalle_mov_form, servicio, control_plaga,
-                                               'Analisis de Triquinosis')
+                                               'Control de plagas')
                         return redirect('controles_plagas:lista_controles_plagas')
                 else:
                     if mov_form.is_valid():
                         control_plaga = form.save()
                         VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'],
                                       control=control_plaga).save()
-                        pd_v.nuevo_movimiento(request, mov_form, servicio, control_plaga, 'Analisis de Triquinosis')
+                        pd_v.nuevo_movimiento(request, mov_form, servicio, control_plaga, 'Control de plagas')
                         return redirect('controles_plagas:lista_controles_plagas')
             else:
                 if pago_diferido_form.is_valid():
@@ -928,7 +923,7 @@ def estadisticas_td(request):
     total_general = sum(ctr_anual.values())
     dic = {}
     for k, v in ctr_anual.items():
-        dic[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+        dic[k] = (v, float("{0:.2f}".format(v * 100 / total_general)))
 
     context = {
         'rango_form': rango_form,
@@ -962,13 +957,14 @@ def estadisticas_reinspeccion(request):
         dict_reinspeccion_prod[prod] = total
 
     total_general = sum(dict_reinspeccion_prod.values())
-    ord_dict_reinspeccion_prod = collections.OrderedDict(sorted(dict_reinspeccion_prod.iteritems(), key=lambda (k, v): (k, v)))  # Ordena los servicios por importe
+    ord_dict_reinspeccion_prod = collections.OrderedDict(
+        sorted(dict_reinspeccion_prod.iteritems(), key=lambda (k, v): (k, v)))  # Ordena los servicios por importe
 
     label_reinspeccion = ord_dict_reinspeccion_prod.keys()  # indistinto para los datos (tienen la misma clave)
     datos_reinspecciones = ord_dict_reinspeccion_prod.values()
 
     for k, v in ord_dict_reinspeccion_prod.items():
-        ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+        ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v * 100 / total_general)))
 
     context = {
         'rango_form': rango_form,
@@ -1032,7 +1028,7 @@ def estadisticas_td(request):
     total_general = sum(ctr_anual.values())
     dic = {}
     for k, v in ctr_anual.items():
-        dic[k] = (v, float("{0:.2f}".format(v*100/total_general)))
+        dic[k] = (v, float("{0:.2f}".format(v * 100 / total_general)))
 
     context = {
         'rango_form': rango_form,
@@ -1060,7 +1056,7 @@ def estadisticas_reinspeccion(request):
 
     reinspecciones_data = ReinspeccionProducto.objects.filter(reinspeccion__fecha__gte=fecha_desde,
                                                               reinspeccion__fecha__lte=fecha_hasta,
-                                                              reinspeccion__detalles=True)\
+                                                              reinspeccion__detalles=True) \
         .values_list('reinspeccion__origen__nombre', 'producto__nombre', 'kilo_producto')
 
     reinspecciones = Reinspeccion.objects.filter(fecha__gte=fecha_desde, fecha__lte=fecha_hasta, detalles=True)
@@ -1076,6 +1072,8 @@ def estadisticas_reinspeccion(request):
         dict_reinspeccion_orig_kg[orig] = total_kg_orig
 
         if prod.lower() in ['bovinos', 'bovinos sin hueso', 'porcinos', 'ovinos']:
+            if prod.lower() == 'bovinos sin hueso':
+                prod = 'Bovinos sin hueso'
             if orig not in dict_reinspeccion_gan['Bovinos']:
                 dict_reinspeccion_gan['Bovinos'][orig] = 0
                 dict_reinspeccion_gan['Bovinos sin hueso'][orig] = 0
@@ -1107,12 +1105,12 @@ def estadisticas_reinspeccion(request):
     label_gan = dict_reinspeccion_gan['Bovinos'].keys()
 
     for k, v in ord_dict_reinspeccion_prod.items():
-        ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v*100/total_general_prod)))
+        ord_dict_reinspeccion_prod[k] = (v, float("{0:.2f}".format(v * 100 / total_general_prod)))
 
     for k, v in ord_dict_reinspeccion_orig.items():
         cant_kg = dict_reinspeccion_orig_kg.get(k, 0)
-        ord_dict_reinspeccion_orig[k] = (v, float("{0:.2f}".format(v*100/total_general_orig_r)), cant_kg,
-                                         float("{0:.2f}".format(cant_kg*100/total_general_orig_kg)))
+        ord_dict_reinspeccion_orig[k] = (v, float("{0:.2f}".format(v * 100 / total_general_orig_r)), cant_kg,
+                                         float("{0:.2f}".format(cant_kg * 100 / total_general_orig_kg)))
 
     orden = ['Bovinos', 'Bovinos sin hueso', 'Porcinos', 'Ovinos', 'total_kg']
     for orig in label_gan:

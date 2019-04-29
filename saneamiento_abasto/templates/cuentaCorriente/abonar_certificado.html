@@ -1,0 +1,75 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles bootstrap3 widget_tweaks %}
+
+{% block title %}Cuentas Corrientes{% endblock %}
+
+{% block header-title %}Abonar certificado de deuda{% endblock %}
+
+{% block url-volver %}{% url 'cuentas_corrientes:periodos_cc' periodo.cc.pk %}{% endblock %}
+
+{% block content %}
+    <div class="container container-form">
+        <form method="post" enctype="multipart/form-data" id="form-base">
+            {% csrf_token %}
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <div class="col-md-7">
+                        <h3><b>Resumen de Reinspeccion Veterinaria:</b></h3>
+                        <h3><b>{{ periodo.periodo|date:"F Y" }}</b></h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Abastecedor:</td>
+                                    <td>{{ periodo.cc.abastecedor }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Código de abastecedor:</td>
+                                    <td>{{ periodo.cc.abastecedor.pk }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Dirección:</td>
+                                    <td>{{ periodo.cc.abastecedor.responsable.domicilio }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total de productos inspeccionados:</td>
+                                    <td>{{ periodo.total_kg }} Kg</td>
+                                </tr>
+                                <tr>
+                                    <td>Fecha de emisión de certificado de deuda:</td>
+                                    <td>{{ periodo.fecha_certificado }}</td>
+                                </tr>
+                                {% if atraso >= 5 %}
+                                    <tr>
+                                        <td>Importe original:</td>
+                                        <td>${{ periodo.importe }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dias de atraso:</td>
+                                        <td>{{ atraso }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Importe con intereses:</td>
+                                        <td>${{ importe }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td>Importe:</td>
+                                        <td>${{ importe }}</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-md-5">
+                        {% include 'caja/cuadro_facturacion.html' %}
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="submit" class="btn btn-primary" value="Aceptar"
+                           onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
+                    <a class="btn btn-danger btn-cancelar" href="{% url 'cuentas_corrientes:periodos_cc' periodo.cc.pk %}">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
