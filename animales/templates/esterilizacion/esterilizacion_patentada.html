@@ -65,6 +65,8 @@
             altFormat: 'd-m-Y - H:i',
             defaultHour: 8,
             minDate: 'today',
+            minTime: '08:00',
+            maxTime: '19:30',
             disable: [
                 function(date) {
                     return (date.getDay() === 6 || date.getDay() === 0);

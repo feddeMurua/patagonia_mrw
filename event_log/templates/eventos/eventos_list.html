@@ -3,7 +3,7 @@
 
 {% block more-stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/eventos_list.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flatpickr.min.css' %}"/>
 {% endblock %}
 
 {% block title %}Seguimiento de Eventos{% endblock %}
@@ -17,7 +17,6 @@
 {% block btn-nuevo %}
     <form class="form-filtro form-inline" method="post" style="margin: 0">
         {% csrf_token %}
-        {{ rango_form.media }}
         {% for field in rango_form %}
             <div class="form-group">
                 <label>{{ field.label }}</label>
@@ -53,21 +52,45 @@
 {% endblock %}
 
 {% block more-scripts %}
-    <script src="{% static 'js/moment.js' %}"></script>
-    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
-    <script src="{% static 'js/es-us.js' %}"></script>
+    <script src="{% static 'js/flatpickr.min.js' %}"></script>
+    <script src="{% static 'js/es.js' %}"></script>
     <script>
-        $('#id_fecha_desde').datetimepicker({
-            format: 'DD/MM/YY HH:mm',
-            locale: 'es-us',
-            sideBySide: true,
-            maxDate: moment()
+        flatpickr.localize(flatpickr.l10ns.es);
+        $("#id_fecha_desde").flatpickr({
+            locale: {
+                firstDayOfWeek: 0
+            },
+            altInput: true,
+            altFormat: 'd-m-Y - H:i',
+            time_24hr: true,
+            enableTime: true,
+            maxDate: 'today',
+            disable: [
+                function(date) {
+                    return (date.getDay() === 6 || date.getDay() === 0);
+                }
+            ],
+            onOpen: function(){
+                $('.numInput').prop('disabled', true)
+            }
         });
-        $('#id_fecha_hasta').datetimepicker({
-            format: 'DD/MM/YY HH:mm',
-            locale: 'es-us',
-            sideBySide: true,
-            maxDate: moment()
+        $("#id_fecha_hasta").flatpickr({
+            locale: {
+                firstDayOfWeek: 0
+            },
+            altInput: true,
+            altFormat: 'd-m-Y - H:i',
+            time_24hr: true,
+            enableTime: true,
+            maxDate: 'today',
+            disable: [
+                function(date) {
+                    return (date.getDay() === 6 || date.getDay() === 0);
+                }
+            ],
+            onOpen: function(){
+                $('.numInput').prop('disabled', true)
+            }
         });
     </script>
 {% endblock %}
