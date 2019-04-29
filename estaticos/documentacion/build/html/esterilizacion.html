@@ -20,22 +20,12 @@
   <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'',
-              LANGUAGE:'es',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
         <script type="text/javascript" src="_static/translations.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -99,11 +89,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="mascotas.html">Mascotas</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="patentamiento.html">Patentamiento de Mascotas</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Esterilización</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nuevo-turno-mascota-patentada">Nuevo Turno - Mascota patentada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nuevo-turno-mascota-no-patentada">Nuevo Turno - Mascota No patentada</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#imprimir-consentimiento">Imprimir Consentimiento</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#eliminar-esterilizacion">Eliminar Esterilización</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#confirmar-esterilizacion">Confirmar Esterilización</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nuevo-turno-mascota-patentada">Nuevo Turno - Mascota patentada</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nuevo-turno-mascota-no-patentada">Nuevo Turno - Mascota No patentada</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="sacrificio_entrega.html">Sacrificios/Entregas de animales</a></li>
@@ -196,30 +186,6 @@ que se encuentren registradas en el sistema hasta la fecha.</p>
 <li><a class="reference internal" href="#nuevo-turno-p"><span class="std std-ref">Nuevo Turno - Mascota patentada</span></a></li>
 <li><a class="reference internal" href="#nuevo-turno-np"><span class="std std-ref">Nuevo Turno - Mascota No patentada</span></a></li>
 </ul>
-<div class="section" id="imprimir-consentimiento">
-<span id="imprimir-esterilizacion"></span><h2>Imprimir Consentimiento<a class="headerlink" href="#imprimir-consentimiento" title="Enlazar permanentemente con este título">¶</a></h2>
-<blockquote>
-<div>Si el usuario desea imprimir el consentimiento informado para cirguía deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Esterilización</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Imprimir</span> <span class="pre">Consentimiento</span></code>.
-A continuación, el sistema abrirá en una pestaña emergente, el formulario en formato «.pdf» para imprimir.</div></blockquote>
-</div>
-<div class="section" id="eliminar-esterilizacion">
-<span id="id1"></span><h2>Eliminar Esterilización<a class="headerlink" href="#eliminar-esterilizacion" title="Enlazar permanentemente con este título">¶</a></h2>
-<blockquote>
-<div><p>Si el usuario desea eliminar una <em>Esterilización</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Esterilización</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Eliminar</span></code>.</p>
-<p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
-<img alt="_images/baja_esterilizacion.png" class="align-center" src="_images/baja_esterilizacion.png" />
-<p>En esta parte el usuario deberá decidir si confirma la eliminación del <em>Turno</em> o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
-</div></blockquote>
-</div>
-<div class="section" id="confirmar-esterilizacion">
-<span id="id2"></span><h2>Confirmar Esterilización<a class="headerlink" href="#confirmar-esterilizacion" title="Enlazar permanentemente con este título">¶</a></h2>
-<blockquote>
-<div><p>Si el usuario desea confirmar una <em>Esterilización</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Esterilización</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Confirmar</span> <span class="pre">realización</span></code>.</p>
-<p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
-<img alt="_images/confirmar_esterilizacion.png" class="align-center" src="_images/confirmar_esterilizacion.png" />
-<p>En esta parte el usuario deberá decidir si confirma la esterilización o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
-</div></blockquote>
-</div>
 <div class="section" id="nuevo-turno-mascota-patentada">
 <span id="nuevo-turno-p"></span><h2>Nuevo Turno - Mascota patentada<a class="headerlink" href="#nuevo-turno-mascota-patentada" title="Enlazar permanentemente con este título">¶</a></h2>
 <blockquote>
@@ -260,6 +226,30 @@ En este punto, las posibles causas de errores son:</p>
 </div></blockquote>
 </div>
 <p>Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de esterilizaciones.</p>
+</div></blockquote>
+</div>
+<div class="section" id="imprimir-consentimiento">
+<span id="imprimir-esterilizacion"></span><h2>Imprimir Consentimiento<a class="headerlink" href="#imprimir-consentimiento" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div>Si el usuario desea imprimir el consentimiento informado para cirguía deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Esterilización</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Imprimir</span> <span class="pre">Consentimiento</span></code>.
+A continuación, el sistema abrirá en una pestaña emergente, el formulario en formato «.pdf» para imprimir.</div></blockquote>
+</div>
+<div class="section" id="eliminar-esterilizacion">
+<span id="id1"></span><h2>Eliminar Esterilización<a class="headerlink" href="#eliminar-esterilizacion" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea eliminar una <em>Esterilización</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Esterilización</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Eliminar</span></code>.</p>
+<p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
+<img alt="_images/baja_esterilizacion.png" class="align-center" src="_images/baja_esterilizacion.png" />
+<p>En esta parte el usuario deberá decidir si confirma la eliminación del <em>Turno</em> o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="confirmar-esterilizacion">
+<span id="id2"></span><h2>Confirmar Esterilización<a class="headerlink" href="#confirmar-esterilizacion" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Si el usuario desea confirmar una <em>Esterilización</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Esterilización</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Confirmar</span> <span class="pre">realización</span></code>.</p>
+<p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
+<img alt="_images/confirmar_esterilizacion.png" class="align-center" src="_images/confirmar_esterilizacion.png" />
+<p>En esta parte el usuario deberá decidir si confirma la esterilización o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
 </div></blockquote>
 </div>
 </div>

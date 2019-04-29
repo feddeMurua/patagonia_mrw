@@ -12,17 +12,43 @@ Inscripciones
 
    - :ref:`Eliminar Inscripción <eliminar-inscripcion>`
    - :ref:`Modificar Inscripción <modificar-inscripcion>`
-   - Imprimir Inscripción (PROXIMAMENTE)
+   - :ref:`Imprimir Inscripción <imprimir-inscripcion>`
 
    Además, si el usuario desea Registrar una nueva *Inscripción*:
 
    - :ref:`Nueva Inscripción <nueva-inscripcion>`
 
 
+.. _nueva-inscripcion:
+
+Nueva Inscripción
+-----------------
+
+  Si el usuario desea crear una nueva *Inscripción*, deberá presionar el botón ``Nueva Inscripción``.
+
+  A continuación, el sistema lo redirigirá a la siguiente pantalla. En esta parte, al usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta una nueva *Inscripción*.
+
+  .. image:: _static/alta_inscripcion.png
+     :align: center
+
+
+  .. ATTENTION::
+
+      Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Persona*, el cual es utilizado para
+      agregar una nueva persona respectivamente si no se encuentra registrada en el sistema. Además;
+      El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
+      En este punto, las posibles causas de errores son:
+
+          - Uno o más campos obligatorios vacíos.
+          - Uno o más campos con un formato incorrecto.
+
+  Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de inscripciones.
+
+
 .. _eliminar-inscripcion:
 
 Eliminar Inscripción
-----------------------
+--------------------
 
   Si el usuario desea eliminar una *Inscripción*, deberá seleccionar en la columna de **acciones** asociado a la *Inscripción* y presionar el ícono ``Eliminar``
 
@@ -58,27 +84,11 @@ Modificar Inscripción
    Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos de la *Inscripción* seleccionada.
 
 
-.. _nueva-inscripcion:
+.. _imprimir-inscripcion:
 
-Nueva Inscripción
------------------
+Imprimir Inscripción
+--------------------
 
- Si el usuario desea crear una nueva *Inscripción*, deberá presionar el botón ``Nueva Inscripción``.
+  Si el usuario desea imprimir una *Inscripción*, deberá seleccionar en la columna de **acciones** asociado a la *Inscripción* y presionar el ícono ``Imprimir Comprobante``
 
- A continuación, el sistema lo redirigirá a la siguiente pantalla. En esta parte, al usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta una nueva *Inscripción*.
-
- .. image:: _static/alta_inscripcion.png
-    :align: center
-
-
- .. ATTENTION::
-
-     Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Persona*, el cual es utilizado para
-     agregar una nueva persona respectivamente si no se encuentra registrada en el sistema. Además;
-     El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
-     En este punto, las posibles causas de errores son:
-
-         - Uno o más campos obligatorios vacíos.
-         - Uno o más campos con un formato incorrecto.
-
- Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de inscripciones.
+  A continuación, el sistema presentará en una nueva pestaña un archivo en formato .PDF para imprimir el comprobante de inscripción.

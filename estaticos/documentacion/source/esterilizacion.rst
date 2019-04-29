@@ -20,45 +20,6 @@ Además, si el usuario desea Registrar un nuevo *Turno*:
 - :ref:`Nuevo Turno - Mascota No patentada <nuevo-turno_np>`
 
 
-.. _imprimir-esterilizacion:
-
-Imprimir Consentimiento
------------------------
-
-  Si el usuario desea imprimir el consentimiento informado para cirguía deberá seleccionar en la columna de **acciones** asociado a la *Esterilización* y presionar el ícono ``Imprimir Consentimiento``.
-  A continuación, el sistema abrirá en una pestaña emergente, el formulario en formato ".pdf" para imprimir.
-
-
-.. _eliminar-esterilizacion:
-
-Eliminar Esterilización
------------------------
-
-  Si el usuario desea eliminar una *Esterilización*, deberá seleccionar en la columna de **acciones** asociado a la *Esterilización* y presionar el ícono ``Eliminar``.
-
-  Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
-
-  .. image:: _static/baja_esterilizacion.png
-    :align: center
-
-  En esta parte el usuario deberá decidir si confirma la eliminación del *Turno* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
-
-
-.. _confirmar-esterilizacion:
-
-Confirmar Esterilización
-------------------------
-
-  Si el usuario desea confirmar una *Esterilización*, deberá seleccionar en la columna de **acciones** asociado a la *Esterilización* y presionar el ícono ``Confirmar realización``.
-
-  Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
-
-  .. image:: _static/confirmar_esterilizacion.png
-    :align: center
-
-  En esta parte el usuario deberá decidir si confirma la esterilización o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
-
-
 .. _nuevo-turno_p:
 
 Nuevo Turno - Mascota patentada
@@ -105,3 +66,42 @@ Nuevo Turno - Mascota No patentada
           - Uno o más campos con un formato incorrecto.
 
   Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de esterilizaciones.
+
+
+.. _imprimir-esterilizacion:
+
+Imprimir Consentimiento
+-----------------------
+
+  Si el usuario desea imprimir el consentimiento informado para cirguía deberá seleccionar en la columna de **acciones** asociado a la *Esterilización* y presionar el ícono ``Imprimir Consentimiento``.
+  A continuación, el sistema abrirá en una pestaña emergente, el formulario en formato ".pdf" para imprimir.
+
+
+.. _eliminar-esterilizacion:
+
+Eliminar Esterilización
+-----------------------
+
+  Si el usuario desea eliminar una *Esterilización*, deberá seleccionar en la columna de **acciones** asociado a la *Esterilización* y presionar el ícono ``Eliminar``.
+
+  Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
+
+  .. image:: _static/baja_esterilizacion.png
+    :align: center
+
+  En esta parte el usuario deberá decidir si confirma la eliminación del *Turno* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
+
+
+.. _confirmar-esterilizacion:
+
+Confirmar Esterilización
+------------------------
+
+  Si el usuario desea confirmar una *Esterilización*, deberá seleccionar en la columna de **acciones** asociado a la *Esterilización* y presionar el ícono ``Confirmar realización``.
+
+  Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
+
+  .. image:: _static/confirmar_esterilizacion.png
+    :align: center
+
+  En esta parte el usuario deberá decidir si confirma la esterilización o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.

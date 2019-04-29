@@ -14,7 +14,7 @@ Estas funcionalidades son:
 - :ref:`Modificar Curso <modificar-curso>`
 - :ref:`Inscripciones del Curso <listado-inscripciones>`
 - :ref:`Cierre del Curso <cierre-curso>`
-- :ref:`Planilla de Asistencia Curso <asistencia-curso>`
+- :ref:`Planilla de Asistencia del Curso <asistencia-curso>`
 
 Además, si el usuario desea Registrar un nuevo *Curso*:
 
@@ -122,3 +122,13 @@ Cierre del Curso
     :maxdepth: 1
 
     cierrecurso
+
+
+.. _asistencia-curso:
+
+Planilla de Asistencia del Curso
+--------------------------------
+
+  Si el usuario desea imprimir una *Planilla de Asistencia del curso*, deberá seleccionar en la columna de **acciones** asociado al *Curso* y presionar el ícono ``Planilla de Asistencia``
+
+  A continuación, el sistema presentará en una nueva pestaña un archivo en formato .PDF para imprimir la Planilla de Asistencia.

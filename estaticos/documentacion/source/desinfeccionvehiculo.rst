@@ -17,21 +17,6 @@ Desinfecciones
    - :ref:`Nueva Desinfección <nueva-desinfeccion>`
 
 
-.. _eliminar-desinfeccion:
-
-Eliminar Desinfección
----------------------
-
- Si el usuario desea eliminar una *Desinfección*, deberá seleccionar en la columna de **acciones** asociado a la *Desinfección* y presionar el ícono ``Eliminar``
-
- Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
-
- .. image:: _static/baja_desinfeccion.png
-    :align: center
-
- En esta parte el usuario deberá decidir si confirma la eliminación de la *Desinfección* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
-
-
 .. _nueva-desinfeccion:
 
 Nueva Desinfección
@@ -47,4 +32,22 @@ Nueva Desinfección
 
   .. ATTENTION::
       El usuario ingresará los datos de facturación correspondientes (factura previa o nueva factura) y confirmará los datos.
+
+      Recordar: Si la desinfección se realiza fuera de término. Se cobrará un recargo.
+
       Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de inscripciones.
+
+
+.. _eliminar-desinfeccion:
+
+Eliminar Desinfección
+---------------------
+
+ Si el usuario desea eliminar una *Desinfección*, deberá seleccionar en la columna de **acciones** asociado a la *Desinfección* y presionar el ícono ``Eliminar``
+
+ Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
+
+ .. image:: _static/baja_desinfeccion.png
+    :align: center
+
+ En esta parte el usuario deberá decidir si confirma la eliminación de la *Desinfección* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
