@@ -39,7 +39,14 @@ Alta de Usuario
           - Uno o más campos obligatorios vacíos.
           - Uno o más campos con un formato incorrecto.
 
-      En caso de que el futuo usuario tenga permisos especiales, se deberá seleccionar la opción "Es staff".
+      En caso de que el futuro usuario tenga permisos especiales, se deberá seleccionar la opción "Es staff".
+
+      Recordar, como se indica en el formulario, como el sistema validará la contraseña del usuario:
+
+          - La contraseña no puede ser similar a otros componentes de la información personal.
+          - La contraseña debe contener por lo menos 8 caracteres.
+          - La contraseña no puede ser una contraseña comunmente usada.
+          - La contraseña no puede estar formada exclusivamente por números.
 
   Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de cursos.
 

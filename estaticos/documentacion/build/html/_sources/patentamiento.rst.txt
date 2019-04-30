@@ -11,8 +11,8 @@ Patentamiento de Mascotas
 
   Estas funcionalidades son:
 
+    - :ref:`Imprimir Carnet <imprimir-carnet>`
     - :ref:`Retiro de Beneficios <retiro-beneficios>`
-    - Imprimir Carnet (PROXIMAMENTE)
     - :ref:`Detalle Patente <detalle-patente>`
     - :ref:`Modificar Patente <modificar-patente>`
     - :ref:`Eliminar Patente <eliminar-patente>`
@@ -45,6 +45,16 @@ Nueva Patente
           - Uno o más campos con un formato incorrecto.
 
   Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de las Patentes.
+
+
+.. _imprimir-carnet:
+
+Imprimir Carnet
+---------------
+
+  Si el usuario desea imprimir un *Carnet*, deberá seleccionar en la columna de **acciones** asociado a la *Patente* y presionar el ícono ``Imprimir Carnet``.
+
+  A continuación, el sistema presentará en una nueva pestaña un archivo en formato .PDF para imprimir el carnet correspondiente a la patente.
 
 
 .. _retiro-beneficios:
