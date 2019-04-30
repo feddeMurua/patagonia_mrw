@@ -16,6 +16,10 @@
   	margin: 0;
 }
 
+.dt-buttons {
+    margin-bottom: 14px;
+}
+
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;

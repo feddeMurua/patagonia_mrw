@@ -39,6 +39,8 @@ Alta de Usuario
           - Uno o más campos obligatorios vacíos.
           - Uno o más campos con un formato incorrecto.
 
+      En caso de que el futuo usuario tenga permisos especiales, se deberá seleccionar la opción "Es staff".
+
   Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de cursos.
 
 
@@ -51,7 +53,7 @@ Modificación de Usuario
 
   Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:
 
-  .. image:: _static/mod_usuario.png
+  .. image:: _static/alta_usuario.png
     :align: center
 
   En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados al *Usuario*.

@@ -11,8 +11,8 @@ Patentamiento de Mascotas
 
   Estas funcionalidades son:
 
+    - :ref:`Imprimir Carnet <imprimir-carnet>`
     - :ref:`Retiro de Beneficios <retiro-beneficios>`
-    - Imprimir Carnet (PROXIMAMENTE)
     - :ref:`Detalle Patente <detalle-patente>`
     - :ref:`Modificar Patente <modificar-patente>`
     - :ref:`Eliminar Patente <eliminar-patente>`
@@ -21,21 +21,6 @@ Patentamiento de Mascotas
   Además, si el usuario desea Registrar una nueva *Patente*:
 
     - :ref:`Nueva Patente <nueva-patente>`
-
-
-.. _retiro-beneficios:
-
-Retiro de Beneficios
---------------------
-
-  Si el usuario desea registrar un nuevo retiro de un *garrapaticida* o *atiparasitario* , deberá presionar los respectivos botones de ``Garrapaticida`` o ``Antiparasitario``.
-
-  Una vez realizado el paso anterior aparecerá la siguiente vista emergente:
-
-  .. image:: _static/retiro_beneficio.png
-    :align: center
-
-  En esta parte el usuario deberá decidir si confirma el retiro del beneficio o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
 
 
 .. _nueva-patente:
@@ -62,7 +47,45 @@ Nueva Patente
   Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de las Patentes.
 
 
-.. _modificar-Patente:
+.. _imprimir-carnet:
+
+Imprimir Carnet
+---------------
+
+Si el usuario desea imprimir el *Carnet* correspondiente a la *Mascota* patentada, debera presionar el ícono ``Confirmar`` asociado a la *Patente* en la columna de **acciones**.
+
+
+.. _retiro-beneficios:
+
+Retiro de Beneficios
+--------------------
+
+  Si el usuario desea registrar un nuevo retiro de un *Garrapaticida* o *Atiparasitario*, deberá presionar el ícono ``Retiro de beneficios`` asociado a la *Patente* en la columna de **acciones**. Acto seguido, se abrirá la siguiente vista emergente:
+
+  .. image:: _static/retiro_beneficios.png
+    :align: center
+
+  En esta ventana el usuario deberá seleccionar el tipo de beneficio que desea retirar. Para cerrar la ventana en caso de no seleccionar una opción, el usuario debera presionar el botón ``X`` en la esquina superior derecha, o bin hacer click en cualquier otro lugar de la pantalla.
+
+  Una vez seleccionado un beneficio, se abrirá una nueva vista emergente, informando si el retiro se realizó con exito, o si por el contrario, existió algun error.
+
+
+.. _detalle-patente:
+
+Detalle de Patente
+------------------
+
+  Si el usuario desea ver el detalle de una *Patente*, deberá seleccionar en la columna de **acciones** asociado a la *Patente* y presionar el ícono ``Detalle``
+
+  Una vez realizado el paso anterior aparecerá la siguiente vista emergente:
+
+  .. image:: _static/detalle_patente.png
+    :align: center
+
+  En esta parte el usuario podrá observar la información adicional de la *Patente*. Si desea imprimir la tarjeta, deberá presionar el botón ``Imprimir Tarjeta``, de otro modo, si desea volver al listado inicial, presionará el botón ``Regresar``.
+
+
+.. _modificar-patente:
 
 Modificación de Patente
 -----------------------
@@ -86,7 +109,7 @@ Modificación de Patente
    Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos de la *Patente* seleccionada, caso contrario, presionará el botón ``Cancelar``.
 
 
-.. _eliminar-Patente:
+.. _eliminar-patente:
 
 
 Eliminar Patente
@@ -102,25 +125,10 @@ Eliminar Patente
    En esta parte el usuario deberá decidir si confirma la eliminación de la *Patente* o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
 
 
-.. _detalle-Patente:
+.. _renovacion-patente:
 
-Detalle Patente
----------------
-
-  Si el usuario desea ver el detalle de una *Patente*, deberá seleccionar en la columna de **acciones** asociado a la *Patente* y presionar el ícono ``Detalle``
-
-  Una vez realizado el paso anterior aparecerá la siguiente vista emergente:
-
-  .. image:: _static/detalle_patente.png
-    :align: center
-
-  En esta parte el usuario podrá observar la información adicional de la *Patente*. Si desea imprimir la tarjeta, deberá presionar el botón ``Imprimir Tarjeta``, de otro modo, si desea volver al listado inicial, presionará el botón ``Regresar``.
-
-
-.. _renovacion-Patente:
-
-Renovación Patente
-------------------
+Renovación de Patente
+---------------------
 
   Si el usuario desea ver renovar una *Patente*, deberá seleccionar en la columna de **acciones** asociado a la *Patente* y presionar el ícono ``Renovación Duplicado de Patente``
 

@@ -18,21 +18,6 @@ Además, si el usuario desea Registrar un nuevo *Sacrificio/Entrega*:
 - :ref:`Nuevo Sacrificio/Entrega <nuevo-s_e>`
 
 
-.. _modificar-s_e:
-
-Modificación Sacrificio/Entrega
--------------------------------
-
-  Si el usuario desea modificar los datos de un *Sacrificio/Entrega*, deberá seleccionar en la columna de **acciones** asociado al *Curso* y presionar el ícono ``Modificar``.
-
-  Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:
-
-  .. image:: _static/modificar_s_e.png
-    :align: center
-
-  En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados al *Sacrificio/Entrega*.
-
-
 .. _nuevo-s_e:
 
 Nuevo Sacrificio/Entrega
@@ -46,12 +31,14 @@ Nuevo Sacrificio/Entrega
     :align: center
 
   El usuario deberá ingresar los datos solicitados por el formulario. A continuación deberá escoger si el animal está patentando o no.
+
   Si selecciona la opción ``patentado`` el sistema mostrará la siguiente pantalla:
 
   .. image:: _static/alta_s_e_patente.png
     :align: center
 
   A continuación el usuario seleccionará la patente existente y el sistema luego de crear el registro solicitado lo redigirá al listado inicial.
+
   Si por otro lado el usuario NO selecciona la opción ``patentado`` , el sistema mostrará el nuevo formulario:
 
   .. image:: _static/alta_sin_patente_s_e.png
@@ -65,3 +52,18 @@ Nuevo Sacrificio/Entrega
 
           - Uno o más campos obligatorios vacíos.
           - Uno o más campos con un formato incorrecto.
+
+
+.. _modificar-s_e:
+
+Modificación Sacrificio/Entrega
+-------------------------------
+
+  Si el usuario desea modificar los datos de un *Sacrificio/Entrega*, deberá seleccionar en la columna de **acciones** asociado al *Curso* y presionar el ícono ``Modificar``.
+
+  Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:
+
+  .. image:: _static/modificar_s_e.png
+    :align: center
+
+  En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados al *Sacrificio/Entrega*.
