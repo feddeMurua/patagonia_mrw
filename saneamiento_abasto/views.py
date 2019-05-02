@@ -21,6 +21,7 @@ from django_addanother.views import CreatePopupMixin
 from django.utils import timezone
 import collections
 import json
+import numpy as np
 from weasyprint import HTML
 from django.template.loader import get_template
 
@@ -28,10 +29,10 @@ from django.template.loader import get_template
 def enlazar_detalles():
     detalles = DetalleCC.objects.filter(periodo__isnull=True)
     for detalle in detalles:
-        fecha_reinspeccion = detalle.reinspeccion.fecha
         try:
-            periodo = PeriodoCC.objects.get(periodo__month=fecha_reinspeccion.month,
-                                            periodo__year=fecha_reinspeccion.year)
+            periodo = PeriodoCC.objects.get(periodo__month=detalle.reinspeccion.fecha.month,
+                                            periodo__year=detalle.reinspeccion.fecha.year,
+                                            cc=CuentaCorriente.objects.get(abastecedor=detalle.reinspeccion.abastecedor))
             detalle.periodo = periodo
         except:
             periodo = PeriodoCC(periodo=detalle.reinspeccion.fecha,
@@ -174,10 +175,11 @@ def pdf_certificado(request, pk):
 @login_required(login_url='login')
 def abonar_certificado(request, pk):
     periodo = PeriodoCC.objects.get(pk=pk)
-    delta = timezone.now().date() - periodo.fecha_certificado
+    delta = np.busday_count(periodo.fecha_certificado, timezone.now().date(), holidays=['Y-04-29'])
+    delta += 1
     importe = periodo.importe
-    if delta.days >= 5:
-        importe += (importe * (delta.days - 5) / 100)
+    if delta > 5:
+        importe += (importe * 0.008 * (delta - 5))
     if request.method == 'POST':
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
@@ -201,7 +203,7 @@ def abonar_certificado(request, pk):
     else:
         detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'cuentaCorriente/abonar_certificado.html', {'periodo': periodo, 'atraso': delta.days,
+    return render(request, 'cuentaCorriente/abonar_certificado.html', {'periodo': periodo, 'atraso': delta - 5,
                                                                        'detalle_mov_form': detalle_mov_form,
                                                                        'importe': importe, 'mov_form': mov_form})
 

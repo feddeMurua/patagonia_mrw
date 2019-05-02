@@ -23,6 +23,9 @@ class AltaAnalisisForm(forms.ModelForm):
     class Meta:
         model = Analisis
         exclude = ['medico_veterinario', 'resultado']
+        labels = {
+            'toma_muestra': _("Muestra tomada por")
+        }
         widgets = {
             'procedencia': AddAnotherWidgetWrapper(
                 forms.Select,
@@ -42,6 +45,9 @@ class ModificacionAnalisisForm(forms.ModelForm):
     class Meta:
         model = Analisis
         fields = ['procedencia', 'categoria']
+        labels = {
+            'toma_muestra': _("Muestra tomada por")
+        }
         widgets = {
             'procedencia': AddAnotherWidgetWrapper(
                 forms.Select,

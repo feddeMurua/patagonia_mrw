@@ -23,6 +23,21 @@ Patentamiento de Mascotas
     - :ref:`Nueva Patente <nueva-patente>`
 
 
+.. _retiro-beneficios:
+
+Retiro de Beneficios
+--------------------
+
+  Si el usuario desea registrar un nuevo retiro de un *garrapaticida* o *atiparasitario* , deberá presionar los respectivos botones de ``Garrapaticida`` o ``Antiparasitario``.
+
+  Una vez realizado el paso anterior aparecerá la siguiente vista emergente:
+
+  .. image:: _static/retiro_beneficio.png
+    :align: center
+
+  En esta parte el usuario deberá decidir si confirma el retiro del beneficio o no. Si desea confirmar la eliminación deberá presionar el botón ``Confirmar``, caso contrario, presionará el botón ``Cancelar``.
+
+
 .. _nueva-patente:
 
 Nueva Patente

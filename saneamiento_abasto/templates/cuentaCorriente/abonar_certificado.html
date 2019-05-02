@@ -38,7 +38,7 @@
                                     <td>Fecha de emisión de certificado de deuda:</td>
                                     <td>{{ periodo.fecha_certificado }}</td>
                                 </tr>
-                                {% if atraso >= 5 %}
+                                {% if atraso > 0 %}
                                     <tr>
                                         <td>Importe original:</td>
                                         <td>${{ periodo.importe }}</td>

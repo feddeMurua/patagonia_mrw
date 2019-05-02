@@ -45,7 +45,8 @@
                 DNI N°: {{ analisis.interesado.dni }} / Domicilio: {{ analisis.interesado.domicilio }} / Teléfono:
                 {{ analisis.interesado.telefono }}<br>
                 Procedencia de/los animal/es: {{ analisis.procedencia }}<br>
-                Cantidad de animales: {{ porcinos|length }}
+                Cantidad de animales: {{ porcinos|length }}<br>
+                Muestra tomada por: {{ analisis.toma_muestra|default_if_none:"" }}
             </p>
             <table class="tabla-porcinos">
                 <thead>

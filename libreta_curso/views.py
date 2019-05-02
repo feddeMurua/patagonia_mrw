@@ -132,6 +132,7 @@ def alta_inscripcion(request, id_curso):
     curso = Curso.objects.get(pk=id_curso)
     vencido = curso.fecha < timezone.now().date()
     if request.method == 'POST':
+
         form = InscripcionForm(request.POST, id_curso=id_curso)
         if form.is_valid():
             inscripcion = form.save(commit=False)
@@ -167,7 +168,7 @@ def modificacion_inscripcion(request, pk, id_curso):
     else:
         form = ModificacionInscripcionForm(instance=inscripcion)
     url_return = 'cursos:inscripciones_curso'
-    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'id_curso': id_curso,
+    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'curso': inscripcion.curso,
                                                                  'url_return': url_return,
                                                                  'modificacion': True})
 
@@ -186,7 +187,7 @@ def cierre_inscripcion(request, pk, id_curso):
     else:
         form = CierreInscripcionForm(instance=inscripcion)
     url_return = 'cursos:cierre_curso'
-    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'curso': inscripcion.cursodatetime.now().date(),
+    return render(request, 'inscripcion/inscripcion_form.html', {'form': form, 'curso': inscripcion.curso,
                                                                  'url_return': url_return,
                                                                  'modificacion': True})
 

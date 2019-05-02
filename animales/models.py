@@ -13,6 +13,7 @@ class Analisis(models.Model):
     fecha = models.DateField(default=now)
     interesado = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE, related_name="interesado")
     procedencia = models.ForeignKey(m.Localidad, on_delete=models.CASCADE)
+    toma_muestra = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, related_name="toma_muestra", null=True)
     medico_veterinario = models.ForeignKey(m.PersonalPropio, on_delete=models.CASCADE, null=True, blank=True,
                                            related_name="medico_veterinario")
     resultado = models.CharField(max_length=15, choices=Resultados, null=True)
