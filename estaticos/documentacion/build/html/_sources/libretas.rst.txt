@@ -66,6 +66,8 @@ Modificación de Libreta
            - Uno o más campos obligatorios vacíos.
            - Uno o más campos con un formato incorrecto.
 
+       Si el contribuyente, ya poseía una fotografía aparecerá la opción de eliminar fotografía (botón rojo).
+
    Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos de la *Libreta* seleccionada, caso contrario, presionará el botón ``Cancelar``.
 
 .. _eliminar-libreta:
@@ -119,6 +121,8 @@ Renovación Libreta
 
           - Uno o más campos obligatorios vacíos.
           - Uno o más campos con un formato incorrecto.
+
+      Si el contribuyente, ya poseía una fotografía aparecerá la opción de eliminar fotografía (botón rojo).
 
   Una vez completado el formulario, el usuario deberá presionar el botón ``Aceptar`` y el sistema se encargará de actualizar los datos de la *Libreta* seleccionada, caso contrario, presionará el botón ``Cancelar``..
 

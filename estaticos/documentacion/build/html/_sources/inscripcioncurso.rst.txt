@@ -34,8 +34,6 @@ Nueva Inscripción
 
   .. ATTENTION::
 
-      Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Persona*, el cual es utilizado para
-      agregar una nueva persona respectivamente si no se encuentra registrada en el sistema. Además;
       El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
       En este punto, las posibles causas de errores son:
 

@@ -35,6 +35,8 @@ Nuevo Análisis
   En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo *Análisis*.
 
   .. ATTENTION::
+      Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Procedencia*, el cual es utilizado para
+      agregar una nueva procedencia (localidad) respectivamente si no se encuentra registrada en el sistema. Además;
       El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
       En este punto, las posibles causas de errores son:
 
@@ -89,6 +91,9 @@ Modificación de Análisis
   En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados al *Análisis*.
 
   .. ATTENTION::
+
+      Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Procedencia*, el cual es utilizado para
+      agregar una nueva procedencia (localidad) respectivamente si no se encuentra registrada en el sistema. Además;
       El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
       En este punto, las posibles causas de errores son:
 

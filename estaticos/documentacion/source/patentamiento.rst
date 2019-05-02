@@ -52,7 +52,13 @@ Nueva Patente
 Imprimir Carnet
 ---------------
 
+<<<<<<< HEAD
 Si el usuario desea imprimir el *Carnet* correspondiente a la *Mascota* patentada, debera presionar el ícono ``Confirmar`` asociado a la *Patente* en la columna de **acciones**.
+=======
+  Si el usuario desea imprimir un *Carnet*, deberá seleccionar en la columna de **acciones** asociado a la *Patente* y presionar el ícono ``Imprimir Carnet``.
+
+  A continuación, el sistema presentará en una nueva pestaña un archivo en formato .PDF para imprimir el carnet correspondiente a la patente.
+>>>>>>> cd755d2912d003dbc86232a49a11a5ead353f9b9
 
 
 .. _retiro-beneficios:

@@ -179,63 +179,23 @@
 <p>Se presentará una pantalla que contendrá un listado con todos los alumnos inscriptos en un <em>Curso</em> particular
 que se encuentra registrado en el sistema hasta la fecha.</p>
 <img alt="_images/cierre_curso_list.png" class="align-center" src="_images/cierre_curso_list.png" />
-<p>Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular cada <em>Inscripción</em>.</p>
+<p>Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular cada <em>Alumno inscripto en el curso</em>.</p>
 <p>Estas funcionalidades son:</p>
 <ul class="simple">
-<li><a class="reference internal" href="inscripcioncurso.html#eliminar-inscripcion"><span class="std std-ref">Eliminar Inscripción</span></a></li>
-<li><a class="reference internal" href="inscripcioncurso.html#modificar-inscripcion"><span class="std std-ref">Modificar Inscripción</span></a></li>
-<li>Imprimir Inscripción (PROXIMAMENTE)</li>
+<li><a class="reference internal" href="#modificar-inscripcion-alumno"><span class="std std-ref">Modificar Calificación/Asistencia</span></a></li>
 </ul>
-<p>Además, si el usuario desea Registrar una nueva <em>Inscripción</em>:</p>
-<ul class="simple">
-<li><a class="reference internal" href="inscripcioncurso.html#nueva-inscripcion"><span class="std std-ref">Nueva Inscripción</span></a></li>
-</ul>
-<div class="section" id="eliminar-inscripcion">
-<span id="id1"></span><h2>Eliminar Inscripción<a class="headerlink" href="#eliminar-inscripcion" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Si el usuario desea eliminar una <em>Inscripción</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Inscripción</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Eliminar</span></code></p>
-<p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
-<img alt="_images/baja_inscripcion.png" class="align-center" src="_images/baja_inscripcion.png" />
-<p>En esta parte el usuario deberá decidir si confirma la eliminación de la <em>Inscripción</em> o no. Si desea confirmar la eliminación deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Confirmar</span></code>, caso contrario, presionará el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>.</p>
-</div>
-<div class="section" id="modificar-inscripcion">
-<span id="id2"></span><h2>Modificar Inscripción<a class="headerlink" href="#modificar-inscripcion" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Si el usuario desea modificar los datos de una <em>Inscripción</em>, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Inscripción</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Modificar</span></code>.</p>
+<div class="section" id="modificar-calificacion-asistencia-del-alumno">
+<span id="modificar-inscripcion-alumno"></span><h2>Modificar Calificación/Asistencia del Alumno<a class="headerlink" href="#modificar-calificacion-asistencia-del-alumno" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Si el usuario desea agregar los datos de una <em>Calificación/Asistencia</em> de un alumno, deberá seleccionar en la columna de <strong>acciones</strong> asociado a la <em>Inscripción</em> y presionar el ícono <code class="docutils literal notranslate"><span class="pre">Modificar</span></code>.</p>
 <p>Una vez realizado el paso anterior, el sistema lo redirigirá a la siguiente pantalla:</p>
-<img alt="_images/mod_inscripcion.png" class="align-center" src="_images/mod_inscripcion.png" />
+<img alt="_images/mod_cierre_curso.png" class="align-center" src="_images/mod_cierre_curso.png" />
 <p>En esta parte al usuario se le presentará un formulario y deberá actualizar los datos asociados a la <em>Inscripción</em>.</p>
 <div class="admonition attention">
 <p class="first admonition-title">Atención</p>
-<p>El sistema recopilará los datos registrados de la Inscripción y los mostrará para modificarlos, además, siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
-En este punto, las posibles causas de errores son:</p>
-<blockquote class="last">
-<div><ul class="simple">
-<li>Uno o más campos con un formato incorrecto.</li>
-</ul>
-</div></blockquote>
+<p>SOLO SE PODRÁ INGRESAR EL PORCENTAJE DE ASISTENCIA Y CALIFICACIÓN UNA SOLA VEZ LUEGO DE INGRESAR LOS DATOS Y POSTERIORMENTE CONFIRMARLOS.</p>
+<p class="last">El sistema no permitirá volver a modificar los datos del alumno.</p>
 </div>
 <p>Una vez completado el formulario, el usuario deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code> y el sistema se encargará de actualizar los datos de la <em>Inscripción</em> seleccionada.</p>
-</div>
-<div class="section" id="nueva-inscripcion">
-<span id="id3"></span><h2>Nueva Inscripción<a class="headerlink" href="#nueva-inscripcion" title="Enlazar permanentemente con este título">¶</a></h2>
-<blockquote>
-<div><p>Si el usuario desea crear una nueva <em>Inscripción</em>, deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Nueva</span> <span class="pre">Inscripción</span></code>.</p>
-<p>A continuación, el sistema lo redirigirá a la siguiente pantalla. En esta parte, al usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta una nueva <em>Inscripción</em>.</p>
-<img alt="_images/alta_inscripcion.png" class="align-center" src="_images/alta_inscripcion.png" />
-<div class="admonition attention">
-<p class="first admonition-title">Atención</p>
-<p>Se puede observar un botón verde con la leyenda <code class="docutils literal notranslate"><span class="pre">Agregar</span></code> en el campo <em>Persona</em>, el cual es utilizado para
-agregar una nueva persona respectivamente si no se encuentra registrada en el sistema. Además;
-El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
-En este punto, las posibles causas de errores son:</p>
-<blockquote class="last">
-<div><ul class="simple">
-<li>Uno o más campos obligatorios vacíos.</li>
-<li>Uno o más campos con un formato incorrecto.</li>
-</ul>
-</div></blockquote>
-</div>
-<p>Una vez completado el formulario, se volverá  a la pantalla que contendrá el listado de inscripciones.</p>
-</div></blockquote>
 </div>
 </div>
 

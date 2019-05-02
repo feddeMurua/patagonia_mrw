@@ -6,3 +6,5 @@ __pycache__
 estaticos/fotos/
 ssl/
 venv/
+estaticos/documentacion/
+static/documentacion/

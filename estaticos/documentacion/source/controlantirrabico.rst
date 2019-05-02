@@ -33,6 +33,8 @@ Nuevo control Antirrábico
   En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo *Control Antirrábico*.
 
   .. ATTENTION::
+      Se puede observar un botón verde con la leyenda ``Agregar`` en el campo *Mordido*, así como en el campo *Responsable del animal*, el cual es utilizado para
+      agregar una nuevo Mordido o un Responsable del animal respectivamente si no se encuentran registrados en el sistema. Además;
       El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
       En este punto, las posibles causas de errores son:
 
