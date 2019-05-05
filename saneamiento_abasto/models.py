@@ -99,23 +99,23 @@ class PeriodoCC(models.Model):
 
 class DetalleCC(models.Model):
     reinspeccion = models.ForeignKey('Reinspeccion', on_delete=models.CASCADE)
-    periodo = models.ForeignKey('PeriodoCC', on_delete=models.CASCADE, null=True)
+    periodo = models.ForeignKey('PeriodoCC', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return "%s" % self.reinspeccion
 
     def save(self, *args, **kwargs):
-        periodo = PeriodoCC.objects.filter(periodo__month=self.reinspeccion.fecha.month,
-                                           periodo__year=self.reinspeccion.fecha.year).last()
-        if periodo:
+        try:
+            periodo = PeriodoCC.objects.get(periodo__month=self.reinspeccion.fecha.month,
+                                            periodo__year=self.reinspeccion.fecha.year,
+                                            cc=CuentaCorriente.objects.get(abastecedor=self.reinspeccion.abastecedor))
             periodo.total_kg += self.reinspeccion.total_kg
             periodo.importe += self.reinspeccion.importe
-            periodo.save()
-        else:
-            cc = CuentaCorriente.objects.get(abastecedor=self.reinspeccion.abastecedor)
+        except:
             periodo = PeriodoCC.objects.create(periodo=self.reinspeccion.fecha, importe=self.reinspeccion.importe,
-                                               total_kg=self.reinspeccion.total_kg, cc=cc)
-            periodo.save()
+                                               total_kg=self.reinspeccion.total_kg,
+                                               cc=CuentaCorriente.objects.get(abastecedor=self.reinspeccion.abastecedor))
+        periodo.save()
         self.periodo = periodo
         super(DetalleCC, self).save(*args, **kwargs)
 

@@ -33,12 +33,15 @@ def enlazar_detalles():
             periodo = PeriodoCC.objects.get(periodo__month=detalle.reinspeccion.fecha.month,
                                             periodo__year=detalle.reinspeccion.fecha.year,
                                             cc=CuentaCorriente.objects.get(abastecedor=detalle.reinspeccion.abastecedor))
-            detalle.periodo = periodo
+            periodo.total_kg += detalle.reinspeccion.total_kg
+            periodo.importe += detalle.reinspeccion.importe
         except:
-            periodo = PeriodoCC(periodo=detalle.reinspeccion.fecha,
-                                cc=CuentaCorriente.objects.get(abastecedor=detalle.reinspeccion.abastecedor))
-            periodo.save()
-            detalle.periodo = periodo
+            periodo = PeriodoCC.objects.create(periodo=detalle.reinspeccion.fecha, importe=detalle.reinspeccion.importe,
+                                               total_kg=detalle.reinspeccion.total_kg,
+                                               cc=CuentaCorriente.objects.get(
+                                                   abastecedor=detalle.reinspeccion.abastecedor))
+        periodo.save()
+        detalle.periodo = periodo
         detalle.save()
 
 
