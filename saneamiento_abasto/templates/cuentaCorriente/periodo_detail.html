@@ -14,7 +14,6 @@
         <tr>
             <th>Fecha</th>
             <th>Turno</th>
-            <th>Precintado</th>
             <th>Certificado</th>
             <th>Total Kg</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
@@ -25,11 +24,13 @@
             <tr>
                 <td>{{ detalle.reinspeccion.fecha }}</td>
                 <td>{{ detalle.reinspeccion.turno }}</td>
-                <td>{{ reinspeccion.precintado }}</td>
                 <td>{{ detalle.reinspeccion.certificado }}</td>
                 <td>{{ detalle.reinspeccion.total_kg }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Productos" href="{% url 'reinspecciones:lista_productos' detalle.reinspeccion.pk periodo.pk %}"><em class="glyphicon glyphicon-list-alt"></em></a>
+                    {% if user.is_staff %}
+                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_reinspeccion' detalle.reinspeccion.pk periodo.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
+                    {% endif %}
                     {% if not periodo.pagado %}
                         <a class="btn btn-danger btn-baja" data-toggle="tooltip" title="Eliminar" data-url="{% url 'reinspecciones:baja_reinspeccion' detalle.reinspeccion.pk %}"><em class="glyphicon glyphicon-trash"></em></a>
                     {% endif %}

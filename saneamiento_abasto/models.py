@@ -60,6 +60,46 @@ class Reinspeccion(models.Model):
     def __str__(self):
         return "%s - %s" % (self.fecha, self.abastecedor)
 
+    __original_kg = None
+    __original_importe = None
+
+    def __init__(self, *args, **kwargs):
+        super(Reinspeccion, self).__init__(*args, **kwargs)
+        self.__original_fecha = self.fecha
+        self.__original_kg = self.total_kg
+        self.__original_importe = self.importe
+
+    def save(self, *args, **kwargs):
+        super(Reinspeccion, self).save(*args, **kwargs)
+        if self.fecha.month != self.__original_fecha.month:
+            try:
+                detalle = DetalleCC.objects.get(reinspeccion=self)
+                detalle.periodo.total_kg -= self.__original_kg
+                detalle.periodo.importe -= self.__original_importe
+                detalle.periodo.save()
+                detalle.periodo = None
+                detalle.save()
+            except:
+                pass
+        if self.total_kg != self.__original_kg:
+            try:
+                detalle = DetalleCC.objects.get(reinspeccion=self)
+                detalle.periodo.total_kg -= self.__original_kg - self.total_kg
+                detalle.periodo.importe -= self.__original_importe - self.importe
+                detalle.periodo.save()
+            except:
+                pass
+
+    def delete(self, using=None, keep_parents=False):
+        try:
+            detalle = DetalleCC.objects.get(reinspeccion=self)
+            detalle.periodo.total_kg -= self.total_kg
+            detalle.periodo.importe -= self.importe
+            detalle.periodo.save()
+        except:
+            pass
+        super(Reinspeccion, self).delete()
+
 
 class ReinspeccionPrecios(SingletonModel):
     kg_min = models.IntegerField(validators=[MinValueValidator(1)], default=30)
@@ -108,13 +148,15 @@ class DetalleCC(models.Model):
         try:
             periodo = PeriodoCC.objects.get(periodo__month=self.reinspeccion.fecha.month,
                                             periodo__year=self.reinspeccion.fecha.year,
-                                            cc=CuentaCorriente.objects.get(abastecedor=self.reinspeccion.abastecedor))
+                                            cc=CuentaCorriente.objects.get(
+                                                abastecedor=self.reinspeccion.abastecedor))
             periodo.total_kg += self.reinspeccion.total_kg
             periodo.importe += self.reinspeccion.importe
         except:
             periodo = PeriodoCC.objects.create(periodo=self.reinspeccion.fecha, importe=self.reinspeccion.importe,
                                                total_kg=self.reinspeccion.total_kg,
-                                               cc=CuentaCorriente.objects.get(abastecedor=self.reinspeccion.abastecedor))
+                                               cc=CuentaCorriente.objects.get(
+                                                   abastecedor=self.reinspeccion.abastecedor))
         periodo.save()
         self.periodo = periodo
         super(DetalleCC, self).save(*args, **kwargs)

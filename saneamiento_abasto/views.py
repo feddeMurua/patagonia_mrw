@@ -26,6 +26,14 @@ from weasyprint import HTML
 from django.template.loader import get_template
 
 
+def limpiar_periodos(cc):
+    periodos = PeriodoCC.objects.filter(cc=cc)
+    detalles = DetalleCC.objects.all().values_list('periodo', flat=True)
+    for periodo in periodos:
+        if periodo.pk not in detalles:
+            periodo.delete()
+
+
 def enlazar_detalles():
     detalles = DetalleCC.objects.filter(periodo__isnull=True)
     for detalle in detalles:
@@ -33,8 +41,6 @@ def enlazar_detalles():
             periodo = PeriodoCC.objects.get(periodo__month=detalle.reinspeccion.fecha.month,
                                             periodo__year=detalle.reinspeccion.fecha.year,
                                             cc=CuentaCorriente.objects.get(abastecedor=detalle.reinspeccion.abastecedor))
-            periodo.total_kg += detalle.reinspeccion.total_kg
-            periodo.importe += detalle.reinspeccion.importe
         except:
             periodo = PeriodoCC.objects.create(periodo=detalle.reinspeccion.fecha, importe=detalle.reinspeccion.importe,
                                                total_kg=detalle.reinspeccion.total_kg,
@@ -128,6 +134,7 @@ def lista_cc(request):
 @login_required(login_url='login')
 def periodos_cc(request, pk):
     cc = CuentaCorriente.objects.get(pk=pk)
+    limpiar_periodos(cc)
     return render(request, 'cuentaCorriente/cc_periodos.html', {'pk': pk, 'listado': PeriodoCC.objects.filter(cc=cc)})
 
 
@@ -361,16 +368,28 @@ def existe_producto(request, producto):
 
 
 @login_required(login_url='login')
-def modificar_reinspeccion(request, pk):
+def modificar_reinspeccion(request, pk, periodo_pk):
     reinspeccion = Reinspeccion.objects.get(pk=pk)
+    if int(periodo_pk):
+        periodo = PeriodoCC.objects.get(pk=periodo_pk)
+        url_return = 'cuentas_corrientes:detalle_periodo'
+        id_return = periodo_pk
+    else:
+        periodo = None
+        url_return = 'reinspecciones:lista_reinspecciones'
+        id_return = ""
     if request.method == 'POST':
         form = ModificarReinspeccionForm(request.POST, instance=reinspeccion)
         if form.is_valid():
             log_modificar(request.user.id, form.save(), 'Reinspeccion Veterinaria')
-            return redirect('reinspecciones:lista_reinspecciones')
+            if int(periodo_pk):
+                return HttpResponseRedirect(reverse(url_return, args=[periodo_pk]))
+            else:
+                return redirect('reinspecciones:lista_reinspecciones')
     else:
         form = ModificarReinspeccionForm(instance=reinspeccion)
-    return render(request, 'reinspeccion/reinspeccion_modificar.html', {'form': form})
+    return render(request, 'reinspeccion/reinspeccion_modificar.html', {'form': form, 'url_return': url_return,
+                                                                        'id_return': id_return, 'periodo': periodo})
 
 
 @login_required(login_url='login')

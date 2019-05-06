@@ -5,8 +5,8 @@
 
 {% block header-title %}Modificación de Reinspección{% endblock %}
 
-{% block url-volver %}{% url 'reinspecciones:lista_reinspecciones' %}{% endblock %}
+{% block url-volver %}{% url url_return id_return %}{% endblock %}
 
 {% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url 'reinspecciones:lista_reinspecciones' %}">Cancelar</a>
+    <a class="btn btn-danger btn-cancelar" href="{% url url_return id_return %}">Cancelar</a>
 {% endblock %}
