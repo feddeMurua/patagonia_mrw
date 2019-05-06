@@ -4,6 +4,7 @@ __pycache__
 .idea/
 *.sqlite3
 estaticos/fotos/
+static/fotos/
 ssl/
 venv/
 estaticos/documentacion/
