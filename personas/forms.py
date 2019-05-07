@@ -49,7 +49,12 @@ class AltaPersonaFisicaForm(PersonaGenericaForm):
 
     class Meta:
         model = PersonaFisica
-        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'tipo_dni', 'dni', 'fecha_nacimiento', 'telefono', 'email',
+                  'obra_social']
+        labels = {
+            'tipo_dni': _("Tipo de documento"),
+            'dni': _("Documento")
+        }
         widgets = {
             'nacionalidad': AddAnotherWidgetWrapper(
                 forms.Select,
@@ -87,8 +92,18 @@ class ModificacionPersonaFisicaForm(forms.ModelForm):
 
     class Meta:
         model = PersonaFisica
-        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
-                  'documentacion_retirada']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'tipo_dni', 'dni', 'fecha_nacimiento', 'telefono', 'email',
+                  'obra_social', 'documentacion_retirada']
+        labels = {
+            'tipo_dni': _("Tipo de documento"),
+            'dni': _("Documento")
+        }
+        widgets = {
+            'nacionalidad': AddAnotherWidgetWrapper(
+                forms.Select,
+                reverse_lazy('personas:nueva_nacionalidad'),
+            )
+        }
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -141,8 +156,12 @@ class PersonalPropioForm(forms.ModelForm):
 
     class Meta:
         model = PersonalPropio
-        fields = ['apellido', 'nombre', 'nacionalidad', 'dni', 'fecha_nacimiento', 'telefono', 'email', 'obra_social',
-                  'rol_actuante']
+        fields = ['apellido', 'nombre', 'nacionalidad', 'tipo_dni', 'dni', 'fecha_nacimiento', 'telefono', 'email',
+                  'obra_social', 'rol_actuante']
+        labels = {
+            'tipo_dni': _("Tipo de documento"),
+            'dni': _("Documento")
+        }
         widgets = {
             'nacionalidad': AddAnotherWidgetWrapper(
                 forms.Select,

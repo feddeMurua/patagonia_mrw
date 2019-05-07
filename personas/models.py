@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from polymorphic.models import PolymorphicModel
 from django.core.validators import MinValueValidator
+from .choices import *
 
 
 class Localidad(models.Model):
@@ -76,6 +77,7 @@ class PersonaJuridica(PersonaGenerica):
 class PersonaFisica(PersonaGenerica):
     apellido = models.CharField(max_length=50)
     fecha_nacimiento = models.DateField()
+    tipo_dni = models.CharField(max_length=10, choices=Tipo_Dni, default='DNI')
     dni = models.CharField(unique=True, max_length=50)
     nacionalidad = models.ForeignKey('Nacionalidad', on_delete=models.CASCADE)
     obra_social = models.CharField(max_length=50, blank=True)
@@ -86,6 +88,9 @@ class PersonaFisica(PersonaGenerica):
         dni = " - %s" % self.dni
 
         return apellido + super(PersonaFisica, self).__str__() + dni
+
+    class Meta:
+        unique_together = ("tipo_dni", "dni")
 
 
 class RolActuante(models.Model):
