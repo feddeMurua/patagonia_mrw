@@ -171,7 +171,7 @@ class Vehiculo(models.Model):
     modelo = models.ForeignKey('ModeloVehiculo')
     anio = models.IntegerField(validators=[MinValueValidator(1950)], blank=True, null=True)
     dominio = models.CharField(max_length=50, unique=True)
-    titular = models.ForeignKey(m.PersonaFisica, on_delete=models.CASCADE)
+    titular = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=TIPO_VEHICULO, default='TPP')
     nro = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
     tipo_tpp = models.CharField(max_length=15, blank=True, null=True, choices=TIPO_TPP)
