@@ -27,30 +27,6 @@
             $("#id_documentacion_retirada").checkboxradio();
         });
 
-        var dni = $('#id_dni');
-
-        dni.mask('ZZ99000000', {translation:  {'Z': {pattern: /a-zA-Z0-9/, optional: true}}});
         $('#id_cuit').mask('00-00000000-0');
-
-        dni.focusout( function(){
-            $.ajax({
-                url: "{% url 'personas:verificar_documento' %}",
-                method: 'GET',
-                data: {
-                    documento: dni.val()
-                },
-                success: function(data){
-                    if(data['existe']){
-                        dni.after('<div class="alert alert-danger"><strong>Ya existe una persona registrada con el DNI ingresado</strong></div>')
-                    }
-                }
-            });
-        });
-
-        dni.focusin( function (){
-            if ($('.alert')) {
-                $('.alert').remove()
-            }
-        });
     </script>
 {% endblock %}
