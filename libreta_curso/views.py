@@ -132,18 +132,18 @@ def alta_inscripcion(request, id_curso):
     curso = Curso.objects.get(pk=id_curso)
     vencido = curso.fecha < timezone.now().date()
     if request.method == 'POST':
-
         form = InscripcionForm(request.POST, id_curso=id_curso)
         if form.is_valid():
             inscripcion = form.save(commit=False)
             inscripcion.curso = Curso.objects.get(pk=id_curso)
-            if request.POST['fecha']:
+            try:
+                fecha = request.POST['fecha']
                 try:
-                    inscripcion.fecha_inscripcion = timezone.datetime.strptime(request.POST['fecha'],
-                                                                               '%d/%m/%Y').strftime('%Y-%m-%d')
+                    inscripcion.fecha_inscripcion = timezone.datetime.strptime(fecha, '%d/%m/%Y').strftime('%Y-%m-%d')
                 except:
-                    inscripcion.fecha_inscripcion = timezone.datetime.strptime(request.POST['fecha'],
-                                                                               '%d/%m/%y').strftime('%Y-%m-%d')
+                    inscripcion.fecha_inscripcion = timezone.datetime.strptime(fecha, '%d/%m/%y').strftime('%Y-%m-%d')
+            except:
+                pass
             inscripcion.save()
             log_crear(request.user.id, inscripcion, 'Inscripcion a Curso')
             return HttpResponseRedirect(reverse('cursos:inscripciones_curso', kwargs={'id_curso': id_curso}))

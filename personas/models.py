@@ -85,9 +85,9 @@ class PersonaFisica(PersonaGenerica):
 
     def __str__(self):
         apellido = "%s, " % self.apellido
+        tipo_dni = " - %s" % self.tipo_dni
         dni = " - %s" % self.dni
-
-        return apellido + super(PersonaFisica, self).__str__() + dni
+        return apellido + super(PersonaFisica, self).__str__() + tipo_dni + dni
 
     class Meta:
         unique_together = ("tipo_dni", "dni")

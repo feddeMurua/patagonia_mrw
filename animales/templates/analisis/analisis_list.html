@@ -33,6 +33,9 @@
                         <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'analisis:modificacion_analisis' analisis.pk %}"><em class="glyphicon glyphicon-pencil"></em></a>
                         <a class="btn btn-success" data-toggle="tooltip" title="Registrar resultado" href="{% url 'analisis:resultado_analisis' analisis.pk %}"><em class="glyphicon glyphicon-ok"></em></a>
                     {% endif %}
+                    {% if analisis.resultado %}
+                        <a class="btn btn-info" data-toggle="tooltip" title="Imprimir comprobante" href="{% url 'analisis:pdf_analisis' analisis.pk %}" target="_blank"><em class="glyphicon glyphicon-print"></em></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
