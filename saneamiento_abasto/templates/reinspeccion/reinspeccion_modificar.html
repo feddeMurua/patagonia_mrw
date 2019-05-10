@@ -5,8 +5,20 @@
 
 {% block header-title %}Modificación de Reinspección{% endblock %}
 
-{% block url-volver %}{% url url_return id_return %}{% endblock %}
+{% block url-volver %}
+    {% if id_return %}
+        {% url url_return id_return %}
+    {% else %}
+        {% url url_return %}
+    {% endif %}
+{% endblock %}
 
 {% block btn-cancelar %}
-    <a class="btn btn-danger btn-cancelar" href="{% url url_return id_return %}">Cancelar</a>
+    <a class="btn btn-danger btn-cancelar" href="
+            {% if id_return %}
+                {% url url_return id_return %}
+            {% else %}
+                {% url url_return %}
+            {% endif %}
+        ">Cancelar</a>
 {% endblock %}

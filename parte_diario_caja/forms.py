@@ -31,9 +31,6 @@ class MovimientoDiarioForm(forms.ModelForm):
 
 
 class DetalleMovimientoDiarioForm(forms.ModelForm):
-    fecha_min = timezone.now().date() - relativedelta(days=3)
-    movimiento = forms.ModelChoiceField(queryset=MovimientoDiario.objects.filter(fecha__lte=timezone.now().date(),
-                                                                                 fecha__gte=fecha_min))
 
     class Meta:
         model = DetalleMovimiento
