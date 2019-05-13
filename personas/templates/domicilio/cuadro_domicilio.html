@@ -10,8 +10,12 @@
             {{ domicilio_form.barrio|add_class:'form-control' }}
         </div>
         <div class="form-group">
-            <label>Calle *</label>
+            <label>Calle</label>
             {{ domicilio_form.calle|add_class:'form-control' }}
+        </div>
+        <div class="form-group">
+            <label>N°</label>
+            {{ domicilio_form.nro|add_class:'form-control' }}
         </div>
         <label>Entre calles</label>
         <div class="row">
@@ -27,22 +31,30 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label>N° *</label>
-                    {{ domicilio_form.nro|add_class:'form-control' }}
+                    <label>Edificio</label>
+                    {{ domicilio_form.edificio|add_class:'form-control' }}
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label>Departamento</label>
                     {{ domicilio_form.dpto|add_class:'form-control' }}
                 </div>
             </div>
-            <div class="col-md-4">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label>Piso</label>
                     {{ domicilio_form.piso|add_class:'form-control' }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Escalera</label>
+                    {{ domicilio_form.escalera|add_class:'form-control' }}
                 </div>
             </div>
         </div>

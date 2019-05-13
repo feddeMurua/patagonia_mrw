@@ -32,12 +32,14 @@ class Nacionalidad(models.Model):
 
 class Domicilio(models.Model):
     barrio = models.CharField(max_length=20, null=True, blank=True)
-    calle = models.CharField(max_length=50)
+    calle = models.CharField(max_length=50, null=True, blank=True)
     calle_entre1 = models.CharField(max_length=50, null=True, blank=True)
     calle_entre2 = models.CharField(max_length=50, null=True, blank=True)
     nro = models.IntegerField(null=True, blank=True)
     dpto = models.CharField(max_length=50, null=True, blank=True)
     piso = models.IntegerField(null=True, blank=True)
+    edificio = models.CharField(max_length=50, null=True, blank=True)
+    escalera = models.CharField(max_length=50, null=True, blank=True)
     localidad = models.ForeignKey('Localidad', on_delete=models.CASCADE)
 
     def __str__(self):
