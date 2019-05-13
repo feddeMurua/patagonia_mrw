@@ -8,6 +8,13 @@ from parte_diario_caja import models as pd_m
 from personas import models as m
 from .choices import *
 
+def calculo_importe(total_kg):
+    precios = ReinspeccionPrecios.objects.get()
+    monto = precios.precio_min
+    if total_kg > precios.kg_min:
+        monto = total_kg * precios.precio_kg
+    return monto
+
 
 class Abastecedor(models.Model):
     responsable = models.OneToOneField(m.PersonaGenerica, on_delete=models.CASCADE)
@@ -33,6 +40,12 @@ class ReinspeccionProducto(models.Model):
             'producto': {'nombre': self.producto.nombre},
             'kilo_producto': self.kilo_producto
         }
+
+    def delete(self, using=None, keep_parents=False):
+        self.reinspeccion.total_kg -= self.kilo_producto
+        self.reinspeccion.importe = calculo_importe(self.reinspeccion.total_kg)
+        self.reinspeccion.save()
+        super(ReinspeccionProducto, self).delete()
 
 
 class Producto(models.Model):
