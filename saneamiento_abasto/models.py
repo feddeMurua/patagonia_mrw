@@ -186,7 +186,7 @@ class Vehiculo(models.Model):
     dominio = models.CharField(max_length=50, unique=True)
     titular = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     tipo_vehiculo = models.CharField(max_length=3, choices=TIPO_VEHICULO, default='TPP')
-    nro = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
+    nro = models.IntegerField(validators=[MinValueValidator(1)], unique=True, blank=True, null=True)
     tipo_tpp = models.CharField(max_length=15, blank=True, null=True, choices=TIPO_TPP)
     disposicion_resolucion = models.CharField(max_length=50, blank=True, null=True, unique=True)
     categoria = models.CharField(max_length=50, choices=CATEGORIA, blank=True, null=True)
