@@ -91,8 +91,9 @@ def cierre_de_curso(request, id_curso):
 def pdf_asistencia(request, pk):
     template = get_template('curso/planilla_asistencia_pdf.html')
     curso = Curso.objects.get(pk=pk)
-    context = {'inscripciones': Inscripcion.objects.filter(curso=curso), 'title': 'Planilla de asistencia a curso',
-               'curso': curso}
+    context = {'inscripciones': Inscripcion.objects.filter(curso=curso).order_by('persona__apellido',
+                                                                                 'persona__nombre'),
+               'title': 'Planilla de asistencia a curso', 'curso': curso}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
