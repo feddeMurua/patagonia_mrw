@@ -49,6 +49,7 @@
                         <thead>
                             <tr>
                                 <th>Descripcion</th>
+                                <th><em class="glyphicon glyphicon-cog"></em></th>
                                 <th>Importe</th>
                             </tr>
                         </thead>
@@ -56,11 +57,12 @@
                             {% for detalle in detalles %}
                                 <tr>
                                     <td>{{ detalle.descripcion }}</td>
+                                    <td><a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'caja:modificar_detalle' detalle.pk %}"><em class="glyphicon glyphicon-pencil"></em></a></td>
                                     <td>${{ detalle.importe }}</td>
                                 </tr>
                             {% endfor %}
                             <tr>
-                                <td></td>
+                                <td colspan="2"></td>
                                 <td><b>TOTAL: ${{ total }}</b></td>
                             </tr>
                         </tbody>

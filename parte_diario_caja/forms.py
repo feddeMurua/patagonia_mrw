@@ -30,6 +30,18 @@ class MovimientoDiarioForm(forms.ModelForm):
         exclude = ['fecha']
 
 
+class ModificarMovimientoDiarioForm(forms.ModelForm):
+
+    class Meta:
+        model = MovimientoDiario
+        exclude = ['fecha', 'titular']
+        labels = {
+            'nro_ingreso': _("N° de ingresos varios"),
+            'forma_pago': _("Forma de pago"),
+            'nro_cheque': _("N° de cheque")
+        }
+
+
 class DetalleMovimientoDiarioForm(forms.ModelForm):
 
     class Meta:

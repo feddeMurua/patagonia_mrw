@@ -1,0 +1,54 @@
+{% extends "base/base_form.html" %}
+{% load staticfiles bootstrap3 %}
+
+{% block title %}Modificar Movimiento Diario{% endblock %}
+
+{% block header-title %}Modificar Movimiento Diario{% endblock %}
+
+{% block url-volver %}{% url 'caja:lista_movimientos' %}{% endblock %}
+
+{% block btn-cancelar %}
+    <a class="btn btn-danger btn-cancelar" href="{% url 'caja:lista_movimientos' %}">Cancelar</a>
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        let forma_pago = $('#id_forma_pago'),
+        nro_cheque = $('#id_nro_cheque'),
+        nro_ingreso = $('#id_nro_ingreso');
+
+        forma_pago.change(hideNroCheque);
+        hideNroCheque();
+
+        function hideNroCheque() {
+            if (forma_pago.val() === 'Cheque') {
+                nro_cheque.parent().removeClass('hidden');
+                nro_cheque.prop('required', true);
+            } else {
+                nro_cheque.parent().addClass('hidden');
+                nro_cheque.prop('required', false);
+            }
+        }
+
+        nro_ingreso.focusout( function(){
+            $.ajax({
+                url: '/caja/verificar_nro_ingreso/',
+                method: 'GET',
+                data: {
+                    nro_ingreso: nro_ingreso.val()
+                },
+                success: function(data){
+                    if(data['existe']){
+                        nro_ingreso.after('<div class="alert alert-danger"><strong>El número de ingresos varios ya existe</strong></div>')
+                    }
+                }
+            });
+        });
+
+        nro_ingreso.focusin( function (){
+            if ($('.alert')) {
+                $('.alert').remove()
+            }
+        });
+    </script>
+{% endblock %}

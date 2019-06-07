@@ -48,6 +48,34 @@ def detalle_movimiento(request, pk):
 
 
 @login_required(login_url='login')
+def modificar_movimiento(request, pk):
+    movimiento = MovimientoDiario.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ModificarMovimientoDiarioForm(request.POST, instance=movimiento)
+        if form.is_valid():
+            form.save()
+            log_modificar(request.user.id, movimiento, 'Movimiento Diario')
+            return redirect('caja:lista_movimientos')
+    else:
+        form = ModificarMovimientoDiarioForm(instance=movimiento)
+    return render(request, 'caja/modificar_movimiento.html', {'form': form})
+
+
+@login_required(login_url='login')
+def modificar_detalle(request, pk):
+    detalle = DetalleMovimiento.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = DetalleMovimientoDiarioForm(request.POST, instance=detalle)
+        if form.is_valid():
+            form.save()
+            log_modificar(request.user.id, detalle, 'Detalle de Movimiento Diario')
+            return redirect('caja:lista_movimientos')
+    else:
+        form = DetalleMovimientoDiarioForm(instance=detalle)
+    return render(request, 'caja/modificar_detalle.html', {'pk_mov': detalle.movimiento.pk, 'form': form})
+
+
+@login_required(login_url='login')
 def verificar_nro_ingreso(request):
     existe = False
     try:

@@ -1,4 +1,4 @@
-var previa = $('.previa'),
+let previa = $('.previa'),
 nueva = $('.nueva'),
 movimiento = $('#id_movimiento'),
 titular = $('#id_titular'),
