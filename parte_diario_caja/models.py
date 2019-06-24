@@ -24,7 +24,7 @@ class Servicio(models.Model):
 
 
 class MovimientoDiario(models.Model):
-    fecha = models.DateField(default=timezone.now)
+    fecha = models.DateTimeField(default=timezone.now)
     titular = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     nro_ingreso = models.BigIntegerField(unique=True)
     forma_pago = models.CharField(max_length=50, choices=TipoPago, default='Efectivo')
@@ -58,6 +58,7 @@ class DetalleMovimiento(models.Model):
 
 class ArqueoDiario(models.Model):
     fecha = models.DateTimeField(default=timezone.now)
+    turno = models.CharField(max_length=10, null=True, choices=Turno, default='Mañana')
     nro_planilla = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
     mil = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     quinientos = models.IntegerField(default=0, validators=[MinValueValidator(0)])

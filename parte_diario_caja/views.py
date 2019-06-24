@@ -146,8 +146,11 @@ def lista_arqueos(request):
     return render(request, 'arqueo/arqueo_list.html', {'listado': arqueos, 'realizado': realizado})
 
 
-def get_ingresos_varios():
-    movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date())
+def get_ingresos_varios(filtro):
+    if filtro == "Mañana":
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), fecha__hour__lt=14)
+    else:
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), fecha__hour__gte=14)
     subtotales = {'tarjeta_mov': 0, 'tarjeta_imp': 0, 'cheque_mov': 0, 'cheque_imp': 0, 'efectivo_mov': 0,
                   'efectivo_imp': 0, 'total_mov': 0, 'total_imp': 0}
     if movimientos:
@@ -170,7 +173,9 @@ def get_ingresos_varios():
 
 @login_required(login_url='login')
 def alta_arqueo(request):
-    ingresos_varios = get_ingresos_varios()
+    iv_manana = get_ingresos_varios("Mañana")
+    iv_tarde = get_ingresos_varios("Tarde")
+    excludes = ['N° de planilla', 'Total de recuento manual', 'Turno']
     if request.method == 'POST':
         form = ArqueoEfectivoForm(request.POST)
         form_otros = ArqueoOtrosForm(request.POST)
@@ -180,14 +185,17 @@ def alta_arqueo(request):
             datos.update(form_otros.cleaned_data)
             arqueo = ArqueoDiario.objects.create(**datos)
             arqueo.total_manual = request.POST['total_manual']
-            arqueo.detalle_sistema(ingresos_varios)
+            if arqueo.turno == 'Mañana':
+                arqueo.detalle_sistema(iv_manana)
+            else:
+                arqueo.detalle_sistema(iv_tarde)
             log_crear(request.user.id, arqueo, 'Arqueo diario de caja')
             return redirect('arqueo:lista_arqueos')
     else:
         form = ArqueoEfectivoForm
         form_otros = ArqueoOtrosForm
-    return render(request, 'arqueo/arqueo_form.html', {'form': form, 'form_otros': form_otros,
-                                                       'ingresos_varios': ingresos_varios})
+    return render(request, 'arqueo/arqueo_form.html', {'form': form, 'form_otros': form_otros, 'excludes': excludes,
+                                                       'iv_mañana': iv_manana, 'iv_tarde': iv_tarde})
 
 
 def calculo_arqueo(arqueo):

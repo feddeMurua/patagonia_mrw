@@ -88,7 +88,7 @@ class ArqueoOtrosForm(forms.ModelForm):
 
     class Meta:
         model = ArqueoDiario
-        fields = ['tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub']
+        fields = ['turno', 'tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub']
 
 
 class ServicioForm(forms.ModelForm):

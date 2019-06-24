@@ -17,12 +17,22 @@
             {% csrf_token %}
             <div class="panel panel-primary">
                 <div class="panel-body">
-                    <div class="form-group form-inline" style="margin-left: 15px;">
-                        <label>{{ form.nro_planilla.label }} *</label>
-                        {{ form.nro_planilla|add_class:'form-control' }}
-                        {% for error in form.nro_planilla.errors %}
-                            <span class="help-block">{{ error }}</span>
-                        {% endfor %}
+                    <div class="row" style="margin-left: 0;">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>{{ form.turno.label }} *</label>
+                                {{ form.turno|add_class:'form-control' }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>{{ form.nro_planilla.label }} *</label>
+                                {{ form.nro_planilla|add_class:'form-control' }}
+                                {% for error in form.nro_planilla.errors %}
+                                    <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-7">
                         <div class="panel panel-info">
@@ -40,7 +50,7 @@
                                     </thead>
                                     <tbody>
                                         {% for field in form %}
-                                            {% if field.label != "N° de planilla" and field.label != "Total de recuento manual"%}
+                                            {% if field.label not in excludes %}
                                                 <tr>
                                                     <td>{{ field.label }}</td>
                                                     <td>{{ field|add_class:'form-control'|add_class:'cant_efectivo_manual' }}</td>
@@ -89,25 +99,25 @@
                                     <tbody>
                                         <tr>
                                             <td>Efectivo</td>
-                                            <td align="center"><span>{{ ingresos_varios.efectivo_mov }}</span></td>
-                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.efectivo_imp }}</span></td>
+                                            <td align="center"><span>{{ iv_mañana.efectivo_mov }}</span></td>
+                                            <td align="center">$<span class="sub_valor_sistema">{{ iv_mañana.efectivo_imp }}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Débito/Crédito</td>
-                                            <td align="center"><span>{{ ingresos_varios.tarjeta_mov }}</span></td>
-                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.tarjeta_imp }}</span></td>
+                                            <td align="center"><span>{{ iv_mañana.tarjeta_mov }}</span></td>
+                                            <td align="center">$<span class="sub_valor_sistema">{{ iv_mañana.tarjeta_imp }}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Cheques</td>
-                                            <td align="center"><span>{{ ingresos_varios.cheque_mov }}</span></td>
-                                            <td align="center">$<span class="sub_valor_sistema">{{ ingresos_varios.cheque_imp }}</span></td>
+                                            <td align="center"><span>{{ iv_mañana.cheque_mov }}</span></td>
+                                            <td align="center">$<span class="sub_valor_sistema">{{ iv_mañana.cheque_imp }}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="panel-footer">
-                                <b>Total de operaciones registradas en el sistema: {{ ingresos_varios.total_mov }}</b><br>
-                                <b>Total de recuento de sistema: ${{ ingresos_varios.total_imp }}</b>
+                                <b>Total de operaciones registradas en el sistema: {{ iv_mañana.total_mov }}</b><br>
+                                <b>Total de recuento de sistema: ${{ iv_mañana.total_imp }}</b>
                             </div>
                         </div>
                     </div>
@@ -124,9 +134,4 @@
 
 {% block more-scripts %}
     <script src="{% static 'js/arqueo_caja.js' %}"></script>
-    <script>
-        $(':input[type=number]').on('mousewheel', function(e){
-            e.preventDefault();
-        });
-    </script>
 {% endblock %}
