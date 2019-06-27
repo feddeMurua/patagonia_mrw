@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     url(r'^$', lista_reinspeccion, name='lista_reinspecciones'),
+    url(r'^datatable_preloader$', datatable_preloader, name='datatable_preloader'),
     url(r'^nueva$', alta_reinspeccion, name='nueva_reinspeccion'),
     url(r'^calculo_importe/(?P<kg>\w+)$', calculo_importe_json, name='calculo_importe'),
     url(r'^nueva_cc$', alta_reinspeccion_cc, name='nueva_reinspeccion_cc'),

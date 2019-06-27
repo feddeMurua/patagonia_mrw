@@ -25,19 +25,13 @@
                 </div>
             </div>
             <div class="panel-body">
-                {% if listado %}
-                    <div class="container-fluid container-table">
-                        <table class="table table-list table-bordered table-striped" id="table-list">
-                            {% block tabla %}{% endblock %}
-                        </table>
-                    </div>
-                {% else %}
-                    <div id="table-empty" class="table-empty">
-                        <h3 class="table-empty-title"><span class="glyphicon glyphicon-exclamation-sign"></span>
-                            No se encontraron elementos
-                        </h3>
-                    </div>
-                {% endif %}
+
+                <div class="container-fluid container-table">
+                    <table class="table table-list table-bordered table-striped" id="table-list">
+                        {% block tabla %}{% endblock %}
+                    </table>
+                </div>
+
             </div>
             {% block panel-footer %}{% endblock %}
         </div>

@@ -13,6 +13,7 @@
         <a href="{% url 'reinspecciones:nueva_reinspeccion_cc' %}" class="btn btn-success">Nueva Reinspeccion a Cuenta Corriente</a>
         <a href="{% url 'reinspecciones:precios_reinspeccion' %}" class="btn btn-info">Precios Vigentes</a>
     {% endif %}
+    <a href="javascript:void(0);" onclick="fnClickAddRow();" class="btn btn-warning">Filtrar</a>
 {% endblock %}
 
 {% block tabla %}
@@ -48,4 +49,54 @@
             </tr>
         {% endfor %}
     </tbody>
+
+{% endblock %}
+
+{% block more-scripts %}
+
+  <script type="text/javascript">
+
+    var table = $("#table-list tbody");
+
+    function eventFired() {
+
+      var value = $('.dataTables_filter input').val();
+
+      $.ajax({
+          url: "{% url 'reinspecciones:datatable_preloader' %}",
+          method: "GET",
+          xhrFields: {
+              withCredentials: true
+          },
+          data: {
+            "filtro": value
+          },
+          success: function (data) {
+
+            $.each(data, function(key, value) {
+
+              var obj = JSON.parse(value);
+
+              $.each(obj, function(k, v) {
+                $('#table-list').dataTable().fnAddData( [
+              		v.fields.fecha,
+              		v.fields.turno,
+              		v.fields.certificado,
+              		v.fields.abastecedor,
+                  v.fields.origen,
+                  v.fields.total_kg,
+                  0] );
+              });
+            });
+          }
+      });
+    }
+
+    function fnClickAddRow() {
+      eventFired();
+      $('.dataTables_filter input').val('').keyup();
+    }
+
+  </script>
+
 {% endblock %}

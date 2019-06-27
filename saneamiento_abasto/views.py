@@ -225,7 +225,32 @@ REINSPECCIONES
 
 @login_required(login_url='login')
 def lista_reinspeccion(request):
-    return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': Reinspeccion.objects.all()})
+    #list = Reinspeccion.objects.all().order_by('id')[0:10]
+    list = None
+    return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': list})
+
+
+def datatable_preloader(request):
+    #3203
+    from django.core import serializers
+
+    abastecedor = request.GET.get('filtro')
+
+    data = '0'
+
+    if abastecedor:
+        data = serializers.serialize('json', Reinspeccion.objects.filter(abastecedor__responsable__nombre__icontains=abastecedor)\
+                    .order_by('id')[0:10],\
+                     fields=('fecha', 'turno','certificado', 'abastecedor', \
+                            'origen', 'total_kg'))
+
+    print("----------------")
+    print(data)
+    print("----------------")
+
+    response = {'listado': data}
+    return JsonResponse(response)
+
 
 
 @login_required(login_url='login')
