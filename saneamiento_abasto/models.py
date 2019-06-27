@@ -8,6 +8,7 @@ from parte_diario_caja import models as pd_m
 from personas import models as m
 from .choices import *
 
+
 def calculo_importe(total_kg):
     precios = ReinspeccionPrecios.objects.get()
     monto = precios.precio_min

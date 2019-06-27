@@ -612,8 +612,20 @@ def modificacion_vehiculo(request, pk):
 
 
 @login_required(login_url='login')
+def pdf_desinfecciones(request, nro):
+    template = get_template('vehiculo/pdf_desinfecciones.html')
+    vehiculo = Vehiculo.objects.get(nro=nro)
+    context = {'vehiculo': vehiculo, 'title': 'Vehiculo N°'}
+    rendered = template.render(context)
+    pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=' + str("Vehiculo_N°_" + str(nro))
+    return response
+
+
+@login_required(login_url='login')
 def pdf_vehiculo(request, nro):
-    template = get_template('vehiculo/vehiculo_pdf.html')
+    template = get_template('vehiculo/pdf_vehiculo.html')
     vehiculo = Vehiculo.objects.get(nro=nro)
     context = {'vehiculo': vehiculo, 'title': 'Vehiculo N°'}
     rendered = template.render(context)

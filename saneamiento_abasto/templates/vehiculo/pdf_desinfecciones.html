@@ -1,0 +1,37 @@
+{% load staticfiles %}
+
+{% block extra_style %}
+    <title>{{ title }}</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: 108mm 216mm;
+            margin: 5px;
+        }
+        .year {
+            margin-left: 65px;
+            text-align: center;
+            font-size: 16px;
+        }
+        p {
+            font-size: 9px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <div class="year"><b>{% now 'Y' %}</b></div>
+            <br><br><br><br><br>
+            {% if vehiculo.tipo_vehiculo == 'TSA' %}
+                <div style="margin-left: 120px; font-size: 16px"><b>____________ ____________</b></div>
+            {% else %}
+                <div style="margin-left: 30px; font-size: 16px"><b>__________</b><b style="margin-left: 115px;">____________</b></div>
+            {% endif %}
+            <p style="margin-left: 80px;"><b>{{ vehiculo.modelo.nombre }}</b><b style="margin-left: 60px;">{{ vehiculo.modelo.marca }}</b></p>
+            <p style="margin-left: 80px;"><b>{{ vehiculo.dominio }}</b></p>
+            <p style="margin-left: 95px;"><b>{{ vehiculo.titular }}</b></p>
+        </div>
+    </div>
+{% endblock %}
