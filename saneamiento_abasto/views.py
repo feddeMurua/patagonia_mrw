@@ -191,17 +191,17 @@ def abonar_certificado(request, pk):
     if delta > 5:
         importe += (importe * 0.008 * (delta - 5))
     if request.method == 'POST':
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         periodo.pagado = True
         servicio = "Cancelacion de deuda en Cuenta Corriente"
         if request.POST['optradio'] == 'previa':
-            if detalle_mov_form.is_valid():
-                periodo.save()
-                detalle_mov = detalle_mov_form.save(commit=False)
-                detalle_mov.completar_monto(importe, servicio, periodo.cc)
-                log_crear(request.user.id, periodo.cc, servicio)
-                return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
+            periodo.save()
+            nro_ingreso = int(request.POST['selected_mov'])
+            movimiento = pd_m.MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
+            detalle_mov = pd_m.DetalleMovimiento.objects.create(movimiento=movimiento, importe=0)
+            detalle_mov.completar_monto(importe, servicio, periodo.cc)
+            log_crear(request.user.id, periodo.cc, servicio)
+            return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
         else:
             if mov_form.is_valid():
                 periodo.save()
@@ -211,10 +211,8 @@ def abonar_certificado(request, pk):
                 log_crear(request.user.id, periodo.cc, servicio)
                 return HttpResponseRedirect(reverse('cuentas_corrientes:periodos_cc', args=[periodo.cc.pk]))
     else:
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'cuentaCorriente/abonar_certificado.html', {'periodo': periodo, 'atraso': delta - 5,
-                                                                       'detalle_mov_form': detalle_mov_form,
                                                                        'importe': importe, 'mov_form': mov_form})
 
 
@@ -232,7 +230,6 @@ def lista_reinspeccion(request):
 def alta_reinspeccion(request):
     if request.method == 'POST':
         form = ReinspeccionForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         servicio = 'Reinspeccion Veterinaria'
         if form.is_valid():
@@ -241,11 +238,12 @@ def alta_reinspeccion(request):
             reinspeccion.save()
             form.save_m2m()
             if request.POST['optradio'] == 'previa':
-                if detalle_mov_form.is_valid():
-                    detalle_mov = detalle_mov_form.save(commit=False)
-                    detalle_mov.completar_monto(reinspeccion.importe, servicio, reinspeccion)
-                    log_crear(request.user.id, reinspeccion, servicio)
-                    return redirect('reinspecciones:lista_reinspecciones')
+                nro_ingreso = int(request.POST['selected_mov'])
+                movimiento = pd_m.MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
+                detalle_mov = pd_m.DetalleMovimiento.objects.create(movimiento=movimiento, importe=0)
+                detalle_mov.completar_monto(reinspeccion.importe, servicio, reinspeccion)
+                log_crear(request.user.id, reinspeccion, servicio)
+                return redirect('reinspecciones:lista_reinspecciones')
             else:
                 if mov_form.is_valid():
                     mov = mov_form.save()
@@ -255,10 +253,8 @@ def alta_reinspeccion(request):
                     return redirect('reinspecciones:lista_reinspecciones')
     else:
         form = ReinspeccionForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                                   'mov_form': mov_form})
+    return render(request, 'reinspeccion/reinspeccion_form.html', {'form': form, 'mov_form': mov_form})
 
 
 @login_required(login_url='login')
@@ -533,12 +529,12 @@ VEHICULO
 @login_required(login_url='login')
 def get_rubros_json(request, id_categoria):
     return JsonResponse({
-                            'Categoria_A': CATEGORIA_A,
-                            'Categoria_B': CATEGORIA_B,
-                            'Categoria_C': CATEGORIA_C,
-                            'Categoria_D': CATEGORIA_D,
-                            'Categoria_E': CATEGORIA_E
-                        }.get(id_categoria, None))
+        'Categoria_A': CATEGORIA_A,
+        'Categoria_B': CATEGORIA_B,
+        'Categoria_C': CATEGORIA_C,
+        'Categoria_D': CATEGORIA_D,
+        'Categoria_E': CATEGORIA_E
+    }.get(id_categoria, None))
 
 
 @login_required(login_url='login')
@@ -670,7 +666,6 @@ def nueva_desinfeccion(request, pk_vehiculo):
     vehiculo = Vehiculo.objects.get(pk=pk_vehiculo)
     if request.method == 'POST':
         form = DesinfeccionForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if form.is_valid():
             desinfeccion = form.save(commit=False)
@@ -684,14 +679,15 @@ def nueva_desinfeccion(request, pk_vehiculo):
                 servicio = pd_m.Servicio.objects.get(nombre="Desinfeccion: Taxi, Remisse, Escolar, TSA")
             importe = servicio.importe * 2 if estado == 'Atrasado' else servicio.importe
             if request.POST['optradio'] == 'previa':
-                if detalle_mov_form.is_valid():
-                    detalle_mov = detalle_mov_form.save(commit=False)
-                    detalle_mov.importe = importe
-                    detalle_mov.descripcion = str(servicio) + " | N° " + str(desinfeccion.id)
-                    detalle_mov.servicio = str(servicio)
-                    detalle_mov.save()
-                    log_crear(request.user.id, desinfeccion, 'Desinfeccion')
-                    return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=[pk_vehiculo]))
+                nro_ingreso = int(request.POST['selected_mov'])
+                movimiento = pd_m.MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
+                detalle_mov = pd_m.DetalleMovimiento.objects.create(movimiento=movimiento, importe=0)
+                detalle_mov.importe = importe
+                detalle_mov.descripcion = str(servicio) + " | N° " + str(desinfeccion.id)
+                detalle_mov.servicio = str(servicio)
+                detalle_mov.save()
+                log_crear(request.user.id, desinfeccion, 'Desinfeccion')
+                return HttpResponseRedirect(reverse('desinfecciones:lista_desinfecciones', args=[pk_vehiculo]))
             else:
                 if mov_form.is_valid():
                     mov = mov_form.save()
@@ -705,11 +701,9 @@ def nueva_desinfeccion(request, pk_vehiculo):
 
     else:
         form = DesinfeccionForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
     return render(request, 'desinfeccion/desinfeccion_form.html', {'estado': estado, 'vehiculo': vehiculo,
-                                                                   'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                                   'mov_form': mov_form})
+                                                                   'form': form, 'mov_form': mov_form})
 
 
 @login_required(login_url='login')
@@ -748,25 +742,22 @@ def lista_controles_plaga(request):
 def alta_control_plaga(request):
     if request.method == 'POST':
         form = ControlDePlagaForm(request.POST)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         pago_diferido_form = PagoDiferidoForm(request.POST)
         if form.is_valid():
             servicio = "Fumigacion, desinfeccion, desratizacion"
             if request.POST['radio_tipo_pago'] == 'normal':
                 if request.POST['optradio'] == 'previa':
-                    if detalle_mov_form.is_valid():
-                        control_plaga = form.save()
-                        VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'],
-                                      control=control_plaga).save()
-                        pd_v.movimiento_previo(request, detalle_mov_form, servicio, control_plaga,
-                                               'Control de plagas')
-                        return redirect('controles_plagas:lista_controles_plagas')
+                    control_plaga = form.save()
+                    VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'], control=control_plaga).save()
+                    nro_ingreso = int(request.POST['selected_mov'])
+                    movimiento = pd_m.MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
+                    pd_v.movimiento_previo(request, movimiento, servicio, control_plaga, 'Control de plagas')
+                    return redirect('controles_plagas:lista_controles_plagas')
                 else:
                     if mov_form.is_valid():
                         control_plaga = form.save()
-                        VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'],
-                                      control=control_plaga).save()
+                        VisitaControl(fecha=form.cleaned_data['fecha_prox_visita'], control=control_plaga).save()
                         pd_v.nuevo_movimiento(request, mov_form, servicio, control_plaga, 'Control de plagas')
                         return redirect('controles_plagas:lista_controles_plagas')
             else:
@@ -781,12 +772,10 @@ def alta_control_plaga(request):
                     return redirect('controles_plagas:lista_controles_plagas')
     else:
         form = ControlDePlagaForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
         pago_diferido_form = PagoDiferidoForm
-    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                                    'pago_diferido_form': pago_diferido_form,
-                                                                    'mov_form': mov_form})
+    return render(request, 'controlPlaga/control_plaga_form.html', {'form': form, 'mov_form': mov_form,
+                                                                    'pago_diferido_form': pago_diferido_form})
 
 
 class DetalleControlPlaga(LoginRequiredMixin, DetailView):
@@ -822,19 +811,19 @@ def pago_diferido(request, pk):
     control = ControlDePlaga.objects.get(pk=pk)
     pago = PagoDiferido.objects.get(control=control)
     if request.method == 'POST':
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if request.POST['optradio'] == 'previa':
-            if detalle_mov_form.is_valid():
-                detalle_mov = detalle_mov_form.save(commit=False)
-                detalle_mov.descripcion = 'Fumigacion, desinfeccion, desratizacion' + " | N° " + str(control.id)
-                detalle_mov.importe = pago.monto
-                detalle_mov.servicio = 'Fumigacion, desinfeccion, desratizacion'
-                detalle_mov.save()
-                control.pagado = True
-                control.save()
-                log_crear(request.user.id, pago, 'Pago de Control de Plagas')
-                return redirect('controles_plagas:lista_controles_plagas')
+            nro_ingreso = int(request.POST['selected_mov'])
+            movimiento = pd_m.MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
+            detalle_mov = pd_m.DetalleMovimiento.objects.create(movimiento=movimiento, importe=0)
+            detalle_mov.descripcion = 'Fumigacion, desinfeccion, desratizacion' + " | N° " + str(control.id)
+            detalle_mov.importe = pago.monto
+            detalle_mov.servicio = 'Fumigacion, desinfeccion, desratizacion'
+            detalle_mov.save()
+            control.pagado = True
+            control.save()
+            log_crear(request.user.id, pago, 'Pago de Control de Plagas')
+            return redirect('controles_plagas:lista_controles_plagas')
         else:
             if mov_form.is_valid():
                 mov = mov_form.save()
@@ -848,10 +837,8 @@ def pago_diferido(request, pk):
                 log_crear(request.user.id, pago, 'Pago de Control de Plagas')
                 return redirect('controles_plagas:lista_controles_plagas')
     else:
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'controlPlaga/pago_control_form.html', {'detalle_mov_form': detalle_mov_form,
-                                                                   'mov_form': mov_form})
+    return render(request, 'controlPlaga/pago_control_form.html', {'mov_form': mov_form})
 
 
 def visitas_control_plaga(request, pk):
@@ -866,8 +853,7 @@ def mod_visita_control_plaga(request, pk):
         form = ModificacionVisitaControlForm(request.POST, instance=visita)
         if form.is_valid():
             log_modificar(request.user.id, form.save(), 'Visita de Control de Plagas')
-            return HttpResponseRedirect(reverse('controles_plagas:visitas_control_plaga',
-                                                args=[visita.control.pk]))
+            return HttpResponseRedirect(reverse('controles_plagas:visitas_control_plaga', args=[visita.control.pk]))
     else:
         form = ModificacionVisitaControlForm(instance=visita)
     return render(request, 'controlPlaga/control_plaga_visita_form.html', {'form': form, 'visita': visita})

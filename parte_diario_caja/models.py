@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.utils import timezone
+from datetime import datetime
 from django.db import models
 from personas import models as m
 from .choices import *
@@ -24,7 +25,8 @@ class Servicio(models.Model):
 
 
 class MovimientoDiario(models.Model):
-    fecha = models.DateTimeField(default=timezone.now)
+    fecha = models.DateField(default=timezone.now)
+    hora = models.TimeField(default=datetime.now())
     titular = models.ForeignKey(m.PersonaGenerica, on_delete=models.CASCADE)
     nro_ingreso = models.BigIntegerField(unique=True)
     forma_pago = models.CharField(max_length=50, choices=TipoPago, default='Efectivo')
@@ -32,6 +34,9 @@ class MovimientoDiario(models.Model):
 
     def __str__(self):
         return "N° Ingresos Varios: %s - %s" % (self.nro_ingreso, self.titular)
+
+    def to_json(self):
+        return {'nro_ingreso': self.nro_ingreso, 'titular': self.titular.to_json()}
 
 
 class DetalleMovimiento(models.Model):
@@ -57,7 +62,8 @@ class DetalleMovimiento(models.Model):
 
 
 class ArqueoDiario(models.Model):
-    fecha = models.DateTimeField(default=timezone.now)
+    fecha = models.DateField(default=timezone.now)
+    hora = models.TimeField(default=timezone.now)
     turno = models.CharField(max_length=10, null=True, choices=Turno, default='Mañana')
     nro_planilla = models.IntegerField(validators=[MinValueValidator(1)], unique=True)
     mil = models.IntegerField(default=0, validators=[MinValueValidator(0)])
@@ -98,4 +104,8 @@ class ArqueoDiario(models.Model):
         self.sub_cheque_sis = datos['cheque_imp']
         self.mov_total_sistema = datos['total_mov']
         self.imp_total_sistema = datos['total_imp']
+        self.realizado = True
         self.save()
+
+    class Meta:
+        unique_together = ("fecha", "turno")

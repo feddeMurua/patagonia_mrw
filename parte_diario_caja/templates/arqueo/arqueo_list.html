@@ -8,15 +8,14 @@
 {% block panel-title %}Arqueos diarios{% endblock %}
 
 {% block btn-nuevo %}
-    {% if not realizado %}
-        <a href="{% url 'arqueo:nuevo_arqueo' %}" class="btn btn-primary btn-create">Realizar Arqueo Diario</a>
-    {% endif %}
+    <a href="{% url 'arqueo:nuevo_arqueo' %}" class="btn btn-primary btn-create">Realizar arqueo diario</a>
 {% endblock %}
 
 {% block tabla %}
     <thead>
         <tr>
             <th>Fecha</th>
+            <th>Turno</th>
             <th>N° de Planilla</th>
             <th>Total</th>
             <th><em class="glyphicon glyphicon-cog"></em></th>
@@ -26,10 +25,12 @@
         {% for arqueo in listado %}
             <tr>
                 <td>{{ arqueo.fecha }}</td>
+                <td>{{ arqueo.turno }}</td>
                 <td>{{ arqueo.nro_planilla }}</td>
                 <td>${{ arqueo.total_manual }}</td>
                 <td>
                     <a class="btn btn-warning" data-toggle="tooltip" title="Detalle" href="{% url 'arqueo:detalle_arqueo' arqueo.pk %}"><em class="glyphicon glyphicon-eye-open"></em></a>
+                    <a class="btn btn-default" data-toggle="tooltip" title="Imprimir planilla" href="{% url 'arqueo:arqueo_pdf' arqueo.nro_planilla %}"><em class="glyphicon glyphicon-print"></em></a>
                 </td>
             </tr>
         {% endfor %}

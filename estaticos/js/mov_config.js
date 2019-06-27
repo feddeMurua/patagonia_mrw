@@ -1,6 +1,5 @@
 let previa = $('.previa'),
 nueva = $('.nueva'),
-movimiento = $('#id_movimiento'),
 titular = $('#id_titular'),
 forma_pago = $('#id_forma_pago'),
 nro_cheque = $('#id_nro_cheque'),
@@ -9,7 +8,7 @@ nro_ingreso = $('#id_nro_ingreso');
 forma_pago.change(hideNroCheque);
 hideNroCheque();
 
-var tipo_factura = $("input[name='optradio']:checked").val();
+let tipo_factura = $("input[name='optradio']:checked").val();
 hideFields();
 
 $('#radio_options').change(function() {

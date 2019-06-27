@@ -1,21 +1,9 @@
-$(':input[type=number]').on('mousewheel', function(e){
-            e.preventDefault();
-        });
+$(':input[type=number]').on('mousewheel', function(e){e.preventDefault();});
 
 updateSubs();
 
 let cant_efectivo_manual = $('.cant_efectivo_manual'),
 sub_otros_manual = $('.sub_otros_manual');
-
-$('#id_turno').change(function () {
-    if ($(this).val() === "Mañana") {
-        $("body").html().replace(/iv_tarde/g,'iv_mañana');
-    } else {
-        $("body").html().replace(/iv_mañana/g,'iv_tarde');
-    }
-    location.reload()
-});
-
 
 cant_efectivo_manual.keyup(updateSubs);
 sub_otros_manual.keyup(updateTotal);

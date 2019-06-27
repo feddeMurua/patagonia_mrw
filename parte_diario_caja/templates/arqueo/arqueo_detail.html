@@ -7,149 +7,151 @@
 
 {% block url-volver %}{% url 'arqueo:lista_arqueos' %}{% endblock %}
 
-{% block detail %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col col-md-6">
-                    <h3 class="panel-title">Recuento Manual</h3>
+{% block content %}
+    <div class="container-fluid col-md-12">
+        <div class="panel panel-info panel-table">
+            <div class="panel panel-default" style="margin: 15px">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col col-md-6">
+                            <h3 class="panel-title">Recuento Manual</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Valor</th>
+                                <th>Cantidad de Operaciones</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Billetes de mil</td>
+                                <td>{{ datos.arqueo.mil }}</td>
+                                <td>${{ datos.mil }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de quinientos</td>
+                                <td>{{ datos.arqueo.quinientos }}</td>
+                                <td>${{ datos.quinientos }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de doscientos</td>
+                                <td>{{ datos.arqueo.doscientos }}</td>
+                                <td>${{ datos.doscientos }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de cien</td>
+                                <td>{{ datos.arqueo.cien }}</td>
+                                <td>${{ datos.cien }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de cincuenta</td>
+                                <td>{{ datos.arqueo.b_cincuenta }}</td>
+                                <td>${{ datos.b_cincuenta }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de veinte</td>
+                                <td>{{ datos.arqueo.veinte }}</td>
+                                <td>${{ datos.veinte }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de diez</td>
+                                <td>{{ datos.arqueo.diez }}</td>
+                                <td>${{ datos.diez }}</td>
+                            </tr>
+                            <tr>
+                                <td>Billetes de cinco</td>
+                                <td>{{ datos.arqueo.cinco }}</td>
+                                <td>${{ datos.cinco }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de dos</td>
+                                <td>{{ datos.arqueo.m_dos }}</td>
+                                <td>${{ datos.m_dos }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de uno</td>
+                                <td>{{ datos.arqueo.uno }}</td>
+                                <td>${{ datos.uno }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de cincuenta</td>
+                                <td>{{ datos.arqueo.m_cincuenta }}</td>
+                                <td>${{ datos.m_cincuenta }}</td>
+                            </tr>
+                            <tr>
+                                <td>Monedas de veinticinco</td>
+                                <td>{{ datos.arqueo.veinticinco }}</td>
+                                <td>${{ datos.veinticinco }}</td>
+                            </tr>
+                            <tr>
+                                <td>Débito/Crédito</td>
+                                <td>{{ datos.arqueo.tarjeta_cant }}</td>
+                                <td>${{ datos.arqueo.tarjeta_sub }}</td>
+                            </tr>
+                            <tr>
+                                <td>Cheques</td>
+                                <td>{{ datos.arqueo.cheques_cant }}</td>
+                                <td>${{ datos.arqueo.cheques_sub }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>TOTAL DE RECUENTO MANUAL:</b></td>
+                                <td></td>
+                                <td><b>${{ datos.arqueo.total_manual }}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tipo de Valor</th>
-                        <th>Cantidad de Operaciones</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Billetes de mil</td>
-                        <td>{{ datos.arqueo.mil }}</td>
-                        <td>${{ datos.mil }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de quinientos</td>
-                        <td>{{ datos.arqueo.quinientos }}</td>
-                        <td>${{ datos.quinientos }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de doscientos</td>
-                        <td>{{ datos.arqueo.doscientos }}</td>
-                        <td>${{ datos.doscientos }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de cien</td>
-                        <td>{{ datos.arqueo.cien }}</td>
-                        <td>${{ datos.cien }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de cincuenta</td>
-                        <td>{{ datos.arqueo.b_cincuenta }}</td>
-                        <td>${{ datos.b_cincuenta }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de veinte</td>
-                        <td>{{ datos.arqueo.veinte }}</td>
-                        <td>${{ datos.veinte }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de diez</td>
-                        <td>{{ datos.arqueo.diez }}</td>
-                        <td>${{ datos.diez }}</td>
-                    </tr>
-                    <tr>
-                        <td>Billetes de cinco</td>
-                        <td>{{ datos.arqueo.cinco }}</td>
-                        <td>${{ datos.cinco }}</td>
-                    </tr>
-                    <tr>
-                        <td>Monedas de dos</td>
-                        <td>{{ datos.arqueo.m_dos }}</td>
-                        <td>${{ datos.m_dos }}</td>
-                    </tr>
-                    <tr>
-                        <td>Monedas de uno</td>
-                        <td>{{ datos.arqueo.uno }}</td>
-                        <td>${{ datos.uno }}</td>
-                    </tr>
-                    <tr>
-                        <td>Monedas de cincuenta</td>
-                        <td>{{ datos.arqueo.m_cincuenta }}</td>
-                        <td>${{ datos.m_cincuenta }}</td>
-                    </tr>
-                    <tr>
-                        <td>Monedas de veinticinco</td>
-                        <td>{{ datos.arqueo.veinticinco }}</td>
-                        <td>${{ datos.veinticinco }}</td>
-                    </tr>
-                    <tr>
-                        <td>Débito/Crédito</td>
-                        <td>{{ datos.arqueo.tarjeta_cant }}</td>
-                        <td>${{ datos.arqueo.tarjeta_sub }}</td>
-                    </tr>
-                    <tr>
-                        <td>Cheques</td>
-                        <td>{{ datos.arqueo.cheques_cant }}</td>
-                        <td>${{ datos.arqueo.cheques_sub }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>TOTAL DE RECUENTO MANUAL:</b></td>
-                        <td></td>
-                        <td><b>${{ datos.arqueo.total_manual }}</b></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col col-md-6">
-                    <h3 class="panel-title">Recuento del Sistema</h3>
+            <div class="panel panel-default" style="margin: 15px">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col col-md-6">
+                            <h3 class="panel-title">Recuento del Sistema</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Valor</th>
+                                <th>Cantidad de Operaciones</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Efectivo</td>
+                                <td>{{ datos.arqueo.mov_efectivo_sis }}</td>
+                                <td>${{ datos.arqueo.sub_efectivo_sis }}</td>
+                            </tr>
+                            <tr>
+                                <td>Débito/Crédito</td>
+                                <td>{{ datos.arqueo.mov_tarjeta_sis }}</td>
+                                <td>${{ datos.arqueo.sub_tarjeta_sis }}</td>
+                            </tr>
+                            <tr>
+                                <td>Cheques</td>
+                                <td>{{ datos.arqueo.mov_cheque_sis }}</td>
+                                <td>${{ datos.arqueo.sub_cheque_sis }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>TOTAL DE RECUENTO DE SISTEMA:</b></td>
+                                <td></td>
+                                <td><b>${{ datos.arqueo.imp_total_sistema }}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tipo de Valor</th>
-                        <th>Cantidad de Operaciones</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Efectivo</td>
-                        <td>{{ datos.arqueo.mov_efectivo_sis }}</td>
-                        <td>${{ datos.arqueo.sub_efectivo_sis }}</td>
-                    </tr>
-                    <tr>
-                        <td>Débito/Crédito</td>
-                        <td>{{ datos.arqueo.mov_tarjeta_sis }}</td>
-                        <td>${{ datos.arqueo.sub_tarjeta_sis }}</td>
-                    </tr>
-                    <tr>
-                        <td>Cheques</td>
-                        <td>{{ datos.arqueo.mov_cheque_sis }}</td>
-                        <td>${{ datos.arqueo.sub_cheque_sis }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>TOTAL DE RECUENTO DE SISTEMA:</b></td>
-                        <td></td>
-                        <td><b>${{ datos.arqueo.imp_total_sistema }}</b></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="panel-footer">
+                <a role="button" class="btn btn-primary" href="{% url 'arqueo:lista_arqueos' %}">Regresar</a>
+            </div>
         </div>
     </div>
-{% endblock %}
-
-{% block btn-footer %}
-    <a role="button" class="btn btn-warning" href="{% url 'arqueo:arqueo_pdf' datos.arqueo.nro_planilla %}" target="_blank" >Imprimir planilla</a>
-    <a role="button" class="btn btn-primary" href="{% url 'arqueo:lista_arqueos' %}">Regresar</a>
 {% endblock %}

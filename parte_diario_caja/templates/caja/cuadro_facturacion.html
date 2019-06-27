@@ -1,62 +1,103 @@
+{% extends "base/base.html" %}
 {% load staticfiles bootstrap3 widget_tweaks %}
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Datos de Facturacion</h3>
-    </div>
-    <div class="panel-body">
-        <div id="radio_options">
-            <div class="radio">
-                <label><input type="radio" name="optradio" value="previa" checked>Factura previa</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="optradio" value="nueva">Nueva factura</label>
-            </div>
-        </div>
-        <br>
-        <div class="previa">
-            <div class="form-group">
-                <label>Factura</label>
-                {{ detalle_mov_form.movimiento|add_class:'form-control' }}
-                {% for error in detalle_mov_form.movimiento.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="nueva">
-            <div class="form-group">
-                <label>Titular</label>
-                {{ mov_form.titular }}
-            </div>
-            <div class="form-group">
-                <label>N° de ingresos varios</label>
-                {{ mov_form.nro_ingreso|add_class:'form-control' }}
-                {% for error in mov_form.nro_ingreso.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <label>Forma de pago</label>
-                {{ mov_form.forma_pago }}
-            </div>
-            <div class="form-group">
-                <label>N° de cheque</label>
-                {{ mov_form.nro_cheque|add_class:'form-control' }}
-                {% for error in mov_form.nro_cheque.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        {% for field in servicio_form %}
-            <div class="form-group">
-                <label>{{ field.label }}</label>
-                {{ field|add_class:'form-control' }}
-                {% for error in field.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% endfor %}
-    </div>
-</div>
+{% block no-particles %}{% endblock %}
+{% block no-navbar %}{% endblock %}
+{% block no-header %}{% endblock %}
 
-<script src="{% static 'js/mov_config.js' %}"></script>
+{% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Datos de Facturacion</h3>
+        </div>
+        <div class="panel-body">
+            <div id="radio_options">
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="previa" checked>Factura previa</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="nueva">Nueva factura</label>
+                </div>
+            </div>
+            <br>
+            <div class="previa">
+                <div class="input-group">
+                    <label for="id_movimiento"></label>
+                    <input id="id_movimiento" class="form-control" placeholder="N° de ingresos varios">
+                    <span class="input-group-btn">
+                        <button id="id_btn-movimiento" class="btn btn-default" type="button">Buscar</button>
+                    </span>
+                </div><br>
+                <div class="form-group" id="id_selected_grp" hidden>
+                    <label for="id_sel_mov">Seleccione la opción deseada</label>
+                    <select name="selected_mov" id="id_sel_mov"></select>
+                </div>
+            </div>
+            <div class="nueva">
+                <div class="form-group">
+                    <label>Titular</label>
+                    {{ mov_form.titular }}
+                </div>
+                <div class="form-group">
+                    <label>N° de ingresos varios</label>
+                    {{ mov_form.nro_ingreso|add_class:'form-control' }}
+                    {% for error in mov_form.nro_ingreso.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label>Forma de pago</label>
+                    {{ mov_form.forma_pago }}
+                </div>
+                <div class="form-group">
+                    <label>N° de cheque</label>
+                    {{ mov_form.nro_cheque|add_class:'form-control' }}
+                    {% for error in mov_form.nro_cheque.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% for field in servicio_form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    {% for error in field.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block no-select2 %}{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/mov_config.js' %}"></script>
+    <script>
+        $('#id_btn-movimiento').click(function () {
+            $('.msg').remove();
+            let term = $("#id_movimiento").val();
+            if ($.isNumeric(term) && term >= 0) {
+                $.ajax({
+                    url: '/caja/get_movimientos/' + term,
+                    type: 'GET',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function(data) {
+                        $('#id_selected_grp').removeAttr('hidden');
+                        let movimiento = $('#id_sel_mov'),
+                        movimientos = data['movimientos'];
+                        movimiento.empty().trigger('change');
+                        $.each(movimientos, function(key, opt) {
+                            movimiento.append(new Option(opt['nro_ingreso'] + ' - ' + opt['titular']['nombre'], opt['nro_ingreso'], false, false)).trigger('change');
+                        })
+                    }
+                })
+            } else {
+                $('.input-group').after('<b class="msg" style="color: red">Por favor, ingrese un valor numérico, mayor a 0</b>')
+            }
+        });
+    </script>
+{% endblock %}

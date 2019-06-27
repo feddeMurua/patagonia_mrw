@@ -1,6 +1,8 @@
+$(':input[type=number]').on('mousewheel', function(e){e.preventDefault();});
+
 updateSubs();
 
-var cant_efectivo_manual = $('.cant_efectivo_manual'),
+let cant_efectivo_manual = $('.cant_efectivo_manual'),
 sub_otros_manual = $('.sub_otros_manual');
 
 cant_efectivo_manual.keyup(updateSubs);
@@ -27,7 +29,7 @@ function updateSubs() {
 }
 
 function updateTotal() {
-    var sum = 0;
+    let sum = 0;
     $('.sub_valor_manual').each(function() {
         sum += +$(this).text();
     });

@@ -9,6 +9,7 @@ from .models import *
 from desarrollo_patagonia.utils import *
 from parte_diario_caja import forms as pd_f
 from parte_diario_caja import views as pd_v
+from parte_diario_caja import models as pd_m
 from desarrollo_patagonia import forms as dp_f
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -245,7 +246,6 @@ def img_to_base64(data, usr):
 def alta_libreta(request):
     if request.method == 'POST':
         form = LibretaForm(request.POST, request.FILES)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if form.is_valid():
             libreta = form.save(commit=False)
@@ -256,11 +256,11 @@ def alta_libreta(request):
                 libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
             libreta.pendiente = True
             if request.POST['optradio'] == 'previa':
-                if detalle_mov_form.is_valid():
-                    libreta.save()
-                    pd_v.movimiento_previo(request, detalle_mov_form, "Alta de libreta sanitaria", libreta,
-                                           'Libreta Sanitaria')
-                    return redirect('libretas:lista_libretas')
+                libreta.save()
+                nro_ingreso = int(request.POST['selected_mov'])
+                movimiento = pd_m.MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
+                pd_v.movimiento_previo(request, movimiento, "Alta de libreta sanitaria", libreta, 'Libreta Sanitaria')
+                return redirect('libretas:lista_libretas')
             else:
                 if mov_form.is_valid():
                     libreta.save()
@@ -269,10 +269,8 @@ def alta_libreta(request):
                     return redirect('libretas:lista_libretas')
     else:
         form = LibretaForm
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'mov_form': mov_form})
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'mov_form': mov_form})
 
 
 @login_required(login_url='login')
@@ -341,7 +339,6 @@ def renovar_libreta(request, pk):
     libreta = LibretaSanitaria.objects.get(pk=pk)
     if request.method == 'POST':
         form = RenovacionLibretaForm(request.POST, request.FILES, instance=libreta)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm(request.POST)
         mov_form = pd_f.MovimientoDiarioForm(request.POST)
         if form.is_valid():
             libreta = form.save(commit=False)
@@ -354,11 +351,12 @@ def renovar_libreta(request, pk):
                     libreta.foto = img_to_base64(request.POST['foto'], libreta.persona.dni)
             libreta.pendiente = True
             if request.POST['optradio'] == 'previa':
-                if detalle_mov_form.is_valid():
-                    libreta.save()
-                    pd_v.movimiento_previo(request, detalle_mov_form, "Renovacion de libreta sanitaria", libreta,
-                                           'Renovacion de Libreta Sanitaria')
-                    return redirect('libretas:lista_libretas')
+                libreta.save()
+                nro_ingreso = int(request.POST['selected_mov'])
+                movimiento = pd_m.MovimientoDiario.objects.get(nro_ingreso=nro_ingreso)
+                pd_v.movimiento_previo(request, movimiento, "Renovacion de libreta sanitaria", libreta,
+                                       'Renovacion de Libreta Sanitaria')
+                return redirect('libretas:lista_libretas')
             else:
                 if mov_form.is_valid():
                     libreta.save()
@@ -367,10 +365,9 @@ def renovar_libreta(request, pk):
                     return redirect('libretas:lista_libretas')
     else:
         form = RenovacionLibretaForm(instance=libreta)
-        detalle_mov_form = pd_f.DetalleMovimientoDiarioForm
         mov_form = pd_f.MovimientoDiarioForm
-    return render(request, 'libreta/libreta_form.html', {'form': form, 'detalle_mov_form': detalle_mov_form,
-                                                         'mov_form': mov_form, 'libreta': libreta, 'renovacion': True})
+    return render(request, 'libreta/libreta_form.html', {'form': form, 'mov_form': mov_form, 'libreta': libreta,
+                                                         'renovacion': True})
 
 
 @login_required(login_url='login')

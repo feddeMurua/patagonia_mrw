@@ -173,12 +173,12 @@
         });
 
         function refresh_table(data){
-            var productos = data['productos'],
+            let productos = data['productos'],
             $tbody = $("table tbody");
             $tbody.children().remove();
-            for(var i = 0; i < productos.length; i++){
-                var producto = productos[i]['producto']['nombre'];
-                var row = "<tr align='center'>" +
+            for(let i = 0; i < productos.length; i++){
+                let producto = productos[i]['producto']['nombre'];
+                let row = "<tr align='center'>" +
                             "<td>" + producto + "</td>" +
                             "<td>" + productos[i]['kilo_producto'] + "</td>" +
                             "<td>" +
@@ -189,7 +189,7 @@
                         "</tr>";
                 $tbody.append(row);
             }
-            var total = "<tr align='center'>" +
+            let total = "<tr align='center'>" +
                             "<td><b>Total</b></td>" +
                             "<td colspan='2'>" + data['total_kg'] + "</td>" +
                         "</tr>";

@@ -67,6 +67,9 @@ class PersonaGenerica(PolymorphicModel):
     def __str__(self):
         return "%s" % self.nombre
 
+    def to_json(self):
+        return {'nombre': self.nombre}
+
 
 class PersonaJuridica(PersonaGenerica):
     cuit = models.CharField(unique=True, max_length=20)
@@ -74,6 +77,9 @@ class PersonaJuridica(PersonaGenerica):
     def __str__(self):
         datos = " - %s" % self.cuit
         return super(PersonaJuridica, self).__str__() + datos
+
+    def to_json(self):
+        return {'nombre': self.nombre}
 
 
 class PersonaFisica(PersonaGenerica):
@@ -93,6 +99,9 @@ class PersonaFisica(PersonaGenerica):
 
     class Meta:
         unique_together = ("tipo_dni", "dni")
+
+    def to_json(self):
+        return {'nombre': self.apellido + ", " + self.nombre}
 
 
 class RolActuante(models.Model):
