@@ -14,5 +14,6 @@ TipoPago = (
 
 Turno = (
     ('Manana', _("Mañana")),
-    ('Tarde', _("Tarde"))
+    ('Tarde', _("Tarde")),
+    ('Completo', _("Completo"))
 )

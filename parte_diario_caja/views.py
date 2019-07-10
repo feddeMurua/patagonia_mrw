@@ -2,8 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.core.urlresolvers import reverse
+from django.http import HttpResponse, JsonResponse
 from .forms import *
 from django.utils import timezone
 from desarrollo_patagonia.utils import *
@@ -26,17 +25,14 @@ MOVIMIENTO DIARIO
 def lista_movimientos(request):
     movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date()).order_by('nro_ingreso')
     fecha_form = DatePickerForm
+    fecha = timezone.now().date
     if request.method == 'POST':
         fecha_form = DatePickerForm(request.POST)
         if fecha_form.is_valid():
-            if request.POST.get("buscar"):
-                movimientos = MovimientoDiario.objects.filter(fecha=fecha_form.cleaned_data['fecha']).order_by(
-                    'nro_ingreso')
-            elif request.POST.get("imprimir"):
-                fecha = fecha_form.cleaned_data['fecha']
-                return HttpResponseRedirect(reverse('caja:parte_diario_pdf',
-                                                    kwargs={'anio': fecha.year, 'mes': fecha.month, 'dia': fecha.day}))
-    return render(request, 'caja/caja_list.html', {'listado': movimientos, 'fecha_form': fecha_form})
+            movimientos = MovimientoDiario.objects.filter(fecha=fecha_form.cleaned_data['fecha']).order_by(
+                'nro_ingreso')
+            fecha = fecha_form.cleaned_data['fecha']
+    return render(request, 'caja/caja_list.html', {'listado': movimientos, 'fecha_form': fecha_form, 'fecha': fecha})
 
 
 @login_required(login_url='login')
@@ -100,7 +96,7 @@ def nuevo_movimiento(request, form, servicio, obj, logname):
 
 
 def get_subtotales(detalles):
-    movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date())
+    movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date())  # Optimizar
     subtotales = {'efectivo': 0, 'tarjeta': 0, 'cheque': 0, 'total': 0}
     for movimiento in movimientos:
         if movimiento.forma_pago != 'Eximido':
@@ -126,13 +122,19 @@ def get_movimientos(request, term):
 
 
 @login_required(login_url='login')
-def pdf_parte_diario(request, anio, mes, dia):
+def pdf_parte_diario(request, anio, mes, dia, turno):
     template = get_template('caja/parte_diario_pdf.html')
     fecha = datetime.date(int(anio), int(mes), int(dia))
-    detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha).order_by('movimiento__nro_ingreso')
+    if turno == "Manana":
+        detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha, movimiento__hora__hour__lt=13)
+        turno = "Mañana"
+    elif turno == "Tarde":
+        detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha, movimiento__hora__hour__gte=13)
+    else:
+        detalles = DetalleMovimiento.objects.filter(movimiento__fecha=fecha)
     subtotales = get_subtotales(detalles)
-    context = {'title': 'Parte diario del dia ' + str(fecha.strftime('%d/%m/%Y')), 'detalles': detalles,
-               'subtotales': subtotales, 'fecha_maniana': fecha + relativedelta(days=1)}
+    context = {'title': 'Parte diario del dia ' + str(fecha.strftime('%d/%m/%Y')), 'detalles': detalles, 'turno': turno,
+               'subtotales': subtotales, 'fecha': fecha, 'fecha_maniana': fecha + relativedelta(days=1)}
     rendered = template.render(context)
     pdf_file = HTML(string=rendered, base_url=request.build_absolute_uri()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
@@ -147,16 +149,17 @@ ARQUEO DIARIO DE CAJA
 
 @login_required(login_url='login')
 def lista_arqueos(request):
-
     return render(request, 'arqueo/arqueo_list.html', {'listado': ArqueoDiario.objects.all()})
 
 
 @login_required(login_url='login')
 def get_iv(request, turno):
     if turno == "Manana":
-        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__lt=14)
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__lt=13)
+    elif turno == "Tarde":
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__gte=13)
     else:
-        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__gte=14)
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date())
     subtotales = {'tarjeta_mov': 0, 'tarjeta_imp': 0, 'cheque_mov': 0, 'cheque_imp': 0, 'efectivo_mov': 0,
                   'efectivo_imp': 0, 'total_mov': 0, 'total_imp': 0}
     if movimientos:
@@ -179,9 +182,11 @@ def get_iv(request, turno):
 
 def get_iv_f(turno):
     if turno == "Manana":
-        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__lt=14)
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__lt=13)
+    elif turno == "Tarde":
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__gte=13)
     else:
-        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date(), hora__hour__gte=14)
+        movimientos = MovimientoDiario.objects.filter(fecha=timezone.now().date())
     subtotales = {'tarjeta_mov': 0, 'tarjeta_imp': 0, 'cheque_mov': 0, 'cheque_imp': 0, 'efectivo_mov': 0,
                   'efectivo_imp': 0, 'total_mov': 0, 'total_imp': 0}
     if movimientos:
