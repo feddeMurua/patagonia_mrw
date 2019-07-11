@@ -225,30 +225,24 @@ REINSPECCIONES
 
 @login_required(login_url='login')
 def lista_reinspeccion(request):
-    #list = Reinspeccion.objects.all().order_by('id')[0:10]
-    list = None
-    return render(request, 'reinspeccion/reinspeccion_list.html', {'listado': list})
+    return render(request, 'reinspeccion/reinspeccion_list.html')
 
 
 def datatable_preloader(request):
-    #3203
-    from django.core import serializers
 
-    abastecedor = request.GET.get('filtro')
+    filtro = request.GET.get('filtro')
 
-    data = '0'
+    data = []
+    resul = []
 
-    if abastecedor:
-        data = serializers.serialize('json', Reinspeccion.objects.filter(abastecedor__responsable__nombre__icontains=abastecedor)\
-                    .order_by('id')[0:10],\
-                     fields=('fecha', 'turno','certificado', 'abastecedor', \
-                            'origen', 'total_kg'))
+    if filtro:
+        resul  =  Reinspeccion.objects.filter(abastecedor__responsable__nombre__icontains=filtro)
 
-    print("----------------")
-    print(data)
-    print("----------------")
+    for f in resul:
+        f.fecha = f.fecha.strftime('%d/%m/%Y')
+        data.append(f.to_json())
 
-    response = {'listado': data}
+    response = {'listado': data, 'user_staff':request.user.is_staff}
     return JsonResponse(response)
 
 

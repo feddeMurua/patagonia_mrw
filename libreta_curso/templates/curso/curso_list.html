@@ -22,7 +22,7 @@
     <tbody>
         {% for curso in listado %}
             <tr>
-                <td>{{ curso.fecha }}</td>
+                <td>{{ curso.fecha }}</td> <!--|date:"d/m/y"-->
                 <td>{{ curso.lugar }}</td>
                 <td>
                     {% if not curso.finalizado %}

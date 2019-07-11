@@ -13,7 +13,6 @@
         <a href="{% url 'reinspecciones:nueva_reinspeccion_cc' %}" class="btn btn-success">Nueva Reinspeccion a Cuenta Corriente</a>
         <a href="{% url 'reinspecciones:precios_reinspeccion' %}" class="btn btn-info">Precios Vigentes</a>
     {% endif %}
-    <a href="javascript:void(0);" onclick="fnClickAddRow();" class="btn btn-warning">Filtrar</a>
 {% endblock %}
 
 {% block tabla %}
@@ -28,35 +27,15 @@
             <th><em class="glyphicon glyphicon-cog"></em></th>
         </tr>
     </thead>
-    <tbody>
-        {% for reinspeccion in listado %}
-            <tr>
-                <td>{{ reinspeccion.fecha }}</td>
-                <td>{{ reinspeccion.turno }}</td>
-                <td>{{ reinspeccion.certificado }}</td>
-                <td>{{ reinspeccion.abastecedor }}</td>
-                <td>{{ reinspeccion.origen.nombre|default_if_none:"" }}</td>
-                <td>{{ reinspeccion.total_kg }}</td>
-                <td>
-                    {% if not reinspeccion.detalles %}
-                        <a class="btn btn-info" data-toggle="tooltip" title="Carga de Productos" href="{% url 'reinspecciones:carga_productos' reinspeccion.pk %}"><em class="glyphicon glyphicon-th-list"></em></a>
-                    {% endif %}
-                    <a class="btn btn-warning" data-toggle="tooltip" title="Lista de Productos" href="{% url 'reinspecciones:lista_productos' reinspeccion.pk 0 %}"><em class="glyphicon glyphicon-list-alt"></em></a>
-                    {% if user.is_staff %}
-                        <a class="btn btn-default" data-toggle="tooltip" title="Modificar" href="{% url 'reinspecciones:modificar_reinspeccion' reinspeccion.pk 0 %}"><em class="glyphicon glyphicon-pencil"></em></a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-
 {% endblock %}
 
 {% block more-scripts %}
 
   <script type="text/javascript">
 
-    var table = $("#table-list tbody");
+    $(function() {
+      $("#btn_filtrar").css('display', 'block'); //Muestra el filtrar "rapido"
+    });
 
     function eventFired() {
 
@@ -74,19 +53,34 @@
           success: function (data) {
 
             $.each(data, function(key, value) {
+              if (key == 'listado') {
+                $.each(value, function(k, v) {
+                  $('#table-list').dataTable().fnAddData( [
+                    v.fecha,
+                    v.turno,
+                    v.certificado,
+                    v.abastecedor.nombre,
+                    v.origen.nombre,
+                    v.total_kg,
+                    "{% if not v.detalles %}\
+                      <a class='btn btn-info' data-toggle='tooltip' title='Carga de Productos' href='{% url 'reinspecciones:carga_productos' 123 %}'><em class='glyphicon glyphicon-th-list'></em></a> \
+                     {% endif %}\
+                     <a class='btn btn-warning' data-toggle='tooltip' title='Lista de Productos' href='{% url 'reinspecciones:lista_productos' 123 0 %}'><em class='glyphicon glyphicon-list-alt'></em></a> \
+                     {% if user.is_staff %}\
+                      <a class='btn btn-default' data-toggle='tooltip' title='Modificar' href='{% url 'reinspecciones:modificar_reinspeccion' 123 0 %}'><em class='glyphicon glyphicon-pencil'></em></a>\
+                     {% endif %}"
+                    ] );
 
-              var obj = JSON.parse(value);
+                    var url_carga = "{% url 'reinspecciones:carga_productos' 123 %}".replace('123', v.pk);
+                    var url_lista = "{% url 'reinspecciones:lista_productos' 123 0 %}".replace('123', v.pk);
+                    var url_mod_reinspeccion = "{% url 'reinspecciones:modificar_reinspeccion' 123 0 %}".replace('123', v.pk);
 
-              $.each(obj, function(k, v) {
-                $('#table-list').dataTable().fnAddData( [
-              		v.fields.fecha,
-              		v.fields.turno,
-              		v.fields.certificado,
-              		v.fields.abastecedor,
-                  v.fields.origen,
-                  v.fields.total_kg,
-                  0] );
-              });
+                    $('.carga_producto a').attr('href',url_carga);
+                    $('.lista_productos a').attr('href',url_lista);
+                    $('.modificar_reinspeccion a').attr('href',url_mod_reinspeccion);
+
+                });
+              }
             });
           }
       });
@@ -95,8 +89,9 @@
     function fnClickAddRow() {
       eventFired();
       $('.dataTables_filter input').val('').keyup();
+      var table = $('#table-list').DataTable();
+      table.clear();
     }
-
   </script>
 
 {% endblock %}

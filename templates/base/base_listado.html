@@ -81,10 +81,13 @@
     <script src="{% static 'js/datetime-moment.js' %}"></script>
     <script>
         $(document).ready(function(){
-            moment.locale('es');
-            $.fn.dataTable.moment('D MMMM YYYY');
-            $.fn.dataTable.moment('MM-YYYY');
+            $.fn.dataTable.moment('DD/MM/YYYY');
             $('#table-list').DataTable({
+                dom: 'l<"toolbar">frtip',
+                initComplete: function(){
+                  $("div.toolbar")
+                     .html('<button id="btn_filtrar" type="button" style="margin-left:5px; display:none;" onclick="fnClickAddRow();" class="btn btn-warning pull pull-right">Filtrar</button>');
+                },
                 language: {
                             "sProcessing":     "Procesando...",
                             "sLengthMenu":     "Mostrar _MENU_ registros",
@@ -112,6 +115,22 @@
             });
 
             $('[data-toggle="tooltip"]').tooltip();
+
+            jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+            "date-uk-pre": function ( a ) {
+                var ukDatea = a.split('/');
+                return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+            },
+
+            "date-uk-asc": function ( a, b ) {
+                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+            },
+
+            "date-uk-desc": function ( a, b ) {
+                return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+            }
+            } );
+
         });
 
         $('.btn-baja').click(function() {

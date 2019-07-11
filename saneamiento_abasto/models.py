@@ -73,6 +73,18 @@ class Reinspeccion(models.Model):
     def __str__(self):
         return "%s - %s" % (self.fecha, self.abastecedor)
 
+    def to_json(self):
+        return {
+            'pk': self.pk,
+            'fecha': self.fecha,
+            'turno': self.turno,
+            'certificado': self.certificado,
+            'abastecedor': {'nombre': self.abastecedor.responsable.nombre},
+            'origen': {'nombre': self.origen.nombre},
+            'total_kg': self.total_kg,
+            'detalles': self.detalles,
+        }
+
     __original_kg = None
     __original_importe = None
 
