@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='arqueodiario',
             name='turno',
-            field=models.CharField(choices=[(b'Ma\xc3\xb1ana', 'Ma\xf1ana'), (b'Tarde', 'Tarde')], max_length=10, null=True),
+            field=models.CharField(choices=[(b'Ma\xc3\xb1ana', 'Ma\xf1ana'), (b'Tarde', 'Tarde')], default='Ma\xf1ana', max_length=10, null=True),
         ),
     ]

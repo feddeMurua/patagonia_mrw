@@ -20,7 +20,7 @@
 
 {% block more-scripts %}
     <script>
-        var tipo_vehiculo = $('#id_tipo_vehiculo'),
+        let tipo_vehiculo = $('#id_tipo_vehiculo'),
         tipo_tpp = $('#id_tipo_tpp'),
         disp_res = $('#id_disposicion_resolucion'),
         categoria = $('#id_categoria'),
@@ -52,7 +52,7 @@
         setOptionsSelect();
 
         function setOptionsSelect() {
-            var id_categoria = categoria.val();
+            let id_categoria = categoria.val();
             if (id_categoria) {
                 $.ajax({
                     url: '/vehiculos/getRubros/' + id_categoria,
@@ -60,8 +60,7 @@
                     success: function(data){
                         rubro.empty().trigger('change');
                         $.each(data, function(key, opt) {
-                            var nuevo = new Option(opt, key, false, false);
-                            rubro.append(nuevo).trigger('change');
+                            rubro.append(new Option(opt, key, false, false)).trigger('change');
                         })
                     },
                     error: function(){

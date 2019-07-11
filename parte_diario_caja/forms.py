@@ -27,14 +27,14 @@ class MovimientoDiarioForm(forms.ModelForm):
 
     class Meta:
         model = MovimientoDiario
-        exclude = ['fecha']
+        exclude = ['fecha', 'hora']
 
 
 class ModificarMovimientoDiarioForm(forms.ModelForm):
 
     class Meta:
         model = MovimientoDiario
-        exclude = ['fecha', 'titular']
+        exclude = ['fecha', 'hora', 'titular']
         labels = {
             'nro_ingreso': _("N° de ingresos varios"),
             'forma_pago': _("Forma de pago"),
@@ -60,10 +60,11 @@ class ListaServicios(forms.Form):
 
 
 class ArqueoEfectivoForm(forms.ModelForm):
+    fecha = forms.DateField(widget=DateInput(), label="Fecha")
 
     class Meta:
         model = ArqueoDiario
-        exclude = ['fecha', 'tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub',
+        exclude = ['realizado', 'tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub',
                    'mov_efectivo_sis', 'sub_efectivo_sis', 'mov_tarjeta_sis', 'mov_tarjeta_sis', 'sub_tarjeta_sis',
                    'mov_cheque_sis', 'sub_cheque_sis', 'mov_total_sistema', 'imp_total_sistema']
         labels = {
@@ -88,7 +89,7 @@ class ArqueoOtrosForm(forms.ModelForm):
 
     class Meta:
         model = ArqueoDiario
-        fields = ['turno', 'tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub']
+        fields = ['tarjeta_cant', 'tarjeta_sub', 'cheques_cant', 'cheques_sub']
 
 
 class ServicioForm(forms.ModelForm):

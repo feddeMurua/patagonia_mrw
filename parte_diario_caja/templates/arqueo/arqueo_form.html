@@ -5,6 +5,8 @@
 
 {% block more-stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/arqueo_caja.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/parsley.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flatpickr.min.css' %}"/>
 {% endblock %}
 
 {% block header-title %}Nuevo Arqueo Diario de Caja{% endblock %}
@@ -13,120 +15,128 @@
 
 {% block content %}
     <div class="container container-form">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" class="arqueo-form">
             {% csrf_token %}
-            <div class="panel panel-primary">
-                <div class="panel-body">
-                    <div class="row" style="margin-left: 0;">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>{{ form.turno.label }} *</label>
-                                {{ form.turno|add_class:'form-control' }}
-                            </div>
+            <div class="form-section">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>{{ form.fecha.label }} *</label>
+                            {{ form.fecha|add_class:'form-control' }}
+                            {% for error in form.fecha.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>{{ form.nro_planilla.label }} *</label>
-                                {{ form.nro_planilla|add_class:'form-control' }}
-                                {% for error in form.nro_planilla.errors %}
-                                    <span class="help-block">{{ error }}</span>
-                                {% endfor %}
-                            </div>
+                        <div class="form-group">
+                            <label>{{ form.hora.label }} *</label>
+                            {{ form.hora|add_class:'form-control' }}
+                            {% for error in form.hora.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
                         </div>
+                        <div class="form-group">
+                            <label>{{ form.turno.label }} *</label>
+                            {{ form.turno|add_class:'form-control' }}
+                            {% for error in form.turno.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>{{ form.nro_planilla.label }} *</label>
+                            {{ form.nro_planilla|add_class:'form-control' }}
+                            {% for error in form.nro_planilla.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% if form.non_field_errors%}
+                            <div class="alert alert-danger" role="alert">{{form.non_field_errors}}</div>
+                        {% endif %}
                     </div>
-                    <div class="col-md-7">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Recuento manual</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Tipo de Valor</th>
-                                            <th>Cantidad</th>
-                                            <th>Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for field in form %}
-                                            {% if field.label not in excludes %}
-                                                <tr>
-                                                    <td>{{ field.label }}</td>
-                                                    <td>{{ field|add_class:'form-control'|add_class:'cant_efectivo_manual' }}</td>
-                                                    <td align="center">$<span class="sub_valor_manual" id="efectivo_{{ forloop.counter0 }}">0,00</span></td>
-                                                </tr>
-                                            {% endif %}
+                </div>
+            </div>
+            <div class="form-section">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="col-md-7">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Recuento manual</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tipo de Valor</th>
+                                                <th>Cantidad</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for field in form.visible_fields|slice:"4:" %}
+                                                {% if field.label not in excludes %}
+                                                    <tr>
+                                                        <td>{{ field.label }}</td>
+                                                        <td>{{ field|add_class:'form-control'|add_class:'cant_efectivo_manual' }}</td>
+                                                        <td align="center">$<span class="sub_valor_manual" id="efectivo_{{ forloop.counter }}">0,00</span></td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <tr>
+                                                <td>Débito/Crédito</td>
+                                                <td>{{ form_otros.tarjeta_cant|add_class:'form-control' }}</td>
+                                                <td>{{ form_otros.tarjeta_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cheques</td>
+                                                <td>{{ form_otros.cheques_cant|add_class:'form-control' }}</td>
+                                                <td>{{ form_otros.cheques_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="form-group form-inline">
+                                        <label>{{ form.total_manual.label }}</label>
+                                        {{ form.total_manual|add_class:'form-control'|add_class:'sub_manual'|attr:'readonly' }}
+                                        {% for error in form.total_manual.errors %}
+                                            <span class="help-block">{{ error }}</span>
                                         {% endfor %}
-                                        <tr>
-                                            <td>Débito/Crédito</td>
-                                            <td>{{ form_otros.tarjeta_cant|add_class:'form-control' }}</td>
-                                            <td>{{ form_otros.tarjeta_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cheques</td>
-                                            <td>{{ form_otros.cheques_cant|add_class:'form-control' }}</td>
-                                            <td>{{ form_otros.cheques_sub|add_class:'form-control'|add_class:'sub_otros_manual' }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="panel-footer">
-                                <div class="form-group form-inline">
-                                    <label>{{ form.total_manual.label }}</label>
-                                    {{ form.total_manual|add_class:'form-control'|add_class:'sub_manual'|attr:'readonly' }}
-                                    {% for error in form.total_manual.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
+                        </div>
+                        <div class="col-md-5">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Recuento de sistema</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tipo de Valor</th>
+                                                <th>Operaciones</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabla_sistema"></tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+                                    <b id="id_total_mov"></b><br>
+                                    <b id="id_total_imp"></b>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Recuento de sistema</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Tipo de Valor</th>
-                                            <th>Operaciones</th>
-                                            <th>Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Efectivo</td>
-                                            <td align="center"><span>{{ iv_mañana.efectivo_mov }}</span></td>
-                                            <td align="center">$<span class="sub_valor_sistema">{{ iv_mañana.efectivo_imp }}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Débito/Crédito</td>
-                                            <td align="center"><span>{{ iv_mañana.tarjeta_mov }}</span></td>
-                                            <td align="center">$<span class="sub_valor_sistema">{{ iv_mañana.tarjeta_imp }}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cheques</td>
-                                            <td align="center"><span>{{ iv_mañana.cheque_mov }}</span></td>
-                                            <td align="center">$<span class="sub_valor_sistema">{{ iv_mañana.cheque_imp }}</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="panel-footer">
-                                <b>Total de operaciones registradas en el sistema: {{ iv_mañana.total_mov }}</b><br>
-                                <b>Total de recuento de sistema: ${{ iv_mañana.total_imp }}</b>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="panel-footer">
-                    <input type="submit" class="btn btn-primary" value="Aceptar"
-                           onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
-                    {% block btn-cancelar %}{% endblock %}
-                </div>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="previous btn btn-info pull-left">&lt; Anterior</button>
+                <button type="button" class="next btn btn-info pull-right">Siguiente &gt;</button>
+                <input type="submit" class="btn btn-success pull-right" value="Finalizar"
+                       onclick="return confirm('Se guardaran los datos ingresados. ¿Desea continuar?')">
+                <span class="clearfix"></span>
             </div>
         </form>
     </div>
@@ -134,4 +144,104 @@
 
 {% block more-scripts %}
     <script src="{% static 'js/arqueo_caja.js' %}"></script>
+    <script src="{% static 'js/parsley.js' %}"></script>
+    <script src="{% static 'js/118n/es.js' %}"></script>
+    <script src="{% static 'js/flatpickr.min.js' %}"></script>
+    <script src="{% static 'js/es.js' %}"></script>
+    <script>
+        flatpickr.localize(flatpickr.l10ns.es);
+        $("#id_hora").flatpickr({
+            time_24hr: true,
+            enableTime: true,
+            noCalendar: true,
+            altInput: true,
+            altFormat: 'H:i',
+            minuteIncrement: 1
+        });
+
+        $(function () {
+            let $sections = $('.form-section');
+
+            function navigateTo(index) {
+                // Mark the current section with the class 'current'
+                $sections
+                    .removeClass('current')
+                    .eq(index)
+                    .addClass('current');
+                // Show only the navigation buttons that make sense for the current section:
+                $('.form-navigation .previous').toggle(index > 0);
+                let atTheEnd = index >= $sections.length - 1;
+                $('.form-navigation .next').toggle(!atTheEnd);
+                $('.form-navigation [type=submit]').toggle(atTheEnd);
+
+                if (index === 1) {
+                    getIV();
+                }
+            }
+
+            function getIV() {
+                let turno = $('#id_turno').val();
+                $.ajax({
+                    url: '/arqueo/get_iv/' + turno,
+                    type: 'GET',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function(data) {
+                        dibujar_tabla(data)
+                    }
+                });
+            }
+
+            function dibujar_tabla(data) {
+                let $tbody = $('#tabla_sistema');
+                $tbody.children().remove();
+                let row = "<tr>" +
+                            "<td>Efectivo</td>" +
+                            "<td align='center'><span>" + data['efectivo_mov'] + "</span></td>" +
+                            "<td align='center'>$<span class='sub_valor_sistema'>" + data['efectivo_imp'] + "</span></td>" +
+                        "</tr>";
+                $tbody.append(row);
+                row = "<tr>" +
+                            "<td>Débito/Crédito</td>" +
+                            "<td align='center'><span>" + data['tarjeta_mov'] + "</span></td>" +
+                            "<td align='center'>$<span class='sub_valor_sistema'>" + data['tarjeta_imp'] + "</span></td>" +
+                        "</tr>";
+                $tbody.append(row);
+                row = "<tr>" +
+                            "<td>Cheques</td>" +
+                            "<td align='center'><span>" + data['cheque_mov'] + "</span></td>" +
+                            "<td align='center'>$<span class='sub_valor_sistema'>" + data['cheque_imp'] + "</span></td>" +
+                        "</tr>";
+                $tbody.append(row);
+                $('#id_total_mov').text("Total de operaciones registradas en el sistema: " + data['total_mov']);
+                $('#id_total_imp').text("Total de recuento de sistema: $" + data['total_imp'])
+            }
+
+            function curIndex() {
+                // Return the current index by looking at which section has the class 'current'
+                return $sections.index($sections.filter('.current'));
+            }
+
+            // Previous button is easy, just go back
+            $('.form-navigation .previous').click(function() {
+                navigateTo(curIndex() - 1);
+            });
+
+            // Next button goes forward iff current block validates
+            $('.form-navigation .next').click(function() {
+                $('.arqueo-form').parsley().whenValidate({
+                    group: 'block-' + curIndex()
+                }).done(function() {
+                    navigateTo(curIndex() + 1);
+                });
+            });
+
+            // Prepare sections by setting the `data-parsley-group` attribute to 'block-0', 'block-1', etc.
+            $sections.each(function(index, section) {
+                $(section).find(':input').attr('data-parsley-group', 'block-' + index);
+            });
+            navigateTo(0); // Start at the beginning
+        });
+    </script>
 {% endblock %}

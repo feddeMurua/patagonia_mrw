@@ -5,23 +5,33 @@
 
 {% block header-title %}Parte Diario de Caja{% endblock %}
 
-{% block panel-title %}Movimientos diarios{% endblock %}
+{% block panel-title %}Movimientos diarios del dia {{ fecha|date:"SHORT_DATE_FORMAT" }}{% endblock %}
 
 {% block btn-nuevo %}
     <form class="form-inline" method="post" style="margin: 0">
         {% csrf_token %}
         {{ fecha_form.media }}
         {% for field in fecha_form %}
-            <div class="form-group">
-                <label>{{ field.label }}</label>
+            <div class="input-group">
                 {{ field|add_class:'form-control' }}
                 {% for error in field.errors %}
                     <span class="help-block">{{ error }}</span>
                 {% endfor %}
+                <span class="input-group-btn">
+                    <button id="id_btn_buscar" class="btn btn-primary" type="submit">Buscar</button>
+                </span>
             </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary" name="buscar" value="1"><span class="glyphicon glyphicon-search"></span> Buscar</button>
-        <button type="submit" class="btn btn-warning" name="imprimir" value="1"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
+        <div class="btn-group">
+            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-print"></span> Imprimir <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'caja:pdf_parte_diario' fecha.year fecha.month fecha.day "Manana" %}" target="_blank">Turno Mañana</a></li>
+                <li><a href="{% url 'caja:pdf_parte_diario' fecha.year fecha.month fecha.day "Tarde" %}" target="_blank">Turno Tarde</a></li>
+                <li><a href="{% url 'caja:pdf_parte_diario' fecha.year fecha.month fecha.day "Completo" %}" target="_blank">Dia Completo</a></li>
+            </ul>
+        </div>
     </form>
 {% endblock %}
 

@@ -44,7 +44,17 @@
                 </tr>
                 <tr>
                     <td>Categoria del Vehiculo:</td>
-                    <td>{{ object.categoria }}</td>
+                    {% if object.categoria == 'Categoria_A' %}
+                        <td>Transporte isotérmico con equipo de frio para transportar productos congelados</td>
+                    {% elif object.categoria == 'Categoria_B' %}
+                        <td>Transporte isotérmico con equipo de frio para transportar productos refrigerados</td>
+                    {% elif object.categoria == 'Categoria_C' %}
+                        <td>Transporte isotérmico de productos envasados que no requieran refrigeración</td>
+                    {% elif object.categoria == 'Categoria_D' %}
+                        <td>Transporte con caja abierta y protección mediante lona o toldo</td>
+                    {% elif object.categoria == 'Categoria_E' %}
+                        <td>Otros</td>
+                    {% endif %}>
                 </tr>
                 <tr>
                     <td>Rubro del Vehiculo:</td>
@@ -62,6 +72,7 @@
 {% endblock %}
 
 {% block btn-footer %}
-    <a class="btn btn-warning" href="{% url 'vehiculo:vehiculo_pdf' object.nro %}" target="_blank">Imprimir comprobante</a>
+    <a class="btn btn-warning" href="{% url 'vehiculo:pdf_desinfecciones' object.nro %}" target="_blank">Planilla de desinfección (frente)</a>
+    <a class="btn btn-warning" href="{% url 'vehiculo:pdf_vehiculo' object.nro %}" target="_blank">Imprimir comprobante</a>
     <a class="btn btn-primary" href="{% url 'vehiculo:lista_vehiculos' %}" role="button">Regresar</a>
 {% endblock %}

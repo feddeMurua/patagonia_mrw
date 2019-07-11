@@ -12,7 +12,6 @@
         }
         .titulo {
             text-align: center;
-            font-size: 20px;
         }
         table {
             margin: 0 auto;
@@ -41,8 +40,9 @@
     <div id="content">
         <div class="main">
             <img class="logo" src="{% static 'images/rawson.png' %}" alt="">
-            <p class="titulo"><b>Parte Diario de Caja - Ingresos Varios<br>
-            Fecha de Rendicion {{ fecha_maniana }}</b></p>
+            <p class="titulo" style="font-size: 22px"><b>Parte Diario de Caja - Ingresos Varios</b></p>
+            <p class="titulo" style="font-size: 16px"><b>Fecha: {{ fecha|date:"l d F Y" }} - Turno: {{ turno }}<br>
+            FECHA DE RENDICION: {{ fecha_maniana|date:"SHORT_DATE_FORMAT" }}</b></p>
             <table class="detalles">
                 <thead>
                     <tr>
