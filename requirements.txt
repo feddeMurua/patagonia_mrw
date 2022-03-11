@@ -9,5 +9,5 @@ python-dateutil
 WeasyPrint==0.42.3
 django-mathfilters
 django-cleanup
-Pillow==6.0.0
+Pillow==9.0.1
 sphinx_rtd_theme
